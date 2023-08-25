@@ -5,6 +5,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "format:check": "prettier -c .",
+    "format": "prettier -w ."
   },
-  "author": "Alexey Butkeev"
+  "author": "Alexey Butkeev",
+  "devDependencies": {
+    "prettier": "^3.0.2"
+  }
 }
