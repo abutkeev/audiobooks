@@ -4,12 +4,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "download": "ts-node tools/download.ts",
     "format:check": "prettier -c .",
     "format": "prettier -w ."
   },
   "author": "Alexey Butkeev",
   "devDependencies": {
-    "prettier": "^3.0.2"
+    "@types/node": "^20.5.6",
+    "prettier": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   }
 }
