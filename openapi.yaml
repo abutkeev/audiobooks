@@ -6,8 +6,9 @@ servers:
   - url: https://127.0.0.1:3000/api
 
 paths:
-  /books/{id}/info.json:
+  /book/{id}/info.json:
     get:
+      operationId: GetBook
       parameters:
         - name: id
           in: path
