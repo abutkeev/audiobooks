@@ -40,4 +40,5 @@ components:
           type: string
         filename:
           type: string
+      required: [title, filename]
         
