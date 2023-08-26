@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 /api
+
+/src/api/api.ts
