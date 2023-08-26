@@ -1,0 +1,42 @@
+openapi: "3.0.2"
+info:
+  title: Audiobooks API
+  version: "1.0"
+servers:
+  - url: https://127.0.0.1:3000/api
+
+paths:
+  /books/{id}/info.json:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: Book ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Book data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        chapters:
+          type: array
+          items:
+            $ref: "#/components/schemas/Chapter"
+      required: [chapters]
+    Chapter:
+      type: object
+      properties:
+        title:
+          type: string
+        filename:
+          type: string
+        
