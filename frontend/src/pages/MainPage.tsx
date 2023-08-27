@@ -1,19 +1,23 @@
-import { Box } from '@mui/material';
-import { useGetBookQuery } from '../api/api';
-import Player from '../components/player';
+import { useGetBooksQuery } from '../api/api';
 import LoadingWrapper from '../components/common/LoadingWrapper';
+import BookCard from '../components/BookCard';
+import useAuthors from '../hooks/useAuthors';
+import useReaders from '../hooks/useReaders';
+import useSeries from '../hooks/useSeries';
 
 const MainPage: React.FC = () => {
-  const bookId = 'AE0BEB1C-1C28-4E2F-BDCA-3C5B5F4EE877';
-  const { data, isLoading, isError } = useGetBookQuery({ id: bookId });
+  const { data: books = [], isLoading: booksLoading, isError: booksError } = useGetBooksQuery();
+  const { authors, authorsLoading, authorsError } = useAuthors();
+  const { readers, readersLoading, readersError } = useReaders();
+  const { series, seriesLoading, seriesError } = useSeries();
+  const loading = booksLoading || authorsLoading || readersLoading || seriesLoading;
+  const error = booksError || authorsError || readersError || seriesError;
 
   return (
-    <LoadingWrapper loading={isLoading} error={isError}>
-      {data && (
-        <Box display='flex' justifyContent='center'>
-          <Player bookId={bookId} chapters={data.chapters} />
-        </Box>
-      )}
+    <LoadingWrapper loading={loading} error={error}>
+      {books.map(({ id, info }) => (
+        <BookCard key={id} info={info} authors={authors} readers={readers} series={series} />
+      ))}
     </LoadingWrapper>
   );
 };
