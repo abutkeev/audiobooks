@@ -10,6 +10,7 @@ interface PlayerStore {
     volume: number;
     duration?: number;
     playing: boolean;
+    pauseOnChapterEnd: boolean;
   };
   audioRef: React.RefObject<HTMLAudioElement> | null;
   bookId: string;
@@ -22,6 +23,7 @@ const initialState: PlayerStore = {
     volume: 100,
     duration: undefined,
     playing: false,
+    pauseOnChapterEnd: false,
   },
   audioRef: null,
   bookId: '',
@@ -101,7 +103,14 @@ const playerSlice = createSlice({
       const newChapter = store.state.currentChapter + 1;
       store.state.currentChapter = newChapter;
       updateSrc(store.audioRef as PlayerStore['audioRef'], store.bookId, store.chapters, newChapter);
+      if (store.state.pauseOnChapterEnd) {
+        store.state.pauseOnChapterEnd = false;
+        return;
+      }
       store.audioRef?.current?.addEventListener('canplay', playOnReady);
+    },
+    setPauseOnChapterEnd: (store, { payload }: PayloadAction<boolean>) => {
+      store.state.pauseOnChapterEnd = payload;
     },
     updatePosition: store => {
       if (!store.audioRef || !store.audioRef.current) return;
@@ -143,7 +152,8 @@ const playerSlice = createSlice({
     },
   },
 });
-export const { changePosition, playPause, chapterChange, changeVolume, pause } = playerSlice.actions;
+export const { changePosition, playPause, chapterChange, changeVolume, pause, setPauseOnChapterEnd } =
+  playerSlice.actions;
 
 const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
   const audioRef = useRef<HTMLAudioElement>(null);

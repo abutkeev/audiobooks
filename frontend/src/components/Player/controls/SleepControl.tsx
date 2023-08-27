@@ -2,7 +2,7 @@ import { Bedtime, BedtimeOff } from '@mui/icons-material';
 import ControlButton from './ControlButton';
 import { useContext, useEffect, useState } from 'react';
 import { Menu, MenuItem, Stack, Typography } from '@mui/material';
-import { PlayerStateContext, pause } from '../usePlayerState';
+import { PlayerStateContext, pause, setPauseOnChapterEnd } from '../usePlayerState';
 import formatTime from '../../../utils/formatTime';
 
 const SleepControl: React.FC = () => {
@@ -10,7 +10,10 @@ const SleepControl: React.FC = () => {
   const [sleepTimerDuration, setSleepTimerDuration] = useState<number>();
   const [sleepTimerStart, setSleepTimerStart] = useState<Date>();
   const [sleepTimerLeft, setSleepTimerLeft] = useState<number>();
-  const { dispatch } = useContext(PlayerStateContext);
+  const {
+    state: { pauseOnChapterEnd },
+    dispatch,
+  } = useContext(PlayerStateContext);
 
   useEffect(() => {
     if (sleepTimerDuration && sleepTimerStart) {
@@ -36,25 +39,36 @@ const SleepControl: React.FC = () => {
       setSleepTimerDuration(undefined);
       setSleepTimerLeft(undefined);
       setSleepTimerStart(undefined);
+      dispatch(setPauseOnChapterEnd(false));
+      closeMenu();
+      return;
     }
     setSleepTimerDuration(duration);
     setSleepTimerStart(new Date());
     setSleepTimerLeft(duration * 60);
     closeMenu();
   };
+  const handlePauseOnChaperEnd = () => {
+    setSleepTimer(0);
+    dispatch(setPauseOnChapterEnd(true));
+    closeMenu();
+  };
 
   return (
     <Stack direction='row' spacing={1} alignItems='center'>
       <ControlButton
-        Icon={sleepTimerDuration ? Bedtime : BedtimeOff}
+        Icon={sleepTimerDuration || pauseOnChapterEnd ? Bedtime : BedtimeOff}
         small
         onClick={e => setMenuAnchor(e.currentTarget)}
       />
       {!!sleepTimerLeft && <Typography>{formatTime(sleepTimerLeft)}</Typography>}
+      {pauseOnChapterEnd && <Typography>on chapter end</Typography>}
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
-        <MenuItem onClick={setSleepTimer(0)}>
-          <Typography>Switch off</Typography>
-        </MenuItem>
+        {(!!sleepTimerLeft || pauseOnChapterEnd) && (
+          <MenuItem onClick={setSleepTimer(0)}>
+            <Typography>Switch off</Typography>
+          </MenuItem>
+        )}
         <MenuItem onClick={setSleepTimer(15)}>
           <Typography>15 min</Typography>
         </MenuItem>
@@ -70,6 +84,11 @@ const SleepControl: React.FC = () => {
         <MenuItem onClick={setSleepTimer(120)}>
           <Typography>2 hours</Typography>
         </MenuItem>
+        {!pauseOnChapterEnd && (
+          <MenuItem onClick={handlePauseOnChaperEnd}>
+            <Typography>Pause on chapter end</Typography>
+          </MenuItem>
+        )}
       </Menu>
     </Stack>
   );
