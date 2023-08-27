@@ -33,7 +33,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Books"
-  /books/authors.json:
+  /authors.json:
     get:
       operationId: GetAuthors
       responses:
@@ -45,7 +45,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Person"
-  /books/readers.json:
+  /readers.json:
     get:
       operationId: GetReaders
       responses:
@@ -57,7 +57,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Person"
-  /books/series.json:
+  /series.json:
     get:
       operationId: GetSeries
       responses:
