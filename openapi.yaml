@@ -23,16 +23,90 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Book"
+  /books.json:
+    get:
+      operationId: GetBooks
+      responses:
+        "200":
+          description: Books list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Books"
+  /books/authors.json:
+    get:
+      operationId: GetAuthors
+      responses:
+        "200":
+          description: Authors list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Person"
+  /books/readers.json:
+    get:
+      operationId: GetReaders
+      responses:
+        "200":
+          description: Readers list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Person"
+  /books/series.json:
+    get:
+      operationId: GetSeries
+      responses:
+        "200":
+          description: Series list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Series"
 components:
   schemas:
     Book:
       type: object
       properties:
+        name:
+          type: string
+        author_id:
+          type: string
+        reader_id:
+          type: string
+        series_id:
+          type: string
+        series_number:
+          type: string
         chapters:
           type: array
           items:
             $ref: "#/components/schemas/Chapter"
-      required: [chapters]
+      required: [name, author_id, reader_id, chapters]
+    Books:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          author_id:
+            type: string
+          reader_id:
+            type: string
+          series_id:
+            type: string
+          series_number:
+            type: string
+        required: [name, author_id, reader_id, chapters]
     Chapter:
       type: object
       properties:
@@ -41,4 +115,25 @@ components:
         filename:
           type: string
       required: [title, filename]
-        
+    Person:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required: [id, name]
+    Series:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        author_id:
+          type: string
+        books:
+          type: array
+          items:
+            type: string
+      required: [id, name, author_id, books]
