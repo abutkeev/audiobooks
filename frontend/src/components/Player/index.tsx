@@ -12,7 +12,7 @@ interface PlayerProps {
 
 const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
   const audioRef = React.useRef<HTMLAudioElement>(null);
-  const { currentChapter, setCurrentChapter, position, setPosition } = usePlayerState();
+  const { currentChapter, setCurrentChapter, position, setPosition } = usePlayerState(bookId);
   const [duration, setDuration] = React.useState<number>();
   const [playing, setPlaying] = React.useState(false);
   const updateSrc = (chapter: number) => {
@@ -22,6 +22,7 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
   React.useEffect(() => {
     if (!audioRef.current) return;
     updateSrc(currentChapter);
+    audioRef.current.currentTime = position;
     audioRef.current.oncanplay = () => {
       setDuration(audioRef.current?.duration);
     };
