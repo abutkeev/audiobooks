@@ -72,7 +72,7 @@ const SleepControl: React.FC = () => {
   };
 
   return (
-    <Stack direction='row' spacing={1} alignItems='center'>
+    <Stack direction='row' alignItems='center'>
       <ControlButton
         Icon={sleepTimerDuration || pauseOnChapterEnd ? Bedtime : BedtimeOff}
         small

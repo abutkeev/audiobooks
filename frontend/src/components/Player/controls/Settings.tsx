@@ -1,6 +1,6 @@
 import ControlButton from './ControlButton';
 import { ChangeEvent, useContext, useState } from 'react';
-import { FormControlLabel, Menu, MenuItem, Stack, Switch } from '@mui/material';
+import { FormControlLabel, Menu, MenuItem, Switch } from '@mui/material';
 import { PlayerStateContext, setResetSleepTimerOnActivity } from '../usePlayerState';
 import SettingsIcon from '@mui/icons-material/Settings';
 
@@ -18,8 +18,8 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <Stack direction='row' spacing={1} alignItems='center'>
-      <ControlButton Icon={SettingsIcon} small onClick={e => setMenuAnchor(e.currentTarget)} />
+    <>
+      <ControlButton Icon={SettingsIcon} small onClick={e => setMenuAnchor(e.currentTarget)} sx={{ml: 1}} />
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
         <MenuItem>
           <FormControlLabel
@@ -34,7 +34,7 @@ const Settings: React.FC = () => {
           />
         </MenuItem>
       </Menu>
-    </Stack>
+    </>
   );
 };
 
