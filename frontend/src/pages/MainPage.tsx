@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { useGetBookQuery } from '../api/api';
-import Player from '../components/Player';
+import Player from '../components/player';
 import LoadingWrapper from '../components/common/LoadingWrapper';
 
 const MainPage: React.FC = () => {
