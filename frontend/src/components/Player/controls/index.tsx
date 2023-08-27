@@ -1,20 +1,10 @@
 import { Forward10, Pause, PlayArrow, Replay10, SkipNext, SkipPrevious } from '@mui/icons-material';
-import { Grid, Paper, Slider, Stack, Typography } from '@mui/material';
+import { Grid, Paper, Stack } from '@mui/material';
 import React from 'react';
 import ControlButton from './ControlButton';
 import VolumeControl from './VolumeControl';
 import { PlayerStateContext, changePosition, chapterChange, playPause } from '../usePlayerState';
-
-const formatTime = (time: number) => {
-  if (time < 0) return;
-  const hours = Math.floor(time / (60 * 60));
-  const minutes = Math.floor((time % (60 * 60)) / 60);
-  const seconds = Math.floor(time % 60);
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-  if (hours === 0) return `${formattedMinutes}:${formattedSeconds}`;
-  return `${hours}:${formattedMinutes}:${formattedSeconds}`;
-};
+import PositionControl from './PositionControl';
 
 const Controls: React.FC = () => {
   const {
@@ -22,12 +12,11 @@ const Controls: React.FC = () => {
     chapters,
     dispatch,
   } = React.useContext(PlayerStateContext);
-  const handlePositionChange = (newPosition: number) => dispatch(changePosition(newPosition));
   const handlePlayPause = () => dispatch(playPause());
   const handlePreviousChapter = () => dispatch(chapterChange(currentChapter - 1));
   const handleNextChapter = () => currentChapter !== chapters.length - 1 && dispatch(chapterChange(currentChapter + 1));
-  const handleRewind = () => handlePositionChange(position > 10 ? position - 10 : 0);
-  const handleForward = () => duration && handlePositionChange(position + 10 < duration ? position + 10 : duration);
+  const handleRewind = () => dispatch(changePosition(position > 10 ? position - 10 : 0));
+  const handleForward = () => duration && dispatch(changePosition(position + 10 < duration ? position + 10 : duration));
   React.useEffect(() => {
     navigator.mediaSession.setActionHandler('previoustrack', handleRewind);
     navigator.mediaSession.setActionHandler('nexttrack', handleForward);
@@ -50,19 +39,7 @@ const Controls: React.FC = () => {
           <VolumeControl />
         </Grid>
       </Grid>
-      {duration && (
-        <Stack spacing={2} direction='row' mx={1}>
-          <Typography>{formatTime(position)}</Typography>
-          <Slider
-            value={position}
-            onChange={(_, position) => typeof position === 'number' && handlePositionChange(position)}
-            max={duration}
-            valueLabelDisplay='auto'
-            valueLabelFormat={formatTime}
-          />
-          <Typography>{formatTime(duration)}</Typography>
-        </Stack>
-      )}
+      <PositionControl />
     </Paper>
   );
 };
