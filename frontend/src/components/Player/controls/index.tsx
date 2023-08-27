@@ -1,11 +1,20 @@
-import { Forward10, Pause, PlayArrow, Replay10, SkipNext, SkipPrevious } from '@mui/icons-material';
+import {
+  Forward10,
+  Pause,
+  PlayArrow,
+  Replay10,
+  SkipNext,
+  SkipPrevious,
+} from '@mui/icons-material';
 import { Grid, Paper, Slider, Stack, Typography } from '@mui/material';
 import React from 'react';
 import ControlButton from './ControlButton';
+import VolumeControl from './VolumeControl';
 
 interface ControlsProps {
   position: number;
   duration?: number;
+  volume?: number;
   playing: boolean;
   firstChapter?: boolean;
   lastChapter?: boolean;
@@ -13,6 +22,7 @@ interface ControlsProps {
   handlePreviousChapter(): void;
   handleNextChapter(): void;
   handlePlayPause(): void;
+  handleVolumeChange(newLevel: number): void;
 }
 
 const formatTime = (time: number) => {
@@ -29,6 +39,7 @@ const formatTime = (time: number) => {
 const Controls: React.FC<ControlsProps> = ({
   position,
   duration,
+  volume,
   playing,
   firstChapter,
   lastChapter,
@@ -36,6 +47,7 @@ const Controls: React.FC<ControlsProps> = ({
   handlePreviousChapter,
   handleNextChapter,
   handlePlayPause,
+  handleVolumeChange,
 }) => {
   const handleRewind = () => handlePositionChange(position > 10 ? position - 10 : 0);
   const handleForward = () => duration && handlePositionChange(position + 10 < duration ? position + 10 : duration);
@@ -56,9 +68,9 @@ const Controls: React.FC<ControlsProps> = ({
         <ControlButton Icon={Forward10} onClick={handleForward} disabled={!duration || position === duration} />
         <ControlButton Icon={SkipNext} disabled={lastChapter} onClick={handleNextChapter} />
       </Stack>
-      <Grid container>
+      <Grid container p={1}>
         <Grid item xs={4}>
-          <Stack></Stack>
+          <VolumeControl volume={volume} handleVolumeChange={handleVolumeChange} />
         </Grid>
       </Grid>
       {duration && (

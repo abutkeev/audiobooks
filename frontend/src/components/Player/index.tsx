@@ -12,7 +12,7 @@ interface PlayerProps {
 
 const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
   const audioRef = React.useRef<HTMLAudioElement>(null);
-  const { currentChapter, setCurrentChapter, position, setPosition } = usePlayerState(bookId);
+  const { currentChapter, setCurrentChapter, position, setPosition, volume, setVolume } = usePlayerState(bookId);
   const [duration, setDuration] = React.useState<number>();
   const [playing, setPlaying] = React.useState(false);
   const updateSrc = (chapter: number) => {
@@ -23,6 +23,7 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
     if (!audioRef.current) return;
     updateSrc(currentChapter);
     audioRef.current.currentTime = position;
+    audioRef.current.volume = volume / 100;
     audioRef.current.oncanplay = () => {
       setDuration(audioRef.current?.duration);
     };
@@ -73,6 +74,11 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
   };
   const handlePreviousChapter = () => handleChapterClick(currentChapter - 1)();
   const handleNextChapter = () => currentChapter !== chapters.length - 1 && handleChapterClick(currentChapter + 1)();
+  const handleVolumeChange = (newLevel: number) => {
+    if (newLevel < 0 || newLevel > 100 || !audioRef.current) return;
+    setVolume(newLevel);
+    audioRef.current.volume = newLevel / 100;
+  };
 
   return (
     <Paper sx={{ maxWidth: 'md', flexGrow: 1 }}>
@@ -80,10 +86,12 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
         position={position}
         handlePositionChange={handlePositionChange}
         duration={duration}
+        volume={volume}
         playing={playing}
         handlePreviousChapter={handlePreviousChapter}
         handleNextChapter={handleNextChapter}
         handlePlayPause={handlePlayPause}
+        handleVolumeChange={handleVolumeChange}
         firstChapter={currentChapter === undefined || currentChapter === 0}
         lastChapter={currentChapter === undefined || currentChapter === chapters.length - 1}
       />
