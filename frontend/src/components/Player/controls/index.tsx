@@ -1,6 +1,7 @@
 import { Forward10, Pause, PlayArrow, Replay10, SkipNext, SkipPrevious } from '@mui/icons-material';
-import { Grid, IconButton, Paper, Slider, Stack, Typography } from '@mui/material';
+import { Grid, Paper, Slider, Stack, Typography } from '@mui/material';
 import React from 'react';
+import ControlButton from './ControlButton';
 
 interface ControlsProps {
   position: number;
@@ -49,21 +50,11 @@ const Controls: React.FC<ControlsProps> = ({
   return (
     <Paper square sx={{ p: 1 }}>
       <Stack direction='row' justifyContent='center'>
-        <IconButton color='primary' disabled={firstChapter} onClick={handlePreviousChapter}>
-          <SkipPrevious fontSize='large' />
-        </IconButton>
-        <IconButton color='primary' onClick={handleRewind} disabled={!position}>
-          <Replay10 fontSize='large' />
-        </IconButton>
-        <IconButton color='secondary' onClick={handlePlayPause}>
-          {playing ? <Pause sx={{ fontSize: 70 }} /> : <PlayArrow sx={{ fontSize: 70 }} />}
-        </IconButton>
-        <IconButton color='primary' onClick={handleForward} disabled={!duration || position === duration}>
-          <Forward10 fontSize='large' />
-        </IconButton>
-        <IconButton color='primary' disabled={lastChapter} onClick={handleNextChapter}>
-          <SkipNext fontSize='large' />
-        </IconButton>
+        <ControlButton Icon={SkipPrevious} disabled={firstChapter} onClick={handlePreviousChapter} />
+        <ControlButton Icon={Replay10} onClick={handleRewind} disabled={!position} />
+        <ControlButton main Icon={playing ? Pause : PlayArrow} onClick={handlePlayPause} />
+        <ControlButton Icon={Forward10} onClick={handleForward} disabled={!duration || position === duration} />
+        <ControlButton Icon={SkipNext} disabled={lastChapter} onClick={handleNextChapter} />
       </Stack>
       <Grid container>
         <Grid item xs={4}>

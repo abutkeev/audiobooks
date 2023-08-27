@@ -2,7 +2,7 @@ import React from 'react';
 import { Paper } from '@mui/material';
 import Chapter from './Chapter';
 import { Book } from '../../api/api';
-import Controls from './Controls';
+import Controls from './controls';
 import usePlayerState from './usePlayerState';
 
 interface PlayerProps {
