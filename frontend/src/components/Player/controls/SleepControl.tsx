@@ -28,14 +28,14 @@ const SleepControl: React.FC = () => {
         }
         setSleepTimerLeft(left / 1000);
       };
-      const intervalId = setInterval(updateSleepTimerLeft, 1000);
+      const intervalId = setInterval(updateSleepTimerLeft, 500);
       return () => clearInterval(intervalId);
     }
   }, [sleepTimerDuration, sleepTimerStart]);
 
   useEffect(() => {
     const resetSleepTimerStart = () => {
-      if (sleepTimerDuration) setSleepTimerLeft(sleepTimerDuration * 60 - 1);
+      if (sleepTimerDuration) setSleepTimerLeft(sleepTimerDuration * 60);
       setSleepTimerStart(new Date());
     };
     const removeEventListeners = () => {
