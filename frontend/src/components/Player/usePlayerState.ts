@@ -12,6 +12,7 @@ interface PlayerStore {
     playing: boolean;
     pauseOnChapterEnd: boolean;
     resetSleepTimerOnActivity: boolean;
+    preventScreenLock: boolean;
   };
   audioRef: React.RefObject<HTMLAudioElement> | null;
   bookId: string;
@@ -26,6 +27,7 @@ const initialState: PlayerStore = {
     playing: false,
     pauseOnChapterEnd: false,
     resetSleepTimerOnActivity: true,
+    preventScreenLock: true,
   },
   audioRef: null,
   bookId: '',
@@ -37,9 +39,20 @@ const getSavedState = (initialState: PlayerStore['state'], bookId: string) => {
   const savedState = localStorage.getItem(localStorageStateName);
   if (!savedState) return state;
   try {
-    const { currentChapter, position, bookId: savedBookId, volume, resetSleepTimerOnActivity } = JSON.parse(savedState);
+    const {
+      currentChapter,
+      position,
+      bookId: savedBookId,
+      volume,
+      resetSleepTimerOnActivity,
+      preventScreenLock,
+    } = JSON.parse(savedState);
     if (isFinite(volume) && volume > 0 && volume < 100) {
       state.volume = volume;
+    }
+
+    if (typeof preventScreenLock === 'boolean') {
+      state.preventScreenLock = preventScreenLock;
     }
 
     if (typeof resetSleepTimerOnActivity === 'boolean') {
@@ -159,6 +172,9 @@ const playerSlice = createSlice({
     setResetSleepTimerOnActivity: (store, { payload }: PayloadAction<boolean>) => {
       store.state.resetSleepTimerOnActivity = payload;
     },
+    setPreventScreenLock: (store, { payload }: PayloadAction<boolean>) => {
+      store.state.preventScreenLock = payload;
+    },
   },
 });
 export const {
@@ -169,6 +185,7 @@ export const {
   pause,
   setPauseOnChapterEnd,
   setResetSleepTimerOnActivity,
+  setPreventScreenLock,
 } = playerSlice.actions;
 
 const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
@@ -192,7 +209,7 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
     };
   }, [bookId, chapters]);
 
-  const { currentChapter, position, volume, resetSleepTimerOnActivity } = state;
+  const { currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock } = state;
   useEffect(() => {
     localStorage.setItem(
       localStorageStateName,
@@ -202,10 +219,11 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
         position,
         volume,
         resetSleepTimerOnActivity,
+        preventScreenLock,
         updated: new Date().toISOString(),
       })
     );
-  }, [bookId, currentChapter, position, volume, resetSleepTimerOnActivity]);
+  }, [bookId, currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock]);
 
   return [{ state, audioRef }, dispatch] as const;
 };
