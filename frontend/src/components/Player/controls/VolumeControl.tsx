@@ -37,9 +37,9 @@ const VolumeControl: React.FC = () => {
 
   return (
     <Stack direction='row' spacing={2} alignItems='center'>
-      <VolumeDown color='primary' />
+      <VolumeDown color='primary' sx={{ cursor: 'pointer' }} onClick={() => handleVolumeChange(0)} />
       <Slider value={volume} onChange={(_, newLevel) => typeof newLevel === 'number' && handleVolumeChange(newLevel)} />
-      <VolumeUp color='primary' />
+      <VolumeUp color='primary' sx={{ cursor: 'pointer' }} onClick={() => handleVolumeChange(100)} />
     </Stack>
   );
 };
