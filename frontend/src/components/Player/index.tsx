@@ -3,6 +3,7 @@ import { Paper } from '@mui/material';
 import Chapter from './Chapter';
 import { Book } from '../../api/api';
 import Controls from './Controls';
+import usePlayerState from './usePlayerState';
 
 interface PlayerProps {
   bookId: string;
@@ -11,8 +12,7 @@ interface PlayerProps {
 
 const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
   const audioRef = React.useRef<HTMLAudioElement>(null);
-  const [currentChapter, setCurrentChapter] = React.useState<number>(0);
-  const [position, setPosition] = React.useState<number>(0);
+  const { currentChapter, setCurrentChapter, position, setPosition } = usePlayerState();
   const [duration, setDuration] = React.useState<number>();
   const [playing, setPlaying] = React.useState(false);
   const updateSrc = (chapter: number) => {
