@@ -112,6 +112,9 @@ const playerSlice = createSlice({
       store.state.position = payload;
       store.audioRef.current.currentTime = payload;
     },
+    pause: ({ audioRef }) => {
+      audioRef?.current?.pause();
+    },
     playPause: store => {
       if (!store.audioRef || !store.audioRef.current) return;
       if (store.state.playing) {
@@ -140,7 +143,7 @@ const playerSlice = createSlice({
     },
   },
 });
-export const { changePosition, playPause, chapterChange, changeVolume } = playerSlice.actions;
+export const { changePosition, playPause, chapterChange, changeVolume, pause } = playerSlice.actions;
 
 const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
   const audioRef = useRef<HTMLAudioElement>(null);
