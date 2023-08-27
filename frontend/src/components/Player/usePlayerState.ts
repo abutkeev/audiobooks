@@ -112,13 +112,17 @@ const playerSlice = createSlice({
       store.state.position = payload;
       store.audioRef.current.currentTime = payload;
     },
-    playPause: ({ state, audioRef }) => {
-      if (!audioRef || !audioRef.current) return;
-      if (state.playing) {
-        audioRef.current.pause();
+    playPause: store => {
+      if (!store.audioRef || !store.audioRef.current) return;
+      if (store.state.playing) {
+        const rewind = 5;
+        const newPosition = store.state.position > rewind ? store.state.position - rewind : 0;
+        store.audioRef.current.pause();
+        store.state.position = newPosition;
+        store.audioRef.current.currentTime = newPosition;
         return;
       }
-      audioRef.current.play();
+      store.audioRef.current.play();
     },
     chapterChange: (store, { payload }: PayloadAction<number>) => {
       if (!store.audioRef || !store.audioRef.current || payload < 0 || payload > store.chapters.length - 1) return;
