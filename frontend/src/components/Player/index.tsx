@@ -24,7 +24,6 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
     updateSrc(currentChapter);
     audioRef.current.oncanplay = () => {
       setDuration(audioRef.current?.duration);
-      if (playing) audioRef.current?.play();
     };
     audioRef.current.onplaying = () => setPlaying(true);
     audioRef.current.onpause = () => setPlaying(false);
@@ -32,11 +31,10 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
       setCurrentChapter(chapter => {
         if (chapter === chapters.length - 1) {
           setPosition(0);
-          setDuration(undefined);
           updateSrc(0);
           return 0;
         }
-        const newChapter = chapter === undefined ? 1 : chapter + 1;
+        const newChapter = chapter + 1;
         setPosition(0);
         if (!audioRef.current) return newChapter;
         updateSrc(newChapter);
@@ -59,9 +57,6 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
     audioRef.current.currentTime = newPosition;
   };
   const handlePlayPause = () => {
-    if (!currentChapter) {
-      handleChapterClick(0);
-    }
     if (!audioRef.current) return;
     if (audioRef.current.paused) return audioRef.current.play();
     audioRef.current.pause();
@@ -75,9 +70,8 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
       audioRef.current.play();
     }
   };
-  const handlePreviousChapter = () => currentChapter && handleChapterClick(currentChapter - 1)();
-  const handleNextChapter = () =>
-    currentChapter !== undefined && currentChapter !== chapters.length - 1 && handleChapterClick(currentChapter + 1)();
+  const handlePreviousChapter = () => handleChapterClick(currentChapter - 1)();
+  const handleNextChapter = () => currentChapter !== chapters.length - 1 && handleChapterClick(currentChapter + 1)();
 
   return (
     <Paper sx={{ maxWidth: 'md', flexGrow: 1 }}>

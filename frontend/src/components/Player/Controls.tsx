@@ -3,7 +3,7 @@ import { Grid, IconButton, Paper, Slider, Stack, Typography } from '@mui/materia
 import React from 'react';
 
 interface ControlsProps {
-  position?: number;
+  position: number;
   duration?: number;
   playing: boolean;
   firstChapter?: boolean;
@@ -36,9 +36,8 @@ const Controls: React.FC<ControlsProps> = ({
   handleNextChapter,
   handlePlayPause,
 }) => {
-  const handleRewind = () => position !== undefined && handlePositionChange(position > 10 ? position - 10 : 0);
-  const handleForward = () =>
-    position !== undefined && duration && handlePositionChange(position + 10 < duration ? position + 10 : duration);
+  const handleRewind = () => handlePositionChange(position > 10 ? position - 10 : 0);
+  const handleForward = () => duration && handlePositionChange(position + 10 < duration ? position + 10 : duration);
   React.useEffect(() => {
     navigator.mediaSession.setActionHandler('previoustrack', handleRewind);
     navigator.mediaSession.setActionHandler('nexttrack', handleForward);
@@ -59,11 +58,7 @@ const Controls: React.FC<ControlsProps> = ({
         <IconButton color='secondary' onClick={handlePlayPause}>
           {playing ? <Pause sx={{ fontSize: 70 }} /> : <PlayArrow sx={{ fontSize: 70 }} />}
         </IconButton>
-        <IconButton
-          color='primary'
-          onClick={handleForward}
-          disabled={position === undefined || !duration || position === duration}
-        >
+        <IconButton color='primary' onClick={handleForward} disabled={!duration || position === duration}>
           <Forward10 fontSize='large' />
         </IconButton>
         <IconButton color='primary' disabled={lastChapter} onClick={handleNextChapter}>
@@ -75,7 +70,7 @@ const Controls: React.FC<ControlsProps> = ({
           <Stack></Stack>
         </Grid>
       </Grid>
-      {position !== undefined && duration && (
+      {duration && (
         <Stack spacing={2} direction='row' mx={1}>
           <Typography>{formatTime(position)}</Typography>
           <Slider
