@@ -52,24 +52,21 @@ const SleepControl: React.FC = () => {
 
   const closeMenu = () => setMenuAnchor(undefined);
   const setSleepTimer = (duration: number) => () => {
+    closeMenu();
+    dispatch(setPauseOnChapterEnd(false));
     if (duration <= 0) {
       setSleepTimerDuration(undefined);
       setSleepTimerLeft(undefined);
       setSleepTimerStart(undefined);
-      dispatch(setPauseOnChapterEnd(false));
-      closeMenu();
       return;
     }
     setSleepTimerDuration(duration);
     setSleepTimerStart(new Date());
     setSleepTimerLeft(duration * 60);
-    dispatch(setPauseOnChapterEnd(false));
-    closeMenu();
   };
   const handlePauseOnChaperEnd = () => {
     setSleepTimer(0)();
     dispatch(setPauseOnChapterEnd(true));
-    closeMenu();
   };
 
   return (
