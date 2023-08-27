@@ -71,7 +71,7 @@ paths:
                   $ref: "#/components/schemas/Series"
 components:
   schemas:
-    Book:
+    BookInfo:
       type: object
       properties:
         name:
@@ -84,11 +84,18 @@ components:
           type: string
         series_number:
           type: string
+      required: [name, author_id, reader_id]
+    Book:
+      type: object
+      properties:
+        info:
+          type: object
+          $ref: "#/components/schemas/BookInfo"
         chapters:
           type: array
           items:
             $ref: "#/components/schemas/Chapter"
-      required: [name, author_id, reader_id, chapters]
+      required: [info, chapters]
     Books:
       type: array
       items:
@@ -96,17 +103,10 @@ components:
         properties:
           id:
             type: string
-          name:
-            type: string
-          author_id:
-            type: string
-          reader_id:
-            type: string
-          series_id:
-            type: string
-          series_number:
-            type: string
-        required: [name, author_id, reader_id, chapters]
+          info:
+            type: object
+            $ref: "#/components/schemas/BookInfo"
+        required: [info, chapters]
     Chapter:
       type: object
       properties:
