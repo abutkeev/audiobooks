@@ -1,6 +1,6 @@
 import { VolumeDown, VolumeUp } from '@mui/icons-material';
 import { Stack, Slider } from '@mui/material';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { PlayerStateContext, changeVolume } from '../usePlayerState';
 
 const VolumeControl: React.FC = () => {
@@ -9,6 +9,31 @@ const VolumeControl: React.FC = () => {
     dispatch,
   } = useContext(PlayerStateContext);
   const handleVolumeChange = (newLevel: number) => dispatch(changeVolume(newLevel));
+  const handleKeyDown = (e: KeyboardEvent) => {
+    const { code } = e;
+    const volumeChangeValue = 5;
+    const disableDefaultActions = () => {
+      e.stopPropagation();
+      e.preventDefault();
+    };
+    switch (code) {
+      case 'ArrowUp':
+        handleVolumeChange(volume < 100 - volumeChangeValue ? volume + volumeChangeValue : 100);
+        disableDefaultActions();
+        break;
+      case 'ArrowDown':
+        handleVolumeChange(volume > volumeChangeValue ? volume - volumeChangeValue : 0);
+        disableDefaultActions();
+        break;
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [volume]);
 
   return (
     <Stack direction='row' spacing={2} alignItems='center'>
