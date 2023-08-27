@@ -16,7 +16,7 @@ const MainPage: React.FC = () => {
   return (
     <LoadingWrapper loading={loading} error={error}>
       {books.map(({ id, info }) => (
-        <BookCard key={id} info={info} authors={authors} readers={readers} series={series} />
+        <BookCard key={id} id={id} info={info} authors={authors} readers={readers} series={series} />
       ))}
     </LoadingWrapper>
   );

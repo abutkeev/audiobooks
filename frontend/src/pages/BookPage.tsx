@@ -1,0 +1,31 @@
+import { useParams } from 'react-router-dom';
+import { useGetBookQuery } from '../api/api';
+import BookCard from '../components/BookCard';
+import LoadingWrapper from '../components/common/LoadingWrapper';
+import useAuthors from '../hooks/useAuthors';
+import useReaders from '../hooks/useReaders';
+import useSeries from '../hooks/useSeries';
+import Player from '../components/player';
+
+const BookPage: React.FC = () => {
+  const { id = '' } = useParams();
+  const { data, isLoading, isError } = useGetBookQuery({ id });
+  const { authors, authorsLoading, authorsError } = useAuthors();
+  const { readers, readersLoading, readersError } = useReaders();
+  const { series, seriesLoading, seriesError } = useSeries();
+  const loading = isLoading || authorsLoading || readersLoading || seriesLoading;
+  const error = isError || authorsError || readersError || seriesError;
+
+  return (
+    <LoadingWrapper loading={loading} error={error}>
+      {data && (
+        <>
+          <BookCard info={data.info} authors={authors} readers={readers} series={series} />
+          <Player bookId={id} chapters={data.chapters} />
+        </>
+      )}
+    </LoadingWrapper>
+  );
+};
+
+export default BookPage;

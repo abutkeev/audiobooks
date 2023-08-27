@@ -9,11 +9,16 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import MainPage from './pages/MainPage';
+import BookPage from './pages/BookPage';
 
 const router = createHashRouter([
   {
     path: '/',
     element: <MainPage />,
+  },
+  {
+    path: '/book/:id',
+    element: <BookPage />,
   },
 ]);
 
