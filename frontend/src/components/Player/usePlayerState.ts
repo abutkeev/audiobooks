@@ -13,6 +13,7 @@ interface PlayerStore {
     pauseOnChapterEnd: boolean;
     resetSleepTimerOnActivity: boolean;
     preventScreenLock: boolean;
+    error: string;
   };
   audioRef: React.RefObject<HTMLAudioElement> | null;
   bookId: string;
@@ -28,6 +29,7 @@ const initialState: PlayerStore = {
     pauseOnChapterEnd: false,
     resetSleepTimerOnActivity: true,
     preventScreenLock: true,
+    error: '',
   },
   audioRef: null,
   bookId: '',
@@ -153,6 +155,12 @@ const playerSlice = createSlice({
         store.audioRef.current.currentTime = newPosition;
         return;
       }
+      if (store.state.error) {
+        store.state.error = '';
+        updateSrc(store.audioRef as PlayerStore['audioRef'], store.bookId, store.chapters, store.state.currentChapter);
+        store.audioRef.current.addEventListener('canplay', playOnReady);
+        return;
+      }
       store.audioRef.current.play();
     },
     chapterChange: (store, { payload }: PayloadAction<number>) => {
@@ -175,6 +183,9 @@ const playerSlice = createSlice({
     setPreventScreenLock: (store, { payload }: PayloadAction<boolean>) => {
       store.state.preventScreenLock = payload;
     },
+    setError: (store, { payload }: PayloadAction<string>) => {
+      store.state.error = payload;
+    },
   },
 });
 export const {
@@ -195,7 +206,7 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
     return { state, chapters, audioRef, bookId };
   });
 
-  const { setup, updateDuration, setPlaying, chapterEnded, updatePosition } = playerSlice.actions;
+  const { setup, updateDuration, setPlaying, chapterEnded, updatePosition, setError } = playerSlice.actions;
   useEffect(() => {
     dispatch(setup({ bookId, chapters }));
     if (!audioRef.current) return;
@@ -203,6 +214,15 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
     audioRef.current.onplaying = () => dispatch(setPlaying(true));
     audioRef.current.onpause = () => dispatch(setPlaying(false));
     audioRef.current.onended = () => dispatch(chapterEnded());
+    audioRef.current.onerror = e => {
+      dispatch(setPlaying(false));
+      if (typeof e === 'string') {
+        dispatch(setError(e));
+        return;
+      }
+      console.error(e);
+      dispatch(setError('An error occurred, see console log for details'));
+    };
     const intervalId = setInterval(() => dispatch(updatePosition), 1000);
     return () => {
       clearInterval(intervalId);

@@ -4,6 +4,7 @@ import Chapters from './chapters';
 import { Book } from '../../api/api';
 import Controls from './controls';
 import usePlayerState, { PlayerStateContext } from './usePlayerState';
+import PlayerError from './PlayerError';
 
 interface PlayerProps {
   bookId: string;
@@ -17,6 +18,7 @@ const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
     <PlayerStateContext.Provider value={{ state, dispatch, chapters }}>
       <Paper sx={{ maxWidth: 'md', flexGrow: 1 }}>
         <Controls />
+        <PlayerError />
         <Chapters />
         <audio ref={audioRef} />
       </Paper>
