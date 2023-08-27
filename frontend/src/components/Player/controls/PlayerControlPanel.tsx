@@ -21,7 +21,6 @@ const PlayerControlPanel: React.FC = () => {
   const handleKeyDown = (e: KeyboardEvent) => {
     const { code } = e;
     const disableDefaultActions = () => {
-      e.stopPropagation();
       e.preventDefault();
     };
     switch (code) {

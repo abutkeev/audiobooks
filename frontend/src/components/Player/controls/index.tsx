@@ -4,6 +4,7 @@ import VolumeControl from './VolumeControl';
 import PositionControl from './PositionControl';
 import PlayerControlPanel from './PlayerControlPanel';
 import SleepControl from './SleepControl';
+import Settings from './Settings';
 
 const Controls: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const Controls: React.FC = () => {
         </Grid>
         <Grid item xs={8} display='flex' justifyContent='flex-end'>
           <SleepControl />
+          <Settings />
         </Grid>
       </Grid>
       <PositionControl />

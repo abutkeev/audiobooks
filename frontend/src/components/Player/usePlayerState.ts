@@ -11,6 +11,7 @@ interface PlayerStore {
     duration?: number;
     playing: boolean;
     pauseOnChapterEnd: boolean;
+    resetSleepTimerOnActivity: boolean;
   };
   audioRef: React.RefObject<HTMLAudioElement> | null;
   bookId: string;
@@ -24,6 +25,7 @@ const initialState: PlayerStore = {
     duration: undefined,
     playing: false,
     pauseOnChapterEnd: false,
+    resetSleepTimerOnActivity: true,
   },
   audioRef: null,
   bookId: '',
@@ -35,9 +37,13 @@ const getSavedState = (initialState: PlayerStore['state'], bookId: string) => {
   const savedState = localStorage.getItem(localStorageStateName);
   if (!savedState) return state;
   try {
-    const { currentChapter, position, bookId: savedBookId, volume } = JSON.parse(savedState);
+    const { currentChapter, position, bookId: savedBookId, volume, resetSleepTimerOnActivity } = JSON.parse(savedState);
     if (isFinite(volume) && volume > 0 && volume < 100) {
       state.volume = volume;
+    }
+
+    if (typeof resetSleepTimerOnActivity === 'boolean') {
+      state.resetSleepTimerOnActivity = resetSleepTimerOnActivity;
     }
 
     if (savedBookId !== bookId) return state;
@@ -150,10 +156,20 @@ const playerSlice = createSlice({
       store.state.volume = payload;
       store.audioRef.current.volume = payload / 100;
     },
+    setResetSleepTimerOnActivity: (store, { payload }: PayloadAction<boolean>) => {
+      store.state.resetSleepTimerOnActivity = payload;
+    },
   },
 });
-export const { changePosition, playPause, chapterChange, changeVolume, pause, setPauseOnChapterEnd } =
-  playerSlice.actions;
+export const {
+  changePosition,
+  playPause,
+  chapterChange,
+  changeVolume,
+  pause,
+  setPauseOnChapterEnd,
+  setResetSleepTimerOnActivity,
+} = playerSlice.actions;
 
 const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -176,13 +192,20 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
     };
   }, [bookId, chapters]);
 
-  const { currentChapter, position, volume } = state;
+  const { currentChapter, position, volume, resetSleepTimerOnActivity } = state;
   useEffect(() => {
     localStorage.setItem(
       localStorageStateName,
-      JSON.stringify({ bookId, currentChapter, position, volume, updated: new Date().toISOString() })
+      JSON.stringify({
+        bookId,
+        currentChapter,
+        position,
+        volume,
+        resetSleepTimerOnActivity,
+        updated: new Date().toISOString(),
+      })
     );
-  }, [bookId, currentChapter, position, volume]);
+  }, [bookId, currentChapter, position, volume, resetSleepTimerOnActivity]);
 
   return [{ state, audioRef }, dispatch] as const;
 };

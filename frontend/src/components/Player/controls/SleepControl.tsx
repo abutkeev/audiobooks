@@ -11,7 +11,7 @@ const SleepControl: React.FC = () => {
   const [sleepTimerStart, setSleepTimerStart] = useState<Date>();
   const [sleepTimerLeft, setSleepTimerLeft] = useState<number>();
   const {
-    state: { pauseOnChapterEnd },
+    state: { pauseOnChapterEnd, resetSleepTimerOnActivity },
     dispatch,
   } = useContext(PlayerStateContext);
 
@@ -21,7 +21,7 @@ const SleepControl: React.FC = () => {
         const endTimestamp = sleepTimerStart.getTime() + sleepTimerDuration * 60 * 1000;
         const left = endTimestamp - new Date().getTime();
         if (left < 0) {
-          setSleepTimer(0);
+          setSleepTimer(0)();
           dispatch(pause());
           clearInterval(intervalId);
           return;
@@ -32,6 +32,23 @@ const SleepControl: React.FC = () => {
       return () => clearInterval(intervalId);
     }
   }, [sleepTimerDuration, sleepTimerStart]);
+
+  useEffect(() => {
+    const resetSleepTimerStart = () => {
+      if (sleepTimerDuration) setSleepTimerLeft(sleepTimerDuration * 60 - 1);
+      setSleepTimerStart(new Date());
+    };
+    const removeEventListeners = () => {
+      window.removeEventListener('mousemove', resetSleepTimerStart);
+      window.removeEventListener('keydown', resetSleepTimerStart);
+    };
+    if (sleepTimerStart && resetSleepTimerOnActivity) {
+      window.addEventListener('mousemove', resetSleepTimerStart);
+      window.addEventListener('keydown', resetSleepTimerStart);
+      return removeEventListeners;
+    }
+    removeEventListeners();
+  }, [sleepTimerStart, sleepTimerDuration, resetSleepTimerOnActivity]);
 
   const closeMenu = () => setMenuAnchor(undefined);
   const setSleepTimer = (duration: number) => () => {
@@ -49,7 +66,7 @@ const SleepControl: React.FC = () => {
     closeMenu();
   };
   const handlePauseOnChaperEnd = () => {
-    setSleepTimer(0);
+    setSleepTimer(0)();
     dispatch(setPauseOnChapterEnd(true));
     closeMenu();
   };

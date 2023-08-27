@@ -13,7 +13,6 @@ const VolumeControl: React.FC = () => {
     const { code } = e;
     const volumeChangeValue = 5;
     const disableDefaultActions = () => {
-      e.stopPropagation();
       e.preventDefault();
     };
     switch (code) {
