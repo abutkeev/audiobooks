@@ -10,22 +10,28 @@ import { store } from './store';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import BookPage from './pages/BookPage';
+import AppBar from './components/app-bar/AppBar';
 
 const router = createHashRouter([
   {
-    path: '/',
-    element: <MainPage />,
-  },
-  {
-    path: '/book/:id',
-    element: <BookPage />,
+    element: <AppBar />,
+    children: [
+      {
+        path: '/',
+        element: <MainPage />,
+      },
+      {
+        path: '/book/:id',
+        element: <BookPage />,
+      },
+    ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}></RouterProvider>
     </Provider>
   </React.StrictMode>
 );
