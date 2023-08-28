@@ -3,6 +3,8 @@ import { Book } from '../../api/api';
 import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 const localStorageStateName = 'playerState';
+let audioRef: React.RefObject<HTMLAudioElement> | null;
+
 interface PlayerStore {
   state: {
     currentChapter: number;
@@ -15,7 +17,6 @@ interface PlayerStore {
     preventScreenLock: boolean;
     error: string;
   };
-  audioRef: React.RefObject<HTMLAudioElement> | null;
   bookId: string;
   chapters: Book['chapters'];
 }
@@ -31,7 +32,6 @@ const initialState: PlayerStore = {
     preventScreenLock: true,
     error: '',
   },
-  audioRef: null,
   bookId: '',
   chapters: [],
 };
@@ -74,12 +74,7 @@ const getSavedState = (initialState: PlayerStore['state'], bookId: string) => {
   return state;
 };
 
-const updateSrc = (
-  audioRef: PlayerStore['audioRef'],
-  bookId: string,
-  chapters: PlayerStore['chapters'],
-  chapter: number
-) => {
+const updateSrc = (bookId: string, chapters: PlayerStore['chapters'], chapter: number) => {
   if (!audioRef || !audioRef.current) return;
   audioRef.current.src = `/api/books/${bookId}/${chapters[chapter].filename}`;
 };
@@ -101,14 +96,14 @@ const playerSlice = createSlice({
     ) => {
       store.state = getSavedState(initialState.state, bookId);
       store.chapters = chapters;
-      if (!store.audioRef || !store.audioRef.current) return;
-      updateSrc(store.audioRef as PlayerStore['audioRef'], bookId, chapters, store.state.currentChapter);
-      store.audioRef.current.currentTime = store.state.position;
-      store.audioRef.current.volume = store.state.volume / 100;
+      if (!audioRef || !audioRef.current) return;
+      updateSrc(bookId, chapters, store.state.currentChapter);
+      audioRef.current.currentTime = store.state.position;
+      audioRef.current.volume = store.state.volume / 100;
     },
     updateDuration: store => {
-      if (!store.audioRef || !store.audioRef.current) return;
-      store.state.duration = store.audioRef.current.duration;
+      if (!audioRef || !audioRef.current) return;
+      store.state.duration = audioRef.current.duration;
     },
     setPlaying: (store, { payload }: PayloadAction<boolean>) => {
       store.state.playing = payload;
@@ -117,65 +112,65 @@ const playerSlice = createSlice({
       store.state.position = 0;
       const { currentChapter } = store.state;
       if (currentChapter === store.chapters.length - 1) {
-        updateSrc(store.audioRef as PlayerStore['audioRef'], store.bookId, store.chapters, 0);
+        updateSrc(store.bookId, store.chapters, 0);
         store.state.currentChapter = 0;
         return;
       }
       const newChapter = store.state.currentChapter + 1;
       store.state.currentChapter = newChapter;
-      updateSrc(store.audioRef as PlayerStore['audioRef'], store.bookId, store.chapters, newChapter);
+      updateSrc(store.bookId, store.chapters, newChapter);
       if (store.state.pauseOnChapterEnd) {
         store.state.pauseOnChapterEnd = false;
         return;
       }
-      store.audioRef?.current?.addEventListener('canplay', playOnReady);
+      audioRef?.current?.addEventListener('canplay', playOnReady);
     },
     setPauseOnChapterEnd: (store, { payload }: PayloadAction<boolean>) => {
       store.state.pauseOnChapterEnd = payload;
     },
     updatePosition: store => {
-      if (!store.audioRef || !store.audioRef.current) return;
-      store.state.position = store.audioRef.current.currentTime;
+      if (!audioRef || !audioRef.current) return;
+      store.state.position = audioRef.current.currentTime;
     },
     changePosition: (store, { payload }: PayloadAction<number>) => {
-      if (!store.audioRef || !store.audioRef.current) return;
+      if (!audioRef || !audioRef.current) return;
       store.state.position = payload;
-      store.audioRef.current.currentTime = payload;
+      audioRef.current.currentTime = payload;
     },
-    pause: ({ audioRef }) => {
+    pause: () => {
       audioRef?.current?.pause();
     },
     playPause: store => {
-      if (!store.audioRef || !store.audioRef.current) return;
+      if (!audioRef || !audioRef.current) return;
       if (store.state.playing) {
         const rewind = 5;
         const newPosition = store.state.position > rewind ? store.state.position - rewind : 0;
-        store.audioRef.current.pause();
+        audioRef.current.pause();
         store.state.position = newPosition;
-        store.audioRef.current.currentTime = newPosition;
+        audioRef.current.currentTime = newPosition;
         return;
       }
       if (store.state.error) {
         store.state.error = '';
-        updateSrc(store.audioRef as PlayerStore['audioRef'], store.bookId, store.chapters, store.state.currentChapter);
-        store.audioRef.current.addEventListener('canplay', playOnReady);
+        updateSrc(store.bookId, store.chapters, store.state.currentChapter);
+        audioRef.current.addEventListener('canplay', playOnReady);
         return;
       }
-      store.audioRef.current.play();
+      audioRef.current.play();
     },
     chapterChange: (store, { payload }: PayloadAction<number>) => {
-      if (!store.audioRef || !store.audioRef.current || payload < 0 || payload > store.chapters.length - 1) return;
+      if (!audioRef || !audioRef.current || payload < 0 || payload > store.chapters.length - 1) return;
       store.state.position = 0;
       store.state.currentChapter = payload;
-      updateSrc(store.audioRef as PlayerStore['audioRef'], store.bookId, store.chapters, payload);
+      updateSrc(store.bookId, store.chapters, payload);
       if (store.state.playing) {
-        store.audioRef.current.addEventListener('canplay', playOnReady);
+        audioRef.current.addEventListener('canplay', playOnReady);
       }
     },
     changeVolume: (store, { payload }: PayloadAction<number>) => {
-      if (!store.audioRef || !store.audioRef.current || payload < 0 || payload > 100) return;
+      if (!audioRef || !audioRef.current || payload < 0 || payload > 100) return;
       store.state.volume = payload;
-      store.audioRef.current.volume = payload / 100;
+      audioRef.current.volume = payload / 100;
     },
     setResetSleepTimerOnActivity: (store, { payload }: PayloadAction<boolean>) => {
       store.state.resetSleepTimerOnActivity = payload;
@@ -200,16 +195,16 @@ export const {
 } = playerSlice.actions;
 
 const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
+  audioRef = useRef<HTMLAudioElement>(null);
   const [{ state }, dispatch] = useReducer(playerSlice.reducer, playerSlice.getInitialState(), initialState => {
     const state = getSavedState(initialState.state, bookId);
-    return { state, chapters, audioRef, bookId };
+    return { state, chapters, bookId };
   });
 
   const { setup, updateDuration, setPlaying, chapterEnded, updatePosition, setError } = playerSlice.actions;
   useEffect(() => {
     dispatch(setup({ bookId, chapters }));
-    if (!audioRef.current) return;
+    if (!audioRef || !audioRef.current) return;
     audioRef.current.oncanplay = () => dispatch(updateDuration());
     audioRef.current.onplaying = () => dispatch(setPlaying(true));
     audioRef.current.onpause = () => dispatch(setPlaying(false));
