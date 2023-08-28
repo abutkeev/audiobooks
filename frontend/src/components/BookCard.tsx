@@ -1,7 +1,7 @@
 import { Edit, Mic, LibraryBooks } from '@mui/icons-material';
 import { Card, CardContent, Typography, Stack } from '@mui/material';
 import { BookInfo } from '../api/api';
-import { Link } from 'react-router-dom';
+import Link from './common/Link';
 
 interface BookCardProps {
   id?: string;
