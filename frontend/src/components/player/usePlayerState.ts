@@ -51,6 +51,21 @@ const playOnReady = ({ target }: Event) => {
   }
 };
 
+const setPositionOnReady = (position: number, play: boolean) => {
+  const handler = ({ target, type }: Event) => {
+    if (target instanceof HTMLAudioElement && type === 'canplay') {
+      if (position < 0) {
+        const newPosition = target.duration - position;
+        target.currentTime = newPosition > 0 ? newPosition : 0;
+      } else {
+        target.currentTime = position < target.duration ? position : target.duration;
+      }
+      if (play) target.play();
+    }
+  };
+  audioRef?.current?.addEventListener('canplay', handler, { once: true });
+};
+
 const playerSlice = createSlice({
   name: 'player',
   initialState,
@@ -123,6 +138,45 @@ const playerSlice = createSlice({
       }
       audioRef.current.play();
     },
+    forward: (store, { payload }: PayloadAction<number>) => {
+      if (!audioRef || !audioRef.current || payload < 0 || store.state.duration === undefined) return;
+      const remainTime = store.state.duration - store.state.position;
+      if (payload <= remainTime) {
+        store.state.position += payload;
+        audioRef.current.currentTime = store.state.position;
+        return;
+      }
+      if (store.state.currentChapter === store.chapters.length - 1) {
+        store.state.position = store.state.duration;
+        audioRef.current.currentTime = store.state.duration;
+        return;
+      }
+      const newPosition = payload - remainTime;
+      store.state.currentChapter += 1;
+      updateSrc(store.bookId, store.chapters, store.state.currentChapter);
+      store.state.position = newPosition;
+      store.state.duration = undefined;
+      setPositionOnReady(newPosition, store.state.playing);
+    },
+    rewind: (store, { payload }: PayloadAction<number>) => {
+      if (!audioRef || !audioRef.current || payload < 0) return;
+      if (payload <= store.state.position) {
+        store.state.position -= payload;
+        audioRef.current.currentTime = store.state.position;
+        return;
+      }
+      if (store.state.currentChapter === 0) {
+        store.state.position = 0;
+        audioRef.current.currentTime = 0;
+        return;
+      }
+      const remainingRewind = payload - store.state.position;
+      store.state.currentChapter -= 1;
+      updateSrc(store.bookId, store.chapters, store.state.currentChapter);
+      store.state.position = 0;
+      store.state.duration = undefined;
+      setPositionOnReady(-remainingRewind, store.state.playing);
+    },
     chapterChange: (store, { payload }: PayloadAction<number>) => {
       if (!audioRef || !audioRef.current || payload < 0 || payload > store.chapters.length - 1) return;
       store.state.position = 0;
@@ -151,6 +205,8 @@ const playerSlice = createSlice({
 export const {
   changePosition,
   playPause,
+  forward,
+  rewind,
   chapterChange,
   changeVolume,
   pause,

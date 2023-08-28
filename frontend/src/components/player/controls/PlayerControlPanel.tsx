@@ -2,8 +2,12 @@ import { SkipPrevious, Replay10, Pause, PlayArrow, Forward10, SkipNext } from '@
 import { Stack } from '@mui/material';
 import ControlButton from './ControlButton';
 import { useContext } from 'react';
-import { PlayerStateContext, changePosition, chapterChange, playPause } from '../usePlayerState';
+import { PlayerStateContext, chapterChange, forward, playPause, rewind } from '../usePlayerState';
 import React from 'react';
+
+const mediaKeysRewindTime = 10;
+const arrowKeysRewindTime = 15;
+const letterKeysRewindTime = 30;
 
 const PlayerControlPanel: React.FC = () => {
   const {
@@ -15,9 +19,6 @@ const PlayerControlPanel: React.FC = () => {
   const handlePlayPause = () => dispatch(playPause());
   const handlePreviousChapter = () => dispatch(chapterChange(currentChapter - 1));
   const handleNextChapter = () => currentChapter !== chapters.length - 1 && dispatch(chapterChange(currentChapter + 1));
-  const handleRewind = (amount: number) => () => dispatch(changePosition(position > amount ? position - amount : 0));
-  const handleForward = (amount: number) => () =>
-    duration && dispatch(changePosition(position + amount < duration ? position + amount : duration));
   const handleKeyDown = (e: KeyboardEvent) => {
     const { code } = e;
     const disableDefaultActions = () => {
@@ -30,19 +31,19 @@ const PlayerControlPanel: React.FC = () => {
         disableDefaultActions();
         break;
       case 'ArrowLeft':
-        handleRewind(15)();
+        dispatch(rewind(arrowKeysRewindTime));
         disableDefaultActions();
         break;
       case 'ArrowRight':
-        handleForward(15)();
+        dispatch(forward(arrowKeysRewindTime));
         disableDefaultActions();
         break;
       case 'KeyJ':
-        handleRewind(30)();
+        dispatch(rewind(letterKeysRewindTime));
         disableDefaultActions();
         break;
       case 'KeyL':
-        handleForward(30)();
+        dispatch(forward(letterKeysRewindTime));
         disableDefaultActions();
         break;
       case 'KeyN':
@@ -57,8 +58,8 @@ const PlayerControlPanel: React.FC = () => {
   };
 
   React.useEffect(() => {
-    navigator.mediaSession.setActionHandler('previoustrack', handleRewind(10));
-    navigator.mediaSession.setActionHandler('nexttrack', handleForward(10));
+    navigator.mediaSession.setActionHandler('previoustrack', () => dispatch(rewind(mediaKeysRewindTime)));
+    navigator.mediaSession.setActionHandler('nexttrack', () => dispatch(forward(mediaKeysRewindTime)));
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       navigator.mediaSession.setActionHandler('previoustrack', null);
@@ -70,9 +71,17 @@ const PlayerControlPanel: React.FC = () => {
   return (
     <Stack direction='row' justifyContent='center'>
       <ControlButton Icon={SkipPrevious} disabled={currentChapter === 0} onClick={handlePreviousChapter} />
-      <ControlButton Icon={Replay10} onClick={handleRewind(10)} disabled={!position} />
+      <ControlButton
+        Icon={Replay10}
+        onClick={() => dispatch(rewind(10))}
+        disabled={!position && currentChapter === 0}
+      />
       <ControlButton main Icon={playing ? Pause : PlayArrow} onClick={handlePlayPause} />
-      <ControlButton Icon={Forward10} onClick={handleForward(10)} disabled={!duration || position === duration} />
+      <ControlButton
+        Icon={Forward10}
+        onClick={() => dispatch(forward(10))}
+        disabled={!duration || (position === duration && currentChapter === chapters.length - 1)}
+      />
       <ControlButton Icon={SkipNext} disabled={currentChapter === chapters.length - 1} onClick={handleNextChapter} />
     </Stack>
   );
