@@ -3,7 +3,7 @@ import { PlayerState } from './usePlayerState';
 
 const playerStateName = 'playerState';
 
-export const getSavedState = (initialState: PlayerState, bookId: string) => {
+export const getSavedState = (initialState: PlayerState, bookId: string, chaptersLength: number) => {
   const state = { ...initialState };
   const savedState = localStorage.getItem(playerStateName);
   if (!savedState) return state;
@@ -29,7 +29,7 @@ export const getSavedState = (initialState: PlayerState, bookId: string) => {
     }
 
     if (savedBookId !== bookId) return state;
-    if (isFinite(currentChapter) && currentChapter > 0) {
+    if (Number.isInteger(currentChapter) && currentChapter > 0 && currentChapter < chaptersLength) {
       state.currentChapter = currentChapter;
     }
     if (isFinite(position) && position > 0) {

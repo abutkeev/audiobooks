@@ -59,7 +59,7 @@ const playerSlice = createSlice({
       store,
       { payload: { bookId, chapters } }: PayloadAction<{ bookId: string; chapters: PlayerStore['chapters'] }>
     ) => {
-      store.state = getSavedState(initialState.state, bookId);
+      store.state = getSavedState(initialState.state, bookId, chapters.length);
       store.chapters = chapters;
       if (!audioRef || !audioRef.current) return;
       updateSrc(bookId, chapters, store.state.currentChapter);
@@ -162,7 +162,7 @@ export const {
 const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
   audioRef = useRef<HTMLAudioElement>(null);
   const [{ state }, dispatch] = useReducer(playerSlice.reducer, playerSlice.getInitialState(), initialState => {
-    const state = getSavedState(initialState.state, bookId);
+    const state = getSavedState(initialState.state, bookId, chapters.length);
     return { state, chapters, bookId };
   });
 
