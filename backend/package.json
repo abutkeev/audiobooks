@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "download": "ts-node tools/download.ts",
+    "update_metadata": "ts-node tools/update_metadata.ts",
     "format:check": "prettier -c .",
     "format": "prettier -w ."
   },
