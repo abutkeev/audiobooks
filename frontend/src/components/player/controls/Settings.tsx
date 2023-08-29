@@ -1,8 +1,9 @@
 import ControlButton from './ControlButton';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { FormControlLabel, Menu, MenuItem, Switch } from '@mui/material';
 import { PlayerStateContext, setPreventScreenLock, setResetSleepTimerOnActivity } from '../state/usePlayerState';
 import SettingsIcon from '@mui/icons-material/Settings';
+import useWakeLock from '../useWakeLock';
 
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -10,32 +11,7 @@ const Settings: React.FC = () => {
     state: { resetSleepTimerOnActivity, preventScreenLock, playing },
     dispatch,
   } = useContext(PlayerStateContext);
-
-  useEffect(() => {
-    if (preventScreenLock && playing) {
-      let timerId: ReturnType<typeof setTimeout>;
-      let wakelock: WakeLockSentinel;
-      const preventLock = () =>
-        navigator.wakeLock.request('screen').then(lock => {
-          wakelock = lock;
-          wakelock.onrelease = () => {
-            timerId = setTimeout(() => {
-              console.log('timeout');
-              clearTimeout(timerId);
-              preventLock();
-            }, 1000);
-          };
-        });
-      preventLock();
-      return () => {
-        clearTimeout(timerId);
-        if (wakelock) {
-          wakelock.onrelease = null;
-          wakelock.release();
-        }
-      };
-    }
-  }, [preventScreenLock, playing]);
+  const wakelockAvailable = useWakeLock({ preventScreenLock, playing });
 
   const closeMenu = () => setMenuAnchor(undefined);
   const handleResetSleepTimerOnActivityChange = (_: ChangeEvent, checked: boolean) => {
@@ -63,12 +39,14 @@ const Settings: React.FC = () => {
             label='reset sleep timer on activity'
           />
         </MenuItem>
-        <MenuItem>
-          <FormControlLabel
-            control={<Switch checked={preventScreenLock} color='primary' onChange={handlePreventScreenLock} />}
-            label='prevent screen lock when playing'
-          />
-        </MenuItem>
+        {wakelockAvailable && (
+          <MenuItem>
+            <FormControlLabel
+              control={<Switch checked={preventScreenLock} color='primary' onChange={handlePreventScreenLock} />}
+              label='prevent screen lock when playing'
+            />
+          </MenuItem>
+        )}
       </Menu>
     </>
   );
