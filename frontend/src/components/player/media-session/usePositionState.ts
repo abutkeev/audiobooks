@@ -8,7 +8,7 @@ const usePositionState = ({ position, duration }: PositionInfo) => {
   const { mediaSession } = navigator;
 
   useEffect(() => {
-    if (duration) {
+    if (duration && position <= duration) {
       mediaSession.setPositionState({ duration, position });
     }
     return () => {
