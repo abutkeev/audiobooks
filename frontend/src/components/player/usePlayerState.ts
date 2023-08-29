@@ -16,6 +16,7 @@ interface PlayerStore {
     resetSleepTimerOnActivity: boolean;
     preventScreenLock: boolean;
     error: string;
+    newPosition?: number;
   };
   bookId: string;
   chapters: Book['chapters'];
@@ -44,28 +45,6 @@ const updateSrc = (bookId: string, chapters: PlayerStore['chapters'], chapter: n
   audioRef.current.src = `/api/books/${bookId}/${chapters[chapter].filename}`;
 };
 
-const playOnReady = ({ target }: Event) => {
-  if (target instanceof HTMLAudioElement) {
-    target.play();
-    target.removeEventListener('canplay', playOnReady);
-  }
-};
-
-const setPositionOnReady = (position: number, play: boolean) => {
-  const handler = ({ target, type }: Event) => {
-    if (target instanceof HTMLAudioElement && type === 'canplay') {
-      if (position < 0) {
-        const newPosition = target.duration - position;
-        target.currentTime = newPosition > 0 ? newPosition : 0;
-      } else {
-        target.currentTime = position < target.duration ? position : target.duration;
-      }
-      if (play) target.play();
-    }
-  };
-  audioRef?.current?.addEventListener('canplay', handler, { once: true });
-};
-
 const playerSlice = createSlice({
   name: 'player',
   initialState,
@@ -81,9 +60,21 @@ const playerSlice = createSlice({
       audioRef.current.currentTime = store.state.position;
       audioRef.current.volume = store.state.volume / 100;
     },
-    updateDuration: store => {
+    canPlay: store => {
       if (!audioRef || !audioRef.current) return;
       store.state.duration = audioRef.current.duration;
+      if (store.state.newPosition) {
+        if (store.state.newPosition < 0) {
+          const newPosition = store.state.duration - store.state.newPosition;
+          store.state.position = newPosition > 0 ? newPosition : 0;
+        } else {
+          store.state.position =
+            store.state.newPosition < store.state.duration ? store.state.newPosition : store.state.duration;
+        }
+        audioRef.current.currentTime = store.state.position;
+        store.state.newPosition = undefined;
+      }
+      if (store.state.playing) audioRef.current.play();
     },
     setPlaying: (store, { payload }: PayloadAction<boolean>) => {
       store.state.playing = payload;
@@ -103,7 +94,7 @@ const playerSlice = createSlice({
         store.state.pauseOnChapterEnd = false;
         return;
       }
-      audioRef?.current?.addEventListener('canplay', playOnReady);
+      store.state.playing = true;
     },
     setPauseOnChapterEnd: (store, { payload }: PayloadAction<boolean>) => {
       store.state.pauseOnChapterEnd = payload;
@@ -132,8 +123,8 @@ const playerSlice = createSlice({
       }
       if (store.state.error) {
         store.state.error = '';
+        store.state.playing = true;
         updateSrc(store.bookId, store.chapters, store.state.currentChapter);
-        audioRef.current.addEventListener('canplay', playOnReady);
         return;
       }
       audioRef.current.play();
@@ -151,12 +142,9 @@ const playerSlice = createSlice({
         audioRef.current.currentTime = store.state.duration;
         return;
       }
-      const newPosition = payload - remainTime;
       store.state.currentChapter += 1;
       updateSrc(store.bookId, store.chapters, store.state.currentChapter);
-      store.state.position = newPosition;
-      store.state.duration = undefined;
-      setPositionOnReady(newPosition, store.state.playing);
+      store.state.newPosition = payload - remainTime;
     },
     rewind: (store, { payload }: PayloadAction<number>) => {
       if (!audioRef || !audioRef.current || payload < 0) return;
@@ -173,18 +161,14 @@ const playerSlice = createSlice({
       const remainingRewind = payload - store.state.position;
       store.state.currentChapter -= 1;
       updateSrc(store.bookId, store.chapters, store.state.currentChapter);
-      store.state.position = 0;
+      store.state.newPosition = -remainingRewind;
       store.state.duration = undefined;
-      setPositionOnReady(-remainingRewind, store.state.playing);
     },
     chapterChange: (store, { payload }: PayloadAction<number>) => {
       if (!audioRef || !audioRef.current || payload < 0 || payload > store.chapters.length - 1) return;
       store.state.position = 0;
       store.state.currentChapter = payload;
       updateSrc(store.bookId, store.chapters, payload);
-      if (store.state.playing) {
-        audioRef.current.addEventListener('canplay', playOnReady);
-      }
     },
     changeVolume: (store, { payload }: PayloadAction<number>) => {
       if (!audioRef || !audioRef.current || payload < 0 || payload > 100) return;
@@ -222,11 +206,11 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
     return { state, chapters, bookId };
   });
 
-  const { setup, updateDuration, setPlaying, chapterEnded, updatePosition, setError } = playerSlice.actions;
+  const { setup, canPlay, setPlaying, chapterEnded, updatePosition, setError } = playerSlice.actions;
   useEffect(() => {
     dispatch(setup({ bookId, chapters }));
     if (!audioRef || !audioRef.current) return;
-    audioRef.current.oncanplay = () => dispatch(updateDuration());
+    audioRef.current.oncanplay = () => dispatch(canPlay());
     audioRef.current.onplaying = () => dispatch(setPlaying(true));
     audioRef.current.onpause = () => dispatch(setPlaying(false));
     audioRef.current.onended = () => dispatch(chapterEnded());
