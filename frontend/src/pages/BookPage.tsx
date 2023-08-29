@@ -21,7 +21,15 @@ const BookPage: React.FC = () => {
       {data && (
         <>
           <BookCard info={data.info} authors={authors} readers={readers} series={series} />
-          <Player bookId={id} chapters={data.chapters} />
+          <Player
+            info={{
+              name: data.info.name,
+              author: authors[data.info.author_id],
+              series: data.info.series_id && series[data.info.series_id],
+            }}
+            bookId={id}
+            chapters={data.chapters}
+          />
         </>
       )}
     </LoadingWrapper>

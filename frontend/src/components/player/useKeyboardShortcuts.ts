@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import usePlayerState, { rewind, forward, playPause, chapterChange, changeVolume } from './state/usePlayerState';
 
-const mediaKeysRewindTime = 10;
 const arrowKeysRewindTime = 15;
 const letterKeysRewindTime = 30;
 
@@ -58,12 +57,8 @@ const useKeyboardShortcuts = (
   };
 
   useEffect(() => {
-    navigator.mediaSession.setActionHandler('previoustrack', () => dispatch(rewind(mediaKeysRewindTime)));
-    navigator.mediaSession.setActionHandler('nexttrack', () => dispatch(forward(mediaKeysRewindTime)));
     document.addEventListener('keydown', handleKeyDown);
     return () => {
-      navigator.mediaSession.setActionHandler('previoustrack', null);
-      navigator.mediaSession.setActionHandler('nexttrack', null);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [currentChapter, volume]);

@@ -109,8 +109,22 @@ const playerSlice = createSlice({
       store.state.position = payload;
       audioRef.current.currentTime = payload;
     },
-    pause: () => {
-      audioRef?.current?.pause();
+    pause: store => {
+      if (!audioRef || !audioRef.current) return;
+      const rewind = 5;
+      const newPosition = store.state.position > rewind ? store.state.position - rewind : 0;
+      audioRef.current.pause();
+      store.state.position = newPosition;
+      audioRef.current.currentTime = newPosition;
+    },
+    play: store => {
+      if (store.state.error) {
+        store.state.error = '';
+        store.state.playing = true;
+        updateSrc(store.bookId, store.chapters, store.state.currentChapter);
+        return;
+      }
+      audioRef?.current?.play();
     },
     playPause: store => {
       if (!audioRef || !audioRef.current) return;
@@ -195,6 +209,7 @@ export const {
   chapterChange,
   changeVolume,
   pause,
+  play,
   setPauseOnChapterEnd,
   setResetSleepTimerOnActivity,
   setPreventScreenLock,

@@ -6,15 +6,18 @@ import Controls from './controls';
 import usePlayerState, { PlayerStateContext } from './state/usePlayerState';
 import PlayerError from './PlayerError';
 import useKeyboardShortcuts from './useKeyboardShortcuts';
+import useMediaSession, { BookInfo } from './media-session/useMediaSession';
 
 interface PlayerProps {
   bookId: string;
+  info: BookInfo;
   chapters: Book['chapters'];
 }
 
-const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
+const Player: React.FC<PlayerProps> = ({ bookId, info, chapters }) => {
   const [{ state, audioRef }, dispatch] = usePlayerState(bookId, chapters);
   useKeyboardShortcuts(state, dispatch);
+  useMediaSession(info, chapters[state.currentChapter].title, state, dispatch);
 
   return (
     <PlayerStateContext.Provider value={{ state, dispatch, chapters }}>
