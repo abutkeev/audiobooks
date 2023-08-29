@@ -53,7 +53,7 @@ export const getSavedState = (initialState: PlayerState, bookId: string, chapter
   const state = { ...initialState };
   const { currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock } = loadSavedState(bookId);
 
-  if (isFinite(volume) && volume > 0 && volume < 100) {
+  if (isFinite(volume) && volume >= 0 && volume <= 100) {
     state.volume = volume;
   }
 
