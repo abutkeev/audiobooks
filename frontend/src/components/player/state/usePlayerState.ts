@@ -43,6 +43,7 @@ const initialState: PlayerStore = {
 const updateSrc = (bookId: string, chapters: PlayerStore['chapters'], chapter: number) => {
   if (!audioRef || !audioRef.current) return;
   audioRef.current.src = `/api/books/${bookId}/${chapters[chapter].filename}`;
+  audioRef.current.load()
 };
 
 const playerSlice = createSlice({
