@@ -1,4 +1,4 @@
-import { Grid, Paper } from '@mui/material';
+import { Grid, Hidden, Paper } from '@mui/material';
 import React from 'react';
 import VolumeControl from './VolumeControl';
 import PositionControl from './PositionControl';
@@ -11,10 +11,12 @@ const Controls: React.FC = () => {
     <Paper square sx={{ p: 1 }}>
       <PlayerControlPanel />
       <Grid container p={1} alignItems='center'>
-        <Grid item xs={4}>
-          <VolumeControl />
-        </Grid>
-        <Grid item xs={8} display='flex' justifyContent='flex-end'>
+        <Hidden smDown>
+          <Grid item md={4}>
+            <VolumeControl />
+          </Grid>
+        </Hidden>
+        <Grid item xs={12} md={8} display='flex' justifyContent='flex-end'>
           <SleepControl />
           <Settings />
         </Grid>
