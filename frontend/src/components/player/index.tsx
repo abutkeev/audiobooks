@@ -5,6 +5,7 @@ import { Book } from '../../api/api';
 import Controls from './controls';
 import usePlayerState, { PlayerStateContext } from './state/usePlayerState';
 import PlayerError from './PlayerError';
+import useKeyboardShortcuts from './useKeyboardShortcuts';
 
 interface PlayerProps {
   bookId: string;
@@ -13,6 +14,7 @@ interface PlayerProps {
 
 const Player: React.FC<PlayerProps> = ({ bookId, chapters }) => {
   const [{ state, audioRef }, dispatch] = usePlayerState(bookId, chapters);
+  useKeyboardShortcuts(state, dispatch);
 
   return (
     <PlayerStateContext.Provider value={{ state, dispatch, chapters }}>
