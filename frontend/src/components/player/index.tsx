@@ -3,7 +3,7 @@ import { Paper } from '@mui/material';
 import Chapters from './chapters';
 import { Book } from '../../api/api';
 import Controls from './controls';
-import usePlayerState, { PlayerStateContext } from './usePlayerState';
+import usePlayerState, { PlayerStateContext } from './state/usePlayerState';
 import PlayerError from './PlayerError';
 
 interface PlayerProps {

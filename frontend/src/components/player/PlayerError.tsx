@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { PlayerStateContext } from './usePlayerState';
+import { PlayerStateContext } from './state/usePlayerState';
 import { Alert } from '@mui/material';
 
 const PlayerError: React.FC = () => {

@@ -2,7 +2,7 @@ import { Bedtime, BedtimeOff } from '@mui/icons-material';
 import ControlButton from './ControlButton';
 import { useContext, useEffect, useState } from 'react';
 import { Menu, MenuItem, Stack, Typography } from '@mui/material';
-import { PlayerStateContext, pause, setPauseOnChapterEnd } from '../usePlayerState';
+import { PlayerStateContext, pause, setPauseOnChapterEnd } from '../state/usePlayerState';
 import formatTime from '../../../utils/formatTime';
 
 const SleepControl: React.FC = () => {

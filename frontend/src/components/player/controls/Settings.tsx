@@ -1,7 +1,7 @@
 import ControlButton from './ControlButton';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { FormControlLabel, Menu, MenuItem, Switch } from '@mui/material';
-import { PlayerStateContext, setPreventScreenLock, setResetSleepTimerOnActivity } from '../usePlayerState';
+import { PlayerStateContext, setPreventScreenLock, setResetSleepTimerOnActivity } from '../state/usePlayerState';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 const Settings: React.FC = () => {

@@ -2,7 +2,7 @@ import { SkipPrevious, Replay10, Pause, PlayArrow, Forward10, SkipNext } from '@
 import { Stack } from '@mui/material';
 import ControlButton from './ControlButton';
 import { useContext } from 'react';
-import { PlayerStateContext, chapterChange, forward, playPause, rewind } from '../usePlayerState';
+import { PlayerStateContext, chapterChange, forward, playPause, rewind } from '../state/usePlayerState';
 import React from 'react';
 
 const mediaKeysRewindTime = 10;

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { PlayerStateContext, changePosition } from '../usePlayerState';
+import { PlayerStateContext, changePosition } from '../state/usePlayerState';
 import { Stack, Typography, Slider } from '@mui/material';
 import formatTime from '../../../utils/formatTime';
 

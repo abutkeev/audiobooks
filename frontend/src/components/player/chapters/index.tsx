@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { PlayerStateContext, chapterChange } from '../usePlayerState';
+import { PlayerStateContext, chapterChange } from '../state/usePlayerState';
 import Chapter from './Chapter';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 

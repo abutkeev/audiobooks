@@ -1,7 +1,7 @@
 import { VolumeDown, VolumeUp } from '@mui/icons-material';
 import { Stack, Slider } from '@mui/material';
 import { useContext, useEffect } from 'react';
-import { PlayerStateContext, changeVolume } from '../usePlayerState';
+import { PlayerStateContext, changeVolume } from '../state/usePlayerState';
 
 const VolumeControl: React.FC = () => {
   const {
