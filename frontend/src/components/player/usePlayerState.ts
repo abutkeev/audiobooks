@@ -102,6 +102,7 @@ const playerSlice = createSlice({
     updatePosition: store => {
       if (!audioRef || !audioRef.current) return;
       store.state.position = audioRef.current.currentTime;
+      store.state.duration = audioRef.current.duration;
     },
     changePosition: (store, { payload }: PayloadAction<number>) => {
       if (!audioRef || !audioRef.current) return;
