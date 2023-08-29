@@ -11,7 +11,7 @@ import { RouterProvider, createHashRouter } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import BookPage from './pages/BookPage';
 import AppBar from './components/app-bar/AppBar';
-import NotFound from './components/NotFound';
+import NotFound from './pages/NotFound';
 
 const router = createHashRouter([
   {
