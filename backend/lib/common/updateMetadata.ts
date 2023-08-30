@@ -29,19 +29,19 @@ const updateMetadata = (targetDir: string) => {
       booksList.push(fsBook);
       continue;
     }
-    if (name && book.info.name !== name) {
+    if (name && !book.info.name) {
       book.info.name = name;
     }
-    if (author_id && book.info.author_id !== author_id) {
+    if (author_id && !book.info.author_id) {
       book.info.author_id = author_id;
     }
-    if (reader_id && book.info.reader_id !== reader_id) {
+    if (reader_id && !book.info.reader_id) {
       book.info.reader_id = reader_id;
     }
-    if (series_id && book.info.series_id !== series_id) {
+    if (series_id && !book.info.series_id) {
       book.info.series_id = series_id;
     }
-    if (series_number && book.info.series_number !== series_number) {
+    if (series_number && !book.info.series_number) {
       book.info.series_number = series_number;
     }
   }
