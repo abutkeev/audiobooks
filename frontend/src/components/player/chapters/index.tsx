@@ -10,11 +10,16 @@ const Chapters: React.FC = () => {
     dispatch,
   } = useContext(PlayerStateContext);
   const handleChapterClick = (chapter: number) => () => dispatch(chapterChange(chapter));
+  const currentChapterTitle = chapters[currentChapter].title;
+  const chapterNumber = currentChapter + 1;
+  const titleIsNumber = +currentChapterTitle === chapterNumber;
 
   return (
     <Accordion>
       <AccordionSummary>
-        <Typography>Current chapter {chapters[currentChapter].title}</Typography>
+        <Typography>
+          Current chapter {chapterNumber} of {chapters.length} {!titleIsNumber && `(${currentChapterTitle})`}
+        </Typography>
       </AccordionSummary>
       <AccordionDetails>
         {chapters.map(({ title }, i) => (
