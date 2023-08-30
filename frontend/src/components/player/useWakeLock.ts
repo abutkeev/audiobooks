@@ -16,7 +16,6 @@ const useWakeLock = ({ preventScreenLock, playing }: WakeLockParams) => {
           wakelock = lock;
           wakelock.onrelease = () => {
             timerId = setTimeout(() => {
-              console.log('timeout');
               clearTimeout(timerId);
               preventLock();
             }, 1000);
