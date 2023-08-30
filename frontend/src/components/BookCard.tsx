@@ -1,5 +1,5 @@
-import { Edit, Mic, LibraryBooks, NavigateNext } from '@mui/icons-material';
-import { Card, CardContent, Typography, Stack, Tooltip, CardMedia, Skeleton, Hidden } from '@mui/material';
+import { Edit, Mic, LibraryBooks, NavigateNext, AutoStories } from '@mui/icons-material';
+import { Card, CardContent, Typography, Stack, Tooltip, Hidden } from '@mui/material';
 import { BookInfo, useGetBooksQuery } from '../api/api';
 import Link from './common/Link';
 import { useMemo } from 'react';
@@ -34,11 +34,9 @@ const BookCard: React.FC<BookCardProps> = ({
       <Stack direction='row'>
         <Hidden mdDown>
           {cover ? (
-            <CardMedia>
-              <img width={200} height={200} src={cover.filename} />
-            </CardMedia>
+            <img width={200} height={200} src={cover.filename} />
           ) : (
-            <Skeleton variant='rectangular' animation={false} width={200} height={200} />
+            <AutoStories sx={{ width: 200, height: 200 }} color='primary' />
           )}
         </Hidden>
         <CardContent>
