@@ -109,7 +109,7 @@ components:
           info:
             type: object
             $ref: "#/components/schemas/BookInfo"
-        required: [info, chapters]
+        required: [id, info]
     Chapter:
       type: object
       properties:
