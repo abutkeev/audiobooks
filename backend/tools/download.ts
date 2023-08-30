@@ -6,12 +6,12 @@ import generateID from '../lib/common/generateID';
 import updateMetadata from '../lib/common/updateMetadata';
 
 if (process.argv.length < 4) {
-  console.error(`Usage: npm run download <URL> <target dir>`);
+  console.error(`Usage: npm run download <target dir> <URL>`);
   process.exit(1);
 }
 
-const url = process.argv[2];
-const targetDir = process.argv[3];
+const targetDir = process.argv[2];
+const url = process.argv[3];
 extractPlaylist(url).then(async playlist => {
   if (!playlist) throw new Error("Can't get playlist");
   const bookId = generateID();
