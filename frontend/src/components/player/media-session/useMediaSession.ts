@@ -8,6 +8,10 @@ export interface BookInfo {
   name: string;
   author: string;
   series?: string;
+  cover?: {
+    type: string;
+    filename: string;
+  };
 }
 
 const useMediaSession = (

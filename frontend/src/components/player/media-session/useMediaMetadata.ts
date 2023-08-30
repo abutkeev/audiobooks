@@ -4,10 +4,14 @@ interface BookMetadata {
   name: string;
   author: string;
   series?: string;
+  cover?: {
+    type: string;
+    filename: string;
+  };
   chapterTitle: string;
 }
 
-const useMediaMetadata = ({ name, author, series, chapterTitle }: BookMetadata) => {
+const useMediaMetadata = ({ name, author, series, cover, chapterTitle }: BookMetadata) => {
   const { mediaSession } = navigator;
 
   useEffect(() => {
@@ -16,6 +20,14 @@ const useMediaMetadata = ({ name, author, series, chapterTitle }: BookMetadata) 
       title,
       artist: author,
       album: series,
+      artwork: cover
+        ? [
+            {
+              src: cover.filename,
+              type: cover.type,
+            },
+          ]
+        : undefined,
     });
     return () => {
       mediaSession.metadata = null;

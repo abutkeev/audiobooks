@@ -1,5 +1,5 @@
 import { Edit, Mic, LibraryBooks, NavigateNext } from '@mui/icons-material';
-import { Card, CardContent, Typography, Stack, Tooltip } from '@mui/material';
+import { Card, CardContent, Typography, Stack, Tooltip, CardMedia, Skeleton, Hidden } from '@mui/material';
 import { BookInfo, useGetBooksQuery } from '../api/api';
 import Link from './common/Link';
 import { useMemo } from 'react';
@@ -14,7 +14,7 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({
   id,
-  info: { name, author_id, reader_id, series_id, series_number },
+  info: { name, author_id, reader_id, series_id, series_number, cover },
   authors,
   readers,
   series,
@@ -30,36 +30,47 @@ const BookCard: React.FC<BookCardProps> = ({
     return { id: nextBook.id, name: nextBook.info.name };
   }, [books, id, series_id, series_number]);
   return (
-    <Card sx={{ maxWidth: 'md', mx: 'auto' }}>
-      <CardContent>
-        <Typography variant='h6'>{id ? <Link to={`/book/${id}`}>{name}</Link> : name}</Typography>
-        <Stack direction='row' spacing={1}>
-          <Edit />
-          <Typography>{authors[author_id] ?? author_id}</Typography>
-        </Stack>
-        <Stack direction='row' spacing={1}>
-          <Mic />
-          <Typography>{readers[reader_id] ?? reader_id}</Typography>
-        </Stack>
-        {series_id && (
+    <Card sx={{ maxWidth: 'md', mx: 'auto' }} raised>
+      <Stack direction='row'>
+        <Hidden mdDown>
+          {cover ? (
+            <CardMedia>
+              <img width={200} height={200} src={cover.filename} />
+            </CardMedia>
+          ) : (
+            <Skeleton variant='rectangular' animation={false} width={200} height={200} />
+          )}
+        </Hidden>
+        <CardContent>
+          <Typography variant='h6'>{id ? <Link to={`/book/${id}`}>{name}</Link> : name}</Typography>
           <Stack direction='row' spacing={1}>
-            <LibraryBooks />
-            <Typography>
-              {series[series_id] ?? series_id} {series_number && `(${series_number})`}
-            </Typography>
-            {nextBook && (
-              <>
-                <NavigateNext />
-                <Tooltip title='Next book'>
-                  <Typography>
-                    <Link to={`/book/${nextBook.id}`}>{nextBook.name}</Link>
-                  </Typography>
-                </Tooltip>
-              </>
-            )}
+            <Edit />
+            <Typography>{authors[author_id] ?? author_id}</Typography>
           </Stack>
-        )}
-      </CardContent>
+          <Stack direction='row' spacing={1}>
+            <Mic />
+            <Typography>{readers[reader_id] ?? reader_id}</Typography>
+          </Stack>
+          {series_id && (
+            <Stack direction='row' spacing={1}>
+              <LibraryBooks />
+              <Typography>
+                {series[series_id] ?? series_id} {series_number && `(${series_number})`}
+              </Typography>
+              {nextBook && (
+                <>
+                  <NavigateNext />
+                  <Tooltip title='Next book'>
+                    <Typography>
+                      <Link to={`/book/${nextBook.id}`}>{nextBook.name}</Link>
+                    </Typography>
+                  </Tooltip>
+                </>
+              )}
+            </Stack>
+          )}
+        </CardContent>
+      </Stack>
     </Card>
   );
 };

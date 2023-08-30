@@ -26,6 +26,7 @@ const BookPage: React.FC = () => {
               name: data.info.name,
               author: authors[data.info.author_id],
               series: data.info.series_id && series[data.info.series_id],
+              cover: data.info.cover,
             }}
             bookId={id}
             chapters={data.chapters}
