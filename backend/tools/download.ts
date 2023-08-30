@@ -12,12 +12,12 @@ if (process.argv.length < 4) {
 
 const url = process.argv[2];
 const targetDir = process.argv[3];
-extractPlaylist(url).then(playlist => {
+extractPlaylist(url).then(async playlist => {
   if (!playlist) throw new Error("Can't get playlist");
   const bookId = generateID();
   const bookDir = path.resolve(targetDir, 'books', bookId);
   mkdirSync(bookDir);
-  savePlaylist(playlist, bookDir);
+  await savePlaylist(playlist, bookDir);
   updateMetadata(targetDir);
   console.log(`Book saved to ${bookDir}`);
 });
