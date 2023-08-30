@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import usePlayerState, { rewind, forward, playPause, chapterChange, changeVolume } from './state/usePlayerState';
+import usePlayerState, { rewind, forward, chapterChange, changeVolume, pause, play } from './state/usePlayerState';
 
 const arrowKeysRewindTime = 15;
 const letterKeysRewindTime = 30;
@@ -7,7 +7,7 @@ const letterKeysRewindTime = 30;
 const volumeChangeValue = 5;
 
 const useKeyboardShortcuts = (
-  { currentChapter, volume }: ReturnType<typeof usePlayerState>[0]['state'],
+  { currentChapter, volume, playing }: ReturnType<typeof usePlayerState>[0],
   dispatch: ReturnType<typeof usePlayerState>[1]
 ) => {
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -18,7 +18,7 @@ const useKeyboardShortcuts = (
     switch (code) {
       case 'Space':
       case 'KeyK':
-        dispatch(playPause());
+        dispatch(playing ? pause() : play());
         disableDefaultActions();
         break;
       case 'ArrowLeft':
@@ -61,7 +61,7 @@ const useKeyboardShortcuts = (
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentChapter, volume]);
+  }, [currentChapter, volume, playing]);
 };
 
 export default useKeyboardShortcuts;

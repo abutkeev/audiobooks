@@ -13,7 +13,7 @@ export interface BookInfo {
 const useMediaSession = (
   info: BookInfo,
   chapterTitle: string,
-  { playing, duration, position }: ReturnType<typeof usePlayerState>[0]['state'],
+  { playing, duration, position }: ReturnType<typeof usePlayerState>[0],
   dispatch: ReturnType<typeof usePlayerState>[1]
 ) => {
   if (!('mediaSession' in navigator)) return;

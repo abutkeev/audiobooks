@@ -15,7 +15,7 @@ interface PlayerProps {
 }
 
 const Player: React.FC<PlayerProps> = ({ bookId, info, chapters }) => {
-  const [{ state, audioRef }, dispatch] = usePlayerState(bookId, chapters);
+  const [state , dispatch] = usePlayerState(bookId, chapters);
   useKeyboardShortcuts(state, dispatch);
   useMediaSession(info, chapters[state.currentChapter].title, state, dispatch);
 
@@ -25,7 +25,6 @@ const Player: React.FC<PlayerProps> = ({ bookId, info, chapters }) => {
         <Controls />
         <PlayerError />
         <Chapters />
-        <audio ref={audioRef} />
       </Paper>
     </PlayerStateContext.Provider>
   );

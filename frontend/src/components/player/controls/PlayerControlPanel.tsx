@@ -2,7 +2,7 @@ import { SkipPrevious, Replay10, Pause, PlayArrow, Forward10, SkipNext } from '@
 import { Stack } from '@mui/material';
 import ControlButton from './ControlButton';
 import { useContext } from 'react';
-import { PlayerStateContext, chapterChange, forward, playPause, rewind } from '../state/usePlayerState';
+import { PlayerStateContext, chapterChange, forward, pause, play, rewind } from '../state/usePlayerState';
 
 const PlayerControlPanel: React.FC = () => {
   const {
@@ -23,7 +23,11 @@ const PlayerControlPanel: React.FC = () => {
         onClick={() => dispatch(rewind(10))}
         disabled={!position && currentChapter === 0}
       />
-      <ControlButton main Icon={playing ? Pause : PlayArrow} onClick={() => dispatch(playPause())} />
+      {playing ? (
+        <ControlButton main Icon={Pause} onClick={() => dispatch(pause())} />
+      ) : (
+        <ControlButton main Icon={PlayArrow} onClick={() => dispatch(play())} />
+      )}
       <ControlButton
         Icon={Forward10}
         onClick={() => dispatch(forward(10))}
