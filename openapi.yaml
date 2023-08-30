@@ -84,6 +84,9 @@ components:
           type: string
         series_number:
           type: string
+        cover:
+          type: object
+          $ref: "#/components/schemas/Cover"
       required: [name, author_id, reader_id]
     Book:
       type: object
@@ -115,6 +118,14 @@ components:
         filename:
           type: string
       required: [title, filename]
+    Cover:
+      type: object
+      properties:
+        type:
+          type: string
+        filename:
+          type: string
+      required: [type, filename]
     Person:
       type: object
       properties:
