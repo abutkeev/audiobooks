@@ -21,7 +21,7 @@ const MainPage: React.FC = () => {
         }
         if (a.info.author_id === b.info.author_id && a.info.series_id && a.info.series_id === b.info.series_id) {
           if (a.info.series_number && b.info.series_number && a.info.series_number > b.info.series_number) {
-            return 1
+            return 1;
           }
         }
         return -1;
