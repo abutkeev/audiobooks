@@ -3,6 +3,7 @@ import extractPlaylist from '../lib/extractPlaylist';
 import savePlaylist from '../lib/savePlaylist';
 import path from 'path';
 import generateID from '../lib/common/generateID';
+import updateMetadata from '../lib/common/updateMetadata';
 
 if (process.argv.length < 4) {
   console.error(`Usage: npm run download <URL> <target dir>`);
@@ -17,5 +18,6 @@ extractPlaylist(url).then(playlist => {
   const bookDir = path.resolve(targetDir, 'books', bookId);
   mkdirSync(bookDir);
   savePlaylist(playlist, bookDir);
-  console.log(`Book saved to ${bookDir}`)
+  updateMetadata(targetDir);
+  console.log(`Book saved to ${bookDir}`);
 });
