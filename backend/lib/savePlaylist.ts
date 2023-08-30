@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from 'fs';
 import extractPlaylist from './extractPlaylist';
 import path from 'path';
+import BookInfo from '../types/BookInfo.interface';
 
 const savePlaylist = async (playlist: Awaited<ReturnType<typeof extractPlaylist>>, targetDir: string) => {
   mkdirSync(targetDir, { recursive: true });
@@ -15,7 +16,12 @@ const savePlaylist = async (playlist: Awaited<ReturnType<typeof extractPlaylist>
     chapters.push({ title, filename });
     i++;
   }
-  writeFileSync(path.resolve(targetDir, 'info.json'), JSON.stringify({ chapters }, null, 2));
+  const info: BookInfo = {
+    name: '',
+    author_id: '',
+    reader_id: '',
+  };
+  writeFileSync(path.resolve(targetDir, 'info.json'), JSON.stringify({ info, chapters }, null, 2));
 };
 
 export default savePlaylist;
