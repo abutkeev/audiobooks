@@ -14,6 +14,7 @@ const getFixedBooksFromFs = (dir: string): BookListEntry[] => {
   const entries: BookListEntry[] = [];
   const dirEntries = readdirSync(booksDir);
   for (const id of dirEntries) {
+    if (!lstatSync(path.resolve(booksDir, id)).isDirectory()) continue;
     const infoFile = path.resolve(booksDir, id, 'info.json');
     const emptyBookInfo: BookInfo = { name: '', author_id: '', reader_id: '' };
     if (!existsSync(infoFile)) {

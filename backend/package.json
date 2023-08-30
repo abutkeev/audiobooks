@@ -8,6 +8,7 @@
   "scripts": {
     "download": "ts-node tools/download.ts",
     "update_metadata": "ts-node tools/update_metadata.ts",
+    "extract_cover": "ts-node tools/extract_cover.ts",
     "format:check": "prettier -c .",
     "format": "prettier -w ."
   },
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "node-fetch": "^3.3.2",
+    "node-id3": "^0.2.6",
     "uuid": "^9.0.0"
   }
 }

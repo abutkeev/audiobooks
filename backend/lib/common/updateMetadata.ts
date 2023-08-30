@@ -1,10 +1,10 @@
-import fixBooksList from "./fixBooksList";
-import fixPersonsList from "./fixPersonsList";
-import fixSeriesList from "./fixSeriesList";
-import getFixedBooksFromFs from "./getFixedBooksFromFs";
-import readConfig from "./readConfig";
-import updateBookInfo from "./updateBookInfo";
-import writeConfig from "./writeConfig";
+import fixBooksList from './fixBooksList';
+import fixPersonsList from './fixPersonsList';
+import fixSeriesList from './fixSeriesList';
+import getFixedBooksFromFs from './getFixedBooksFromFs';
+import readConfig from './readConfig';
+import updateBookInfo from './updateBookInfo';
+import writeConfig from './writeConfig';
 
 const updateMetadata = (targetDir: string) => {
   const books = readConfig(targetDir, 'books.json') || [];
@@ -22,13 +22,14 @@ const updateMetadata = (targetDir: string) => {
   for (const fsBook of booksFromFs) {
     const {
       id,
-      info: { name, author_id, reader_id, series_id, series_number },
+      info: { name, author_id, reader_id, series_id, series_number, cover },
     } = fsBook;
     const book = booksList.find(book => book.id === id);
     if (!book) {
       booksList.push(fsBook);
       continue;
     }
+    // priority to book list
     if (name && !book.info.name) {
       book.info.name = name;
     }
@@ -43,6 +44,10 @@ const updateMetadata = (targetDir: string) => {
     }
     if (series_number && !book.info.series_number) {
       book.info.series_number = series_number;
+    }
+    // priority to book info
+    if (cover && book.info.cover !== cover) {
+      book.info.cover = cover;
     }
   }
 

@@ -31,6 +31,17 @@ const fixBooksList = (input: any): BookListEntry[] => {
     if ('series_number' in info && typeof info.series_number === 'string') {
       newEntry.info.series_number = info.series_number;
     }
+    if (
+      'cover' in info &&
+      typeof info.cover === 'object' &&
+      info.cover &&
+      'type' in info.cover &&
+      typeof info.cover.type === 'string' &&
+      'filename' in info.cover &&
+      typeof info.cover.filename === 'string'
+    ) {
+      newEntry.info.cover = info.cover;
+    }
     return newEntry;
   });
 };
