@@ -30,6 +30,7 @@ const PositionControl: React.FC = () => {
             <Typography>00:00</Typography>
           </Skeleton>
           <Slider
+            value={0}
             disabled
             componentsProps={{ thumb: { style: { display: 'none' } }, track: { style: { display: 'none' } } }}
           />
