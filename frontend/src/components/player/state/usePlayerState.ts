@@ -227,7 +227,6 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
     playerSlice.actions;
   const { updateAudio } = state;
   useAudioControl({
-    bookId,
     chapters,
     updateAudio,
     dispatch,

@@ -12,7 +12,6 @@ export interface UpdateAudioControl {
   volume?: number;
 }
 interface AudioControlArg {
-  bookId: string;
   chapters: {
     filename: string;
   }[];
@@ -29,7 +28,6 @@ interface AudioControlArg {
 }
 
 const useAudioControl = ({
-  bookId,
   chapters,
   updateAudio,
   dispatch,
@@ -91,10 +89,10 @@ const useAudioControl = ({
     playRef.current = play;
     positionRef.current = position;
     audioRef.current.pause();
-    audioRef.current.src = `/api/books/${bookId}/${chapters[number].filename}`;
+    audioRef.current.src = `${chapters[number].filename}`;
     audioRef.current.load();
     dispatch(audioUpdated('chapter'));
-  }, [chapter, bookId, chapters]);
+  }, [chapter, chapters]);
 
   useEffect(() => {
     if (!audioRef.current || position === undefined || !isFinite(position) || position < 0) return;
