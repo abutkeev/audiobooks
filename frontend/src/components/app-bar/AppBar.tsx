@@ -1,7 +1,8 @@
 import { Home } from '@mui/icons-material';
-import { IconButton, Toolbar } from '@mui/material';
+import { Box, IconButton, Toolbar } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import Search from './Search';
 
 const AppBar: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const AppBar: React.FC = () => {
               <Home />
             </IconButton>
           )}
+          <Box flexGrow={1} />
+          <Search />
         </Toolbar>
       </MuiAppBar>
       <Toolbar />
