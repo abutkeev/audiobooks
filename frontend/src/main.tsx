@@ -8,7 +8,7 @@ import '@fontsource/roboto/700.css';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
-import MainPage from './pages/MainPage';
+import BookList from './pages/BookList';
 import BookPage from './pages/BookPage';
 import AppBar from './components/app-bar/AppBar';
 import NotFound from './pages/NotFound';
@@ -19,7 +19,11 @@ const router = createHashRouter([
     children: [
       {
         path: '/',
-        element: <MainPage />,
+        element: <BookList />,
+      },
+      {
+        path: '/books',
+        element: <BookList />,
       },
       {
         path: '/book/:id',

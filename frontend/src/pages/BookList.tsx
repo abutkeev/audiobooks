@@ -6,7 +6,7 @@ import useReaders from '../hooks/useReaders';
 import useSeries from '../hooks/useSeries';
 import { useMemo } from 'react';
 
-const MainPage: React.FC = () => {
+const BookList: React.FC = () => {
   const { data: books = [], isLoading: booksLoading, isError: booksError } = useGetBooksQuery();
   const { authors, authorsLoading, authorsError } = useAuthors();
   const { readers, readersLoading, readersError } = useReaders();
@@ -38,4 +38,4 @@ const MainPage: React.FC = () => {
   );
 };
 
-export default MainPage;
+export default BookList;
