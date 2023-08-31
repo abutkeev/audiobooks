@@ -2,10 +2,16 @@ import { Clear, Search as SearchIcon } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { setSearchText } from '../../store/features/search';
+import { KeyboardEventHandler } from 'react';
 
 const Search: React.FC = () => {
   const { show, text } = useAppSelector(({ search }) => search);
   const dispatch = useAppDispatch();
+  const handleKeyDown: KeyboardEventHandler = ({ code }) => {
+    if (code === 'Escape') {
+      dispatch(setSearchText(''));
+    }
+  };
   return (
     show && (
       <TextField
@@ -39,6 +45,7 @@ const Search: React.FC = () => {
         }}
         value={text}
         onChange={({ target: { value } }) => dispatch(setSearchText(value))}
+        onKeyDown={handleKeyDown}
       />
     )
   );
