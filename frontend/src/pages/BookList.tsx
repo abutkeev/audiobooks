@@ -5,6 +5,7 @@ import useAuthors from '../hooks/useAuthors';
 import useReaders from '../hooks/useReaders';
 import useSeries from '../hooks/useSeries';
 import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const BookList: React.FC = () => {
   const { data: books = [], isLoading: booksLoading, isError: booksError } = useGetBooksQuery();
@@ -13,9 +14,24 @@ const BookList: React.FC = () => {
   const { series, seriesLoading, seriesError } = useSeries();
   const loading = booksLoading || authorsLoading || readersLoading || seriesLoading;
   const error = booksError || authorsError || readersError || seriesError;
+  const [searchParams] = useSearchParams();
+  const { author_id, reader_id, series_id } = Object.fromEntries(searchParams);
+  const filtredBooks = useMemo(() => {
+    let result = books;
+    if (author_id) {
+      result = result.filter(book => book.info.author_id === author_id);
+    }
+    if (reader_id) {
+      result = result.filter(book => book.info.reader_id === reader_id);
+    }
+    if (series_id) {
+      result = result.filter(book => book.info.series_id === series_id);
+    }
+    return result;
+  }, [author_id, reader_id, series_id, books]);
   const sortedBooks = useMemo(
     () =>
-      books.slice().sort((a, b) => {
+      filtredBooks.slice().sort((a, b) => {
         if (a.info.author_id > b.info.author_id) {
           return 1;
         }
@@ -26,7 +42,7 @@ const BookList: React.FC = () => {
         }
         return -1;
       }),
-    [books]
+    [filtredBooks]
   );
 
   return (

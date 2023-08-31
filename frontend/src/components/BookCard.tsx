@@ -43,17 +43,23 @@ const BookCard: React.FC<BookCardProps> = ({
           <Typography variant='h6'>{id ? <Link to={`/book/${id}`}>{name}</Link> : name}</Typography>
           <Stack direction='row' spacing={1}>
             <Edit />
-            <Typography>{authors[author_id] ?? author_id}</Typography>
+            <Typography>
+              <Link to={`/books?author_id=${author_id}`}>{authors[author_id] ?? author_id}</Link>
+            </Typography>
           </Stack>
           <Stack direction='row' spacing={1}>
             <Mic />
-            <Typography>{readers[reader_id] ?? reader_id}</Typography>
+            <Typography>
+              <Link to={`/books?reader_id=${reader_id}`}> {readers[reader_id] ?? reader_id}</Link>
+            </Typography>
           </Stack>
           {series_id && (
             <Stack direction='row' spacing={1}>
               <LibraryBooks />
               <Typography>
-                {series[series_id] ?? series_id} {series_number && `(${series_number})`}
+                <Link to={`/books?series_id=${series_id}`}>
+                  {series[series_id] ?? series_id} {series_number && `(${series_number})`}
+                </Link>
               </Typography>
               {nextBook && (
                 <>
