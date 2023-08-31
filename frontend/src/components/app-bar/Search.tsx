@@ -1,5 +1,5 @@
 import { Clear, Search as SearchIcon } from '@mui/icons-material';
-import { IconButton, InputAdornment, TextField } from '@mui/material';
+import { InputAdornment, TextField } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { setSearchText } from '../../store/features/search';
 import { KeyboardEventHandler } from 'react';
@@ -32,14 +32,12 @@ const Search: React.FC = () => {
             </InputAdornment>
           ),
           endAdornment: text && (
-            <InputAdornment position='end'>
-              <IconButton onClick={() => dispatch(setSearchText(''))}>
-                <Clear
-                  sx={theme => ({
-                    color: theme.palette.getContrastText(theme.palette.primary.dark),
-                  })}
-                />
-              </IconButton>
+            <InputAdornment position='end' onClick={() => dispatch(setSearchText(''))} sx={{ cursor: 'pointer' }}>
+              <Clear
+                sx={theme => ({
+                  color: theme.palette.getContrastText(theme.palette.primary.dark),
+                })}
+              />
             </InputAdornment>
           ),
         }}
