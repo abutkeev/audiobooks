@@ -14,7 +14,7 @@ const PositionControl: React.FC = () => {
     <Stack spacing={2} alignItems='center' direction='row' mx={1}>
       {!!duration ? (
         <>
-          <Typography>{formatTime(position)}</Typography>
+          <Typography sx={{ cursor: 'default' }}>{formatTime(position)}</Typography>
           <Slider
             value={position}
             onChange={(_, position) => typeof position === 'number' && handlePositionChange(position)}
@@ -22,7 +22,7 @@ const PositionControl: React.FC = () => {
             valueLabelDisplay='auto'
             valueLabelFormat={formatTime}
           />
-          <Typography>{formatTime(duration)}</Typography>
+          <Typography sx={{ cursor: 'default' }}>{formatTime(duration)}</Typography>
         </>
       ) : (
         <>

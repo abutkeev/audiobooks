@@ -40,7 +40,9 @@ const BookCard: React.FC<BookCardProps> = ({
           )}
         </Hidden>
         <CardContent>
-          <Typography variant='h6'>{id ? <Link to={`/book/${id}`}>{name}</Link> : name}</Typography>
+          <Typography variant='h6' sx={{ cursor: 'default' }}>
+            {id ? <Link to={`/book/${id}`}>{name}</Link> : name}
+          </Typography>
           <Stack direction='row' spacing={1}>
             <Edit />
             <Typography>
