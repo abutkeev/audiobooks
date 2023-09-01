@@ -15,7 +15,7 @@ const Chapters: React.FC = () => {
   const titleIsNumber = +currentChapterTitle === chapterNumber;
 
   return (
-    <Accordion>
+    <Accordion square>
       <AccordionSummary>
         <Typography>
           Current chapter {chapterNumber} of {chapters.length} {!titleIsNumber && `(${currentChapterTitle})`}

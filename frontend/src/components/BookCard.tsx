@@ -30,7 +30,7 @@ const BookCard: React.FC<BookCardProps> = ({
     return { id: nextBook.id, name: nextBook.info.name };
   }, [books, id, series_id, series_number]);
   return (
-    <Card sx={{ maxWidth: 'md', mx: 'auto' }} raised>
+    <Card sx={{ maxWidth: 'md', mx: 'auto' }} raised square>
       <Stack direction='row'>
         <Hidden mdDown>
           {cover ? (
