@@ -250,10 +250,12 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
 
 const defaultContextData: {
   state: PlayerStore['state'];
+  bookId: string;
   chapters: PlayerStore['chapters'];
   dispatch: Dispatch<AnyAction>;
 } = {
   state: initialState.state,
+  bookId: '',
   dispatch: () => {},
   chapters: [],
 };

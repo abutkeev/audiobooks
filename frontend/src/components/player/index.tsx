@@ -20,7 +20,7 @@ const Player: React.FC<PlayerProps> = ({ bookId, info, chapters }) => {
   useMediaSession(info, chapters[state.currentChapter].title, state, dispatch);
 
   return (
-    <PlayerStateContext.Provider value={{ state, dispatch, chapters }}>
+    <PlayerStateContext.Provider value={{ state, bookId, dispatch, chapters }}>
       <Paper sx={{ maxWidth: 'md', flexGrow: 1, mx: 'auto' }}>
         <Controls />
         <PlayerError />

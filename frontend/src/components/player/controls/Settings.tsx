@@ -4,11 +4,14 @@ import { FormControlLabel, Menu, MenuItem, Switch } from '@mui/material';
 import { PlayerStateContext, setPreventScreenLock, setResetSleepTimerOnActivity } from '../state/usePlayerState';
 import SettingsIcon from '@mui/icons-material/Settings';
 import useWakeLock from '../useWakeLock';
+import copy from 'copy-to-clipboard';
+import { ContentCopy } from '@mui/icons-material';
 
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const {
-    state: { resetSleepTimerOnActivity, preventScreenLock, playing },
+    state: { resetSleepTimerOnActivity, preventScreenLock, playing, position, currentChapter },
+    bookId,
     dispatch,
   } = useContext(PlayerStateContext);
   const wakelockAvailable = useWakeLock({ preventScreenLock, playing });
@@ -21,6 +24,10 @@ const Settings: React.FC = () => {
   const handlePreventScreenLock = (_: ChangeEvent, checked: boolean) => {
     dispatch(setPreventScreenLock(checked));
     setTimeout(closeMenu, 700);
+  };
+  const handleStateCopy = () => {
+    copy(JSON.stringify({ bookId, currentChapter, position }));
+    closeMenu();
   };
 
   return (
@@ -47,6 +54,7 @@ const Settings: React.FC = () => {
             />
           </MenuItem>
         )}
+        <MenuItem onClick={handleStateCopy}><ContentCopy sx={theme => ({color: theme.palette.primary.main, mr: 3})}/>copy state</MenuItem>
       </Menu>
     </>
   );
