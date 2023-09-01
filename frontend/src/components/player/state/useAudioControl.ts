@@ -79,6 +79,9 @@ const useAudioControl = ({
     }, 1000);
     return () => {
       clearInterval(intervalId);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
     };
   }, []);
 
