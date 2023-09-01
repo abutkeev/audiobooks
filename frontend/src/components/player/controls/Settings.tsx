@@ -5,7 +5,8 @@ import { PlayerStateContext, setPreventScreenLock, setResetSleepTimerOnActivity 
 import SettingsIcon from '@mui/icons-material/Settings';
 import useWakeLock from '../useWakeLock';
 import copy from 'copy-to-clipboard';
-import { ContentCopy } from '@mui/icons-material';
+import { ContentCopy, Update } from '@mui/icons-material';
+import UpdateStateDialog from './UpdateStateDialog';
 
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -15,6 +16,7 @@ const Settings: React.FC = () => {
     dispatch,
   } = useContext(PlayerStateContext);
   const wakelockAvailable = useWakeLock({ preventScreenLock, playing });
+  const [showUpdateStateDialog, setShowUpdateStateDialog] = useState(false);
 
   const closeMenu = () => setMenuAnchor(undefined);
   const handleResetSleepTimerOnActivityChange = (_: ChangeEvent, checked: boolean) => {
@@ -26,7 +28,11 @@ const Settings: React.FC = () => {
     setTimeout(closeMenu, 700);
   };
   const handleStateCopy = () => {
-    copy(JSON.stringify({ bookId, currentChapter, position }));
+    copy(JSON.stringify({ bookId, currentChapter, position }, null, 2));
+    closeMenu();
+  };
+  const handleUpdateStateDialogOpen = () => {
+    setShowUpdateStateDialog(true);
     closeMenu();
   };
 
@@ -54,8 +60,16 @@ const Settings: React.FC = () => {
             />
           </MenuItem>
         )}
-        <MenuItem onClick={handleStateCopy}><ContentCopy sx={theme => ({color: theme.palette.primary.main, mr: 3})}/>copy state</MenuItem>
+        <MenuItem onClick={handleStateCopy}>
+          <ContentCopy sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
+          copy state
+        </MenuItem>
+        <MenuItem onClick={handleUpdateStateDialogOpen}>
+          <Update sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
+          update state
+        </MenuItem>
       </Menu>
+      <UpdateStateDialog show={showUpdateStateDialog} onClose={() => setShowUpdateStateDialog(false)} />
     </>
   );
 };

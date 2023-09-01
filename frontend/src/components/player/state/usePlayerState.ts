@@ -16,6 +16,11 @@ interface PlayerStore {
     preventScreenLock: boolean;
     error: string;
     updateAudio?: UpdateAudioControl;
+    updateBookState?: {
+      bookId: string;
+      currentChapter: number;
+      position: number;
+    };
   };
   bookId: string;
   chapters: Book['chapters'];
@@ -48,6 +53,7 @@ const playerSlice = createSlice({
       { payload: { bookId, chapters } }: PayloadAction<{ bookId: string; chapters: PlayerStore['chapters'] }>
     ) => {
       store.state = getSavedState(initialState.state, bookId, chapters.length);
+      store.bookId = bookId;
       store.chapters = chapters;
       store.state.updateAudio = {
         chapter: {
@@ -202,6 +208,38 @@ const playerSlice = createSlice({
     setError: (store, { payload }: PayloadAction<string>) => {
       store.state.error = payload;
     },
+    updateBookState: (store, { payload }: PayloadAction<PlayerState['updateBookState']>) => {
+      if (!payload || store.bookId !== payload.bookId) {
+        store.state.updateBookState = payload;
+        return;
+      }
+
+      const { position, currentChapter } = payload;
+
+      if (position < 0) return;
+
+      if (store.state.currentChapter === currentChapter) {
+        if (store.state.duration && position > store.state.duration) return;
+        store.state.playing = false;
+        store.state.position = position;
+        store.state.updateAudio = { playing: false, position: position };
+        return;
+      }
+
+      if (currentChapter >= store.chapters.length) return;
+
+      store.state.playing = false;
+      store.state.currentChapter = currentChapter;
+      store.state.position = position;
+
+      store.state.updateAudio = {
+        chapter: {
+          number: currentChapter,
+          position: position,
+          play: false,
+        },
+      };
+    },
   },
 });
 export const {
@@ -215,6 +253,7 @@ export const {
   setPauseOnChapterEnd,
   setResetSleepTimerOnActivity,
   setPreventScreenLock,
+  updateBookState,
 } = playerSlice.actions;
 
 const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
@@ -223,8 +262,16 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
     return { state, chapters, bookId };
   });
 
-  const { setup, audioUpdated, chapterEnded, updatePlaying, updatePosition, updateDuration, setError } =
-    playerSlice.actions;
+  const {
+    setup,
+    audioUpdated,
+    chapterEnded,
+    updatePlaying,
+    updatePosition,
+    updateDuration,
+    setError,
+    updateBookState,
+  } = playerSlice.actions;
   const { updateAudio } = state;
   useAudioControl({
     chapters,
@@ -244,6 +291,12 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
   }, [bookId, chapters]);
 
   useSaveState(state, bookId);
+
+  useEffect(() => {
+    if (state.updateBookState) {
+      dispatch(updateBookState());
+    }
+  }, [state.updateBookState]);
 
   return [state, dispatch] as const;
 };

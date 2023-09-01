@@ -19,15 +19,17 @@ const parseSavedState = (name: string) => {
 
 const updateBookState = (
   bookId: string,
-  currentChapter: PlayerState['currentChapter'],
-  position: PlayerState['position']
+  currentChapter: number,
+  position: number,
+  newBookState?: { bookId: string; currentChapter: number; position: number }
 ) => {
   const state = parseSavedState(booksStateName);
-  state[bookId] = {
-    currentChapter,
-    position,
-    updated: new Date().toISOString(),
-  };
+  const updated = new Date().toISOString();
+  state[bookId] = { currentChapter, position, updated };
+  if (newBookState) {
+    const { bookId, currentChapter, position } = newBookState;
+    state[bookId] = { currentChapter, position, updated };
+  }
   localStorage.setItem(booksStateName, JSON.stringify(state));
 };
 
@@ -77,7 +79,14 @@ export const getSavedState = (initialState: PlayerState, bookId: string, chapter
 };
 
 export const useSaveState = (state: PlayerState, bookId: string) => {
-  const { currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock } = state;
+  const {
+    currentChapter,
+    position,
+    volume,
+    resetSleepTimerOnActivity,
+    preventScreenLock,
+    updateBookState: newBookState,
+  } = state;
   useEffect(() => {
     localStorage.setItem(
       playerStateName,
@@ -91,6 +100,6 @@ export const useSaveState = (state: PlayerState, bookId: string) => {
         updated: new Date().toISOString(),
       })
     );
-    updateBookState(bookId, currentChapter, position);
-  }, [bookId, currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock]);
+    updateBookState(bookId, currentChapter, position, newBookState);
+  }, [bookId, currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock, newBookState]);
 };
