@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { PlayerStateContext, changePosition } from '../state/usePlayerState';
 import { Stack, Typography, Slider, Skeleton } from '@mui/material';
 import formatTime from '../../../utils/formatTime';
@@ -9,6 +9,7 @@ const PositionControl: React.FC = () => {
     dispatch,
   } = useContext(PlayerStateContext);
   const handlePositionChange = (newPosition: number) => dispatch(changePosition(newPosition));
+  const [showRemaining, setShowRemaining] = useState(false);
 
   return (
     <Stack spacing={2} alignItems='center' direction='row' mx={1}>
@@ -22,7 +23,9 @@ const PositionControl: React.FC = () => {
             valueLabelDisplay='auto'
             valueLabelFormat={formatTime}
           />
-          <Typography sx={{ cursor: 'default' }}>{formatTime(duration)}</Typography>
+          <Typography sx={{ cursor: 'pointer' }} onClick={() => setShowRemaining(!showRemaining)}>
+            {showRemaining ? `-${formatTime(duration - position)}` : formatTime(duration)}
+          </Typography>
         </>
       ) : (
         <>
