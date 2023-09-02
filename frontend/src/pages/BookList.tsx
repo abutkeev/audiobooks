@@ -9,6 +9,7 @@ import { useSearchParams } from 'react-router-dom';
 import useSearch from '../hooks/useSearch';
 import { Alert } from '@mui/material';
 import { currentBookVarName } from './Home';
+import useTitle from '../hooks/useTitle';
 
 const BookList: React.FC = () => {
   const { data: books = [], isLoading: booksLoading, isError: booksError } = useGetBooksQuery();
@@ -20,6 +21,8 @@ const BookList: React.FC = () => {
   const [searchParams] = useSearchParams();
   const { author_id, reader_id, series_id } = Object.fromEntries(searchParams);
   const searchText = useSearch();
+
+  useTitle('Book list');
 
   useEffect(() => {
     localStorage.removeItem(currentBookVarName);
