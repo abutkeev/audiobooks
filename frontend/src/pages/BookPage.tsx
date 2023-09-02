@@ -6,6 +6,8 @@ import useAuthors from '../hooks/useAuthors';
 import useReaders from '../hooks/useReaders';
 import useSeries from '../hooks/useSeries';
 import Player from '../components/player';
+import { useEffect } from 'react';
+import { currentBookVarName } from './Home';
 
 const BookPage: React.FC = () => {
   const { id = '' } = useParams();
@@ -13,6 +15,11 @@ const BookPage: React.FC = () => {
   const { authors, authorsLoading, authorsError } = useAuthors();
   const { readers, readersLoading, readersError } = useReaders();
   const { series, seriesLoading, seriesError } = useSeries();
+
+  useEffect(() => {
+    localStorage.setItem(currentBookVarName, id);
+  }, [id]);
+
   const loading = isLoading || authorsLoading || readersLoading || seriesLoading;
   const error = isError || authorsError || readersError || seriesError;
 

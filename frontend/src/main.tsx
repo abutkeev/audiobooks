@@ -12,6 +12,7 @@ import BookList from './pages/BookList';
 import BookPage from './pages/BookPage';
 import AppBar from './components/app-bar/AppBar';
 import NotFound from './pages/NotFound';
+import Home from './pages/Home';
 
 const router = createHashRouter([
   {
@@ -19,7 +20,7 @@ const router = createHashRouter([
     children: [
       {
         path: '/',
-        element: <BookList />,
+        element: <Home />,
       },
       {
         path: '/books',

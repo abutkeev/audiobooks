@@ -4,10 +4,11 @@ import BookCard from '../components/BookCard';
 import useAuthors from '../hooks/useAuthors';
 import useReaders from '../hooks/useReaders';
 import useSeries from '../hooks/useSeries';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useSearch from '../hooks/useSearch';
 import { Alert } from '@mui/material';
+import { currentBookVarName } from './Home';
 
 const BookList: React.FC = () => {
   const { data: books = [], isLoading: booksLoading, isError: booksError } = useGetBooksQuery();
@@ -19,6 +20,10 @@ const BookList: React.FC = () => {
   const [searchParams] = useSearchParams();
   const { author_id, reader_id, series_id } = Object.fromEntries(searchParams);
   const searchText = useSearch();
+
+  useEffect(() => {
+    localStorage.removeItem(currentBookVarName);
+  }, []);
 
   const filtredBooks = useMemo(() => {
     let result = books;
