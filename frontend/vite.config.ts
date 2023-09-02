@@ -7,6 +7,29 @@ export default defineConfig({
   base: '',
   plugins: [
     react(),
-    VitePWA({ registerType: 'autoUpdate', manifest: { name: 'Audio books', short_name: 'Audio books' } }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'Audio books',
+        short_name: 'Audio books',
+        icons: [
+          {
+            src: 'pwa-64x64.png',
+            sizes: '64x64',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
   ],
 });
