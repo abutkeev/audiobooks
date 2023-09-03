@@ -55,4 +55,12 @@ const App: React.FC = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
+const rootDiv = document.createElement('div');
+rootDiv.setAttribute('id', 'root');
+const oldRootDiv = document.getElementById('root')!;
+if (oldRootDiv && oldRootDiv.parentElement) {
+  oldRootDiv.parentElement.removeChild(oldRootDiv);
+}
+document.body.appendChild(rootDiv);
+
+ReactDOM.createRoot(rootDiv).render(<App />);
