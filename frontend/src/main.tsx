@@ -13,6 +13,9 @@ import BookPage from './pages/BookPage';
 import AppBar from './components/app-bar/AppBar';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
+import useCreateTheme from './hooks/useCreateTheme';
+import { ThemeProvider } from '@emotion/react';
+import { CssBaseline } from '@mui/material';
 
 const router = createHashRouter([
   {
@@ -38,10 +41,18 @@ const router = createHashRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router}></RouterProvider>
-    </Provider>
-  </React.StrictMode>
-);
+const App: React.FC = () => {
+  const theme = useCreateTheme();
+  return (
+    <React.StrictMode>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <RouterProvider router={router}></RouterProvider>
+        </ThemeProvider>
+      </Provider>
+    </React.StrictMode>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
