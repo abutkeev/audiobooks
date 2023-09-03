@@ -1,5 +1,5 @@
 import { Home } from '@mui/icons-material';
-import { Box, IconButton, Toolbar, Typography } from '@mui/material';
+import { Box, Container, IconButton, Toolbar, Typography } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Search from './Search';
@@ -40,7 +40,9 @@ const AppBar: React.FC = () => {
         </Toolbar>
       </MuiAppBar>
       <Toolbar />
-      <Outlet />
+      <Container sx={{ my: 1 }}>
+        <Outlet />
+      </Container>
     </>
   );
 };
