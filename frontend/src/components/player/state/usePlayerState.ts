@@ -44,15 +44,24 @@ const initialState: PlayerStore = {
   chapters: [],
 };
 
+export type ExternalPlayerState = PlayerPosition;
+
 const playerSlice = createSlice({
   name: 'player',
   initialState,
   reducers: {
     setup: (
       store,
-      { payload: { bookId, chapters } }: PayloadAction<{ bookId: string; chapters: PlayerStore['chapters'] }>
+      {
+        payload: { bookId, chapters, externalState },
+      }: PayloadAction<{ bookId: string; chapters: PlayerStore['chapters']; externalState?: ExternalPlayerState }>
     ) => {
       store.state = getSavedState(initialState.state, bookId, chapters.length);
+      if (externalState) {
+        const { currentChapter, position } = externalState;
+        store.state.currentChapter = currentChapter;
+        store.state.position = position;
+      }
       store.bookId = bookId;
       store.chapters = chapters;
       store.state.updateAudio = {
@@ -256,7 +265,12 @@ export const {
   updateBookState,
 } = playerSlice.actions;
 
-const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
+const usePlayerState = (
+  bookId: string,
+  chapters: PlayerStore['chapters'],
+  externalState: ExternalPlayerState | undefined,
+  onStateUpdate: (state: PlayerState) => void
+) => {
   const [{ state }, dispatch] = useReducer(playerSlice.reducer, playerSlice.getInitialState(), initialState => {
     const state = getSavedState(initialState.state, bookId, chapters.length);
     return { state, chapters, bookId };
@@ -287,8 +301,10 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
     },
   });
   useEffect(() => {
-    dispatch(setup({ bookId, chapters }));
+    dispatch(setup({ bookId, chapters, externalState }));
   }, [bookId, chapters]);
+
+  useEffect(() => onStateUpdate(state), [state]);
 
   useSaveState(state, bookId);
 

@@ -3,7 +3,12 @@ import { Paper } from '@mui/material';
 import Chapters from './chapters';
 import { Book } from '../../api/api';
 import Controls from './controls';
-import usePlayerState, { PlayerPosition, PlayerStateContext } from './state/usePlayerState';
+import usePlayerState, {
+  ExternalPlayerState,
+  PlayerPosition,
+  PlayerState,
+  PlayerStateContext,
+} from './state/usePlayerState';
 import PlayerError from './PlayerError';
 import useKeyboardShortcuts from './useKeyboardShortcuts';
 import useMediaSession, { BookInfo } from './media-session/useMediaSession';
@@ -13,10 +18,12 @@ interface PlayerProps {
   info: BookInfo;
   chapters: Book['chapters'];
   generateUrl(state: PlayerPosition): string;
+  externalState?: ExternalPlayerState;
+  onStateUpdate(state: PlayerState): void;
 }
 
-const Player: React.FC<PlayerProps> = ({ bookId, info, chapters, generateUrl }) => {
-  const [state, dispatch] = usePlayerState(bookId, chapters);
+const Player: React.FC<PlayerProps> = ({ bookId, info, chapters, generateUrl, externalState, onStateUpdate }) => {
+  const [state, dispatch] = usePlayerState(bookId, chapters, externalState, onStateUpdate);
   useKeyboardShortcuts(state, dispatch);
   useMediaSession(info, chapters[state.currentChapter].title, state, dispatch);
 
