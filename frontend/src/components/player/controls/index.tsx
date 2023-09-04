@@ -5,6 +5,7 @@ import PositionControl from './PositionControl';
 import PlayerControlPanel from './PlayerControlPanel';
 import SleepControl from './SleepControl';
 import Settings from './Settings';
+import CopyPosition from './CopyPosition';
 
 const Controls: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const Controls: React.FC = () => {
           </Grid>
         </Hidden>
         <Grid item xs={12} md={8} display='flex' justifyContent='flex-end'>
+          <CopyPosition />
           <SleepControl />
           <Settings />
         </Grid>

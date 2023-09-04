@@ -9,6 +9,7 @@ import Player from '../components/player';
 import { useEffect } from 'react';
 import { currentBookVarName } from './Home';
 import useTitle from '../hooks/useTitle';
+import { PlayerPosition } from '../components/player/state/usePlayerState';
 
 const BookPage: React.FC = () => {
   const { id = '' } = useParams();
@@ -25,6 +26,10 @@ const BookPage: React.FC = () => {
 
   const loading = isLoading || authorsLoading || readersLoading || seriesLoading;
   const error = isError || authorsError || readersError || seriesError;
+  const generateUrl = ({ currentChapter, position }: PlayerPosition) => {
+    const url = `${location.toString()}?currentChapter=${currentChapter}&position=${position}`;
+    return url;
+  };
 
   return (
     <LoadingWrapper loading={loading} error={error}>
@@ -40,6 +45,7 @@ const BookPage: React.FC = () => {
             }}
             bookId={id}
             chapters={data.chapters}
+            generateUrl={generateUrl}
           />
         </>
       )}

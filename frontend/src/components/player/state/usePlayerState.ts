@@ -301,16 +301,23 @@ const usePlayerState = (bookId: string, chapters: PlayerStore['chapters']) => {
   return [state, dispatch] as const;
 };
 
+export interface PlayerPosition {
+  currentChapter: number;
+  position: number;
+}
+
 const defaultContextData: {
   state: PlayerStore['state'];
   bookId: string;
   chapters: PlayerStore['chapters'];
   dispatch: Dispatch<AnyAction>;
+  generateUrl(state: PlayerPosition): string;
 } = {
   state: initialState.state,
   bookId: '',
   dispatch: () => {},
   chapters: [],
+  generateUrl: () => '',
 };
 
 export const PlayerStateContext = createContext(defaultContextData);
