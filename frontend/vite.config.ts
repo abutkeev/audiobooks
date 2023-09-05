@@ -39,6 +39,15 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith('/api/') && !url.pathname.endsWith('.mp3'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api',
+            },
+          },
+        ],
       },
     }),
   ],
