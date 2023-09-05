@@ -4,12 +4,14 @@ import { api } from '../api/api';
 import searchSlice from './features/search';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import titleSlice from './features/title';
+import snackbarsSlice from './features/snackbars';
 
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     [searchSlice.name]: searchSlice.reducer,
     [titleSlice.name]: titleSlice.reducer,
+    [snackbarsSlice.name]: snackbarsSlice.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(api.middleware),
 });

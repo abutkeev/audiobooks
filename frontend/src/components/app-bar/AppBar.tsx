@@ -6,6 +6,7 @@ import Search from './Search';
 import { currentBookVarName } from '../../pages/Home';
 import { useAppSelector } from '../../store';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import Snackbar from './SnackBar';
 
 const AppBar: React.FC = () => {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const AppBar: React.FC = () => {
         </Toolbar>
       </MuiAppBar>
       <Toolbar />
+      <Snackbar />
       <Container sx={{ my: 1 }}>
         <Outlet />
       </Container>
