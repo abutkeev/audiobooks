@@ -52,6 +52,8 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'mp3',
+              cacheableResponse: { statuses: [200] },
+              rangeRequests: true,
             },
           },
         ],
