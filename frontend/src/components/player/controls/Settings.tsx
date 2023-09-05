@@ -7,6 +7,8 @@ import useWakeLock from '../useWakeLock';
 import copy from 'copy-to-clipboard';
 import { ContentCopy, Update } from '@mui/icons-material';
 import UpdateStateDialog from './UpdateStateDialog';
+import { useAppDispatch } from '../../../store';
+import { addSnackbar } from '../../../store/features/snackbars';
 
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -17,6 +19,7 @@ const Settings: React.FC = () => {
   } = useContext(PlayerStateContext);
   const wakelockAvailable = useWakeLock({ preventScreenLock, playing });
   const [showUpdateStateDialog, setShowUpdateStateDialog] = useState(false);
+  const appDispatch = useAppDispatch();
 
   const closeMenu = () => setMenuAnchor(undefined);
   const handleResetSleepTimerOnActivityChange = (_: ChangeEvent, checked: boolean) => {
@@ -29,6 +32,7 @@ const Settings: React.FC = () => {
   };
   const handleStateCopy = () => {
     copy(JSON.stringify({ bookId, currentChapter, position }, null, 2));
+    appDispatch(addSnackbar({ severity: 'success', text: 'Copied to clipboard', timeout: 2000 }));
     closeMenu();
   };
   const handleUpdateStateDialogOpen = () => {
