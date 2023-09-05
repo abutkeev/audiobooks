@@ -47,6 +47,13 @@ export default defineConfig({
               cacheName: 'api',
             },
           },
+          {
+            urlPattern: ({ url }) => url.pathname.endsWith('.mp3'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'mp3',
+            },
+          },
         ],
       },
     }),
