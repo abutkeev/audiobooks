@@ -6,7 +6,7 @@ import Search from './Search';
 import { currentBookVarName } from '../../pages/Home';
 import { useAppSelector } from '../../store';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import Snackbar from './SnackBar';
+import Snackbar from './Snackbar';
 
 const AppBar: React.FC = () => {
   const navigate = useNavigate();
