@@ -1,4 +1,4 @@
-import { DownloadForOffline } from '@mui/icons-material';
+import { DownloadForOffline, ErrorOutline } from '@mui/icons-material';
 import { ChapterCacheState } from '../state/useCache';
 import { CircularProgress } from '@mui/material';
 
@@ -22,6 +22,8 @@ const ChapterCacheIcon: React.FC<ChapterCacheIconProps> = ({ cacheState }) => {
           variant={cacheState.progress ? 'determinate' : 'indeterminate'}
         />
       );
+    case 'error':
+      return <ErrorOutline color='error' />;
     default:
       console.error(`unknown chapter cache state ${state}`);
       return null;

@@ -10,6 +10,7 @@ export type ChapterCacheState =
       state: 'downloading';
       progress?: number;
     }
+  | { state: 'error' }
   | { state: 'pending' }
   | undefined;
 
@@ -37,6 +38,10 @@ const cacheSlice = createSlice({
         progress: progress && progress > 0 && progress < 100 ? progress : undefined,
       };
     },
+    setError: (state, { payload }: PayloadAction<number>) => {
+      if (payload < 0 || payload >= state.length) return;
+      state[payload] = { state: 'error' };
+    },
   },
 });
 
@@ -44,7 +49,7 @@ export const { startDownload } = cacheSlice.actions;
 
 type Chapters = { filename: string }[];
 
-const { setProgress } = cacheSlice.actions;
+const { setProgress, setError } = cacheSlice.actions;
 const useDownload = (chapters: Chapters, { state, dispatch }: ReturnType<typeof useCache>) => {
   useEffect(() => {
     if (state.find(entry => entry?.state === 'downloading')) return;
@@ -63,7 +68,7 @@ const useDownload = (chapters: Chapters, { state, dispatch }: ReturnType<typeof 
         .then(() => dispatch(setProgress({ index, progress: 100 })))
         .catch(e => {
           console.error(`can't download ${url}`, e);
-          dispatch(setProgress({ index, progress: undefined }));
+          dispatch(setError(index));
           setTimeout(download, 1000);
         });
 
