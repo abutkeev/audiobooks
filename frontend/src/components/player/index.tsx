@@ -31,7 +31,7 @@ const Player: React.FC<PlayerProps> = ({ bookId, info, chapters, generateUrl, ex
 
   return (
     <PlayerStateContext.Provider value={{ state, bookId, dispatch, chapters, generateUrl, cache }}>
-      <Paper sx={{ maxWidth: 'md', flexGrow: 1, mx: 'auto' }} square>
+      <Paper square>
         <Controls />
         <PlayerError />
         <Chapters />

@@ -42,7 +42,7 @@ const AppBar: React.FC = () => {
       </MuiAppBar>
       <Toolbar />
       <Snackbar />
-      <Container sx={{ my: 1 }}>
+      <Container sx={{ my: 1, maxWidth: 'md' }}>
         <Outlet />
       </Container>
     </>
