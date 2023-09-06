@@ -5,10 +5,11 @@ import { PlayerStateContext, setPreventScreenLock, setResetSleepTimerOnActivity 
 import SettingsIcon from '@mui/icons-material/Settings';
 import useWakeLock from '../useWakeLock';
 import copy from 'copy-to-clipboard';
-import { ContentCopy, Update } from '@mui/icons-material';
+import { ContentCopy, FileDownload, Update } from '@mui/icons-material';
 import UpdateStateDialog from './UpdateStateDialog';
 import { useAppDispatch } from '../../../store';
 import { addSnackbar } from '../../../store/features/snackbars';
+import { startDownload } from '../state/useCache';
 
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -16,10 +17,13 @@ const Settings: React.FC = () => {
     state: { resetSleepTimerOnActivity, preventScreenLock, playing, position, currentChapter },
     bookId,
     dispatch,
+    cache,
   } = useContext(PlayerStateContext);
   const wakelockAvailable = useWakeLock({ preventScreenLock, playing });
   const [showUpdateStateDialog, setShowUpdateStateDialog] = useState(false);
   const appDispatch = useAppDispatch();
+
+  const canDownload = cache.state.filter(entry => !entry).length !== 0;
 
   const closeMenu = () => setMenuAnchor(undefined);
   const handleResetSleepTimerOnActivityChange = (_: ChangeEvent, checked: boolean) => {
@@ -37,6 +41,10 @@ const Settings: React.FC = () => {
   };
   const handleUpdateStateDialogOpen = () => {
     setShowUpdateStateDialog(true);
+    closeMenu();
+  };
+  const handelStartDownload = () => {
+    cache.dispatch(startDownload());
     closeMenu();
   };
 
@@ -72,6 +80,12 @@ const Settings: React.FC = () => {
           <Update sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
           update state
         </MenuItem>
+        {canDownload && (
+          <MenuItem onClick={handelStartDownload}>
+            <FileDownload sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
+            cache all chapters
+          </MenuItem>
+        )}
       </Menu>
       <UpdateStateDialog show={showUpdateStateDialog} onClose={() => setShowUpdateStateDialog(false)} />
     </>
