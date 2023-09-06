@@ -5,9 +5,7 @@ import axios from 'axios';
 const cacheName = 'mp3';
 
 export type ChapterCacheState =
-  | {
-      state: 'cached';
-    }
+  | { state: 'cached' }
   | {
       state: 'downloading';
       progress?: number;
