@@ -88,13 +88,13 @@ const Settings: React.FC = () => {
           <Update sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
           update state
         </MenuItem>
-        {!allChaptersCached && !downloading && (
+        {cache.available && !allChaptersCached && !downloading && (
           <MenuItem onClick={handelStartDownload}>
             <FileDownload sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
             cache all chapters
           </MenuItem>
         )}
-        {anyChaptersCached && !downloading && (
+        {cache.available && anyChaptersCached && !downloading && (
           <MenuItem onClick={handleClearCacheMenuClick}>
             <Clear sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
             clear cached chapters

@@ -4,6 +4,16 @@ import axios from 'axios';
 
 const cacheName = 'mp3';
 
+let available = 'caches' in window && 'serviceWorker' in navigator;
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    available = available && registrations.length !== 0;
+  });
+  navigator.serviceWorker.oncontrollerchange = () => {
+    available = true;
+  };
+}
+
 export type ChapterCacheState =
   | { state: 'cached' }
   | {
@@ -65,6 +75,8 @@ const useDownload = ({
   dispatch: Dispatch<AnyAction>;
 }) => {
   useEffect(() => {
+    if (!available) return;
+
     if (state.find(entry => entry?.state === 'downloading')) return;
 
     const index = state.findIndex(entry => entry?.state === 'pending');
@@ -95,6 +107,7 @@ const useCache = (chapters: Chapters) => {
   useEffect(() => {
     Promise.all(
       chapters.map(({ filename }) => {
+        if (!available) return;
         return caches
           .open(cacheName)
           .then(cache => cache.match(filename))
@@ -105,6 +118,7 @@ const useCache = (chapters: Chapters) => {
   }, [chapters]);
 
   const clearCache = async () => {
+    if (!available) return;
     try {
       const cache = await caches.open(cacheName);
       await Promise.all(
@@ -120,7 +134,7 @@ const useCache = (chapters: Chapters) => {
 
   useDownload({ chapters, state, dispatch });
 
-  return { state, dispatch, clearCache };
+  return { state, dispatch, clearCache, available };
 };
 
 export default useCache;
