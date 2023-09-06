@@ -3,6 +3,7 @@ import { PlayerStateContext, chapterChange } from '../state/usePlayerState';
 import Chapter from './Chapter';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import BookCacheIcon from './BookCacheIcon';
+import { ExpandMore } from '@mui/icons-material';
 
 const Chapters: React.FC = () => {
   const {
@@ -18,7 +19,7 @@ const Chapters: React.FC = () => {
 
   return (
     <Accordion square>
-      <AccordionSummary>
+      <AccordionSummary expandIcon={<ExpandMore />}>
         <Typography flexGrow={1}>
           Current chapter {chapterNumber} of {chapters.length} {!titleIsNumber && `(${currentChapterTitle})`}
         </Typography>
