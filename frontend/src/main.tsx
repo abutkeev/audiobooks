@@ -16,9 +16,6 @@ import Home from './pages/Home';
 import useCreateTheme from './hooks/useCreateTheme';
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
-import updateSW from './utils/updateSW';
-
-updateSW(true);
 
 const router = createHashRouter([
   {

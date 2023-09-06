@@ -8,7 +8,6 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
       manifest: {
         name: 'Audio books',
         short_name: 'Audio books',
