@@ -29,7 +29,7 @@ const AppBar: React.FC = () => {
       </HelmetProvider>
       <MuiAppBar position='fixed'>
         <Toolbar>
-          {(pathname !== '/' || searchParams.size !== 0) && (
+          {(pathname !== '/' || new Set(searchParams.keys()).size !== 0) && (
             <IconButton color='inherit' onClick={handleHomeButtonClick}>
               <Home />
             </IconButton>
