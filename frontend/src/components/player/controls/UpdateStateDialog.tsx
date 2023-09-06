@@ -36,6 +36,12 @@ const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) 
     dispatch(updateBookState(JSON.parse(value)));
     onClose();
   };
+
+  const handleClose = () => {
+    onClose();
+    setValue('');
+  };
+
   const handlePaste = () => {
     if (textFieldRef.current) {
       textFieldRef.current.focus();
@@ -47,7 +53,7 @@ const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) 
   return (
     <CustomDialog
       open={show}
-      close={onClose}
+      close={handleClose}
       onConfirm={handleUpdateClick}
       confirmButtonProps={{ disabled: !valid }}
       confirmButtonText='Update'
