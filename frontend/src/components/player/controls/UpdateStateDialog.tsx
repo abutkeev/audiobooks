@@ -1,7 +1,8 @@
 import { Clear, ContentPaste } from '@mui/icons-material';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, TextField } from '@mui/material';
+import { InputAdornment, TextField } from '@mui/material';
 import { useContext, useMemo, useRef, useState } from 'react';
 import { PlayerStateContext, updateBookState } from '../state/usePlayerState';
+import CustomDialog from '../../common/CustomDialog';
 
 interface UpdateStateDialogProps {
   show: boolean;
@@ -44,9 +45,14 @@ const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) 
   };
 
   return (
-    <Dialog open={show} onClose={onClose} fullWidth maxWidth='sm'>
-      <DialogTitle>Update player state</DialogTitle>
-      <DialogContent>
+    <CustomDialog
+      open={show}
+      close={onClose}
+      onConfirm={handleUpdateClick}
+      confirmButtonProps={{ disabled: !valid }}
+      confirmButtonText='Update'
+      title='Update player state'
+      content={
         <TextField
           autoFocus
           label='New player state'
@@ -70,14 +76,8 @@ const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) 
             ),
           }}
         />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleUpdateClick} disabled={!valid}>
-          Update
-        </Button>
-      </DialogActions>
-    </Dialog>
+      }
+    />
   );
 };
 
