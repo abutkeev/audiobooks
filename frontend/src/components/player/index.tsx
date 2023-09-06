@@ -12,6 +12,7 @@ import usePlayerState, {
 import PlayerError from './PlayerError';
 import useKeyboardShortcuts from './useKeyboardShortcuts';
 import useMediaSession, { BookInfo } from './media-session/useMediaSession';
+import useCache from './state/useCache';
 
 interface PlayerProps {
   bookId: string;
@@ -24,11 +25,12 @@ interface PlayerProps {
 
 const Player: React.FC<PlayerProps> = ({ bookId, info, chapters, generateUrl, externalState, onStateUpdate }) => {
   const [state, dispatch] = usePlayerState(bookId, chapters, externalState, onStateUpdate);
+  const cache = useCache(chapters);
   useKeyboardShortcuts(state, dispatch);
   useMediaSession(info, chapters[state.currentChapter].title, state, dispatch);
 
   return (
-    <PlayerStateContext.Provider value={{ state, bookId, dispatch, chapters, generateUrl }}>
+    <PlayerStateContext.Provider value={{ state, bookId, dispatch, chapters, generateUrl, cache }}>
       <Paper sx={{ maxWidth: 'md', flexGrow: 1, mx: 'auto' }} square>
         <Controls />
         <PlayerError />

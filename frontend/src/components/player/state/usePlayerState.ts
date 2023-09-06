@@ -3,6 +3,7 @@ import { Book } from '../../../api/api';
 import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { getSavedState, useSaveState } from './localStorageState';
 import useAudioControl, { UpdateAudioControl } from './useAudioControl';
+import useCache from './useCache';
 
 interface PlayerStore {
   state: {
@@ -328,12 +329,14 @@ const defaultContextData: {
   chapters: PlayerStore['chapters'];
   dispatch: Dispatch<AnyAction>;
   generateUrl(state: PlayerPosition): string;
+  cache: ReturnType<typeof useCache>;
 } = {
   state: initialState.state,
   bookId: '',
   dispatch: () => {},
   chapters: [],
   generateUrl: () => '',
+  cache: { state: [], dispatch: () => {} },
 };
 
 export const PlayerStateContext = createContext(defaultContextData);
