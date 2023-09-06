@@ -54,12 +54,22 @@ const useDownload = (chapters: Chapters, { state, dispatch }: ReturnType<typeof 
     const index = state.findIndex(entry => entry?.state === 'pending');
     if (index === -1) return;
 
-    axios({
-      url: chapters[index].filename,
-      onDownloadProgress: ({ loaded, total }) => {
-        dispatch(setProgress({ index, progress: total ? (loaded * 100) / total : undefined }));
-      },
-    }).then(() => dispatch(setProgress({ index, progress: 100 })));
+    const url = chapters[index].filename;
+    const download = () =>
+      axios({
+        url,
+        onDownloadProgress: ({ loaded, total }) => {
+          dispatch(setProgress({ index, progress: total ? (loaded * 100) / total : undefined }));
+        },
+      })
+        .then(() => dispatch(setProgress({ index, progress: 100 })))
+        .catch(e => {
+          console.error(`can't download ${url}`, e);
+          dispatch(setProgress({ index, progress: undefined }));
+          setTimeout(download, 1000);
+        });
+
+    download();
   }, [state, dispatch, chapters]);
 };
 
