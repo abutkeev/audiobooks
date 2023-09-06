@@ -336,7 +336,7 @@ const defaultContextData: {
   dispatch: () => {},
   chapters: [],
   generateUrl: () => '',
-  cache: { state: [], dispatch: () => {} },
+  cache: { state: [], dispatch: () => {}, clearCache: async () => {} },
 };
 
 export const PlayerStateContext = createContext(defaultContextData);

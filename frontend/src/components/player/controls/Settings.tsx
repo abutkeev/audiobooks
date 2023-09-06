@@ -5,11 +5,12 @@ import { PlayerStateContext, setPreventScreenLock, setResetSleepTimerOnActivity 
 import SettingsIcon from '@mui/icons-material/Settings';
 import useWakeLock from '../useWakeLock';
 import copy from 'copy-to-clipboard';
-import { ContentCopy, FileDownload, Update } from '@mui/icons-material';
+import { Clear, ContentCopy, FileDownload, Update } from '@mui/icons-material';
 import UpdateStateDialog from './UpdateStateDialog';
 import { useAppDispatch } from '../../../store';
 import { addSnackbar } from '../../../store/features/snackbars';
 import { startDownload } from '../state/useCache';
+import CustomDialog from '../../common/CustomDialog';
 
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -21,9 +22,12 @@ const Settings: React.FC = () => {
   } = useContext(PlayerStateContext);
   const wakelockAvailable = useWakeLock({ preventScreenLock, playing });
   const [showUpdateStateDialog, setShowUpdateStateDialog] = useState(false);
+  const [showClearCacheConfirmation, setShowClearCacheConfirmation] = useState(false);
   const appDispatch = useAppDispatch();
 
-  const canDownload = cache.state.filter(entry => !entry).length !== 0;
+  const allChaptersCached = cache.state.filter(entry => !entry).length === 0;
+  const anyChaptersCached = cache.state.filter(entry => entry?.state === 'cached').length !== 0;
+  const downloading = cache.state.findIndex(entry => entry?.state === 'downloading' || entry?.state === 'error') !== -1;
 
   const closeMenu = () => setMenuAnchor(undefined);
   const handleResetSleepTimerOnActivityChange = (_: ChangeEvent, checked: boolean) => {
@@ -45,6 +49,10 @@ const Settings: React.FC = () => {
   };
   const handelStartDownload = () => {
     cache.dispatch(startDownload());
+    closeMenu();
+  };
+  const handleClearCacheMenuClick = () => {
+    setShowClearCacheConfirmation(true);
     closeMenu();
   };
 
@@ -80,14 +88,28 @@ const Settings: React.FC = () => {
           <Update sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
           update state
         </MenuItem>
-        {canDownload && (
+        {!allChaptersCached && !downloading && (
           <MenuItem onClick={handelStartDownload}>
             <FileDownload sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
             cache all chapters
           </MenuItem>
         )}
+        {anyChaptersCached && !downloading && (
+          <MenuItem onClick={handleClearCacheMenuClick}>
+            <Clear sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
+            clear cached chapters
+          </MenuItem>
+        )}
       </Menu>
       <UpdateStateDialog show={showUpdateStateDialog} onClose={() => setShowUpdateStateDialog(false)} />
+      <CustomDialog
+        title='Clear cache confirmation'
+        open={showClearCacheConfirmation}
+        content='Clear all cached chapters?'
+        confirmButtonProps={{ color: 'error' }}
+        close={() => setShowClearCacheConfirmation(false)}
+        onConfirm={cache.clearCache}
+      />
     </>
   );
 };

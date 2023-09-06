@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { useEffect, useReducer } from 'react';
+import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Dispatch, useEffect, useReducer } from 'react';
 import axios from 'axios';
 
 const cacheName = 'mp3';
@@ -42,6 +42,10 @@ const cacheSlice = createSlice({
       if (payload < 0 || payload >= state.length) return;
       state[payload] = { state: 'error' };
     },
+    clear: (state, { payload }: PayloadAction<number>) => {
+      if (payload < 0 || payload >= state.length) return;
+      state[payload] = undefined;
+    },
   },
 });
 
@@ -50,7 +54,16 @@ export const { startDownload } = cacheSlice.actions;
 type Chapters = { filename: string }[];
 
 const { setProgress, setError } = cacheSlice.actions;
-const useDownload = (chapters: Chapters, { state, dispatch }: ReturnType<typeof useCache>) => {
+
+const useDownload = ({
+  chapters,
+  state,
+  dispatch,
+}: {
+  chapters: Chapters;
+  state: typeof initialState;
+  dispatch: Dispatch<AnyAction>;
+}) => {
   useEffect(() => {
     if (state.find(entry => entry?.state === 'downloading')) return;
 
@@ -91,9 +104,23 @@ const useCache = (chapters: Chapters) => {
     ).then(state => dispatch(setup(state)));
   }, [chapters]);
 
-  useDownload(chapters, { state, dispatch });
+  const clearCache = async () => {
+    try {
+      const cache = await caches.open(cacheName);
+      await Promise.all(
+        chapters.map(async ({ filename }, index) => {
+          await cache.delete(filename);
+          dispatch(cacheSlice.actions.clear(index));
+        })
+      );
+    } catch (e) {
+      console.error('got error on clear cache', e);
+    }
+  };
 
-  return { state, dispatch };
+  useDownload({ chapters, state, dispatch });
+
+  return { state, dispatch, clearCache };
 };
 
 export default useCache;
