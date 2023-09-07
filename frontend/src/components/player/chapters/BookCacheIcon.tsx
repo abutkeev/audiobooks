@@ -1,24 +1,16 @@
-import { useContext } from 'react';
-import { PlayerStateContext } from '../state/usePlayerState';
 import { DownloadForOffline, Downloading } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
+import useChaptersCacheInfo from './useChaptersCacheInfo';
 
 const BookCacheIcon: React.FC = () => {
-  const {
-    cache: { state },
-  } = useContext(PlayerStateContext);
-  // no cache
-  if (state.filter(entry => entry).length === 0) return null;
+  const { available, none, all, downloading, cached, keys } = useChaptersCacheInfo();
 
-  // all cached
-  if (state.filter(entry => !entry || entry.state !== 'cached').length === 0) {
-    return <DownloadForOffline />;
-  }
+  if (!available || none) return null;
 
-  // download in progress
-  if (state.findIndex(entry => entry && entry.state !== 'cached') !== -1) {
-    const downloadPercent = (state.filter(entry => entry && entry.state === 'cached').length * 100) / state.length;
-    return <CircularProgress size={24} variant='determinate' value={downloadPercent} />;
+  if (all) return <DownloadForOffline />;
+
+  if (downloading) {
+    return <CircularProgress size={24} variant='determinate' value={(cached * 100) / keys.length} />;
   }
 
   return <Downloading />;

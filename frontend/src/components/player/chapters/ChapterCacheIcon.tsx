@@ -1,9 +1,9 @@
 import { DownloadForOffline, ErrorOutline } from '@mui/icons-material';
-import { ChapterCacheState } from '../state/useCache';
 import { CircularProgress } from '@mui/material';
+import { MediaCacheEntryState } from '../../../store/features/media-cache';
 
 interface ChapterCacheIconProps {
-  cacheState: ChapterCacheState;
+  cacheState?: MediaCacheEntryState;
 }
 
 const ChapterCacheIcon: React.FC<ChapterCacheIconProps> = ({ cacheState }) => {
@@ -12,8 +12,6 @@ const ChapterCacheIcon: React.FC<ChapterCacheIconProps> = ({ cacheState }) => {
   switch (state) {
     case 'cached':
       return <DownloadForOffline />;
-    case 'pending':
-      return null;
     case 'downloading':
       return (
         <CircularProgress

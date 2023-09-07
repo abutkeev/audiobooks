@@ -1,12 +1,12 @@
 import { Paper, Typography } from '@mui/material';
-import { ChapterCacheState } from '../state/useCache';
 import ChapterCacheIcon from './ChapterCacheIcon';
+import { MediaCacheEntryState } from '../../../store/features/media-cache';
 
 interface ChapterProps {
   title: string;
   current?: boolean;
   onClick: React.MouseEventHandler<HTMLDivElement>;
-  cacheState?: ChapterCacheState;
+  cacheState?: MediaCacheEntryState;
 }
 
 const Chapter: React.FC<ChapterProps> = ({ title, current, onClick, cacheState }) => {
