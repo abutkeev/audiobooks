@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
-import usePlayerState, { rewind, forward, chapterChange, changeVolume, pause, play } from './state/usePlayerState';
+import { useAppDispatch, useAppSelector } from '../store';
+import { changeVolume, chapterChange, forward, pause, play, rewind } from '../store/features/player';
 
 const arrowKeysRewindTime = 15;
 const letterKeysRewindTime = 30;
 
 const volumeChangeValue = 5;
 
-const useKeyboardShortcuts = (
-  { currentChapter, volume, playing }: ReturnType<typeof usePlayerState>[0],
-  dispatch: ReturnType<typeof usePlayerState>[1]
-) => {
+const useKeyboardShortcuts = () => {
+  const { playing, currentChapter, volume } = useAppSelector(({ player: { state } }) => state);
+  const dispatch = useAppDispatch();
+
   const handleKeyDown = (e: KeyboardEvent) => {
     const { code } = e;
     const disableDefaultActions = () => {

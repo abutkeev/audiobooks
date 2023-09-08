@@ -1,11 +1,14 @@
-import { useContext } from 'react';
-import { PlayerStateContext } from './state/usePlayerState';
 import { Alert } from '@mui/material';
+import { useAppSelector } from '../../store';
 
 const PlayerError: React.FC = () => {
-  const {
-    state: { error },
-  } = useContext(PlayerStateContext);
+  const error = useAppSelector(
+    ({
+      player: {
+        state: { error },
+      },
+    }) => error
+  );
 
   if (!error) return;
 

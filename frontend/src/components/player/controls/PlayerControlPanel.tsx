@@ -1,15 +1,15 @@
 import { SkipPrevious, Replay10, Pause, PlayArrow, Forward10, SkipNext } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import ControlButton from './ControlButton';
-import { useContext } from 'react';
-import { PlayerStateContext, chapterChange, forward, pause, play, rewind } from '../state/usePlayerState';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { chapterChange, forward, pause, play, rewind } from '../../../store/features/player';
 
 const PlayerControlPanel: React.FC = () => {
   const {
     state: { position, duration, currentChapter, playing },
     chapters,
-    dispatch,
-  } = useContext(PlayerStateContext);
+  } = useAppSelector(({ player }) => player);
+  const dispatch = useAppDispatch();
 
   return (
     <Stack direction='row' justifyContent='center'>

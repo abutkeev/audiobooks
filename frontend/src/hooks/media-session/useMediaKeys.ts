@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
-import usePlayerState, { changePosition, forward, pause, play, rewind } from '../state/usePlayerState';
+import { useAppDispatch } from '../../store';
+import { changePosition, forward, pause, play, rewind } from '../../store/features/player';
 
 const mediaKeysRewindTime = 10;
 
-const useMediaKeys = (dispatch: ReturnType<typeof usePlayerState>[1]) => {
+const useMediaKeys = () => {
+  const dispatch = useAppDispatch();
+
   if (!('mediaSession' in navigator)) return;
   const { mediaSession } = navigator;
 

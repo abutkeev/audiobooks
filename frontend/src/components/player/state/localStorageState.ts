@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { PlayerState } from './usePlayerState';
 
 const playerStateName = 'playerState';
 const booksStateName = 'booksState';
@@ -51,55 +49,55 @@ const loadSavedState = (bookId: string) => {
   return state;
 };
 
-export const getSavedState = (initialState: PlayerState, bookId: string, chaptersLength: number) => {
-  const state = { ...initialState };
-  const { currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock } = loadSavedState(bookId);
+// export const getSavedState = (initialState: PlayerState, bookId: string, chaptersLength: number) => {
+//   const state = { ...initialState };
+//   const { currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock } = loadSavedState(bookId);
 
-  if (isFinite(volume) && volume >= 0 && volume <= 100) {
-    state.volume = volume;
-  }
+//   if (isFinite(volume) && volume >= 0 && volume <= 100) {
+//     state.volume = volume;
+//   }
 
-  if (typeof preventScreenLock === 'boolean') {
-    state.preventScreenLock = preventScreenLock;
-  }
+//   if (typeof preventScreenLock === 'boolean') {
+//     state.preventScreenLock = preventScreenLock;
+//   }
 
-  if (typeof resetSleepTimerOnActivity === 'boolean') {
-    state.resetSleepTimerOnActivity = resetSleepTimerOnActivity;
-  }
+//   if (typeof resetSleepTimerOnActivity === 'boolean') {
+//     state.resetSleepTimerOnActivity = resetSleepTimerOnActivity;
+//   }
 
-  if (Number.isInteger(currentChapter) && currentChapter > 0 && currentChapter < chaptersLength) {
-    state.currentChapter = currentChapter;
-  }
+//   if (Number.isInteger(currentChapter) && currentChapter > 0 && currentChapter < chaptersLength) {
+//     state.currentChapter = currentChapter;
+//   }
 
-  if (isFinite(position) && position > 0) {
-    state.position = position;
-  }
+//   if (isFinite(position) && position > 0) {
+//     state.position = position;
+//   }
 
-  return state;
-};
+//   return state;
+// };
 
-export const useSaveState = (state: PlayerState, bookId: string) => {
-  const {
-    currentChapter,
-    position,
-    volume,
-    resetSleepTimerOnActivity,
-    preventScreenLock,
-    updateBookState: newBookState,
-  } = state;
-  useEffect(() => {
-    localStorage.setItem(
-      playerStateName,
-      JSON.stringify({
-        bookId,
-        currentChapter,
-        position,
-        volume,
-        resetSleepTimerOnActivity,
-        preventScreenLock,
-        updated: new Date().toISOString(),
-      })
-    );
-    updateBookState(bookId, currentChapter, position, newBookState);
-  }, [bookId, currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock, newBookState]);
-};
+// export const useSaveState = (state: PlayerState, bookId: string) => {
+//   const {
+//     currentChapter,
+//     position,
+//     volume,
+//     resetSleepTimerOnActivity,
+//     preventScreenLock,
+//     updateBookState: newBookState,
+//   } = state;
+//   useEffect(() => {
+//     localStorage.setItem(
+//       playerStateName,
+//       JSON.stringify({
+//         bookId,
+//         currentChapter,
+//         position,
+//         volume,
+//         resetSleepTimerOnActivity,
+//         preventScreenLock,
+//         updated: new Date().toISOString(),
+//       })
+//     );
+//     updateBookState(bookId, currentChapter, position, newBookState);
+//   }, [bookId, currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock, newBookState]);
+// };

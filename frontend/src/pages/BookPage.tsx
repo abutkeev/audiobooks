@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useGetBookQuery } from '../api/api';
 import BookCard from '../components/BookCard';
 import LoadingWrapper from '../components/common/LoadingWrapper';
@@ -6,10 +6,9 @@ import useAuthors from '../hooks/useAuthors';
 import useReaders from '../hooks/useReaders';
 import useSeries from '../hooks/useSeries';
 import Player from '../components/player';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { currentBookVarName } from './Home';
 import useTitle from '../hooks/useTitle';
-import { PlayerPosition } from '../components/player/state/usePlayerState';
 
 const BookPage: React.FC = () => {
   const { id = '' } = useParams();
@@ -24,25 +23,25 @@ const BookPage: React.FC = () => {
     localStorage.setItem(currentBookVarName, id);
   }, [id]);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const externalState = useMemo(() => {
-    const params = Object.fromEntries(searchParams);
-    const position = +params.position;
-    const currentChapter = +params.currentChapter;
-    if (!isFinite(position) || !isFinite(currentChapter) || position < 0 || currentChapter < 0) return undefined;
-    return { position, currentChapter };
-  }, [searchParams]);
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const externalState = useMemo(() => {
+  //   const params = Object.fromEntries(searchParams);
+  //   const position = +params.position;
+  //   const currentChapter = +params.currentChapter;
+  //   if (!isFinite(position) || !isFinite(currentChapter) || position < 0 || currentChapter < 0) return undefined;
+  //   return { position, currentChapter };
+  // }, [searchParams]);
 
   const loading = isLoading || authorsLoading || readersLoading || seriesLoading;
   const error = isError || authorsError || readersError || seriesError;
-  const generateUrl = ({ currentChapter, position }: PlayerPosition) => {
-    const url = `${location.toString()}?currentChapter=${currentChapter}&position=${position}`;
-    return url;
-  };
+  // const generateUrl = ({ currentChapter, position }: PlayerPosition) => {
+  //   const url = `${location.toString()}?currentChapter=${currentChapter}&position=${position}`;
+  //   return url;
+  // };
 
-  const handleStateUpdate = () => {
-    setSearchParams([]);
-  };
+  // const handleStateUpdate = () => {
+  //   setSearchParams([]);
+  // };
 
   return (
     <LoadingWrapper loading={loading} error={error}>
@@ -50,7 +49,7 @@ const BookPage: React.FC = () => {
         <>
           <BookCard info={data.info} authors={authors} readers={readers} series={series} />
           <Player
-            info={{
+            bookInfo={{
               name: data.info.name,
               author: authors[data.info.author_id],
               series: data.info.series_id && series[data.info.series_id],
@@ -58,9 +57,9 @@ const BookPage: React.FC = () => {
             }}
             bookId={id}
             chapters={data.chapters}
-            generateUrl={generateUrl}
-            externalState={externalState}
-            onStateUpdate={handleStateUpdate}
+            // generateUrl={generateUrl}
+            // externalState={externalState}
+            // onStateUpdate={handleStateUpdate}
           />
         </>
       )}

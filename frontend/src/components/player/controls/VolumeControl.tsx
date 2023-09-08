@@ -1,13 +1,11 @@
 import { VolumeDown, VolumeUp } from '@mui/icons-material';
 import { Stack, Slider } from '@mui/material';
-import { useContext } from 'react';
-import { PlayerStateContext, changeVolume } from '../state/usePlayerState';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { changeVolume } from '../../../store/features/player';
 
 const VolumeControl: React.FC = () => {
-  const {
-    state: { volume },
-    dispatch,
-  } = useContext(PlayerStateContext);
+  const { volume } = useAppSelector(({ player: { state } }) => state);
+  const dispatch = useAppDispatch();
 
   return (
     <Stack direction='row' spacing={2} alignItems='center'>

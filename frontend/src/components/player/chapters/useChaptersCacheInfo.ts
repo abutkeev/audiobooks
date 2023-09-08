@@ -1,9 +1,8 @@
-import { useContext } from 'react';
 import useMediaCache from '../../../hooks/useMediaCache';
-import { PlayerStateContext } from '../state/usePlayerState';
+import { useAppSelector } from '../../../store';
 
 const useChaptersCacheInfo = () => {
-  const { chapters } = useContext(PlayerStateContext);
+  const chapters = useAppSelector(({ player: { chapters } }) => chapters);
   const cache = useMediaCache();
   if (!cache.available) return {};
 

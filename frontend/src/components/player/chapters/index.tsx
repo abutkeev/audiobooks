@@ -1,18 +1,20 @@
-import { useContext } from 'react';
-import { PlayerStateContext, chapterChange } from '../state/usePlayerState';
 import Chapter from './Chapter';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import BookCacheIcon from './BookCacheIcon';
 import { ExpandMore } from '@mui/icons-material';
 import useMediaCache from '../../../hooks/useMediaCache';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { chapterChange } from '../../../store/features/player';
 
 const Chapters: React.FC = () => {
   const {
     state: { currentChapter },
     chapters,
-    dispatch,
-  } = useContext(PlayerStateContext);
+  } = useAppSelector(({ player }) => player);
+  const dispatch = useAppDispatch();
   const cache = useMediaCache();
+
+  if (chapters.length === 0) return;
 
   const handleChapterClick = (chapter: number) => () => dispatch(chapterChange(chapter));
   const currentChapterTitle = chapters[currentChapter].title;

@@ -1,19 +1,18 @@
 import { Bedtime, BedtimeOff } from '@mui/icons-material';
 import ControlButton from './ControlButton';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, MenuItem, Stack, Typography } from '@mui/material';
-import { PlayerStateContext, pause, setPauseOnChapterEnd } from '../state/usePlayerState';
 import formatTime from '../../../utils/formatTime';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { pause, setPauseOnChapterEnd } from '../../../store/features/player';
 
 const SleepControl: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const [sleepTimerDuration, setSleepTimerDuration] = useState<number>();
   const [sleepTimerStart, setSleepTimerStart] = useState<Date>();
   const [sleepTimerLeft, setSleepTimerLeft] = useState<number>();
-  const {
-    state: { pauseOnChapterEnd, resetSleepTimerOnActivity },
-    dispatch,
-  } = useContext(PlayerStateContext);
+  const { pauseOnChapterEnd, resetSleepTimerOnActivity } = useAppSelector(({ player: { state } }) => state);
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (sleepTimerDuration && sleepTimerStart) {

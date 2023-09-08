@@ -1,29 +1,28 @@
 import ControlButton from './ControlButton';
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { FormControlLabel, Menu, MenuItem, Switch } from '@mui/material';
-import { PlayerStateContext, setPreventScreenLock, setResetSleepTimerOnActivity } from '../state/usePlayerState';
 import SettingsIcon from '@mui/icons-material/Settings';
 import useWakeLock from '../useWakeLock';
 import copy from 'copy-to-clipboard';
 import { Clear, ContentCopy, FileDownload, Update } from '@mui/icons-material';
 import UpdateStateDialog from './UpdateStateDialog';
-import { useAppDispatch } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store';
 import { addSnackbar } from '../../../store/features/snackbars';
 import CustomDialog from '../../common/CustomDialog';
 import useChaptersCacheInfo from '../chapters/useChaptersCacheInfo';
 import { addMediaToCache, removeCachedMedia } from '../../../store/features/media-cache';
+import { setPreventScreenLock, setResetSleepTimerOnActivity } from '../../../store/features/player';
 
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const {
     state: { resetSleepTimerOnActivity, preventScreenLock, playing, position, currentChapter },
     bookId,
-    dispatch,
-  } = useContext(PlayerStateContext);
+  } = useAppSelector(({ player }) => player);
+  const dispatch = useAppDispatch();
   const wakelockAvailable = useWakeLock({ preventScreenLock, playing });
   const [showUpdateStateDialog, setShowUpdateStateDialog] = useState(false);
   const [showClearCacheConfirmation, setShowClearCacheConfirmation] = useState(false);
-  const appDispatch = useAppDispatch();
   const chaptersCacheInfo = useChaptersCacheInfo();
 
   const closeMenu = () => setMenuAnchor(undefined);
@@ -37,7 +36,7 @@ const Settings: React.FC = () => {
   };
   const handleStateCopy = () => {
     copy(JSON.stringify({ bookId, currentChapter, position }, null, 2));
-    appDispatch(addSnackbar({ severity: 'success', text: 'Copied to clipboard', timeout: 2000 }));
+    dispatch(addSnackbar({ severity: 'success', text: 'Copied to clipboard', timeout: 2000 }));
     closeMenu();
   };
   const handleUpdateStateDialogOpen = () => {
@@ -45,7 +44,7 @@ const Settings: React.FC = () => {
     closeMenu();
   };
   const handelStartDownload = () => {
-    appDispatch(addMediaToCache(chaptersCacheInfo.keys || []));
+    dispatch(addMediaToCache(chaptersCacheInfo.keys || []));
     closeMenu();
   };
   const handleClearCacheMenuClick = () => {
@@ -105,7 +104,7 @@ const Settings: React.FC = () => {
         content='Clear all cached chapters?'
         confirmButtonProps={{ color: 'error' }}
         close={() => setShowClearCacheConfirmation(false)}
-        onConfirm={() => chaptersCacheInfo.available && appDispatch(removeCachedMedia(chaptersCacheInfo.keys))}
+        onConfirm={() => chaptersCacheInfo.available && dispatch(removeCachedMedia(chaptersCacheInfo.keys))}
       />
     </>
   );

@@ -6,6 +6,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import titleSlice from './features/title';
 import snackbarsSlice from './features/snackbars';
 import mediaCacheSlice, { createMediaCacheListenerMiddleware } from './features/media-cache';
+import { audioControlMiddleware, playerSlice } from './features/player';
 
 export const store = configureStore({
   reducer: {
@@ -14,9 +15,12 @@ export const store = configureStore({
     [titleSlice.name]: titleSlice.reducer,
     [snackbarsSlice.name]: snackbarsSlice.reducer,
     [mediaCacheSlice.name]: mediaCacheSlice.reducer,
+    [playerSlice.name]: playerSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().prepend(createMediaCacheListenerMiddleware('mp3')).concat(api.middleware),
+    getDefaultMiddleware()
+      .prepend([createMediaCacheListenerMiddleware('mp3'), audioControlMiddleware])
+      .concat(api.middleware),
 });
 
 setupListeners(store.dispatch);

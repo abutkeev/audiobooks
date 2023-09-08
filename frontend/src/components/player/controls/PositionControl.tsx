@@ -1,13 +1,13 @@
-import { useContext, useState } from 'react';
-import { PlayerStateContext, changePosition } from '../state/usePlayerState';
+import { useState } from 'react';
 import { Stack, Typography, Slider, Skeleton } from '@mui/material';
 import formatTime from '../../../utils/formatTime';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { changePosition } from '../../../store/features/player';
 
 const PositionControl: React.FC = () => {
-  const {
-    state: { position, duration },
-    dispatch,
-  } = useContext(PlayerStateContext);
+  const { position, duration } = useAppSelector(({ player: { state } }) => state);
+  const dispatch = useAppDispatch();
+
   const handlePositionChange = (newPosition: number) => dispatch(changePosition(newPosition));
   const [showRemaining, setShowRemaining] = useState(false);
 
