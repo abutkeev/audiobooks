@@ -1,5 +1,5 @@
-import { createAction } from '@reduxjs/toolkit';
 import mediaCacheSlice from './slice';
+import { getSliceActionCreator } from '../..';
 
 export { default as createMediaCacheListenerMiddleware } from './getListenerMiddleware';
 export type { MediaCacheEntryState } from './slice';
@@ -9,9 +9,7 @@ export const { removeCachedMedia } = mediaCacheSlice.actions;
 
 export default mediaCacheSlice;
 
-function createSliceAction<T = undefined>(name: string) {
-  return createAction<T>(`${mediaCacheSlice}/${name}`);
-}
+const createSliceAction = getSliceActionCreator(mediaCacheSlice);
 
 export const startMediaCacheUpdates = createSliceAction('startMediaCacheUpdates');
 export const stopMediaCacheUpdates = createSliceAction('stopMediaCacheUpdates');
