@@ -1,11 +1,8 @@
 import { useEffect } from 'react';
+import { useAppSelector } from '../store';
 
-interface WakeLockParams {
-  preventScreenLock: boolean;
-  playing: boolean;
-}
-
-const useWakeLock = ({ preventScreenLock, playing }: WakeLockParams) => {
+const useWakeLock = () => {
+  const { preventScreenLock, playing } = useAppSelector(({ player: { state } }) => state);
   const wakelockAvailable = 'wakeLock' in navigator;
   useEffect(() => {
     if (preventScreenLock && playing && wakelockAvailable) {

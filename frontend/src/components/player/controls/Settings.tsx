@@ -2,7 +2,7 @@ import ControlButton from './ControlButton';
 import { ChangeEvent, useState } from 'react';
 import { FormControlLabel, Menu, MenuItem, Switch } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
-import useWakeLock from '../useWakeLock';
+import useWakeLock from '../../../hooks/useWakeLock';
 import copy from 'copy-to-clipboard';
 import { Clear, ContentCopy, FileDownload, Update } from '@mui/icons-material';
 import UpdateStateDialog from './UpdateStateDialog';
@@ -16,11 +16,11 @@ import { setPreventScreenLock, setResetSleepTimerOnActivity } from '../../../sto
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const {
-    state: { resetSleepTimerOnActivity, preventScreenLock, playing, position, currentChapter },
+    state: { resetSleepTimerOnActivity, preventScreenLock, position, currentChapter },
     bookId,
   } = useAppSelector(({ player }) => player);
   const dispatch = useAppDispatch();
-  const wakelockAvailable = useWakeLock({ preventScreenLock, playing });
+  const wakelockAvailable = useWakeLock();
   const [showUpdateStateDialog, setShowUpdateStateDialog] = useState(false);
   const [showClearCacheConfirmation, setShowClearCacheConfirmation] = useState(false);
   const chaptersCacheInfo = useChaptersCacheInfo();
