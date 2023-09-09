@@ -1,14 +1,13 @@
 import { IosShare } from '@mui/icons-material';
 import ControlButton from './ControlButton';
-// import copy from 'copy-to-clipboard';
-import { useAppDispatch } from '../../../store';
-import { addSnackbar } from '../../../store/features/snackbars';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { copyUrl } from '../../../store/features/player';
 
 const CopyPosition: React.FC = () => {
+  const { currentChapter, position } = useAppSelector(({ player: { state } }) => state);
   const dispatch = useAppDispatch();
   const handleCopyClick = () => {
-    // copy(generateUrl({ currentChapter, position }));
-    dispatch(addSnackbar({ severity: 'success', text: 'Copied to clipboard', timeout: 2000 }));
+    return dispatch(copyUrl({ currentChapter, position }));
   };
   return <ControlButton Icon={IosShare} small onClick={handleCopyClick} />;
 };

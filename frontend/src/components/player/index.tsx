@@ -7,18 +7,17 @@ import PlayerError from './PlayerError';
 import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
 import useMediaSession from '../../hooks/media-session/useMediaSession';
 import { useAppDispatch } from '../../store';
-import { BookInfo, setBookInfo, playerSetup, playerReset } from '../../store/features/player';
+import { BookInfo, setBookInfo, playerSetup, playerReset, updateBookState } from '../../store/features/player';
 
 interface PlayerProps {
   bookId: string;
   bookInfo: BookInfo;
   chapters: Book['chapters'];
-  // generateUrl(state: PlayerPosition): string;
-  // externalState?: ExternalPlayerState;
-  // onStateUpdate(state: PlayerState): void;
+  externalState?: { position: number; currentChapter: number };
+  onExternalStateApply?(): void;
 }
 
-const Player: React.FC<PlayerProps> = ({ bookId, bookInfo, chapters }) => {
+const Player: React.FC<PlayerProps> = ({ bookId, bookInfo, chapters, externalState, onExternalStateApply }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(playerSetup({ bookId, chapters }));
@@ -30,6 +29,15 @@ const Player: React.FC<PlayerProps> = ({ bookId, bookInfo, chapters }) => {
   useEffect(() => {
     dispatch(setBookInfo(bookInfo));
   }, [bookInfo]);
+
+  useEffect(() => {
+    if (externalState) {
+      dispatch(updateBookState({ ...externalState, bookId }));
+      if (onExternalStateApply) {
+        onExternalStateApply();
+      }
+    }
+  }, [externalState, onExternalStateApply]);
 
   useKeyboardShortcuts();
   useMediaSession();

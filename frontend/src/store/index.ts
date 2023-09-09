@@ -6,7 +6,13 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import titleSlice from './features/title';
 import snackbarsSlice from './features/snackbars';
 import mediaCacheSlice, { createMediaCacheListenerMiddleware } from './features/media-cache';
-import { audioControlMiddleware, createLocalStorageMiddleware, playerSlice } from './features/player';
+import {
+  audioControlMiddleware,
+  createPlayerUtilsMiddleware,
+  createLocalStorageMiddleware,
+  playerSlice,
+} from './features/player';
+import copyBookStateUrl from '../utils/copyBookStateUrl';
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +29,7 @@ export const store = configureStore({
         createMediaCacheListenerMiddleware('mp3'),
         audioControlMiddleware,
         createLocalStorageMiddleware({ playerStateName: 'playerState', booksStateName: 'booksState' }),
+        createPlayerUtilsMiddleware({ copyBookStateUrl }),
       ])
       .concat(api.middleware),
 });

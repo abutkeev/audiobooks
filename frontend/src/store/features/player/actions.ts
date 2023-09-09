@@ -1,3 +1,4 @@
+import { BookState } from './createPlayerUtilsMiddleware';
 import { createSliceAction } from './internal';
 
 export const changePosition = createSliceAction<number>('changePosition');
@@ -10,3 +11,4 @@ export const chapterChange = createSliceAction<number>('chapterChange');
 export const updateBookState = createSliceAction<{ bookId: string; currentChapter: number; position: number }>(
   'updateBookState'
 );
+export const copyUrl = createSliceAction<BookState>('copyUrl');
