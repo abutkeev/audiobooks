@@ -7,11 +7,10 @@ import copy from 'copy-to-clipboard';
 import { Clear, ContentCopy, FileDownload, Update } from '@mui/icons-material';
 import UpdateStateDialog from './UpdateStateDialog';
 import { useAppDispatch, useAppSelector } from '../../../store';
-import { addSnackbar } from '../../../store/features/snackbars';
 import CustomDialog from '../../common/CustomDialog';
 import useChaptersCacheInfo from '../chapters/useChaptersCacheInfo';
 import { addMediaToCache, removeCachedMedia } from '../../../store/features/media-cache';
-import { setPreventScreenLock, setResetSleepTimerOnActivity } from '../../../store/features/player';
+import { setPreventScreenLock, setResetSleepTimerOnActivity, showMessage } from '../../../store/features/player';
 
 const Settings: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -36,7 +35,7 @@ const Settings: React.FC = () => {
   };
   const handleStateCopy = () => {
     copy(JSON.stringify({ bookId, currentChapter, position }, null, 2));
-    dispatch(addSnackbar({ severity: 'success', text: 'Copied to clipboard', timeout: 2000 }));
+    dispatch(showMessage({ severity: 'success', text: 'Copied to clipboard', timeout: 2000 }));
     closeMenu();
   };
   const handleUpdateStateDialogOpen = () => {

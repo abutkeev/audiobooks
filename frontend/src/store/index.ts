@@ -13,6 +13,7 @@ import {
   playerSlice,
 } from './features/player';
 import copyBookStateUrl from '../utils/copyBookStateUrl';
+import showMessage from '../utils/showMessage';
 
 export const store = configureStore({
   reducer: {
@@ -29,7 +30,7 @@ export const store = configureStore({
         createMediaCacheListenerMiddleware('mp3'),
         audioControlMiddleware,
         createLocalStorageMiddleware({ playerStateName: 'playerState', booksStateName: 'booksState' }),
-        createPlayerUtilsMiddleware({ copyBookStateUrl }),
+        createPlayerUtilsMiddleware({ copyBookStateUrl, showMessage }),
       ])
       .concat(api.middleware),
 });
