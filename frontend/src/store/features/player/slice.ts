@@ -52,10 +52,11 @@ export const playerSlice = createSlice({
   name: 'player',
   initialState,
   reducers: {
-    playerSetup: (_, { payload: { bookId, chapters } }: PayloadAction<Pick<PlayerStore, 'bookId' | 'chapters'>>) => {
-      //   store.state = getSavedState(initialState.state, bookId, chapters.length);
-      return { ...initialState, bookId, chapters };
-    },
+    playerSetup: (_, { payload: { bookId, chapters } }: PayloadAction<Pick<PlayerStore, 'bookId' | 'chapters'>>) => ({
+      ...initialState,
+      bookId,
+      chapters,
+    }),
     playerReset: () => initialState,
     setBookInfo: (state, { payload }: PayloadAction<PlayerStore['bookInfo']>) => {
       state.bookInfo = payload;
