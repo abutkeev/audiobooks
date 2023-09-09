@@ -13,7 +13,7 @@ const addPlayerSetupActions: AudioControllAddListrers = (mw, audio) => {
 
       if (chapters.length === 0) return;
 
-      dispatch(loadChapter({number: currentChapter, position}))
+      dispatch(loadChapter({ number: currentChapter, position }));
       dispatch(changeVolume(volume));
     },
   });

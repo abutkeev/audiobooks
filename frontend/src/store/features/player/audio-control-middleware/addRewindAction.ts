@@ -2,7 +2,7 @@ import { AudioControllAddListrers } from '.';
 import { changePosition, rewind } from '..';
 import { loadChapter } from '../internal';
 
-const addRewindAction: AudioControllAddListrers = (mw) => {
+const addRewindAction: AudioControllAddListrers = mw => {
   mw.startListening({
     actionCreator: rewind,
     effect: ({ payload }, { getState, dispatch }) => {
@@ -20,7 +20,7 @@ const addRewindAction: AudioControllAddListrers = (mw) => {
         return;
       }
 
-      dispatch(loadChapter({ number: currentChapter - 1, position:  position - payload }));
+      dispatch(loadChapter({ number: currentChapter - 1, position: position - payload }));
     },
   });
 };

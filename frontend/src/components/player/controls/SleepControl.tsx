@@ -12,7 +12,7 @@ const SleepControl: React.FC = () => {
   const [sleepTimerStart, setSleepTimerStart] = useState<Date>();
   const [sleepTimerLeft, setSleepTimerLeft] = useState<number>();
   const { pauseOnChapterEnd, resetSleepTimerOnActivity } = useAppSelector(({ player: { state } }) => state);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (sleepTimerDuration && sleepTimerStart) {

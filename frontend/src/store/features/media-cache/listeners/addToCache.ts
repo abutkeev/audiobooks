@@ -7,7 +7,7 @@ function addMediaToCacheListner<State extends MediaCacheStateSlice>(
   cache: Cache
 ) {
   const { setCachedMediaProgress, setCachedMediaError } = mediaCacheSlice.actions;
-  
+
   mw.startListening({
     actionCreator: addMediaToCache,
     effect: async ({ payload }, api) => {

@@ -9,4 +9,3 @@ export const chapterEnded = createSliceAction('chapterEnded');
 export const loadChapter = createSliceAction<{ number: number; position?: number }>('loadChapter');
 
 export const setPreventLocalStorageSave = createSliceAction<boolean>('setPreventLocalStorageSave');
-

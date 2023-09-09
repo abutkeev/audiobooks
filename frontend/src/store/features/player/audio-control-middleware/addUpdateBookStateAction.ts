@@ -2,7 +2,7 @@ import { AudioControllAddListrers } from '.';
 import { playerSlice, updateBookState } from '..';
 import { loadChapter, stopUpdates } from '../internal';
 
-const addUpdateBookStateAction: AudioControllAddListrers = (mw) => {
+const addUpdateBookStateAction: AudioControllAddListrers = mw => {
   const { updatePlaying } = playerSlice.actions;
 
   mw.startListening({
