@@ -2,6 +2,8 @@ import { Clear, ContentPaste } from '@mui/icons-material';
 import { InputAdornment, TextField } from '@mui/material';
 import { useMemo, useRef, useState } from 'react';
 import CustomDialog from '../../common/CustomDialog';
+import { useAppDispatch } from '../../../store';
+import { updateBookState } from '../../../store/features/player';
 
 interface UpdateStateDialogProps {
   show: boolean;
@@ -9,6 +11,7 @@ interface UpdateStateDialogProps {
 }
 
 const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) => {
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState('');
   const valid = useMemo(() => {
     if (!value) return false;
@@ -31,7 +34,7 @@ const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) 
   const textFieldRef = useRef<HTMLInputElement>(null);
 
   const handleUpdateClick = () => {
-    // dispatch(updateBookState(JSON.parse(value)));
+    dispatch(updateBookState(JSON.parse(value)));
     onClose();
   };
 

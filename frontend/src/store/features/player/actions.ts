@@ -7,3 +7,6 @@ export const play = createSliceAction('play');
 export const forward = createSliceAction<number>('forward');
 export const rewind = createSliceAction<number>('rewind');
 export const chapterChange = createSliceAction<number>('chapterChange');
+export const updateBookState = createSliceAction<{ bookId: string; currentChapter: number; position: number }>(
+  'updateBookState'
+);

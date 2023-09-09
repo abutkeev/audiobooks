@@ -9,6 +9,7 @@ import addPlayPauseActions from './addPlayPauseActions';
 import addRewindAction from './addRewindAction';
 import addForwardAction from './addForwardAction';
 import addChapterEndAction from './addChapterEndAction';
+import addUpdateBookStateAction from './addUpdateBookStateAction';
 
 export type AudioControllAddListrers = (
   mw: ListenerMiddlewareInstance<PlayerStateSlice>,
@@ -27,5 +28,6 @@ addPlayPauseActions(mw, audio);
 addForwardAction(mw, audio);
 addRewindAction(mw, audio);
 addOtherPlayerActions(mw, audio);
+addUpdateBookStateAction(mw, audio);
 
 export const audioControlMiddleware = mw.middleware;
