@@ -36,7 +36,7 @@ export class UsersService {
     if (result.length === 0) return null;
     const user = result[0];
 
-    if (!await bcrypt.compare(password, user.password)) return null;
+    if (!(await bcrypt.compare(password, user.password))) return null;
 
     return getUserDto(user);
   }

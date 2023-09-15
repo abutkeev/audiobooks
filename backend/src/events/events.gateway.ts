@@ -28,7 +28,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  async handleConnection(client: SocketWithUser, ...args: any[]) {
+  async handleConnection(client: SocketWithUser) {
     const { authorization } = client.handshake.headers;
     if (!authorization) {
       this.logger.error(`No authorization for ${client.id}`);

@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useStaticAssets(path.resolve(__dirname, '..', 'frontend'));
   app.useStaticAssets(path.resolve(__dirname, '..', 'data'), { prefix: '/api/' });
   app.useGlobalPipes(new ValidationPipe());
-  app.setGlobalPrefix('api')
+  app.setGlobalPrefix('api');
 
   const PORT = process.env.PORT || 4000;
   await app.listen(PORT, () => logger.log(`Server started on PORT ${PORT}`));
