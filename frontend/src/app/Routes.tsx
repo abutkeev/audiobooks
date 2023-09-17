@@ -5,6 +5,8 @@ import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import Main from './Main';
 import { useMemo } from 'react';
+import { useAppSelector } from '../store';
+import Login from '../pages/Login';
 
 const authorizedRoutes: RouteObject[] = [
   {
@@ -26,15 +28,24 @@ const authorizedRoutes: RouteObject[] = [
 ];
 
 const Routes: React.FC = () => {
+  const { token } = useAppSelector(({ auth }) => auth);
+
   const router = useMemo(
     () =>
       createHashRouter([
         {
           element: <Main />,
-          children: authorizedRoutes,
+          children: token
+            ? authorizedRoutes
+            : [
+                {
+                  path: '*',
+                  element: <Login />,
+                },
+              ],
         },
       ]),
-    []
+    [token]
   );
 
   return <RouterProvider router={router} />;

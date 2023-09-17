@@ -11,6 +11,7 @@ const AppBar: React.FC = () => {
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
   const title = useAppSelector(({ title }) => title);
+  const token = useAppSelector(({ auth: { token } }) => token);
 
   const handleHomeButtonClick = () => {
     localStorage.removeItem(currentBookVarName);
@@ -21,7 +22,7 @@ const AppBar: React.FC = () => {
     <>
       <MuiAppBar position='fixed'>
         <Toolbar>
-          {(pathname !== '/' || new Set(searchParams.keys()).size !== 0) && (
+          {token && (pathname !== '/' || new Set(searchParams.keys()).size !== 0) && (
             <IconButton color='inherit' onClick={handleHomeButtonClick}>
               <Home />
             </IconButton>

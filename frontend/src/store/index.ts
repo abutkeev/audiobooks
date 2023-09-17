@@ -14,6 +14,7 @@ import {
 } from './features/player';
 import copyBookStateUrl from '../utils/copyBookStateUrl';
 import showMessage from '../utils/showMessage';
+import authSlice from './features/auth';
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     [snackbarsSlice.name]: snackbarsSlice.reducer,
     [mediaCacheSlice.name]: mediaCacheSlice.reducer,
     [playerSlice.name]: playerSlice.reducer,
+    [authSlice.name]: authSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
