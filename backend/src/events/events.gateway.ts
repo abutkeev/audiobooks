@@ -29,14 +29,13 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async handleConnection(client: SocketWithUser) {
-    const { authorization } = client.handshake.headers;
-    if (!authorization) {
-      this.logger.error(`No authorization for ${client.id}`);
+    const { token } = client.handshake.auth;
+    if (!token) {
+      this.logger.error(`No token for ${client.id}`);
       client.disconnect();
       return;
     }
 
-    const token = authorization.slice(authorization.indexOf(' ') + 1);
     const result = await this.authService.verify(token);
     if (!result) {
       this.logger.error(`Token validation failed for ${client.id}`);
