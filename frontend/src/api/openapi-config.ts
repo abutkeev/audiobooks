@@ -2,7 +2,7 @@ import type { ConfigFile } from '@rtk-query/codegen-openapi';
 import { resolve } from 'path';
 
 const config: ConfigFile = {
-  schemaFile: resolve('../../../openapi.yaml'),
+  schemaFile: resolve('../../openapi.json'),
   apiFile: resolve('./emptyApi.ts'),
   apiImport: 'emptySplitApi',
   outputFile: resolve('./api.ts'),

@@ -1,0 +1,11 @@
+{
+    "inputs": [
+        {
+            "inputFile": "../openapi.yaml"
+        },
+        {
+            "inputFile": "../backend/openapi.json"
+        }
+    ],
+    "output": "openapi.json"
+}
