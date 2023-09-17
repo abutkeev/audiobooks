@@ -3,6 +3,7 @@ import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import Search from './Search';
 import { useAppSelector } from '../../store';
 import { useState } from 'react';
+import AccountMenu from './AccountMenu';
 
 interface MobileAppBarProps {
   handleHomeButtonClick(): void;
@@ -36,6 +37,7 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({ handleHomeButtonClick, show
                   <SearchIcon />
                 </IconButton>
               )}
+              <AccountMenu />
             </>
           )}
         </Toolbar>
