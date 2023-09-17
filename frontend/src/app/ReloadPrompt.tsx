@@ -1,7 +1,7 @@
 import { Alert, Button } from '@mui/material';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { useAppDispatch } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
+import { useAppDispatch } from '../store';
+import { addSnackbar } from '../store/features/snackbars';
 import { useState } from 'react';
 
 const updatesCheckInterval = 1 * 60 * 1000;

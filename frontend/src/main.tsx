@@ -7,39 +7,10 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { RouterProvider, createHashRouter } from 'react-router-dom';
-import BookList from './pages/BookList';
-import BookPage from './pages/BookPage';
-import AppBar from './app/app-bar/AppBar';
-import NotFound from './pages/NotFound';
-import Home from './pages/Home';
 import useCreateTheme from './hooks/useCreateTheme';
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
-
-const router = createHashRouter([
-  {
-    element: <AppBar />,
-    children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
-      {
-        path: '/books',
-        element: <BookList />,
-      },
-      {
-        path: '/book/:id',
-        element: <BookPage />,
-      },
-      {
-        path: '*',
-        element: <NotFound />,
-      },
-    ],
-  },
-]);
+import Routes from './app/Routes';
 
 const App: React.FC = () => {
   const theme = useCreateTheme();
@@ -48,7 +19,7 @@ const App: React.FC = () => {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <RouterProvider router={router}></RouterProvider>
+          <Routes />
         </ThemeProvider>
       </Provider>
     </React.StrictMode>

@@ -1,6 +1,6 @@
 import { Alert, Snackbar as MuiSnackbar } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../store';
-import { removeSnackbar } from '../../store/features/snackbars';
+import { useAppDispatch, useAppSelector } from '../store';
+import { removeSnackbar } from '../store/features/snackbars';
 
 const Snackbar: React.FC = () => {
   const snackbars = useAppSelector(({ snackbars }) => snackbars);

@@ -1,13 +1,10 @@
 import { Home } from '@mui/icons-material';
-import { Box, Container, IconButton, Toolbar, Typography } from '@mui/material';
+import { Box, IconButton, Toolbar, Typography } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
-import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Search from './Search';
 import { currentBookVarName } from '../../pages/Home';
 import { useAppSelector } from '../../store';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
-import Snackbar from './Snackbar';
-import ReloadPrompt from './ReloadPrompt';
 
 const AppBar: React.FC = () => {
   const navigate = useNavigate();
@@ -22,11 +19,6 @@ const AppBar: React.FC = () => {
 
   return (
     <>
-      <HelmetProvider>
-        <Helmet>
-          <title>{title}</title>
-        </Helmet>
-      </HelmetProvider>
       <MuiAppBar position='fixed'>
         <Toolbar>
           {(pathname !== '/' || new Set(searchParams.keys()).size !== 0) && (
@@ -42,11 +34,6 @@ const AppBar: React.FC = () => {
         </Toolbar>
       </MuiAppBar>
       <Toolbar />
-      <Snackbar />
-      <Container sx={{ my: 1, maxWidth: 'md' }}>
-        <ReloadPrompt />
-        <Outlet />
-      </Container>
     </>
   );
 };
