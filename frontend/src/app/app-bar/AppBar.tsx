@@ -27,7 +27,7 @@ const AppBar: React.FC = () => {
               <Home />
             </IconButton>
           )}
-          <Typography variant='h6' ml={1}>
+          <Typography variant='h6' ml={1} noWrap>
             {title}
           </Typography>
           <Box flexGrow={1} />
