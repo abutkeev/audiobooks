@@ -10,7 +10,7 @@ import { store } from './store';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import BookList from './pages/BookList';
 import BookPage from './pages/BookPage';
-import AppBar from './components/app-bar/AppBar';
+import AppBar from './app/app-bar/AppBar';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
 import useCreateTheme from './hooks/useCreateTheme';
