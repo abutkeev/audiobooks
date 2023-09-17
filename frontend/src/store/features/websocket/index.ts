@@ -1,34 +1,13 @@
-import { createListenerMiddleware } from '@reduxjs/toolkit';
-import authSlice, { setAuthToken } from '../auth';
-import { Socket, io } from 'socket.io-client';
+import authSlice from '../auth';
+import websocketSlice from './slice';
 
-const connectSocket = (token: string | null) => {
-  if (!token) return;
-
-  const socket = io('/api/events', {
-    transports: ['websocket'],
-    auth: {
-      token,
-    },
-  });
-  return socket;
+export type StateSlice = {
+  [authSlice.name]: ReturnType<typeof authSlice.getInitialState>;
+  [websocketSlice.name]: ReturnType<typeof websocketSlice.getInitialState>;
 };
 
-let socket: Socket | undefined = connectSocket(authSlice.getInitialState().token);
+export { websocketMiddleware } from './websocketMiddleware';
 
-type StateSlice = { [authSlice.name]: ReturnType<typeof authSlice.getInitialState> };
+export { websocketSlice };
 
-const mw = createListenerMiddleware<StateSlice>();
-
-mw.startListening({
-  actionCreator: setAuthToken,
-  effect: ({ payload }) => {
-    if (socket) {
-      socket.close();
-      socket = undefined;
-    }
-    socket = connectSocket(payload);
-  },
-});
-
-export const websocketMiddleware = mw.middleware;
+export * from './actions';

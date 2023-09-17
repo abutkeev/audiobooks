@@ -15,7 +15,7 @@ import {
 import copyBookStateUrl from '../utils/copyBookStateUrl';
 import showMessage from '../utils/showMessage';
 import authSlice from './features/auth';
-import { websocketMiddleware } from './features/websocket';
+import { websocketMiddleware, websocketSlice } from './features/websocket';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +26,7 @@ export const store = configureStore({
     [mediaCacheSlice.name]: mediaCacheSlice.reducer,
     [playerSlice.name]: playerSlice.reducer,
     [authSlice.name]: authSlice.reducer,
+    [websocketSlice.name]: websocketSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
