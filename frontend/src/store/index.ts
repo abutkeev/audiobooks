@@ -15,6 +15,7 @@ import {
 import copyBookStateUrl from '../utils/copyBookStateUrl';
 import showMessage from '../utils/showMessage';
 import authSlice from './features/auth';
+import { websocketMiddleware } from './features/websocket';
 
 export const store = configureStore({
   reducer: {
@@ -33,6 +34,7 @@ export const store = configureStore({
         audioControlMiddleware,
         createLocalStorageMiddleware({ playerStateName: 'playerState', booksStateName: 'booksState' }),
         createPlayerUtilsMiddleware({ copyBookStateUrl, showMessage }),
+        websocketMiddleware,
       ])
       .concat(api.middleware),
 });
