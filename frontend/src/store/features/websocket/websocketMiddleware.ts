@@ -3,10 +3,14 @@ import { Socket, io } from 'socket.io-client';
 import { StateSlice } from '.';
 import { setConnected } from './slice';
 import { connect, disconnect } from './actions';
+import { playerSetup } from '../player';
+import getInstanceId from './getInstanceId';
 
 let socket: Socket | undefined;
 
 const mw = createListenerMiddleware<StateSlice>();
+
+const instanceId = getInstanceId();
 
 mw.startListening({
   actionCreator: connect,
@@ -37,6 +41,31 @@ mw.startListening({
       socket.close();
       socket = undefined;
     }
+  },
+});
+
+mw.startListening({
+  predicate: (action, currentState, originalState) => {
+    if (
+      !socket ||
+      !socket.connected ||
+      (currentState.player.state === originalState.player.state &&
+        originalState.websocket.connected === currentState.websocket.connected) ||
+      currentState.player.bookId === '' ||
+      playerSetup.match(action)
+    ) {
+      return false;
+    }
+
+    return true;
+  },
+  effect: (_, { getState }) => {
+    const {
+      bookId,
+      state: { currentChapter, position },
+    } = getState().player;
+    const updated = new Date().toISOString();
+    socket?.emit('position_update', { instanceId, bookId, currentChapter, position, updated });
   },
 });
 
