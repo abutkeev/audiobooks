@@ -17,8 +17,13 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
 
   @SubscribeMessage('log')
-  handleMessage(client: SocketWithUser, payload: any) {
+  handleLog(client: SocketWithUser, payload: any) {
     this.logger.log(client.user, payload);
+  }
+
+  @SubscribeMessage('position_update')
+  handlePositionUpdate(client: SocketWithUser, payload: any) {
+    this.logger.log('position updated', client.user, payload);
   }
 
   handleDisconnect(client: SocketWithUser) {
