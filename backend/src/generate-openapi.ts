@@ -1,6 +1,5 @@
 import { writeFileSync } from 'fs';
 import { getOpenAPIDocument, setup } from './app';
-import path from 'path';
 
 const generate = async () => {
   const app = await setup({ logger: ['error', 'warn'] });
