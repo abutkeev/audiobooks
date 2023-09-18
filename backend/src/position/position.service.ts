@@ -8,6 +8,10 @@ import { PositionDto } from './dto/position.dto';
 export class PositionService {
   constructor(@InjectModel(Position.name) private positionModel: Model<Position>) {}
 
+  find(userId: string, bookId: string) {
+    return this.positionModel.find({ userId, bookId });
+  }
+
   savePosition(userId: string, instanceId: string, position: PositionDto) {
     return this.positionModel.replaceOne({ userId, instanceId }, { userId, instanceId, ...position }, { upsert: true });
   }
