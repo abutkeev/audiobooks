@@ -1,7 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import getInstanceId from './getInstanceId';
 
 const initialState = {
   connected: false,
+  instanceId: getInstanceId(),
 };
 
 const websocketSlice = createSlice({

@@ -4,13 +4,11 @@ import { StateSlice } from '.';
 import { setConnected } from './slice';
 import { connect, disconnect } from './actions';
 import { playerSetup } from '../player';
-import getInstanceId from './getInstanceId';
+import { api } from '../../../api/api';
 
 let socket: Socket | undefined;
 
 const mw = createListenerMiddleware<StateSlice>();
-
-const instanceId = getInstanceId();
 
 mw.startListening({
   actionCreator: connect,
@@ -19,6 +17,7 @@ mw.startListening({
 
     const {
       auth: { token },
+      websocket: { instanceId },
     } = getState();
 
     if (!token) return;
@@ -32,6 +31,7 @@ mw.startListening({
     });
     socket.on('connect', () => dispatch(setConnected(true)));
     socket.on('disconnect', () => dispatch(setConnected(false)));
+    socket.on('invalidate_tag', tag => dispatch(api.util.invalidateTags([tag])));
   },
 });
 

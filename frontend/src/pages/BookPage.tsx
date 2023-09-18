@@ -9,6 +9,7 @@ import Player from '../components/player';
 import { useEffect, useMemo } from 'react';
 import { currentBookVarName } from './Home';
 import useTitle from '../hooks/useTitle';
+import OtherPlayersPosition from '../components/OtherPlayersPosition';
 
 const BookPage: React.FC = () => {
   const { id = '' } = useParams();
@@ -56,6 +57,7 @@ const BookPage: React.FC = () => {
             externalState={externalState}
             onExternalStateApply={resetSearchParams}
           />
+          <OtherPlayersPosition bookId={id} chapters={data.chapters} />
         </>
       )}
     </LoadingWrapper>
