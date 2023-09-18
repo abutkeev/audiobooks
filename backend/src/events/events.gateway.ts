@@ -32,7 +32,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('position_update')
   async handlePositionUpdate(
     @ConnectedSocket() { user, instanceId }: SocketWithUser,
-    @MessageBody(new ValidationPipe()) payload: PositionDto
+    @MessageBody() payload: PositionDto
   ) {
     this.positionService
       .savePosition(user.id, instanceId, payload)
