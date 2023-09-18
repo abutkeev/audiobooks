@@ -1,4 +1,4 @@
-import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Logger, UsePipes } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -12,8 +12,9 @@ import { EventsService } from './events.service';
 import { PositionDto } from '../position/dto/position.dto';
 import { EventsAuthValidationPipe, SocketWithUser } from './events-auth-validation.pipe';
 import { PositionService } from 'src/position/position.service';
+import { verboseValidationPipeInstance } from './verbose-validation.pipe';
 
-@UsePipes(new ValidationPipe(), new EventsAuthValidationPipe())
+@UsePipes(verboseValidationPipeInstance, new EventsAuthValidationPipe())
 @WebSocketGateway({ namespace: 'api/events' })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private logger: Logger = new Logger('Events gateway');
