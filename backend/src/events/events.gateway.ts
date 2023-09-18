@@ -6,7 +6,6 @@ import {
   OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
-  WsException,
 } from '@nestjs/websockets';
 import { AuthService } from 'src/auth/auth.service';
 import { EventsService } from './events.service';
@@ -33,11 +32,8 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() { user, instanceId }: SocketWithUser,
     @MessageBody(new ValidationPipe()) payload: PositionDto
   ) {
-    if (!user || !instanceId) {
-      throw new WsException('No user or instace id for socket');
-    }
-
-    this.logger.log('position updated', user.id, payload);
+    this.eventsService.savePosition(user.id, instanceId, payload);
+    this.logger.log(`position updated for user ${user.id}, instance ${instanceId}`);
   }
 
   handleDisconnect(client: SocketWithUser) {
