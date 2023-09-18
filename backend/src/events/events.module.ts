@@ -7,5 +7,6 @@ import { PositionModule } from 'src/position/position.module';
 @Module({
   imports: [AuthModule, PositionModule],
   providers: [EventsGateway, EventsService],
+  exports: [EventsService],
 })
 export class EventsModule {}

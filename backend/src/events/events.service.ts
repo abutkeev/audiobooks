@@ -1,20 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Socket } from 'socket.io';
 
 @Injectable()
 export class EventsService {
-  private sockets: Record<string, { instanceId: string; socket: Socket }[]> = {};
+  private static sockets: Record<string, { instanceId: string; socket: Socket }[]> = {};
+  private logger = new Logger('Events service');
 
   registerSocket(userId: string, instanceId: string, socket: Socket) {
-    if (!this.sockets[userId]) {
-      this.sockets[userId] = [];
+    if (!EventsService.sockets[userId]) {
+      EventsService.sockets[userId] = [];
     }
-    this.sockets[userId].push({ socket, instanceId });
+    EventsService.sockets[userId].push({ socket, instanceId });
   }
 
   unregisterSocket(userId: string, socket: Socket) {
-    if (!this.sockets[userId]) return;
+    if (!EventsService.sockets[userId]) return;
 
-    this.sockets[userId] = this.sockets[userId].filter(({ socket: { id } }) => socket.id !== id);
+    EventsService.sockets[userId] = EventsService.sockets[userId].filter(({ socket: { id } }) => socket.id !== id);
+  }
+
+  sendToUser({
+    userId,
+    skipInstance,
+    message,
+    args,
+  }: {
+    userId: string;
+    skipInstance?: string;
+    message: string;
+    args?: any;
+  }) {
+    const userSockets = EventsService.sockets[userId];
+    if (!userSockets) return;
+    for (const { instanceId, socket } of userSockets) {
+      if (instanceId === skipInstance) continue;
+      this.logger.log(`Sending message ${message}(${JSON.stringify(args)}) to ${userId}(${instanceId})`);
+      socket.emit(message, args);
+    }
   }
 }
