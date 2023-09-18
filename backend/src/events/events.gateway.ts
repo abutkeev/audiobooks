@@ -1,12 +1,19 @@
-import { Logger } from '@nestjs/common';
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WsException } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  ConnectedSocket,
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WsException,
+} from '@nestjs/websockets';
 import { AuthService } from 'src/auth/auth.service';
-import { UserDto } from 'src/users/dto/user.dto';
 import { EventsService } from './events.service';
+import { PositionDto } from './dto/position.dto';
+import { EventsAuthValidationPipe, SocketWithUser } from './events-auth-validation.pipe';
 
-type SocketWithUser = Socket & { user?: UserDto; instanceId?: string };
-
+@UsePipes(new ValidationPipe(), new EventsAuthValidationPipe())
 @WebSocketGateway({ namespace: 'api/events' })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private logger: Logger = new Logger('Events gateway');
@@ -22,7 +29,10 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('position_update')
-  handlePositionUpdate({ user, instanceId }: SocketWithUser, payload: unknown) {
+  handlePositionUpdate(
+    @ConnectedSocket() { user, instanceId }: SocketWithUser,
+    @MessageBody(new ValidationPipe()) payload: PositionDto
+  ) {
     if (!user || !instanceId) {
       throw new WsException('No user or instace id for socket');
     }
