@@ -1,4 +1,4 @@
-import { IsDateString, IsInt, IsNotEmpty, Min } from 'class-validator';
+import { IsDateString, IsInt, IsNotEmpty, IsNumber, Min } from 'class-validator';
 
 export class PositionDto {
   @IsNotEmpty()
@@ -8,7 +8,7 @@ export class PositionDto {
   @Min(0)
   readonly currentChapter: number;
 
-  @IsInt()
+  @IsNumber()
   @Min(0)
   readonly position: number;
 

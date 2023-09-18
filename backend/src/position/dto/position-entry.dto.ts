@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsInt, Min } from 'class-validator';
+import { IsDateString, IsInt, IsNumber, Min } from 'class-validator';
 
 export class PositionEntryDto {
   @ApiProperty()
@@ -9,7 +9,7 @@ export class PositionEntryDto {
   @Min(0)
   readonly currentChapter: number;
 
-  @IsInt()
+  @IsNumber()
   @Min(0)
   readonly position: number;
 
