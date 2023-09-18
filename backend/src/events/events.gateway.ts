@@ -1,11 +1,11 @@
 import { Logger } from '@nestjs/common';
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WsException } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 import { UserDto } from 'src/users/dto/user.dto';
 import { EventsService } from './events.service';
 
-type SocketWithUser = Socket & { user?: UserDto };
+type SocketWithUser = Socket & { user?: UserDto; instanceId?: string };
 
 @WebSocketGateway({ namespace: 'api/events' })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -17,13 +17,17 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
 
   @SubscribeMessage('log')
-  handleLog(client: SocketWithUser, payload: any) {
+  handleLog(client: SocketWithUser, payload: unknown) {
     this.logger.log(client.user, payload);
   }
 
   @SubscribeMessage('position_update')
-  handlePositionUpdate(client: SocketWithUser, payload: any) {
-    this.logger.log('position updated', client.user, payload);
+  handlePositionUpdate({ user, instanceId }: SocketWithUser, payload: unknown) {
+    if (!user || !instanceId) {
+      throw new WsException('No user or instace id for socket');
+    }
+
+    this.logger.log('position updated', user.id, payload);
   }
 
   handleDisconnect(client: SocketWithUser) {
@@ -34,9 +38,9 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async handleConnection(client: SocketWithUser) {
-    const { token } = client.handshake.auth;
-    if (!token) {
-      this.logger.error(`No token for ${client.id}`);
+    const { token, instanceId } = client.handshake.auth;
+    if (!token || !instanceId) {
+      this.logger.error(`No token or instanceId for ${client.id}`);
       client.disconnect();
       return;
     }
@@ -47,8 +51,9 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.disconnect();
       return;
     }
-    this.logger.log(`Client connected: ${result.id}, ${result.login}`);
+    this.logger.log(`Client connected: ${result.id}, ${result.login}, ${instanceId}`);
     client.user = result;
-    this.eventsService.registerSocket(result.id, client);
+    client.instanceId = instanceId;
+    this.eventsService.registerSocket(result.id, instanceId, client);
   }
 }

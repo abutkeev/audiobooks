@@ -27,6 +27,7 @@ mw.startListening({
       transports: ['websocket'],
       auth: {
         token,
+        instanceId,
       },
     });
     socket.on('connect', () => dispatch(setConnected(true)));
@@ -65,7 +66,7 @@ mw.startListening({
       state: { currentChapter, position },
     } = getState().player;
     const updated = new Date().toISOString();
-    socket?.emit('position_update', { instanceId, bookId, currentChapter, position, updated });
+    socket?.emit('position_update', { bookId, currentChapter, position, updated });
   },
 });
 
