@@ -9,8 +9,9 @@ import {
 } from '@nestjs/websockets';
 import { AuthService } from 'src/auth/auth.service';
 import { EventsService } from './events.service';
-import { PositionDto } from './dto/position.dto';
+import { PositionDto } from '../position/dto/position.dto';
 import { EventsAuthValidationPipe, SocketWithUser } from './events-auth-validation.pipe';
+import { PositionService } from 'src/position/position.service';
 
 @UsePipes(new ValidationPipe(), new EventsAuthValidationPipe())
 @WebSocketGateway({ namespace: 'api/events' })
@@ -19,7 +20,8 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
     private authService: AuthService,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private positionService: PositionService
   ) {}
 
   @SubscribeMessage('log')
@@ -28,12 +30,13 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('position_update')
-  handlePositionUpdate(
+  async handlePositionUpdate(
     @ConnectedSocket() { user, instanceId }: SocketWithUser,
     @MessageBody(new ValidationPipe()) payload: PositionDto
   ) {
-    this.eventsService.savePosition(user.id, instanceId, payload);
-    this.logger.log(`position updated for user ${user.id}, instance ${instanceId}`);
+    this.positionService
+      .savePosition(user.id, instanceId, payload)
+      .then(() => this.logger.log(`position updated for user ${user.id}, instance ${instanceId}`));
   }
 
   handleDisconnect(client: SocketWithUser) {
