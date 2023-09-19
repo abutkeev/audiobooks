@@ -6,9 +6,12 @@ import { useAuthLoginMutation } from '../api/api';
 import LoadingWrapper from '../components/common/LoadingWrapper';
 import { useAppDispatch } from '../store';
 import { setAuthToken } from '../store/features/auth';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Login: React.FC = () => {
   useTitle('Login');
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -19,6 +22,7 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     const { access_token } = await auth({ loginBodyDto: { login, password } }).unwrap();
     dispatch(setAuthToken(access_token));
+    navigate(pathname, { replace: true });
   };
 
   return (
