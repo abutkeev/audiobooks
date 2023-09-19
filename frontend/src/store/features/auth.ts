@@ -1,4 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createListenerMiddleware, createSlice } from '@reduxjs/toolkit';
+import { api } from '../../api/api';
 
 const localStorageTokenName = 'authToken';
 
@@ -18,5 +19,15 @@ const authSlice = createSlice({
 });
 
 export const { setAuthToken } = authSlice.actions;
+
+const mw = createListenerMiddleware();
+mw.startListening({
+  actionCreator: setAuthToken,
+  effect: (_, { dispatch }) => {
+    dispatch(api.util.resetApiState());
+  },
+});
+
+export const authMiddleware = mw.middleware;
 
 export default authSlice;

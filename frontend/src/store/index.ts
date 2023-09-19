@@ -14,7 +14,7 @@ import {
 } from './features/player';
 import copyBookStateUrl from '../utils/copyBookStateUrl';
 import showMessage from '../utils/showMessage';
-import authSlice from './features/auth';
+import authSlice, { authMiddleware } from './features/auth';
 import { websocketMiddleware, websocketSlice } from './features/websocket';
 
 export const store = configureStore({
@@ -36,6 +36,7 @@ export const store = configureStore({
         createLocalStorageMiddleware({ playerStateName: 'playerState', booksStateName: 'booksState' }),
         createPlayerUtilsMiddleware({ copyBookStateUrl, showMessage }),
         websocketMiddleware,
+        authMiddleware,
       ])
       .concat(api.middleware),
 });
