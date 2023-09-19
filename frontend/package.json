@@ -22,6 +22,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.6",
     "@mui/material": "^5.14.6",
+    "@passwordless-id/webauthn": "^1.2.6",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.5.0",
     "copy-to-clipboard": "^3.3.3",

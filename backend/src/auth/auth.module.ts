@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { JwtAuthGuard } from './jwt/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { WebauthnModule } from './webauthn/webauthn.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { APP_GUARD } from '@nestjs/core';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
     }),
+    WebauthnModule,
   ],
   controllers: [AuthController],
   providers: [
