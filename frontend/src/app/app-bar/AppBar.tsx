@@ -6,7 +6,7 @@ import Search from './Search';
 import { currentBookVarName } from '../../pages/Home';
 import { useAppSelector } from '../../store';
 import MobileAppBar from './MobileAppBar';
-import AccountMenu from './AccountMenu';
+import AccountMenu from '../account-menu';
 
 const AppBar: React.FC = () => {
   const navigate = useNavigate();

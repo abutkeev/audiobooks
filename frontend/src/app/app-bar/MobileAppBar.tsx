@@ -3,7 +3,7 @@ import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import Search from './Search';
 import { useAppSelector } from '../../store';
 import { useState } from 'react';
-import AccountMenu from './AccountMenu';
+import AccountMenu from '../account-menu';
 
 interface MobileAppBarProps {
   handleHomeButtonClick(): void;
