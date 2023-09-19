@@ -6,7 +6,7 @@ import NotFound from '../pages/NotFound';
 import Main from './Main';
 import { useMemo } from 'react';
 import { useAppSelector } from '../store';
-import Login from '../pages/Login';
+import Login from '../pages/login';
 
 const authorizedRoutes: RouteObject[] = [
   {
