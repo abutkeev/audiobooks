@@ -53,12 +53,16 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel} variant={cancelButtonVariant || 'outlined'} {...otherCancelButtonProps}>
-          {cancelButtonText || 'Cancel'}
-        </Button>
-        <Button onClick={handleConfirm} variant={confirmButtonVariant || 'contained'} {...otherConfirmButtonProps}>
-          {confirmButtonText || 'Confirm'}
-        </Button>
+        {(onCancel || close) && (
+          <Button onClick={handleCancel} variant={cancelButtonVariant || 'outlined'} {...otherCancelButtonProps}>
+            {cancelButtonText || (onConfirm || onCancel ? 'Cancel' : 'Close')}
+          </Button>
+        )}
+        {onConfirm && (
+          <Button onClick={handleConfirm} variant={confirmButtonVariant || 'contained'} {...otherConfirmButtonProps}>
+            {confirmButtonText || 'Confirm'}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
