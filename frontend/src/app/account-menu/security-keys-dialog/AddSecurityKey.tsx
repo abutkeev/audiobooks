@@ -43,7 +43,6 @@ const AddSecurityKey: React.FC = () => {
 
   if (!webauthnAvailable) return;
 
-
   if (stageMessage) {
     return (
       <Stack direction='row' spacing={1} alignItems='center'>
