@@ -1,4 +1,4 @@
-import { Alert, Button, Container, Paper, TextField } from '@mui/material';
+import { Alert, Button, Container, FormControl, Paper, TextField } from '@mui/material';
 import useTitle from '../hooks/useTitle';
 import CustomPassword from '../components/common/CustomPassword';
 import { useState } from 'react';
@@ -34,32 +34,31 @@ const Login: React.FC = () => {
               Authorization failed
             </Alert>
           )}
-          <TextField
-            fullWidth
-            label='Login'
-            value={login}
-            onChange={({ target: { value } }) => setLogin(value)}
-            required
-            error={!login}
-          />
-          <CustomPassword
-            fullWidth
-            label='Password'
-            value={password}
-            onChange={({ target: { value } }) => setPassword(value)}
-            required
-            error={!password}
-          />
-          <Button
-            size='large'
-            variant='contained'
-            fullWidth
-            sx={{ mt: 1 }}
-            disabled={!login || !password}
-            onClick={handleLogin}
-          >
-            Login
-          </Button>
+          <FormControl fullWidth>
+            <TextField
+              label='Login'
+              value={login}
+              onChange={({ target: { value } }) => setLogin(value)}
+              required
+              error={!login}
+            />
+            <CustomPassword
+              label='Password'
+              value={password}
+              onChange={({ target: { value } }) => setPassword(value)}
+              required
+              error={!password}
+            />
+            <Button
+              size='large'
+              variant='contained'
+              sx={{ mt: 1 }}
+              disabled={!login || !password}
+              onClick={handleLogin}
+            >
+              Login
+            </Button>
+          </FormControl>
         </Paper>
       </Container>
     </LoadingWrapper>
