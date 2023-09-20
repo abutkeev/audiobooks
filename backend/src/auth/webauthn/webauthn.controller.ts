@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Logger, Post, Request } from '@nestjs/common';
 import { Public } from '../public.decorator';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ChallengeResponseDto } from './dto/challenge-response.dto';
 import { WebauthnService } from './webauthn.service';
 import { PublicKeyDto } from './dto/public-key.dto';
@@ -8,6 +8,7 @@ import { PublicKey } from './schemas/public-key.schema';
 
 const logger = new Logger('WebauthnController');
 
+@ApiTags('webauthn')
 @Controller('auth/webauthn')
 export class WebauthnController {
   constructor(private webauthnService: WebauthnService) {}
