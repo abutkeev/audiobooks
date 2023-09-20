@@ -5,13 +5,9 @@ import { useAuthLoginMutation } from '../../api/api';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../../store';
 import { setAuthToken } from '../../store/features/auth';
+import { CommonAuthProps } from '.';
 
-interface PasswordAuthFormProps {
-  setLoading(v: boolean): void;
-  setError(v?: string): void;
-}
-
-const PasswordAuthForm: React.FC<PasswordAuthFormProps> = ({ setLoading, setError }) => {
+const PasswordAuthForm: React.FC<CommonAuthProps> = ({ setLoading, setError }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
