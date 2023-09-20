@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
-import { Document, Model } from 'mongoose';
+import { Document, Model, ObjectId } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import bcrypt from 'bcrypt';
 import { UserDto } from './dto/user.dto';
@@ -24,6 +24,11 @@ export class UsersService {
     }
     const newUser = await this.userModel.create({ ...user, password: encryptPassword(password) });
     return newUser._id.toString();
+  }
+
+  async find(id: ObjectId): Promise<UserDto> {
+    const result = await this.userModel.findOne({ _id: id }).exec();
+    return getUserDto(result);
   }
 
   async findAll(): Promise<UserDto[]> {

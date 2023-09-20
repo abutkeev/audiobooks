@@ -1,13 +1,13 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { randomBytes } from 'crypto';
 import { Model } from 'mongoose';
 import { PublicKey } from './schemas/public-key.schema';
 import { PublicKeyDto } from './dto/public-key.dto';
-import { type server } from '@passwordless-id/webauthn';
-
-// NestJS is not supporting ESM import
-const webauthn: Promise<typeof server> = eval(`import('@passwordless-id/webauthn')`).then(result => result.server);
+import { AuthenticationDto } from './dto/authentication.dto';
+import { server } from '@abutkeev/webauthn';
+import { UsersService } from 'src/users/users.service';
+import { AuthService } from '../auth.service';
 
 const logger = new Logger('WebauthnService');
 
@@ -22,14 +22,18 @@ export class WebauthnService {
     }
     this.challenges = this.challenges.filter(entry => entry !== challenge);
     return true;
-  }
+  };
 
-  private verifyOrigin = (origin: string) => {
+  private verifyOrigin = () => {
     // TODO: add origin verification
     return true;
-  }
+  };
 
-  constructor(@InjectModel(PublicKey.name) private publicKeyModel: Model<PublicKey>) {}
+  constructor(
+    @InjectModel(PublicKey.name) private publicKeyModel: Model<PublicKey>,
+    private authService: AuthService,
+    private usersService: UsersService
+  ) {}
 
   registerChallenge() {
     const challenge = randomBytes(32).toString('base64url');
@@ -43,9 +47,7 @@ export class WebauthnService {
 
   async add({ registration, name }: PublicKeyDto, userId: string) {
     try {
-      // NestJS is not supporting ESM import
-      const { verifyRegistration } = await webauthn;
-      const { credential } = await verifyRegistration(registration, {
+      const { credential } = await server.verifyRegistration(registration, {
         challenge: this.verifyChallenge,
         origin: this.verifyOrigin,
       });
@@ -53,6 +55,37 @@ export class WebauthnService {
     } catch (e) {
       logger.error(e);
       throw new BadRequestException('add key failed');
+    }
+  }
+
+  async auth(authentication: AuthenticationDto) {
+    try {
+      const key = await this.publicKeyModel.findOne({ id: authentication.credentialId }).exec();
+      if (!key) {
+        throw new UnauthorizedException(`key ${authentication.credentialId} not found`);
+      }
+      const { id, publicKey, algorithm, userId } = key;
+      if (algorithm !== 'RS256' && algorithm !== 'ES256') {
+        throw new UnauthorizedException(`key ${authentication.credentialId} algorithm ${algorithm} is not supported`);
+      }
+      const result = await server.verifyAuthentication(
+        authentication,
+        { id, publicKey, algorithm },
+        {
+          challenge: this.verifyChallenge,
+          origin: this.verifyOrigin,
+          userVerified: true,
+          counter: -1,
+        }
+      );
+      if (!result) {
+        throw new UnauthorizedException('verification failed');
+      }
+      const user = await this.usersService.find(userId);
+      return this.authService.login(user);
+    } catch (e) {
+      logger.error(e);
+      throw new UnauthorizedException('authorization failed');
     }
   }
 }

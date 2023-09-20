@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CredentialKeyDto } from './credantial-key.dto';
 
-export class RegistrationDto {
+export class AuthenticationDto {
   @ApiProperty()
-  username: string;
+  credentialId: string;
 
   @ApiProperty()
   authenticatorData: string;
@@ -12,7 +11,5 @@ export class RegistrationDto {
   clientData: string;
 
   @ApiProperty()
-  attestationData?: string;
-
-  credential: CredentialKeyDto;
+  signature: string;
 }
