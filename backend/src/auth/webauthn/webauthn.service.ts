@@ -15,6 +15,20 @@ const logger = new Logger('WebauthnService');
 export class WebauthnService {
   private challenges: string[] = [];
 
+  private verifyChallenge = (challenge: string) => {
+    if (!this.challenges.includes(challenge)) {
+      logger.error(`challenge ${challenge} is not registred`);
+      return false;
+    }
+    this.challenges = this.challenges.filter(entry => entry !== challenge);
+    return true;
+  }
+
+  private verifyOrigin = (origin: string) => {
+    // TODO: add origin verification
+    return true;
+  }
+
   constructor(@InjectModel(PublicKey.name) private publicKeyModel: Model<PublicKey>) {}
 
   registerChallenge() {
@@ -32,16 +46,8 @@ export class WebauthnService {
       // NestJS is not supporting ESM import
       const { verifyRegistration } = await webauthn;
       const { credential } = await verifyRegistration(registration, {
-        challenge: (challenge: string) => {
-          if (!this.challenges.includes(challenge)) {
-            logger.error(`challenge ${challenge} is not registred`);
-            return false;
-          }
-          this.challenges = this.challenges.filter(entry => entry !== challenge);
-          return true;
-        },
-        // don't verify origin
-        origin: () => true,
+        challenge: this.verifyChallenge,
+        origin: this.verifyOrigin,
       });
       this.publicKeyModel.create({ ...credential, name, userId });
     } catch (e) {
