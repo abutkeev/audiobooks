@@ -1,0 +1,17 @@
+[Unit]
+Description=Audiobooks backend
+Wants=network-online.target
+After=network-online.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+WorkingDirectory=/var/www/audiobooks.abutkeev.ru/backend/
+Type=exec
+ExecStart=node dist/main
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=3
+
