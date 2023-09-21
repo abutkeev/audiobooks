@@ -1,0 +1,10 @@
+version: "3"
+services:
+  audiobooks:
+    image: "node:18"
+    ports: 
+      - "4000:4000"
+    volumes:
+      - "../:/mnt/"
+    working_dir: "/mnt/backend"
+    command: ["npm", "run", "start:prod"]
