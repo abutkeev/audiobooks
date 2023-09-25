@@ -3,8 +3,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Admin } from 'src/auth/admin.decorator';
 
-@ApiSecurity({ bearerAuth: ['admin'] })
+@Admin()
 @ApiTags('users')
 @Controller('users')
 export class UsersController {

@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
 import { JwtAuthGuard } from './jwt/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { WebauthnModule } from './webauthn/webauthn.module';
+import { AdminAuthGuard } from './jwt/admin-auth.guard';
 
 @Module({
   imports: [
@@ -31,6 +32,10 @@ import { WebauthnModule } from './webauthn/webauthn.module';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AdminAuthGuard,
     },
   ],
   exports: [AuthService],
