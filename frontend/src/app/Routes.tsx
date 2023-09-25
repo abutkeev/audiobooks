@@ -7,6 +7,7 @@ import Main from './Main';
 import { useMemo } from 'react';
 import { useAppSelector } from '../store';
 import Login from '../pages/login';
+import Users from '../pages/users';
 
 const authorizedRoutes: RouteObject[] = [
   {
@@ -20,6 +21,10 @@ const authorizedRoutes: RouteObject[] = [
   {
     path: '/book/:id',
     element: <BookPage />,
+  },
+  {
+    path: '/users',
+    element: <Users />,
   },
   {
     path: '*',
