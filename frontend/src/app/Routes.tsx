@@ -8,8 +8,9 @@ import { useMemo } from 'react';
 import { useAppSelector } from '../store';
 import Login from '../pages/login';
 import Users from '../pages/users';
+import useAuthData from '../hooks/useAuthData';
 
-const authorizedRoutes: RouteObject[] = [
+const userRoutes: RouteObject[] = [
   {
     path: '/',
     element: <Home />,
@@ -23,31 +24,45 @@ const authorizedRoutes: RouteObject[] = [
     element: <BookPage />,
   },
   {
-    path: '/users',
-    element: <Users />,
-  },
-  {
     path: '*',
     element: <NotFound />,
   },
 ];
 
+const adminRoutes: RouteObject[] = [
+  {
+    path: '/users',
+    element: <Users />,
+  },
+];
+
+const getRoutes = ({ token, admin }: { token: string | null; admin?: boolean }): RouteObject[] => {
+  if (!token) {
+    return [
+      {
+        path: '*',
+        element: <Login />,
+      },
+    ];
+  }
+
+  if (admin) {
+    return adminRoutes.concat(userRoutes);
+  }
+
+  return userRoutes;
+};
+
 const Routes: React.FC = () => {
   const { token } = useAppSelector(({ auth }) => auth);
+  const { admin } = useAuthData() || {};
 
   const router = useMemo(
     () =>
       createHashRouter([
         {
           element: <Main />,
-          children: token
-            ? authorizedRoutes
-            : [
-                {
-                  path: '*',
-                  element: <Login />,
-                },
-              ],
+          children: getRoutes({ token, admin }),
         },
       ]),
     [token]
