@@ -23,7 +23,7 @@ const Users: React.FC = () => {
       {users.length === 0 ? (
         <Alert severity='info'>No users found</Alert>
       ) : (
-        users.map(({ id, login }) => <User key={id} id={id} login={login} />)
+        users.map(user => <User key={user.id} {...user} />)
       )}
     </LoadingWrapper>
   );
