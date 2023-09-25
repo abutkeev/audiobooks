@@ -13,7 +13,7 @@ export class AuthService {
   private logger = new Logger('AuthService');
 
   async login(user: UserDto) {
-    const payload = { username: user.login, sub: user.id };
+    const payload = { username: user.login, sub: user.id, name: user.name, enabled: user.enabled, admin: user.admin };
     return {
       access_token: this.jwtService.sign(payload),
     };
