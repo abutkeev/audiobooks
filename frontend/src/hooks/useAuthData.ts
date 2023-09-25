@@ -16,9 +16,16 @@ const useAuthData = () => {
     'sub' in result &&
     typeof result.sub === 'string'
   ) {
+    const name = 'name' in result && typeof result.name === 'string' ? result.name : '';
+    const enabled = 'enabled' in result && typeof result.enabled === 'boolean' ? result.enabled : false;
+    const admin = 'admin' in result && typeof result.admin === 'boolean' ? result.admin : false;
+
     return {
       id: result.sub,
       login: result.username,
+      name,
+      enabled,
+      admin,
     };
   }
 };
