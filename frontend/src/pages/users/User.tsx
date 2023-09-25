@@ -4,10 +4,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   FormControl,
-  FormControlLabel,
   IconButton,
   Stack,
-  Switch,
   TextField,
   Typography,
 } from '@mui/material';
@@ -15,6 +13,7 @@ import { UserDto } from '../../api/api';
 import CustomPassword from '../../components/common/CustomPassword';
 import useAuthData from '../../hooks/useAuthData';
 import UserDisableSwitch from './UserDisableSwitch';
+import AdminSwitch from './AdminSwitch';
 
 const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
   const auth = useAuthData();
@@ -38,7 +37,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
           <TextField label='Name' disabled value={name} sx={{ mt: 2 }} />
           <TextField label='Login' disabled required value={login} sx={{ mt: 2 }} />
           <CustomPassword label='Password' disabled />
-          {enabled && !thisUser && <FormControlLabel control={<Switch checked={admin} disabled />} label='Admin' />}
+          <AdminSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
         </FormControl>
       </AccordionDetails>
     </Accordion>
