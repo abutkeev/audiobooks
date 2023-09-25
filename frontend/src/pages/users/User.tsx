@@ -1,4 +1,4 @@
-import { AdminPanelSettings, Delete, ExpandMore, Shield } from '@mui/icons-material';
+import { Delete, ExpandMore } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -9,12 +9,12 @@ import {
   Stack,
   Switch,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import { UserDto } from '../../api/api';
 import CustomPassword from '../../components/common/CustomPassword';
 import useAuthData from '../../hooks/useAuthData';
+import UserDisableSwitch from './UserDisableSwitch';
 
 const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
   const auth = useAuthData();
@@ -26,23 +26,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
           <Typography flexGrow={1} noWrap>
             {login} {name && ` (${name})`}
           </Typography>
-          {admin ? (
-            thisUser ? (
-              <Tooltip title='This user'>
-                <AdminPanelSettings sx={{ mr: 2 }} />
-              </Tooltip>
-            ) : (
-              <Tooltip title='Admin'>
-                <Shield sx={{ mr: 2 }} />
-              </Tooltip>
-            )
-          ) : (
-            <Tooltip title={enabled ? 'Disable' : 'Enable'}>
-              <div>
-                <Switch disabled checked={enabled} />
-              </div>
-            </Tooltip>
-          )}
+          <UserDisableSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
           <IconButton disabled sx={{ visibility: thisUser ? 'collapse' : 'visible' }}>
             <Delete />
           </IconButton>
