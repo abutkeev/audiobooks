@@ -1,4 +1,4 @@
-import { Delete, ExpandMore, Shield } from '@mui/icons-material';
+import { AdminPanelSettings, Delete, ExpandMore, Shield } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -14,8 +14,11 @@ import {
 } from '@mui/material';
 import { UserDto } from '../../api/api';
 import CustomPassword from '../../components/common/CustomPassword';
+import useAuthData from '../../hooks/useAuthData';
 
 const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
+  const auth = useAuthData();
+  const thisUser = auth?.id === id;
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMore />}>
@@ -23,17 +26,24 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
           <Typography flexGrow={1} noWrap>
             {login} {name && ` (${name})`}
           </Typography>
-          {admin && (
-            <Tooltip title='Admin'>
-              <Shield />
+          {admin ? (
+            thisUser ? (
+              <Tooltip title='This user'>
+                <AdminPanelSettings sx={{ mr: 2 }} />
+              </Tooltip>
+            ) : (
+              <Tooltip title='Admin'>
+                <Shield sx={{ mr: 2 }} />
+              </Tooltip>
+            )
+          ) : (
+            <Tooltip title={enabled ? 'Disable' : 'Enable'}>
+              <div>
+                <Switch disabled checked={enabled} />
+              </div>
             </Tooltip>
           )}
-          <Tooltip title={enabled ? 'Disable' : 'Enable'}>
-            <div>
-              <Switch disabled checked={enabled} />
-            </div>
-          </Tooltip>
-          <IconButton disabled>
+          <IconButton disabled sx={{ visibility: thisUser ? 'collapse' : 'visible' }}>
             <Delete />
           </IconButton>
         </Stack>
@@ -44,7 +54,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
           <TextField label='Name' disabled value={name} sx={{ mt: 2 }} />
           <TextField label='Login' disabled required value={login} sx={{ mt: 2 }} />
           <CustomPassword label='Password' disabled />
-          <FormControlLabel control={<Switch checked={admin} disabled />} label='Admin' />
+          {enabled && !thisUser && <FormControlLabel control={<Switch checked={admin} disabled />} label='Admin' />}
         </FormControl>
       </AccordionDetails>
     </Accordion>
