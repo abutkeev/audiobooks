@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AccountMenu: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
-  const { login } = useAuthData() || {};
+  const { login, admin } = useAuthData() || {};
   const connected = useWebSocket();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -49,12 +49,14 @@ const AccountMenu: React.FC = () => {
           </ListItemIcon>
           <ListItemText>Login: {login}</ListItemText>
         </MenuItem>
-        <MenuItem divider onClick={handleNavigateToUsersPage}>
-          <ListItemIcon>
-            <People />
-          </ListItemIcon>
-          <ListItemText>Users</ListItemText>
-        </MenuItem>
+        {admin && (
+          <MenuItem divider onClick={handleNavigateToUsersPage}>
+            <ListItemIcon>
+              <People />
+            </ListItemIcon>
+            <ListItemText>Users</ListItemText>
+          </MenuItem>
+        )}
         <MenuItem onClick={handleShowSecurityKeysDialog}>
           <ListItemIcon>
             <Key />
