@@ -11,8 +11,6 @@ const encryptPassword = (password: string) => {
   return bcrypt.hashSync(password, salt);
 };
 
-const getUserDto = ({ _id, login }: User & Document): UserDto => ({ id: _id.toString(), login });
-
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
@@ -28,21 +26,21 @@ export class UsersService {
 
   async find(id: ObjectId): Promise<UserDto> {
     const result = await this.userModel.findOne({ _id: id }).exec();
-    return getUserDto(result);
+    return result.toJSON();
   }
 
   async findAll(): Promise<UserDto[]> {
     const result = await this.userModel.find().exec();
-    return result.map(getUserDto);
+    return result.map(entry => entry.toJSON());
   }
 
-  async verify(login: string, password: string) {
+  async verify(login: string, password: string): Promise<UserDto> {
     const result = await this.userModel.find({ login });
     if (result.length === 0) return null;
     const user = result[0];
 
     if (!(await bcrypt.compare(password, user.password))) return null;
 
-    return getUserDto(user);
+    return user.toJSON();
   }
 }

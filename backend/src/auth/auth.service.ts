@@ -1,10 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserDto } from 'src/users/dto/user.dto';
+import { JwtStrategy } from './jwt/jwt.strategy';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private jwtStrategy: JwtStrategy
+  ) {}
 
   private logger = new Logger('AuthService');
 
@@ -17,8 +21,7 @@ export class AuthService {
 
   async verify(token: string): Promise<UserDto> {
     try {
-      const { sub: id, username: login } = this.jwtService.verify(token, { ignoreExpiration: false });
-      return { id, login };
+      return this.jwtStrategy.validate(this.jwtService.verify(token, { ignoreExpiration: false }));
     } catch (e) {
       this.logger.error('Token verification error', e);
       return null;
