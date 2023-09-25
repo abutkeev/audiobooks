@@ -1,5 +1,7 @@
+import { MouseEventHandler } from 'react';
 import { AdminPanelSettings, Shield } from '@mui/icons-material';
 import { Switch, Tooltip } from '@mui/material';
+import { useUsersActivateMutation, useUsersDeactivateMutation } from '../../api/api';
 
 interface UserDisableSwitchProps {
   id: string;
@@ -8,7 +10,19 @@ interface UserDisableSwitchProps {
   thisUser: boolean;
 }
 
-const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, enabled }) => {
+const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, enabled, id }) => {
+  const [activate] = useUsersActivateMutation();
+  const [deactivate] = useUsersDeactivateMutation();
+
+  const handleSwitchClick: MouseEventHandler = e => {
+    e.stopPropagation();
+    if (enabled) {
+      return deactivate({ id }).unwrap();
+    }
+
+    return activate({ id }).unwrap;
+  };
+
   if (thisUser) {
     return (
       <Tooltip title='This user'>
@@ -28,7 +42,7 @@ const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, 
   return (
     <Tooltip title={enabled ? 'Disable' : 'Enable'}>
       <div>
-        <Switch disabled checked={enabled} />
+        <Switch checked={enabled} onClick={handleSwitchClick} />
       </div>
     </Tooltip>
   );
