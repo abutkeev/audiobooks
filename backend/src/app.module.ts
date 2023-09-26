@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
 import { PositionModule } from './position/position.module';
+import { ReadersModule } from './readers/readers.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { PositionModule } from './position/position.module';
     AuthModule,
     EventsModule,
     PositionModule,
+    ReadersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
