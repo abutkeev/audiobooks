@@ -7,6 +7,7 @@ import { EventsModule } from './events/events.module';
 import { PositionModule } from './position/position.module';
 import { ReadersModule } from './readers/readers.module';
 import { CommonModule } from './common/common.module';
+import { PersonsModule } from './persons/persons.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CommonModule } from './common/common.module';
     PositionModule,
     ReadersModule,
     CommonModule,
+    PersonsModule,
   ],
   controllers: [],
   providers: [],

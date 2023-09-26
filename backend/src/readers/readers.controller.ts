@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ReadersService } from './readers.service';
-import { NameDto, PersonDto } from 'src/interfaces';
 import { Admin } from 'src/auth/admin.decorator';
+import NameDto from 'src/persons/dto/NameDto';
+import PersonDto from 'src/persons/dto/PersonDto';
 
 @ApiTags('readers')
 @Controller('readers')
