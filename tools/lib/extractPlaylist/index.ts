@@ -1,4 +1,5 @@
 import extractPlayerJsPlaylist from './extractPlayerJsPlaylist';
+import fetch from 'node-fetch';
 
 const extractPlaylist = async (url: string) => {
   const response = await fetch(url);
