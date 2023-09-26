@@ -2,7 +2,6 @@ import { ValidationPipe, INestApplication, NestApplicationOptions } from '@nestj
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import path from 'path';
 import { AppModule } from './app.module';
 import { DataDir, FrontendDir } from './constants';
 

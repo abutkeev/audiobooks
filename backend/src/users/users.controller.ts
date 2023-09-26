@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Admin } from 'src/auth/admin.decorator';
 
@@ -45,7 +45,7 @@ export class UsersController {
 
   @Delete('active/:id')
   @ApiOperation({ description: 'Revoke admin rights from user' })
-  async deactivate(@Param('id') id: string, @Request() req): Promise<true> {
+  async deactivate(@Param('id') id: string): Promise<true> {
     if (await this.usersService.isAdmin(id)) {
       throw new BadRequestException("you can't deactivate admin");
     }
