@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { TextField } from '@mui/material';
 import CustomDialog from '../../components/common/CustomDialog';
+import { useReadersCreateMutation } from '../../api/api';
+import { useAppDispatch } from '../../store';
+import { addSnackbar } from '../../store/features/snackbars';
 
 interface AddReaderDialogProps {
   open: boolean;
@@ -9,6 +12,17 @@ interface AddReaderDialogProps {
 
 const AddReaderDialog: React.FC<AddReaderDialogProps> = ({ open, close }) => {
   const [name, setName] = useState('');
+  const [create] = useReadersCreateMutation();
+  const dispatch = useAppDispatch();
+
+  const handleCreate = () => {
+    try {
+      create({ nameDto: { name } }).unwrap();
+    } catch (e) {
+      const text = e instanceof Error ? e.message : 'got unknown error while creating reader';
+      dispatch(addSnackbar({ severity: 'error', text }));
+    }
+  };
 
   const handleClose = () => {
     close();
@@ -20,6 +34,9 @@ const AddReaderDialog: React.FC<AddReaderDialogProps> = ({ open, close }) => {
       open={open}
       title={'Add reader'}
       close={handleClose}
+      onConfirm={handleCreate}
+      confirmButtonText='Create'
+      confirmButtonProps={{ disabled: !name }}
       content={
         <TextField
           sx={{ mt: 1 }}

@@ -45,18 +45,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Person"
-  /readers.json:
-    get:
-      operationId: GetReaders
-      responses:
-        "200":
-          description: Readers list
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Person"
   /series.json:
     get:
       operationId: GetSeries
