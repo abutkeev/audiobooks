@@ -5,6 +5,7 @@ import AppBar from './app-bar/AppBar';
 import { useAppSelector } from '../store';
 import ReloadPrompt from './ReloadPrompt';
 import { Outlet } from 'react-router-dom';
+import AddSpeedDial from './add-speed-dial';
 
 const Main: React.FC = () => {
   const title = useAppSelector(({ title }) => title);
@@ -22,6 +23,7 @@ const Main: React.FC = () => {
         <ReloadPrompt />
         <Outlet />
       </Container>
+      <AddSpeedDial />
     </>
   );
 };
