@@ -8,6 +8,7 @@ import { PositionModule } from './position/position.module';
 import { ReadersModule } from './readers/readers.module';
 import { CommonModule } from './common/common.module';
 import { PersonsModule } from './persons/persons.module';
+import { AuthorsModule } from './authors/authors.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PersonsModule } from './persons/persons.module';
     ReadersModule,
     CommonModule,
     PersonsModule,
+    AuthorsModule,
   ],
   controllers: [],
   providers: [],
