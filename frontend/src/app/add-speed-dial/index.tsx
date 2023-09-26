@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, SpeedDialProps, useTheme } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
-import { Mic } from '@mui/icons-material';
-import AddReaderDialog from './AddReaderDialog';
+import { Edit, Mic } from '@mui/icons-material';
+import AddReaderDialog from './AddPersonDialog';
 
 const AddSpeedDial: React.FC = () => {
   const { admin } = useAuthData() || {};
   const { spacing } = useTheme();
   const [showMenu, setShowMenu] = useState(false);
-  const [showAddReaderDialog, setShowAddReaderDialog] = useState(false);
+  const [addPersonDialogType, setAddPersonDialogType] = useState<'author' | 'reader'>();
 
   const handleSpeedDialOpen: SpeedDialProps['onOpen'] = (_, reason) => {
     if (reason === 'focus') return;
@@ -28,13 +28,19 @@ const AddSpeedDial: React.FC = () => {
         onClose={() => setShowMenu(false)}
       >
         <SpeedDialAction
+          icon={<Edit />}
+          tooltipTitle='Add author'
+          tooltipOpen
+          onClick={() => setAddPersonDialogType('author')}
+        />
+        <SpeedDialAction
           icon={<Mic />}
           tooltipTitle='Add reader'
           tooltipOpen
-          onClick={() => setShowAddReaderDialog(true)}
+          onClick={() => setAddPersonDialogType('reader')}
         />
       </SpeedDial>
-      <AddReaderDialog open={showAddReaderDialog} close={() => setShowAddReaderDialog(false)} />
+      <AddReaderDialog type={addPersonDialogType} close={() => setAddPersonDialogType(undefined)} />
       {/* Add some space in bottom to scroll in small screens */}
       <Box sx={{ height: { xs: spacing(4), lg: 0 } }} />
     </>

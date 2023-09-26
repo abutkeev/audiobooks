@@ -1,25 +1,34 @@
 import { useState } from 'react';
 import { TextField } from '@mui/material';
 import CustomDialog from '../../components/common/CustomDialog';
-import { useReadersCreateMutation } from '../../api/api';
 import { useAppDispatch } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
+import { useAuthorsCreateMutation, useReadersCreateMutation } from '../../api/api';
 
-interface AddReaderDialogProps {
-  open: boolean;
+interface AddPersonDialogProps {
+  type?: 'reader' | 'author';
   close(): void;
 }
 
-const AddReaderDialog: React.FC<AddReaderDialogProps> = ({ open, close }) => {
+const AddReaderDialog: React.FC<AddPersonDialogProps> = ({ type, close }) => {
   const [name, setName] = useState('');
-  const [create] = useReadersCreateMutation();
   const dispatch = useAppDispatch();
+  const [createAuthor] = useAuthorsCreateMutation();
+  const [createReader] = useReadersCreateMutation();
 
   const handleCreate = () => {
+    const nameDto = { name };
     try {
-      create({ nameDto: { name } }).unwrap();
+      switch (type) {
+        case 'author':
+          createAuthor({ nameDto }).unwrap();
+          break;
+        case 'reader':
+          createReader({ nameDto }).unwrap();
+          break;
+      }
     } catch (e) {
-      const text = e instanceof Error ? e.message : 'got unknown error while creating reader';
+      const text = e instanceof Error ? e.message : `got unknown error while creating ${type}`;
       dispatch(addSnackbar({ severity: 'error', text }));
     }
   };
@@ -31,8 +40,8 @@ const AddReaderDialog: React.FC<AddReaderDialogProps> = ({ open, close }) => {
 
   return (
     <CustomDialog
-      open={open}
-      title={'Add reader'}
+      open={!!type}
+      title={`Add ${type}`}
       close={handleClose}
       onConfirm={handleCreate}
       confirmButtonText='Create'
