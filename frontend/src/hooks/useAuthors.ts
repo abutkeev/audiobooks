@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { useGetAuthorsQuery } from '../api/api';
+import { useAuthorsGetQuery } from '../api/api';
 
 const useAuthors = () => {
-  const { data: authorsArray, isLoading: authorsLoading, isError: authorsError } = useGetAuthorsQuery();
+  const { data: authorsArray, isLoading: authorsLoading, isError: authorsError } = useAuthorsGetQuery();
   const authors = useMemo(
     () => (authorsArray ? Object.fromEntries(authorsArray.map(({ id, name }) => [id, name])) : {}),
     [authorsArray]

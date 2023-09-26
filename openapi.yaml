@@ -33,18 +33,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Books"
-  /authors.json:
-    get:
-      operationId: GetAuthors
-      responses:
-        "200":
-          description: Authors list
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Person"
   /series.json:
     get:
       operationId: GetSeries
