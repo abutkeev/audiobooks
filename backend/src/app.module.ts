@@ -9,6 +9,7 @@ import { ReadersModule } from './readers/readers.module';
 import { CommonModule } from './common/common.module';
 import { PersonsModule } from './persons/persons.module';
 import { AuthorsModule } from './authors/authors.module';
+import { SeriesModule } from './series/series.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuthorsModule } from './authors/authors.module';
     CommonModule,
     PersonsModule,
     AuthorsModule,
+    SeriesModule,
   ],
   controllers: [],
   providers: [],
