@@ -1,4 +1,3 @@
-import { Book } from '../../../api/api';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export interface BookInfo {
@@ -9,6 +8,11 @@ export interface BookInfo {
     type: string;
     filename: string;
   };
+}
+
+export interface BookChapter {
+  title: string;
+  filename: string;
 }
 
 interface PlayerStore {
@@ -25,7 +29,7 @@ interface PlayerStore {
   };
   bookId: string;
   bookInfo: BookInfo;
-  chapters: Book['chapters'];
+  chapters: BookChapter[];
 }
 
 const initialState: PlayerStore = {

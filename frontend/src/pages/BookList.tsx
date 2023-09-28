@@ -1,4 +1,3 @@
-import { useGetBooksQuery } from '../api/api';
 import LoadingWrapper from '../components/common/LoadingWrapper';
 import BookCard from '../components/BookCard';
 import useAuthors from '../hooks/useAuthors';
@@ -10,9 +9,10 @@ import useSearch from '../hooks/useSearch';
 import { Alert } from '@mui/material';
 import { currentBookVarName } from './Home';
 import useTitle from '../hooks/useTitle';
+import { useBooksGetQuery } from '../api/api';
 
 const BookList: React.FC = () => {
-  const { data: books = [], isLoading: booksLoading, isError: booksError } = useGetBooksQuery();
+  const { data: books = [], isLoading: booksLoading, isError: booksError } = useBooksGetQuery();
   const { authors, authorsLoading, authorsError } = useAuthors();
   const { readers, readersLoading, readersError } = useReaders();
   const { series, seriesLoading, seriesError } = useSeries();

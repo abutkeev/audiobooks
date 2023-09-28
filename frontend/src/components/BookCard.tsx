@@ -1,12 +1,12 @@
 import { Edit, Mic, LibraryBooks, NavigateNext, AutoStories } from '@mui/icons-material';
 import { Card, CardContent, Typography, Stack, Tooltip, Hidden } from '@mui/material';
-import { BookInfo, useGetBooksQuery } from '../api/api';
 import Link from './common/Link';
 import { useMemo } from 'react';
+import { BookInfoDto, useBooksGetQuery } from '../api/api';
 
 interface BookCardProps {
   id?: string;
-  info: BookInfo;
+  info: BookInfoDto;
   authors: Record<string, string>;
   readers: Record<string, string>;
   series: Record<string, string>;
@@ -19,7 +19,7 @@ const BookCard: React.FC<BookCardProps> = ({
   readers,
   series,
 }) => {
-  const { data: books } = useGetBooksQuery();
+  const { data: books } = useBooksGetQuery();
   const nextBook = useMemo(() => {
     if (!books || id || !series_id || !series_number) return undefined;
     const nextBook = books.find(

@@ -1,6 +1,5 @@
 import { configureStore, createAction } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { api } from '../api/api';
 import searchSlice from './features/search';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import titleSlice from './features/title';
@@ -16,10 +15,11 @@ import copyBookStateUrl from '../utils/copyBookStateUrl';
 import showMessage from '../utils/showMessage';
 import authSlice, { authMiddleware } from './features/auth';
 import { websocketMiddleware, websocketSlice } from './features/websocket';
+import enhancedApi from '../api/enhancedApi';
 
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,
+    [enhancedApi.reducerPath]: enhancedApi.reducer,
     [searchSlice.name]: searchSlice.reducer,
     [titleSlice.name]: titleSlice.reducer,
     [snackbarsSlice.name]: snackbarsSlice.reducer,
@@ -38,7 +38,7 @@ export const store = configureStore({
         websocketMiddleware,
         authMiddleware,
       ])
-      .concat(api.middleware),
+      .concat(enhancedApi.middleware),
 });
 
 setupListeners(store.dispatch);

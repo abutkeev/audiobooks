@@ -28,5 +28,3 @@ dist-ssr
 /src/api/api.ts
 
 /public/api
-
-/openapi.json

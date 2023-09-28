@@ -1,5 +1,4 @@
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useGetBookQuery } from '../api/api';
 import BookCard from '../components/BookCard';
 import LoadingWrapper from '../components/common/LoadingWrapper';
 import useAuthors from '../hooks/useAuthors';
@@ -10,10 +9,11 @@ import { useEffect, useMemo } from 'react';
 import { currentBookVarName } from './Home';
 import useTitle from '../hooks/useTitle';
 import OtherPlayersPosition from '../components/OtherPlayersPosition';
+import { useBooksGetBookInfoQuery } from '../api/api';
 
 const BookPage: React.FC = () => {
   const { id = '' } = useParams();
-  const { data, isLoading, isError } = useGetBookQuery({ id });
+  const { data, isLoading, isError } = useBooksGetBookInfoQuery({ id });
   const { authors, authorsLoading, authorsError } = useAuthors();
   const { readers, readersLoading, readersError } = useReaders();
   const { series, seriesLoading, seriesError } = useSeries();

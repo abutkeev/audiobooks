@@ -1,18 +1,24 @@
 import React, { useEffect } from 'react';
 import { Paper } from '@mui/material';
 import Chapters from './chapters';
-import { Book } from '../../api/api';
 import Controls from './controls';
 import PlayerError from './PlayerError';
 import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
 import useMediaSession from '../../hooks/media-session/useMediaSession';
 import { useAppDispatch } from '../../store';
-import { BookInfo, setBookInfo, playerSetup, playerReset, updateBookState } from '../../store/features/player';
+import {
+  BookInfo,
+  setBookInfo,
+  playerSetup,
+  playerReset,
+  updateBookState,
+  BookChapter,
+} from '../../store/features/player';
 
 interface PlayerProps {
   bookId: string;
   bookInfo: BookInfo;
-  chapters: Book['chapters'];
+  chapters: BookChapter[];
   externalState?: { position: number; currentChapter: number };
   onExternalStateApply?(): void;
 }
