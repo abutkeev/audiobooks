@@ -45,18 +45,20 @@ const BookPage: React.FC = () => {
       {data && (
         <>
           <BookCard info={data.info} authors={authors} readers={readers} series={series} />
-          <Player
-            bookInfo={{
-              name: data.info.name,
-              author: authors[data.info.author_id],
-              series: data.info.series_id && series[data.info.series_id],
-              cover: data.info.cover,
-            }}
-            bookId={id}
-            chapters={data.chapters}
-            externalState={externalState}
-            onExternalStateApply={resetSearchParams}
-          />
+          {data.chapters.length !== 0 && (
+            <Player
+              bookInfo={{
+                name: data.info.name,
+                author: authors[data.info.author_id],
+                series: data.info.series_id && series[data.info.series_id],
+                cover: data.info.cover,
+              }}
+              bookId={id}
+              chapters={data.chapters}
+              externalState={externalState}
+              onExternalStateApply={resetSearchParams}
+            />
+          )}
           <OtherPlayersPosition bookId={id} chapters={data.chapters} />
         </>
       )}
