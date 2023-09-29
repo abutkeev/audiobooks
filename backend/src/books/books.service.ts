@@ -4,9 +4,10 @@ import { validateSync } from 'class-validator';
 import { CommonService } from 'src/common/common.service';
 import BookEntryDto from './dto/BookEntryDto';
 import BookDto from './dto/BookDto';
-import { existsSync, lstatSync, readdirSync } from 'fs';
+import { existsSync, lstatSync, mkdirSync, readdirSync } from 'fs';
 import path from 'path';
 import { DataDir } from 'src/constants';
+import BookInfoDto from './dto/BookInfoDto';
 
 const logger = new Logger('BooksService');
 const getBookInfoConfig = (id: string) => `books/${id}/info.json`;
@@ -24,7 +25,7 @@ export class BooksService {
 
     for (const id of dirEntries) {
       if (id.startsWith('.')) continue;
-      
+
       try {
         const { info } = this.get(id);
         books.push({ id, info });
@@ -54,6 +55,19 @@ export class BooksService {
         throw new NotFoundException(`book ${id} not found`);
       }
       throw new InternalServerErrorException(`can't get book ${id}`);
+    }
+  }
+
+  create(info: BookInfoDto): string {
+    try {
+      const id = this.commonService.generateID();
+      mkdirSync(path.resolve(booksDir, id));
+      const config: BookDto = { info, chapters: [] };
+      this.commonService.writeJSONFile(getBookInfoConfig(id), config);
+      return id;
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't create book`);
     }
   }
 }
