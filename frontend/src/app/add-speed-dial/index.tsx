@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, SpeedDialProps, useTheme } from '@mui/material';
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, SpeedDialProps, Typography, useTheme } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { Book, Edit, LibraryBooks, Mic } from '@mui/icons-material';
 import AddPersonDialog from './AddPersonDialog';
@@ -33,25 +33,25 @@ const AddSpeedDial: React.FC = () => {
       >
         <SpeedDialAction
           icon={<Edit />}
-          tooltipTitle='Add author'
+          tooltipTitle={<Typography noWrap>Add author</Typography>}
           tooltipOpen
           onClick={() => setAddPersonDialogType('author')}
         />
         <SpeedDialAction
           icon={<Mic />}
-          tooltipTitle='Add reader'
+          tooltipTitle={<Typography noWrap>Add reader</Typography>}
           tooltipOpen
           onClick={() => setAddPersonDialogType('reader')}
         />
         <SpeedDialAction
           icon={<LibraryBooks />}
-          tooltipTitle='Add series'
+          tooltipTitle={<Typography noWrap>Add series</Typography>}
           tooltipOpen
           onClick={() => setShowAddSeriesDialog(true)}
         />
         <SpeedDialAction
           icon={<Book />}
-          tooltipTitle='Add book'
+          tooltipTitle={<Typography noWrap>Add book</Typography>}
           tooltipOpen
           onClick={() => setShowAddBookDialog(true)}
         />
