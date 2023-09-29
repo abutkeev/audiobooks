@@ -12,6 +12,7 @@ interface CustomDialogProps {
   onConfirm?: ButtonProps['onClick'];
   onCancel?: ButtonProps['onClick'];
   close?: ButtonProps['onClick'];
+  extraButtons?: React.ReactNode;
 }
 
 const CustomDialog: React.FC<CustomDialogProps> = ({
@@ -26,6 +27,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
   onConfirm,
   onCancel,
   close,
+  extraButtons,
 }) => {
   const { variant: cancelButtonVariant, ...otherCancelButtonProps } = cancelButtonProps || {};
   const { variant: confirmButtonVariant, ...otherConfirmButtonProps } = confirmButtonProps || {};
@@ -53,6 +55,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
+        {extraButtons}
         {(onCancel || close) && (
           <Button onClick={handleCancel} variant={cancelButtonVariant || 'outlined'} {...otherCancelButtonProps}>
             {cancelButtonText || (onConfirm || onCancel ? 'Cancel' : 'Close')}
