@@ -4,7 +4,7 @@ import { StateSlice } from '.';
 import { setConnected } from './slice';
 import { connect, disconnect } from './actions';
 import { playerSetup } from '../player';
-import { api } from '../../../api/api';
+import enhancedApi from '../../../api/enhancedApi';
 
 let socket: Socket | undefined;
 
@@ -31,7 +31,7 @@ mw.startListening({
     });
     socket.on('connect', () => dispatch(setConnected(true)));
     socket.on('disconnect', () => dispatch(setConnected(false)));
-    socket.on('invalidate_tag', tag => dispatch(api.util.invalidateTags([tag])));
+    socket.on('invalidate_tag', tag => dispatch(enhancedApi.util.invalidateTags([tag])));
   },
 });
 
