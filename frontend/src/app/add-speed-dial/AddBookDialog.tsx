@@ -57,7 +57,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
   return (
     <CustomDialog
       open={!!open}
-      title={`Add series`}
+      title={`Add book`}
       close={handleClose}
       onConfirm={handleCreate}
       confirmButtonText='Create'
@@ -78,6 +78,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
           <CustomComboBox options={readers} label='Reader' value={readerId} setValue={setReaderId} />
           <CustomComboBox options={series} label='Series' value={seriesId} setValue={setSeriesId} required={false} />
           <TextField
+            sx={{ mt: 2 }}
             fullWidth
             label='Series number'
             value={seriesId ? seriesNumber : ''}
