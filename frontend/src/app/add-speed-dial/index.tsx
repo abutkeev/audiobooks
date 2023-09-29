@@ -25,7 +25,7 @@ const AddSpeedDial: React.FC = () => {
     <>
       <SpeedDial
         ariaLabel='Add items'
-        sx={{ position: 'absolute', bottom: spacing(2), right: spacing(2) }}
+        sx={{ position: 'fixed', bottom: spacing(2), right: spacing(2) }}
         icon={<SpeedDialIcon />}
         open={showMenu}
         onOpen={handleSpeedDialOpen}
