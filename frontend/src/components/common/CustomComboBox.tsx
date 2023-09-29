@@ -11,9 +11,18 @@ interface CustomComboBoxProps {
   setValue(v: string): void;
   sx?: SxProps;
   required?: boolean;
+  loading?: boolean;
 }
 
-const CustomComboBox: React.FC<CustomComboBoxProps> = ({ options, label, value, setValue, sx, required = true }) => {
+const CustomComboBox: React.FC<CustomComboBoxProps> = ({
+  options,
+  label,
+  value,
+  setValue,
+  sx,
+  required = true,
+  loading,
+}) => {
   const autoCompleteOptions = useMemo(() => options.map(({ id, name: label }) => ({ id, label })), [options]);
   const autoCompleteValue = useMemo(
     () => autoCompleteOptions.filter(({ id }) => id === value)[0] || null,
@@ -25,6 +34,7 @@ const CustomComboBox: React.FC<CustomComboBoxProps> = ({ options, label, value, 
   return (
     <Autocomplete
       sx={{ mt: 2, ...sx }}
+      loading={loading}
       options={autoCompleteOptions}
       inputValue={inputValue}
       onInputChange={(_, v, reason) => reason !== 'reset' && setInputValue(v)}
