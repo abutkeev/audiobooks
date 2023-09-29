@@ -9,11 +9,13 @@ interface CustomDialogProps {
   cancelButtonText?: string;
   confirmButtonProps?: Omit<ButtonProps, 'onClick' | 'children'>;
   cancelButtonProps?: Omit<ButtonProps, 'onClick' | 'children'>;
-  onConfirm?: ButtonProps['onClick'];
+  onConfirm?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void | Promise<void>;
   onCancel?: ButtonProps['onClick'];
   close?: ButtonProps['onClick'];
   extraButtons?: React.ReactNode;
 }
+
+export class AbortOperation {}
 
 const CustomDialog: React.FC<CustomDialogProps> = ({
   open,
@@ -41,12 +43,16 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
     }
   };
 
-  const handleConfirm: ButtonProps['onClick'] = e => {
-    if (onConfirm) {
-      onConfirm(e);
-    }
-    if (close) {
-      close(e);
+  const handleConfirm: ButtonProps['onClick'] = async e => {
+    try {
+      if (onConfirm) {
+        await onConfirm(e);
+      }
+      if (close) {
+        close(e);
+      }
+    } catch (e) {
+      if (!(e instanceof AbortOperation)) throw e;
     }
   };
 
