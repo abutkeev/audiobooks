@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, SpeedDialProps, useTheme } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { Edit, LibraryBooks, Mic } from '@mui/icons-material';
-import AddReaderDialog from './AddPersonDialog';
+import AddPersonDialog from './AddPersonDialog';
 import AddSeriesDialog from './AddSeriesDialog';
 
 const AddSpeedDial: React.FC = () => {
@@ -48,7 +48,7 @@ const AddSpeedDial: React.FC = () => {
           onClick={() => setShowAddSeriesDialog(true)}
         />
       </SpeedDial>
-      <AddReaderDialog type={addPersonDialogType} close={() => setAddPersonDialogType(undefined)} />
+      <AddPersonDialog type={addPersonDialogType} close={() => setAddPersonDialogType(undefined)} />
       <AddSeriesDialog open={showAddSeriesDialog} close={() => setShowAddSeriesDialog(false)} />
       {/* Add some space in bottom to scroll in small screens */}
       <Box sx={{ height: { xs: spacing(4), lg: 0 } }} />

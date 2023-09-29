@@ -10,7 +10,7 @@ interface AddPersonDialogProps {
   close(): void;
 }
 
-const AddReaderDialog: React.FC<AddPersonDialogProps> = ({ type, close }) => {
+const AddPersonDialog: React.FC<AddPersonDialogProps> = ({ type, close }) => {
   const [name, setName] = useState('');
   const dispatch = useAppDispatch();
   const [createAuthor] = useAuthorsCreateMutation();
@@ -62,4 +62,4 @@ const AddReaderDialog: React.FC<AddPersonDialogProps> = ({ type, close }) => {
   );
 };
 
-export default AddReaderDialog;
+export default AddPersonDialog;

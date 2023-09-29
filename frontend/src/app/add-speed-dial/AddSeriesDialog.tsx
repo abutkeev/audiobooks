@@ -7,12 +7,12 @@ import { useAuthorsGetQuery, useSeriesCreateMutation } from '../../api/api';
 import CustomComboBox from '../../components/common/CustomComboBox';
 import LoadingWrapper from '../../components/common/LoadingWrapper';
 
-interface AddPersonDialogProps {
+interface AddSeriesDialogProps {
   open: boolean;
   close(): void;
 }
 
-const AddSeriesDialog: React.FC<AddPersonDialogProps> = ({ open, close }) => {
+const AddSeriesDialog: React.FC<AddSeriesDialogProps> = ({ open, close }) => {
   const [name, setName] = useState('');
   const [authorId, setAuthorId] = useState('');
   const dispatch = useAppDispatch();
