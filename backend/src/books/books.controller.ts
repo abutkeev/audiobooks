@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import BookEntryDto from './dto/BookEntryDto';
@@ -28,5 +28,12 @@ export class BooksController {
   @ApiOperation({ description: 'Create book' })
   create(@Body() info: BookInfoDto) {
     return this.service.create(info);
+  }
+
+  @Admin()
+  @Put(':id')
+  @ApiOperation({ description: 'Edit book' })
+  edit(@Param('id') id: string, @Body() book: BookDto): boolean {
+    return this.service.edit(id, book);
   }
 }

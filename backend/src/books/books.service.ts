@@ -70,4 +70,17 @@ export class BooksService {
       throw new InternalServerErrorException(`can't create book`);
     }
   }
+
+  edit(id: string, book: BookDto) {
+    const config = getBookInfoConfig(id);
+    if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${id} not found`);
+
+    try {
+      this.commonService.writeJSONFile(config, book);
+      return true;
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't edit book ${id}`);
+    }
+  }
 }
