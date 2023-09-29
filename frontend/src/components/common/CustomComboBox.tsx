@@ -1,5 +1,5 @@
-import { Autocomplete, SxProps, TextField } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { Autocomplete, AutocompleteInputChangeReason, SxProps, TextField } from '@mui/material';
+import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 
 interface CustomComboBoxProps {
   options: {
@@ -29,7 +29,18 @@ const CustomComboBox: React.FC<CustomComboBoxProps> = ({
     [autoCompleteOptions, value]
   );
   const [inputValue, setInputValue] = useState('');
-  useEffect(() => setInputValue((autoCompleteValue && autoCompleteValue.label) || value), [autoCompleteValue, value]);
+  useEffect(() => {
+    if (inputValue && !value && !autoCompleteOptions.find(({ label }) => inputValue === label)) return;
+    setInputValue((autoCompleteValue && autoCompleteValue.label) || value);
+  }, [autoCompleteValue, autoCompleteOptions, value, inputValue]);
+
+  const handleInputChange = (_: SyntheticEvent, v: string, reason: AutocompleteInputChangeReason) => {
+    if (reason === 'reset') return;
+    setInputValue(v);
+    if (!autoCompleteValue && value) {
+      setValue('');
+    }
+  };
 
   return (
     <Autocomplete
@@ -37,7 +48,7 @@ const CustomComboBox: React.FC<CustomComboBoxProps> = ({
       loading={loading}
       options={autoCompleteOptions}
       inputValue={inputValue}
-      onInputChange={(_, v, reason) => reason !== 'reset' && setInputValue(v)}
+      onInputChange={handleInputChange}
       renderInput={params => (
         <TextField {...params} label={label} required={required} error={required && !autoCompleteValue} />
       )}
