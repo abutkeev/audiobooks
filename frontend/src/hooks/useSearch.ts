@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store';
-import { showSearch } from '../store/features/search';
+import { setSearchText, showSearch } from '../store/features/search';
 
 const useSearch = () => {
   const text = useAppSelector(({ search: { text } }) => text);
@@ -10,6 +10,7 @@ const useSearch = () => {
     dispatch(showSearch(true));
     return () => {
       dispatch(showSearch(false));
+      dispatch(setSearchText(''));
     };
   }, []);
 
