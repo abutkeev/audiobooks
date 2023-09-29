@@ -4,7 +4,7 @@ import { validateSync } from 'class-validator';
 import { CommonService } from 'src/common/common.service';
 import BookEntryDto from './dto/BookEntryDto';
 import BookDto from './dto/BookDto';
-import { existsSync, lstatSync, mkdirSync, readdirSync } from 'fs';
+import { existsSync, lstatSync, mkdirSync, readdirSync, rmSync } from 'fs';
 import path from 'path';
 import { DataDir } from 'src/constants';
 import BookInfoDto from './dto/BookInfoDto';
@@ -77,6 +77,18 @@ export class BooksService {
 
     try {
       this.commonService.writeJSONFile(config, book);
+      return true;
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't edit book ${id}`);
+    }
+  }
+
+  remove(id: string) {
+    const bookDir = path.resolve(booksDir, id);
+    if (!existsSync(bookDir) || !lstatSync(bookDir)?.isDirectory()) throw new NotFoundException(`book ${id} not found`);
+    try {
+      rmSync(bookDir, { recursive: true });
       return true;
     } catch (e) {
       logger.error(e);
