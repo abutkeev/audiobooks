@@ -98,7 +98,7 @@ export class BooksService {
       return true;
     } catch (e) {
       logger.error(e);
-      throw new InternalServerErrorException(`can't edit book ${id}`);
+      throw new InternalServerErrorException(`can't remove book ${id}`);
     }
   }
 
