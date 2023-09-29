@@ -1,5 +1,5 @@
 import { Autocomplete, SxProps, TextField } from '@mui/material';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface CustomComboBoxProps {
   options: {
@@ -14,14 +14,25 @@ interface CustomComboBoxProps {
 }
 
 const CustomComboBox: React.FC<CustomComboBoxProps> = ({ options, label, value, setValue, sx, required = true }) => {
-  const autoCompleteOptoons = useMemo(() => options.map(({ id, name: label }) => ({ id, label })), [options]);
+  const autoCompleteOptions = useMemo(() => options.map(({ id, name: label }) => ({ id, label })), [options]);
+  const autoCompleteValue = useMemo(
+    () => autoCompleteOptions.filter(({ id }) => id === value)[0] || null,
+    [autoCompleteOptions, value]
+  );
+  const [inputValue, setInputValue] = useState('');
+  useEffect(() => setInputValue((autoCompleteValue && autoCompleteValue.label) || value), [autoCompleteValue, value]);
+
   return (
     <Autocomplete
       sx={{ mt: 2, ...sx }}
-      options={autoCompleteOptoons}
-      renderInput={params => <TextField {...params} label={label} required={required} error={required && !value} />}
+      options={autoCompleteOptions}
+      inputValue={inputValue}
+      onInputChange={(_, v, reason) => reason !== 'reset' && setInputValue(v)}
+      renderInput={params => (
+        <TextField {...params} label={label} required={required} error={required && !autoCompleteValue} />
+      )}
       onChange={(_, v) => setValue(v ? v.id : '')}
-      value={autoCompleteOptoons.filter(({ id }) => id === value)[0] || null}
+      value={autoCompleteValue}
     />
   );
 };
