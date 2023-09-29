@@ -113,7 +113,7 @@ export class BooksService {
       if (chapters.find(chapter => chapter.filename === filename)) {
         throw new UnprocessableEntityException(`chapter file ${filename} for book ${bookId} is already exists`);
       }
-      if (!filename.endsWith('.mp3')) {
+      if (!filename.toLowerCase().endsWith('.mp3')) {
         throw new UnprocessableEntityException(`chapter file ${filename} for book ${bookId} is not mp3`);
       }
       writeFileSync(path.resolve(booksDir, bookId, filename), buffer);
