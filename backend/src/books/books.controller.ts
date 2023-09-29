@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { BooksService } from './books.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import BookEntryDto from './dto/BookEntryDto';
 import BookDto from './dto/BookDto';
 import { Admin } from 'src/auth/admin.decorator';
 import BookInfoDto from './dto/BookInfoDto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('books')
 @Controller('books')
@@ -42,5 +43,29 @@ export class BooksController {
   @ApiOperation({ description: 'Remove book' })
   remove(@Param('id') id: string): boolean {
     return this.service.remove(id);
+  }
+
+  @Admin()
+  @Post(':id/chapter/:title')
+  @ApiOperation({ description: 'Add chapter' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  uploadChapter(
+    @Param('id') id: string,
+    @Param('title') title: string,
+    @UploadedFile() file: Express.Multer.File
+  ): boolean {
+    return this.service.uploadChapter(id, title, file);
   }
 }

@@ -1,10 +1,16 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { CommonService } from 'src/common/common.service';
 import BookEntryDto from './dto/BookEntryDto';
 import BookDto from './dto/BookDto';
-import { existsSync, lstatSync, mkdirSync, readdirSync, rmSync } from 'fs';
+import { existsSync, lstatSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'fs';
 import path from 'path';
 import { DataDir } from 'src/constants';
 import BookInfoDto from './dto/BookInfoDto';
@@ -93,6 +99,31 @@ export class BooksService {
     } catch (e) {
       logger.error(e);
       throw new InternalServerErrorException(`can't edit book ${id}`);
+    }
+  }
+
+  uploadChapter(bookId: string, title: string, { originalname: filename, buffer }: Express.Multer.File): true {
+    const config = getBookInfoConfig(bookId);
+    if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
+    try {
+      const { info, chapters } = this.get(bookId);
+      if (chapters.find(chapter => chapter.title === title)) {
+        throw new UnprocessableEntityException(`chapter ${title} for book ${bookId} is already exists`);
+      }
+      if (chapters.find(chapter => chapter.filename === filename)) {
+        throw new UnprocessableEntityException(`chapter file ${filename} for book ${bookId} is already exists`);
+      }
+      if (!filename.endsWith('.mp3')) {
+        throw new UnprocessableEntityException(`chapter file ${filename} for book ${bookId} is not mp3`);
+      }
+      writeFileSync(path.resolve(booksDir, bookId, filename), buffer);
+      chapters.push({ title, filename });
+      this.commonService.writeJSONFile(config, { info, chapters });
+      return true;
+    } catch (e) {
+      if (e instanceof UnprocessableEntityException) throw e;
+      logger.error(e);
+      throw new InternalServerErrorException(`can't add chapter ${title} to book ${bookId}`);
     }
   }
 }
