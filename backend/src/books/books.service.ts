@@ -4,37 +4,36 @@ import { validateSync } from 'class-validator';
 import { CommonService } from 'src/common/common.service';
 import BookEntryDto from './dto/BookEntryDto';
 import BookDto from './dto/BookDto';
+import { existsSync, lstatSync, readdirSync } from 'fs';
+import path from 'path';
+import { DataDir } from 'src/constants';
 
 const logger = new Logger('BooksService');
-const configName = 'books.json';
 const getBookInfoConfig = (id: string) => `books/${id}/info.json`;
+const booksDir = path.resolve(DataDir, 'books');
+
 @Injectable()
 export class BooksService {
   constructor(private commonService: CommonService) {}
 
   getList(): BookEntryDto[] {
-    try {
-      const result = this.commonService.readJSONFile(configName);
-      if (!Array.isArray(result)) {
-        logger.log(result);
-        throw new Error('result is not array');
-      }
+    if (!existsSync(booksDir) || !lstatSync(booksDir)?.isDirectory()) return [];
 
-      for (const entry of result) {
-        const errors = validateSync(plainToInstance(BookEntryDto, entry));
-        if (errors.length > 0) {
-          for (const error of errors) {
-            logger.error(error);
-          }
-          logger.log(entry);
-          throw new Error('entry validation failed');
-        }
+    const books: BookEntryDto[] = [];
+    const dirEntries = readdirSync(booksDir);
+
+    for (const id of dirEntries) {
+      if (id.startsWith('.')) continue;
+      
+      try {
+        const { info } = this.get(id);
+        books.push({ id, info });
+      } catch (e) {
+        logger.error(`can't read book ${id}`);
+        logger.error(e);
       }
-      return result as BookEntryDto[];
-    } catch (e) {
-      logger.error(e);
-      throw new InternalServerErrorException(`can't get books`);
     }
+    return books;
   }
 
   get(id: string): BookDto {
