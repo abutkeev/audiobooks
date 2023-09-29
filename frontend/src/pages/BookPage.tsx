@@ -44,7 +44,7 @@ const BookPage: React.FC = () => {
     <LoadingWrapper loading={loading} error={error}>
       {data && (
         <>
-          <BookCard info={data.info} authors={authors} readers={readers} series={series} />
+          <BookCard id={id} info={data.info} authors={authors} readers={readers} series={series} />
           {data.chapters.length !== 0 && (
             <Player
               bookInfo={{

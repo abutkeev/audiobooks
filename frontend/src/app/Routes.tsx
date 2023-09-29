@@ -9,6 +9,7 @@ import { useAppSelector } from '../store';
 import Login from '../pages/login';
 import Users from '../pages/users';
 import useAuthData from '../hooks/useAuthData';
+import EditBookPage from '../pages/edit-book';
 
 const userRoutes: RouteObject[] = [
   {
@@ -33,6 +34,10 @@ const adminRoutes: RouteObject[] = [
   {
     path: '/users',
     element: <Users />,
+  },
+  {
+    path: '/edit/:id',
+    element: <EditBookPage />,
   },
 ];
 

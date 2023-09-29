@@ -81,7 +81,7 @@ const BookList: React.FC = () => {
     <LoadingWrapper loading={loading} error={error}>
       {sortedBooks.length !== 0 ? (
         sortedBooks.map(({ id, info }) => (
-          <BookCard key={id} id={id} info={info} authors={authors} readers={readers} series={series} />
+          <BookCard key={id} id={id} info={info} authors={authors} readers={readers} series={series} list />
         ))
       ) : (
         <Alert severity='info'>
