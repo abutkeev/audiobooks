@@ -4,11 +4,12 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { DataDir, FrontendDir } from './constants';
+import path from 'path';
 
 export async function setup(options?: NestApplicationOptions) {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, options);
   app.useStaticAssets(FrontendDir);
-  app.useStaticAssets(DataDir, { prefix: '/api/' });
+  app.useStaticAssets(path.resolve(DataDir, 'books'), { prefix: '/api/books/' });
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
 
