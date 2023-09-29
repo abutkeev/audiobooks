@@ -102,7 +102,8 @@ export class BooksService {
     }
   }
 
-  uploadChapter(bookId: string, title: string, { originalname: filename, buffer }: Express.Multer.File): true {
+  uploadChapter(bookId: string, title: string, { originalname, buffer }: Express.Multer.File): true {
+    const filename = decodeURI(originalname);
     const config = getBookInfoConfig(bookId);
     if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
     try {

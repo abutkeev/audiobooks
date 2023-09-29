@@ -56,6 +56,7 @@ export class BooksController {
         file: {
           type: 'string',
           format: 'binary',
+          description: 'Filename must be url encoded'
         },
       },
     },
