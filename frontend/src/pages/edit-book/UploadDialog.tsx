@@ -52,7 +52,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
             Authorization: `Bearer ${token}`,
           },
         });
-        enhancedApi.util.invalidateTags(['books']);
+        appDispatch(enhancedApi.util.invalidateTags(['books']));
       }
     } catch (e) {
       if (typeof e === 'object' && e && 'message' in e && e.message === 'canceled') throw new AbortOperation();
