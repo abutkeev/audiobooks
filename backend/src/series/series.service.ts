@@ -41,7 +41,7 @@ export class SeriesService {
   create({ name, author_id }: NewSeriesDto) {
     try {
       const storage = this.get();
-      storage.push({ id: this.commonService.generateID(), name, author_id, books: [] });
+      storage.push({ id: this.commonService.generateID(), name, author_id });
       this.commonService.writeJSONFile(configName, storage);
     } catch (e) {
       logger.error(e);

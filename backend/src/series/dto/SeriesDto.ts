@@ -13,9 +13,6 @@ class SeriesDto {
   @IsNotEmpty()
   @ApiProperty()
   author_id: string;
-
-  @ApiProperty()
-  books: string[];
 }
 
 export default SeriesDto;
