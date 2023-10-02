@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
 import useUploading, {
+  removeTitles,
   resetTitles,
   setProgress,
   setTitle,
@@ -121,6 +122,9 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
           </Button>
         ) : (
           <>
+            <Button variant='outlined' onClick={() => dispatch(removeTitles())}>
+              Remove titles
+            </Button>
             <Button variant='outlined' onClick={() => dispatch(resetTitles())}>
               Reset titles
             </Button>

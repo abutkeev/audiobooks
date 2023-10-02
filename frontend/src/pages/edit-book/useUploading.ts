@@ -51,6 +51,11 @@ const uploadingSlice = createSlice({
         state.chapters[index].title = title.replace(prefixNumbersRegex, '');
       });
     },
+    removeTitles: state => {
+      state.chapters.forEach((_, index) => {
+        state.chapters[index].title = `${index + 1}`;
+      });
+    },
     startUploading: (state, { payload }: PayloadAction<{ file: File; title: string }>) => {
       const { file, title } = payload;
       state.chapters = state.chapters.filter(entry => entry.title !== title);
@@ -99,6 +104,6 @@ const useUploading = (files?: File[]) => {
   return [state, dispatch] as const;
 };
 
-export const { setTitle, resetTitles, stripPrefixNumbers, startUploading, stopUploading, setProgress } =
+export const { setTitle, resetTitles, stripPrefixNumbers, startUploading, stopUploading, setProgress, removeTitles } =
   uploadingSlice.actions;
 export default useUploading;
