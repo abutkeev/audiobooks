@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotAcceptableException,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -171,6 +172,24 @@ export class BooksService {
     } catch (e) {
       logger.error(e);
       throw new InternalServerErrorException(`can't add cover to book ${bookId}`);
+    }
+  }
+
+  extractCover(bookId: string): true {
+    const bookDir = path.resolve(booksDir, bookId);
+    try {
+      const { chapters } = this.get(bookId);
+      for (const { filename } of chapters) {
+        const cover = this.commonService.extractImageFromID3tag(path.resolve(bookDir, filename));
+        if (cover) {
+          this.uploadCover(bookId, cover);
+          return true;
+        }
+      }
+      throw new NotAcceptableException(`No covers found for book ${bookId}`);
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't extract book ${bookId} cover`);
     }
   }
 }

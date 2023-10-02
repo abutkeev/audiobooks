@@ -71,6 +71,13 @@ export class BooksController {
   }
 
   @Admin()
+  @Post(':id/cover/extract')
+  @ApiOperation({ description: 'Extract book cover from chapter files' })
+  extractCover(@Param('id') id: string): true {
+    return this.service.extractCover(id);
+  }
+
+  @Admin()
   @Put(':id/cover')
   @ApiOperation({ description: 'Replace book cover' })
   @ApiConsumes('multipart/form-data')
