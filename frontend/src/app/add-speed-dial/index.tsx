@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, SpeedDialProps, Typography, useTheme } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
-import { Book, Edit, LibraryBooks, Mic } from '@mui/icons-material';
+import { Book, Edit, LibraryBooks, Mic, PersonAdd } from '@mui/icons-material';
 import AddPersonDialog from './AddPersonDialog';
 import AddSeriesDialog from './AddSeriesDialog';
 import AddBookDialog from './AddBookDialog';
+import AddUserDialog from './AddUserDialog';
 
 const AddSpeedDial: React.FC = () => {
   const { admin } = useAuthData() || {};
@@ -13,6 +14,7 @@ const AddSpeedDial: React.FC = () => {
   const [addPersonDialogType, setAddPersonDialogType] = useState<'author' | 'reader'>();
   const [showAddSeriesDialog, setShowAddSeriesDialog] = useState(false);
   const [showAddBookDialog, setShowAddBookDialog] = useState(false);
+  const [showAddUserDialog, setShowAddUserDialog] = useState(false);
 
   const handleSpeedDialOpen: SpeedDialProps['onOpen'] = (_, reason) => {
     if (reason === 'focus') return;
@@ -55,10 +57,17 @@ const AddSpeedDial: React.FC = () => {
           tooltipOpen
           onClick={() => setShowAddBookDialog(true)}
         />
+        <SpeedDialAction
+          icon={<PersonAdd />}
+          tooltipTitle={<Typography noWrap>Add user</Typography>}
+          tooltipOpen
+          onClick={() => setShowAddUserDialog(true)}
+        />
       </SpeedDial>
       <AddPersonDialog type={addPersonDialogType} close={() => setAddPersonDialogType(undefined)} />
       <AddSeriesDialog open={showAddSeriesDialog} close={() => setShowAddSeriesDialog(false)} />
       <AddBookDialog open={showAddBookDialog} close={() => setShowAddBookDialog(false)} />
+      <AddUserDialog open={showAddUserDialog} close={() => setShowAddUserDialog(false)} />
       {/* Add some space in bottom to scroll in small screens */}
       <Box sx={{ height: { xs: spacing(4), lg: 0 } }} />
     </>
