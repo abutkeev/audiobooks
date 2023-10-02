@@ -127,4 +127,50 @@ export class BooksService {
       throw new InternalServerErrorException(`can't add chapter ${title} to book ${bookId}`);
     }
   }
+
+  removeCover(bookId: string) {
+    const config = getBookInfoConfig(bookId);
+    const bookDir = path.resolve(booksDir, bookId);
+    if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
+    try {
+      const { info, chapters } = this.get(bookId);
+      if (info.cover) {
+        const { filename } = info.cover;
+        const coverFile = path.resolve(bookDir, filename);
+        if (existsSync(coverFile)) {
+          rmSync(coverFile);
+        }
+        delete info.cover;
+      }
+      this.commonService.writeJSONFile(config, { info, chapters });
+      return true;
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't remove book ${bookId} cover`);
+    }
+  }
+
+  uploadCover(
+    bookId: string,
+    { originalname, mimetype, buffer }: Pick<Express.Multer.File, 'buffer' | 'mimetype' | 'originalname'>
+  ): true {
+    const config = getBookInfoConfig(bookId);
+    const bookDir = path.resolve(booksDir, bookId);
+    if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
+    try {
+      const { info, chapters } = this.get(bookId);
+      if (info.cover) {
+        this.removeCover(bookId);
+      }
+      const extension = originalname.split('.').pop().toLowerCase();
+      const filename = `${this.commonService.generateID()}.${extension}`;
+      writeFileSync(path.resolve(bookDir, filename), buffer);
+      info.cover = { type: mimetype, filename };
+      this.commonService.writeJSONFile(config, { info, chapters });
+      return true;
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't add cover to book ${bookId}`);
+    }
+  }
 }

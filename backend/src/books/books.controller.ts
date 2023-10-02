@@ -69,4 +69,32 @@ export class BooksController {
   ): boolean {
     return this.service.uploadChapter(id, title, file);
   }
+
+  @Admin()
+  @Put(':id/cover')
+  @ApiOperation({ description: 'Replace book cover' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  uploadCover(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): boolean {
+    return this.service.uploadCover(id, file);
+  }
+
+  @Admin()
+  @Delete(':id/cover')
+  @ApiOperation({ description: 'Remove cover' })
+  @UseInterceptors(FileInterceptor('file'))
+  removeCover(@Param('id') id: string): boolean {
+    return this.service.removeCover(id);
+  }
 }
