@@ -6,6 +6,7 @@ import EditBookInfo from './EditBookInfo';
 import { useMemo, useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
 import EditChapters from './EditChapters';
+import Link from '../../components/common/Link';
 
 const EditBookPage: React.FC = () => {
   const { id = '' } = useParams();
@@ -24,6 +25,7 @@ const EditBookPage: React.FC = () => {
 
   return (
     <LoadingWrapper loading={isLoading} error={isError}>
+      <Link to={`/book/${id}`}>Go to book page</Link>
       <Tabs value={tabIndex} onChange={(_, index) => setTabIndex(index)} sx={{ mb: 1 }}>
         <Tab value={0} label='Info' />
         <Tab value={1} label='Chapters' />
