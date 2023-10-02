@@ -64,7 +64,7 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
           >
             Upload
           </UploadButton>
-          <Button startIcon={<Delete />} variant='contained' color='error' onClick={handleRemove}>
+          <Button startIcon={<Delete />} disabled={!cover} variant='contained' color='error' onClick={handleRemove}>
             Remove
           </Button>
           <Button variant='outlined' onClick={handleExtract}>
