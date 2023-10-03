@@ -1,34 +1,41 @@
 import { useContext } from 'react';
-import { SpeedDialAction, SpeedDialActionProps, Typography } from '@mui/material';
+import { ButtonBase, Card, SpeedDialActionProps, Stack, Typography } from '@mui/material';
 import { CustomSpeedDialContext } from './CustomSpeedDial';
 
 interface CustomSpeedDialActionProps extends Omit<SpeedDialActionProps, 'tooltipOpen'> {
   tooltipTitle: string;
+  onClick(): void;
 }
 
 const CustomSpeedDialAction: React.FC<CustomSpeedDialActionProps> = ({
+  open,
   icon,
   tooltipTitle,
   onClick,
-  ...otherProps
+  FabProps: { ref } = {},
 }) => {
   const { closeSpeedDial } = useContext(CustomSpeedDialContext);
 
-  const handleClick: SpeedDialActionProps['onClick'] = e => {
+  const handleClick = () => {
     if (onClick) {
-      onClick(e);
+      onClick();
     }
     closeSpeedDial();
   };
 
+  if (!open) return;
+
   return (
-    <SpeedDialAction
-      icon={icon}
-      tooltipTitle={<Typography noWrap>{tooltipTitle}</Typography>}
-      tooltipOpen
-      onClick={handleClick}
-      {...otherProps}
-    />
+    <ButtonBase ref={ref} onClick={handleClick}>
+      <Stack direction='row' alignItems='center' justifyContent='flex-end'>
+        <Card raised sx={{ m: 1, mr: 2 }}>
+          <Typography noWrap textAlign='end' m={1}>
+            {tooltipTitle}
+          </Typography>
+        </Card>
+        {icon}
+      </Stack>
+    </ButtonBase>
   );
 };
 
