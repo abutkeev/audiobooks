@@ -6,20 +6,24 @@ const useCreateTheme = () => {
   const darkMode = useMediaQuery('(prefers-color-scheme: dark)');
   return useMemo(
     () =>
-      createTheme({
-        palette: {
-          mode: darkMode ? 'dark' : 'light',
-          primary: darkMode ? { main: blueGrey[300] } : undefined,
-          secondary: darkMode ? { main: grey[50] } : undefined,
-        },
-        components: {
-          MuiLink: {
-            defaultProps: {
-              color: darkMode ? blue[100] : undefined,
-            },
-          },
-        },
-      }),
+      createTheme(
+        darkMode
+          ? {
+              palette: {
+                mode: 'dark',
+                primary: { main: blueGrey[300] },
+                secondary: { main: grey[50] },
+              },
+              components: {
+                MuiLink: {
+                  defaultProps: {
+                    color: blue[100],
+                  },
+                },
+              },
+            }
+          : { palette: { mode: 'light' } }
+      ),
     [darkMode]
   );
 };
