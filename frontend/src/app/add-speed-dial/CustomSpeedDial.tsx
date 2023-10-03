@@ -30,7 +30,7 @@ const CustomSpeedDial: React.FC<React.PropsWithChildren> = ({ children }) => {
         {children}
       </SpeedDial>
       {/* Add some space in bottom to scroll in small screens */}
-      <Box sx={{ height: { xs: spacing(4), lg: 0 } }} />
+      <Box sx={{ height: { xs: spacing(8), lg: 0 } }} />
     </CustomSpeedDialContext.Provider>
   );
 };
