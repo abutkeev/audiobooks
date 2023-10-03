@@ -2,9 +2,14 @@ import { useContext } from 'react';
 import { ButtonBase, Card, SpeedDialActionProps, Stack, Typography } from '@mui/material';
 import { CustomSpeedDialContext } from './CustomSpeedDial';
 
-interface CustomSpeedDialActionProps extends Omit<SpeedDialActionProps, 'tooltipOpen'> {
+interface CustomSpeedDialActionProps {
+  open?: boolean;
+  icon: React.ReactNode;
   tooltipTitle: string;
-  onClick(): void;
+  onClick?(): void;
+  FabProps?: {
+    ref: NonNullable<SpeedDialActionProps['FabProps']>['ref'];
+  };
 }
 
 const CustomSpeedDialAction: React.FC<CustomSpeedDialActionProps> = ({
