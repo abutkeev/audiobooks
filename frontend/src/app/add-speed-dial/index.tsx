@@ -1,75 +1,51 @@
 import { useState } from 'react';
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, SpeedDialProps, Typography, useTheme } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { Book, Edit, LibraryBooks, Mic, PersonAdd } from '@mui/icons-material';
 import AddPersonDialog from './AddPersonDialog';
 import AddSeriesDialog from './AddSeriesDialog';
 import AddBookDialog from './AddBookDialog';
 import AddUserDialog from './AddUserDialog';
+import CustomSpeedDial from './CustomSpeedDial';
+import CustomSpeedDialAction from './CustomSpeedDialAction';
 
 const AddSpeedDial: React.FC = () => {
   const { admin } = useAuthData() || {};
-  const { spacing } = useTheme();
-  const [showMenu, setShowMenu] = useState(false);
   const [addPersonDialogType, setAddPersonDialogType] = useState<'author' | 'reader'>();
   const [showAddSeriesDialog, setShowAddSeriesDialog] = useState(false);
   const [showAddBookDialog, setShowAddBookDialog] = useState(false);
   const [showAddUserDialog, setShowAddUserDialog] = useState(false);
 
-  const handleSpeedDialOpen: SpeedDialProps['onOpen'] = (_, reason) => {
-    if (reason === 'focus') return;
-    setShowMenu(true);
-  };
-
   if (!admin) return;
 
   return (
     <>
-      <SpeedDial
-        ariaLabel='Add items'
-        sx={{ position: 'fixed', bottom: spacing(2), right: spacing(2) }}
-        icon={<SpeedDialIcon />}
-        open={showMenu}
-        onOpen={handleSpeedDialOpen}
-        onClose={() => setShowMenu(false)}
-      >
-        <SpeedDialAction
+      <CustomSpeedDial>
+        <CustomSpeedDialAction
           icon={<Edit />}
-          tooltipTitle={<Typography noWrap>Add author</Typography>}
-          tooltipOpen
+          tooltipTitle='Add author'
           onClick={() => setAddPersonDialogType('author')}
         />
-        <SpeedDialAction
+        <CustomSpeedDialAction
           icon={<Mic />}
-          tooltipTitle={<Typography noWrap>Add reader</Typography>}
-          tooltipOpen
+          tooltipTitle='Add reader'
           onClick={() => setAddPersonDialogType('reader')}
         />
-        <SpeedDialAction
+        <CustomSpeedDialAction
           icon={<LibraryBooks />}
-          tooltipTitle={<Typography noWrap>Add series</Typography>}
-          tooltipOpen
+          tooltipTitle='Add series'
           onClick={() => setShowAddSeriesDialog(true)}
         />
-        <SpeedDialAction
-          icon={<Book />}
-          tooltipTitle={<Typography noWrap>Add book</Typography>}
-          tooltipOpen
-          onClick={() => setShowAddBookDialog(true)}
-        />
-        <SpeedDialAction
+        <CustomSpeedDialAction icon={<Book />} tooltipTitle='Add book' onClick={() => setShowAddBookDialog(true)} />
+        <CustomSpeedDialAction
           icon={<PersonAdd />}
-          tooltipTitle={<Typography noWrap>Add user</Typography>}
-          tooltipOpen
+          tooltipTitle='Add user'
           onClick={() => setShowAddUserDialog(true)}
         />
-      </SpeedDial>
+      </CustomSpeedDial>
       <AddPersonDialog type={addPersonDialogType} close={() => setAddPersonDialogType(undefined)} />
       <AddSeriesDialog open={showAddSeriesDialog} close={() => setShowAddSeriesDialog(false)} />
       <AddBookDialog open={showAddBookDialog} close={() => setShowAddBookDialog(false)} />
       <AddUserDialog open={showAddUserDialog} close={() => setShowAddUserDialog(false)} />
-      {/* Add some space in bottom to scroll in small screens */}
-      <Box sx={{ height: { xs: spacing(4), lg: 0 } }} />
     </>
   );
 };
