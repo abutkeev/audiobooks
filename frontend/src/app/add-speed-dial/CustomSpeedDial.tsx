@@ -8,14 +8,11 @@ const CustomSpeedDial: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   const handleSpeedDialOpen: SpeedDialProps['onOpen'] = (_, reason) => {
-    if (reason === 'focus' || reason === 'mouseEnter') return;
+    if (reason === 'focus') return;
     setShowMenu(true);
   };
 
-  const handleSpeedDialClose: SpeedDialProps['onClose'] = (_, reason) => {
-    if (reason === 'mouseLeave') return;
-    setShowMenu(false);
-  };
+  const handleSpeedDialClose: SpeedDialProps['onClose'] = () => setShowMenu(false);
 
   return (
     <CustomSpeedDialContext.Provider value={{ closeSpeedDial: () => setShowMenu(false) }}>
