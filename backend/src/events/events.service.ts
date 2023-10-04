@@ -50,7 +50,7 @@ export class EventsService {
     const info = this.authService.getTokenInfo(token);
     const user = await this.usersService.find(info.id);
 
-    if (!user || JSON.stringify(info) !== JSON.stringify(user)) {
+    if (!user || JSON.stringify(Object.entries(info).sort()) !== JSON.stringify(Object.entries(user).sort())) {
       this.logger.log(`Token for ${info.login} is outdated`);
       socket.emit('refresh_token');
     }
