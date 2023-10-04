@@ -5,6 +5,7 @@ import { setConnected } from './slice';
 import { connect, disconnect } from './actions';
 import { playerSetup } from '../player';
 import enhancedApi from '../../../api/enhancedApi';
+import { setAuthToken } from '../auth';
 
 let socket: Socket | undefined;
 
@@ -32,6 +33,13 @@ mw.startListening({
     socket.on('connect', () => dispatch(setConnected(true)));
     socket.on('disconnect', () => dispatch(setConnected(false)));
     socket.on('invalidate_tag', tag => dispatch(enhancedApi.util.invalidateTags([tag])));
+    socket.on('refresh_token', async () => {
+      const response = await dispatch(enhancedApi.endpoints.authGenerateToken.initiate());
+      if ('data' in response) {
+        const { access_token } = response.data;
+        dispatch(setAuthToken(access_token));
+      }
+    });
   },
 });
 
