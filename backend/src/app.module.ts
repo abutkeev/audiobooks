@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -11,12 +10,11 @@ import { PersonsModule } from './persons/persons.module';
 import { AuthorsModule } from './authors/authors.module';
 import { SeriesModule } from './series/series.module';
 import { BooksModule } from './books/books.module';
+import { DB_URI } from './constants';
 
 @Module({
   imports: [
-    // need to use env files
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DB_URI),
+    MongooseModule.forRoot(DB_URI),
     UsersModule,
     AuthModule,
     EventsModule,

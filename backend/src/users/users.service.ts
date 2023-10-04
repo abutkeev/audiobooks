@@ -1,15 +1,27 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
-import { Model, ObjectId } from 'mongoose';
+import mongoose, { Model, ObjectId } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import bcrypt from 'bcrypt';
 import { UserDto } from './dto/user.dto';
+import { INIT_ID, INIT_PASSWD } from 'src/constants';
 
 const encryptPassword = (password: string) => {
   const salt = bcrypt.genSaltSync();
   return bcrypt.hashSync(password, salt);
 };
+
+const initUser: UserDto | undefined =
+  INIT_ID && INIT_PASSWD
+    ? {
+        id: new mongoose.Types.ObjectId(INIT_ID).toString(),
+        login: 'init',
+        name: 'Initial administrator',
+        admin: true,
+        enabled: true,
+      }
+    : undefined;
 
 @Injectable()
 export class UsersService {
@@ -25,6 +37,9 @@ export class UsersService {
   }
 
   async find(id: ObjectId | string): Promise<UserDto> {
+    if (initUser && id === initUser.id) {
+      return initUser;
+    }
     const result = await this.userModel.findById(id).exec();
     if (!result) {
       throw new NotFoundException(`user ${id} not found`);
@@ -38,6 +53,9 @@ export class UsersService {
   }
 
   async verify(login: string, password: string): Promise<UserDto> {
+    if (initUser && initUser.login === login && password === INIT_PASSWD) {
+      return initUser;
+    }
     const result = await this.userModel.find({ login });
     if (result.length === 0) return null;
     const user = result[0];
