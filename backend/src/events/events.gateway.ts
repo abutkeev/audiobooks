@@ -65,5 +65,6 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.user = result;
     client.instanceId = instanceId;
     this.eventsService.registerSocket(result.id, instanceId, client);
+    this.eventsService.sendOutdatedTokenRefreshEvent(token, client);
   }
 }

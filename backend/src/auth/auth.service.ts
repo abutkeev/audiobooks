@@ -27,4 +27,15 @@ export class AuthService {
       return null;
     }
   }
+
+  getTokenInfo(token: string): UserDto {
+    const { sub, username, name, admin, enabled } = this.jwtService.verify(token, { ignoreExpiration: false });
+    return {
+      id: sub,
+      login: username,
+      name,
+      admin,
+      enabled,
+    };
+  }
 }

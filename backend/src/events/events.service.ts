@@ -1,10 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Socket } from 'socket.io';
+import { AuthService } from 'src/auth/auth.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class EventsService {
   private static sockets: Record<string, { instanceId: string; socket: Socket }[]> = {};
   private logger = new Logger('Events service');
+
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService
+  ) {}
 
   registerSocket(userId: string, instanceId: string, socket: Socket) {
     if (!EventsService.sockets[userId]) {
@@ -36,6 +43,16 @@ export class EventsService {
       if (instanceId === skipInstance) continue;
       this.logger.log(`Sending message ${message}(${JSON.stringify(args)}) to ${userId}(${instanceId})`);
       socket.emit(message, args);
+    }
+  }
+
+  async sendOutdatedTokenRefreshEvent(token: string, socket: Socket) {
+    const info = this.authService.getTokenInfo(token);
+    const user = await this.usersService.find(info.id);
+
+    if (!user || JSON.stringify(info) !== JSON.stringify(user)) {
+      this.logger.log(`Token for ${info.login} is outdated`);
+      socket.emit('refresh_token');
     }
   }
 }
