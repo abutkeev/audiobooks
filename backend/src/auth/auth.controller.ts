@@ -1,4 +1,4 @@
-import { Controller, NotFoundException, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Inject, NotFoundException, Post, Request, UseGuards, forwardRef } from '@nestjs/common';
 import { LocalAuthGuard } from './local/local-auth.guard';
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
@@ -12,6 +12,8 @@ import { UsersService } from 'src/users/users.service';
 export class AuthController {
   constructor(
     private authService: AuthService,
+
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService
   ) {}
 

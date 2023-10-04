@@ -1,4 +1,4 @@
-import { Logger, UsePipes } from '@nestjs/common';
+import { Inject, Logger, UsePipes, forwardRef } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -20,8 +20,12 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private logger: Logger = new Logger('Events gateway');
 
   constructor(
+    @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
+
     private eventsService: EventsService,
+
+    @Inject(forwardRef(() => PositionService))
     private positionService: PositionService
   ) {}
 

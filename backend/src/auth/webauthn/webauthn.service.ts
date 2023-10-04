@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, Logger, UnauthorizedException, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { randomBytes } from 'crypto';
 import { Model } from 'mongoose';
@@ -31,7 +31,11 @@ export class WebauthnService {
 
   constructor(
     @InjectModel(PublicKey.name) private publicKeyModel: Model<PublicKey>,
+
+    @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
+
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService
   ) {}
 

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { Socket } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 import { UsersService } from 'src/users/users.service';
@@ -9,7 +9,10 @@ export class EventsService {
   private logger = new Logger('Events service');
 
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
+
+    @Inject(forwardRef(() => AuthService))
     private authService: AuthService
   ) {}
 

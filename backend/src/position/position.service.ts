@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Position } from './schemas/position.schema';
@@ -9,6 +9,8 @@ import { EventsService } from 'src/events/events.service';
 export class PositionService {
   constructor(
     @InjectModel(Position.name) private positionModel: Model<Position>,
+
+    @Inject(forwardRef(() => EventsService))
     private eventsService: EventsService
   ) {}
 
