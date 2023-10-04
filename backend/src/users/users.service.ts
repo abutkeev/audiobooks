@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import mongoose, { Model, ObjectId } from 'mongoose';
@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import bcrypt from 'bcrypt';
 import { UserDto } from './dto/user.dto';
 import { INIT_ID, INIT_PASSWD } from 'src/constants';
+import { EventsService } from 'src/events/events.service';
 
 const encryptPassword = (password: string) => {
   const salt = bcrypt.genSaltSync();
@@ -25,7 +26,12 @@ const initUser: UserDto | undefined =
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+
+    @Inject(forwardRef(() => EventsService))
+    private eventsService: EventsService
+  ) {}
 
   async create({ password, ...user }: CreateUserDto): Promise<string> {
     const id = await this.findIdByLogin(user.login);
@@ -80,13 +86,17 @@ export class UsersService {
     return !!admin;
   }
 
-  async update(id: string, update: Partial<Omit<User, 'password'>>): Promise<unknown> {
+  async update(id: string, update: Partial<Omit<User, 'password'>>): Promise<boolean> {
     const user = this.userModel.findById(id).exec();
     if (!user) {
       throw new NotFoundException(`user ${id} not found`);
     }
 
-    return this.userModel.updateOne({ _id: id }, update);
+    await this.userModel.updateOne({ _id: id }, update);
+
+    this.eventsService.sendToUser({ userId: id, message: 'refresh_token' });
+
+    return true;
   }
 
   async updatePassword(id: string, password?: string): Promise<unknown> {
