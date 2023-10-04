@@ -10,6 +10,7 @@ import Login from '../pages/login';
 import Users from '../pages/users';
 import useAuthData from '../hooks/useAuthData';
 import EditBookPage from '../pages/edit-book';
+import NotActive from '../pages/NotActive';
 
 const userRoutes: RouteObject[] = [
   {
@@ -41,12 +42,29 @@ const adminRoutes: RouteObject[] = [
   },
 ];
 
-const getRoutes = ({ token, admin }: { token: string | null; admin?: boolean }): RouteObject[] => {
+const getRoutes = ({
+  token,
+  admin,
+  enabled,
+}: {
+  token: string | null;
+  admin?: boolean;
+  enabled?: boolean;
+}): RouteObject[] => {
   if (!token) {
     return [
       {
         path: '*',
         element: <Login />,
+      },
+    ];
+  }
+
+  if (!enabled) {
+    return [
+      {
+        path: '*',
+        element: <NotActive />,
       },
     ];
   }
@@ -60,14 +78,14 @@ const getRoutes = ({ token, admin }: { token: string | null; admin?: boolean }):
 
 const Routes: React.FC = () => {
   const { token } = useAppSelector(({ auth }) => auth);
-  const { admin } = useAuthData() || {};
+  const { admin, enabled } = useAuthData() || {};
 
   const router = useMemo(
     () =>
       createHashRouter([
         {
           element: <Main />,
-          children: getRoutes({ token, admin }),
+          children: getRoutes({ token, admin, enabled }),
         },
       ]),
     [token]
