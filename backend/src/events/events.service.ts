@@ -34,7 +34,7 @@ export class EventsService {
   }: {
     userId: string;
     skipInstance?: string;
-    message: string;
+    message: 'invalidate_tag' | 'refresh_token';
     args?: any;
   }) {
     const userSockets = EventsService.sockets[userId];
