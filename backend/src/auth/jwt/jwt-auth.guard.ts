@@ -2,6 +2,7 @@ import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from '../public.decorator';
+import { INACTIVE_ALLOWED_KEY } from '../allow-inactive.decorator';
 
 const logger = new Logger('JwtAuthGuard');
 
@@ -22,8 +23,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const canActivate = await super.canActivate(context);
 
+    const inactiveAllowed = this.reflector.getAllAndOverride<boolean>(INACTIVE_ALLOWED_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
     const { user } = super.getRequest(context);
-    if (!user.enabled) {
+    if (!user.enabled && !inactiveAllowed) {
       return false;
     }
 

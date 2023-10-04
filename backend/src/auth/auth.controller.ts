@@ -6,6 +6,7 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags, ApiUnauthorizedResp
 import { LoginBodyDto } from './dto/login-body.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { UsersService } from 'src/users/users.service';
+import { AllowInactive } from './allow-inactive.decorator';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -30,6 +31,7 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  @AllowInactive()
   @Post('token')
   @ApiOperation({ description: 'Generate new authorization token' })
   async generateToken(@Request() { user: { id } }): Promise<LoginResponseDto> {

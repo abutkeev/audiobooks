@@ -7,7 +7,9 @@ import { PublicKeyDto } from './dto/public-key.dto';
 import { PublicKey } from './schemas/public-key.schema';
 import { AuthenticationDto } from './dto/authentication.dto';
 import { LoginResponseDto } from '../dto/login-response.dto';
+import { AllowInactive } from '../allow-inactive.decorator';
 
+@AllowInactive()
 @ApiTags('webauthn')
 @Controller('auth/webauthn')
 export class WebauthnController {
