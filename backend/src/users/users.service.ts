@@ -26,6 +26,9 @@ export class UsersService {
 
   async find(id: ObjectId | string): Promise<UserDto> {
     const result = await this.userModel.findById(id).exec();
+    if (!result) {
+      throw new NotFoundException(`user ${id} not found`);
+    }
     return result.toJSON();
   }
 
