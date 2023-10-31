@@ -1,4 +1,4 @@
-import { PayloadAction, createListenerMiddleware, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createListenerMiddleware, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { api } from '../../api/api';
 
 const localStorageTokenName = 'authToken';
@@ -26,6 +26,16 @@ mw.startListening({
   effect: (_, { dispatch }) => {
     dispatch(api.util.resetApiState());
   },
+});
+
+mw.startListening({
+  predicate: action =>
+    isRejectedWithValue(action) &&
+    typeof action.payload === 'object' &&
+    !!action.payload &&
+    'status' in action.payload &&
+    action.payload.status === 401,
+  effect: (_, { dispatch }) => void dispatch(setAuthToken('')),
 });
 
 export const authMiddleware = mw.middleware;
