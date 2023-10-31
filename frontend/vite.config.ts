@@ -6,19 +6,18 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
   const backendUrl = new URL(process.env.PROXY_TARGET || 'http://127.0.0.1:4000');
-  const wsProtocol = backendUrl.protocol === 'https' ? 'wss' : 'ws';
-  const wsUrl = new URL(backendUrl);
-  wsUrl.protocol = wsProtocol;
 
   return {
     base: '',
     server: {
       proxy: {
         '/api/': {
+          secure: false,
           target: backendUrl,
         },
         '/socket.io': {
-          target: wsUrl,
+          secure: false,
+          target: backendUrl,
           ws: true,
         },
       },
