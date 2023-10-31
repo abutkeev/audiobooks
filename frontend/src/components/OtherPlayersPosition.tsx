@@ -15,7 +15,9 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
   const { instanceId } = useAppSelector(({ websocket }) => websocket);
   const dispatch = useAppDispatch();
 
-  const positions = data.filter(entry => entry.instanceId !== instanceId);
+  const positions = data.filter(
+    entry => entry.instanceId !== instanceId && !(entry.currentChapter === 0 && entry.position === 0)
+  );
   if (positions.length === 0) return;
 
   const getPlayerStateChangeHandler = (currentChapter: number, position: number) => () => {
