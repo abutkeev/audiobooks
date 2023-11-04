@@ -5,16 +5,18 @@ import CustomPassword from '../../components/common/CustomPassword';
 import ProgressButton from '../../components/common/ProgressButton';
 import { useSignUpSignUpMutation } from '../../api/api';
 import getErrorMessage from '../../utils/getErrorMessage';
+import LoginTextField from './LoginTextField';
 
 const SignUp: FC = () => {
   useTitle('Sign up');
   const [login, setLogin] = useState('');
+  const [loginValid, setLoginValid] = useState(false);
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string>();
   const [signUp] = useSignUpSignUpMutation();
 
-  const valid = !!login && !!name && !!password;
+  const valid = loginValid && !!name && !!password;
 
   const handleSignUp = async () => {
     if (!valid) return;
@@ -38,14 +40,7 @@ const SignUp: FC = () => {
                 {error}
               </Alert>
             )}
-            <TextField
-              autoFocus
-              label='Login'
-              value={login}
-              onChange={({ target: { value } }) => setLogin(value)}
-              required
-              error={!login}
-            />
+            <LoginTextField login={login} setLogin={setLogin} valid={loginValid} setValid={setLoginValid} />
             <TextField
               label='Name'
               value={name}
