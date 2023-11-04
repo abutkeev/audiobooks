@@ -11,6 +11,7 @@ import Users from '../pages/users';
 import useAuthData from '../hooks/useAuthData';
 import EditBookPage from '../pages/edit-book';
 import NotActive from '../pages/NotActive';
+import SignUp from '../pages/sign-up';
 
 const userRoutes: RouteObject[] = [
   {
@@ -53,6 +54,10 @@ const getRoutes = ({
 }): RouteObject[] => {
   if (!token) {
     return [
+      {
+        path: '/sign-up',
+        element: <SignUp />,
+      },
       {
         path: '*',
         element: <Login />,
