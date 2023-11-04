@@ -14,4 +14,8 @@ export class SignUpService {
 
     return this.usersService.create({ login, password, name, admin: false, enabled: false });
   }
+
+  async check(login: string) {
+    return !(await this.usersService.findIdByLogin(login));
+  }
 }
