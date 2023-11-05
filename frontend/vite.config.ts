@@ -6,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
   const backendUrl = new URL(process.env.PROXY_TARGET || 'http://127.0.0.1:4000');
+  const { RECAPTCHA_SITE_KEY } = process.env;
 
   return {
     base: '',
@@ -22,6 +23,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    define: { RECAPTCHA_SITE_KEY: JSON.stringify(RECAPTCHA_SITE_KEY) },
     plugins: [
       react(),
       VitePWA({

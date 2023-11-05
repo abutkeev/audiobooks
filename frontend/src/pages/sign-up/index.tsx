@@ -9,6 +9,7 @@ import LoginTextField from './LoginTextField';
 import { useAppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { setAuthToken } from '../../store/features/auth';
+import { GoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const SignUp: FC = () => {
   useTitle('Sign up');
@@ -16,19 +17,20 @@ const SignUp: FC = () => {
   const [loginValid, setLoginValid] = useState(false);
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
   const [error, setError] = useState<string>();
   const [signUp] = useSignUpSignUpMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const valid = loginValid && !!name && !!password;
+  const valid = loginValid && !!name && !!password && captchaToken;
 
   const handleSignUp = async () => {
     if (!valid) return;
 
     setError(undefined);
 
-    const result = await signUp({ signUpDto: { login, password, name } });
+    const result = await signUp({ signUpDto: { login, password, name, captchaToken } });
     if ('error' in result) {
       setError(getErrorMessage(result.error, 'Sign up failed'));
       return;
@@ -71,6 +73,7 @@ const SignUp: FC = () => {
               required
               error={!password}
             />
+            <GoogleReCaptcha onVerify={setCaptchaToken} refreshReCaptcha />
             <ProgressButton fullWidth size='large' variant='contained' disabled={!valid} onClick={handleSignUp}>
               Sign up
             </ProgressButton>
