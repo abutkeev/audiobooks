@@ -15,7 +15,9 @@ const Users: React.FC = () => {
   const users = useMemo(() => {
     if (!searchMatcher) return data;
 
-    return data.filter(({ id, login }) => searchMatcher(id, { equels: true }) || searchMatcher(login));
+    return data.filter(
+      ({ id, login, name }) => searchMatcher(id, { equels: true }) || searchMatcher(login) || searchMatcher(name)
+    );
   }, [data, searchMatcher]);
 
   return (
