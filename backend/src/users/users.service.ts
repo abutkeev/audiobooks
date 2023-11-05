@@ -39,7 +39,7 @@ export class UsersService {
       throw new BadRequestException(`user ${user.login} exists`);
     }
     const newUser = await this.userModel.create({ ...user, password: encryptPassword(password) });
-    return `"${newUser._id.toString()}"`;
+    return newUser._id.toString();
   }
 
   async find(id: ObjectId | string): Promise<UserDto> {
