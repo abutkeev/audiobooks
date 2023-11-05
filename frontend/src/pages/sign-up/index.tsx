@@ -25,7 +25,6 @@ const SignUp: FC = () => {
 
     const result = await signUp({ signUpDto: { login, password, name } });
     if ('error' in result) {
-      console.log(result);
       setError(getErrorMessage(result.error, 'Sign up failed'));
     }
   };
