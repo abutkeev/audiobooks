@@ -6,6 +6,9 @@ import ProgressButton from '../../components/common/ProgressButton';
 import { useSignUpSignUpMutation } from '../../api/api';
 import getErrorMessage from '../../utils/getErrorMessage';
 import LoginTextField from './LoginTextField';
+import { useAppDispatch } from '../../store';
+import { useNavigate } from 'react-router-dom';
+import { setAuthToken } from '../../store/features/auth';
 
 const SignUp: FC = () => {
   useTitle('Sign up');
@@ -15,6 +18,8 @@ const SignUp: FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string>();
   const [signUp] = useSignUpSignUpMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const valid = loginValid && !!name && !!password;
 
@@ -26,7 +31,10 @@ const SignUp: FC = () => {
     const result = await signUp({ signUpDto: { login, password, name } });
     if ('error' in result) {
       setError(getErrorMessage(result.error, 'Sign up failed'));
+      return;
     }
+    dispatch(setAuthToken(result.data.access_token));
+    navigate('/');
   };
 
   return (
