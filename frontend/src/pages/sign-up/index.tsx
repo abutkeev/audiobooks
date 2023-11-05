@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import useTitle from '../../hooks/useTitle';
 import { Alert, Button, Container, FormControl, Paper, Stack, TextField } from '@mui/material';
 import CustomPassword from '../../components/common/CustomPassword';
@@ -22,6 +22,17 @@ const SignUp: FC = () => {
   const [signUp] = useSignUpSignUpMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  useEffect(
+    () => () => {
+      // remove recapcha on umount
+      document.getElementById('google-recaptcha-v3')?.remove();
+      if ('grecaptcha' in window) {
+        delete window.grecaptcha;
+      }
+    },
+    []
+  );
 
   const valid = loginValid && !!name && !!password && captchaToken;
 
