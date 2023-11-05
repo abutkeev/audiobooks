@@ -9,7 +9,7 @@ import LoginTextField from './LoginTextField';
 import { useAppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { setAuthToken } from '../../store/features/auth';
-import { GoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { GoogleReCaptcha, GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 const SignUp: FC = () => {
   useTitle('Sign up');
@@ -73,7 +73,9 @@ const SignUp: FC = () => {
               required
               error={!password}
             />
-            <GoogleReCaptcha onVerify={setCaptchaToken} refreshReCaptcha />
+            <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
+              <GoogleReCaptcha onVerify={setCaptchaToken} refreshReCaptcha />
+            </GoogleReCaptchaProvider>
             <ProgressButton fullWidth size='large' variant='contained' disabled={!valid} onClick={handleSignUp}>
               Sign up
             </ProgressButton>

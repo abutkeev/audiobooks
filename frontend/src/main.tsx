@@ -11,7 +11,6 @@ import useCreateTheme from './hooks/useCreateTheme';
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import Routes from './app/Routes';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 const App: React.FC = () => {
   const theme = useCreateTheme();
@@ -19,10 +18,8 @@ const App: React.FC = () => {
     <React.StrictMode>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
-            <CssBaseline />
-            <Routes />
-          </GoogleReCaptchaProvider>
+          <CssBaseline />
+          <Routes />
         </ThemeProvider>
       </Provider>
     </React.StrictMode>
