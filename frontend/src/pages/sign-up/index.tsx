@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import useTitle from '../../hooks/useTitle';
 import { Alert, Button, Container, FormControl, Paper, Stack, TextField } from '@mui/material';
 import CustomPassword from '../../components/common/CustomPassword';
@@ -9,7 +9,7 @@ import LoginTextField from './LoginTextField';
 import { useAppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { setAuthToken } from '../../store/features/auth';
-import { GoogleReCaptcha, GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+import ReCaptcha from './ReCaptcha';
 
 const SignUp: FC = () => {
   useTitle('Sign up');
@@ -22,17 +22,6 @@ const SignUp: FC = () => {
   const [signUp] = useSignUpSignUpMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  useEffect(
-    () => () => {
-      // remove recapcha on umount
-      document.getElementById('google-recaptcha-v3')?.remove();
-      if ('grecaptcha' in window) {
-        delete window.grecaptcha;
-      }
-    },
-    []
-  );
 
   const valid = loginValid && !!name && !!password && captchaToken;
 
@@ -84,9 +73,7 @@ const SignUp: FC = () => {
               required
               error={!password}
             />
-            <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
-              <GoogleReCaptcha onVerify={setCaptchaToken} refreshReCaptcha />
-            </GoogleReCaptchaProvider>
+            <ReCaptcha setToken={setCaptchaToken} />
             <ProgressButton fullWidth size='large' variant='contained' disabled={!valid} onClick={handleSignUp}>
               Sign up
             </ProgressButton>
