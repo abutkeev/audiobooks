@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import useTitle from '../../hooks/useTitle';
-import { Alert, Container, FormControl, Paper, Stack, TextField } from '@mui/material';
+import { Alert, Button, Container, FormControl, Paper, Stack, TextField } from '@mui/material';
 import CustomPassword from '../../components/common/CustomPassword';
 import ProgressButton from '../../components/common/ProgressButton';
 import { useSignUpSignUpMutation } from '../../api/api';
@@ -37,6 +37,15 @@ const SignUp: FC = () => {
     navigate('/');
   };
 
+  const handleSignUpCancel = () => {
+    setLogin('');
+    setPassword('');
+    setName('');
+    setError(undefined);
+    setLoginValid(false);
+    navigate('/');
+  };
+
   return (
     <Container maxWidth='sm'>
       <Paper sx={{ p: 2 }}>
@@ -65,6 +74,9 @@ const SignUp: FC = () => {
             <ProgressButton fullWidth size='large' variant='contained' disabled={!valid} onClick={handleSignUp}>
               Sign up
             </ProgressButton>
+            <Button fullWidth size='large' variant='contained' onClick={handleSignUpCancel}>
+              Cancel
+            </Button>
           </Stack>
         </FormControl>
       </Paper>
