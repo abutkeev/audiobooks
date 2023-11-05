@@ -7,7 +7,7 @@ const config: ConfigFile = {
   apiImport: 'emptySplitApi',
   outputFile: resolve('./api.ts'),
   exportName: 'api',
-  hooks: true,
+  hooks: { queries: true, lazyQueries: true, mutations: true },
   tag: true,
 };
 
