@@ -1,11 +1,24 @@
 import { FC } from 'react';
-import { useFriendsGetOutgoingRequestsQuery } from '../../api/api';
+import { useFriendsGetOutgoingRequestsQuery, useFriendsRemoveOutgoingRequestMutation } from '../../api/api';
 import FriendsList from './FriendsList';
 
 const OutgoingRequests: FC = () => {
-  const { data = [], isLoading, isError } = useFriendsGetOutgoingRequestsQuery();
+  const { data = [], isLoading, isError, isFetching } = useFriendsGetOutgoingRequestsQuery();
+  const [remove] = useFriendsRemoveOutgoingRequestMutation();
 
-  return <FriendsList data={data} isLoading={isLoading} isError={isError} emptyMessage='No requests' />;
+  const getRemoveHandler = (id: string) => async () => {
+    await remove({ id });
+  };
+
+  return (
+    <FriendsList
+      data={data}
+      isLoading={isLoading}
+      isError={isError}
+      emptyMessage='No requests'
+      actions={[{ action: getRemoveHandler, actionText: 'Remove', refreshing: isFetching }]}
+    />
+  );
 };
 
 export default OutgoingRequests;
