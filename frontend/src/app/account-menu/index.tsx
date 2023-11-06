@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AccountCircle, Key, Logout, People, Person } from '@mui/icons-material';
+import { AccountCircle, AdminPanelSettings, Key, Logout, Person } from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { useAppDispatch } from '../../store';
@@ -52,7 +52,7 @@ const AccountMenu: React.FC = () => {
         {admin && (
           <MenuItem divider onClick={handleNavigateToUsersPage}>
             <ListItemIcon>
-              <People />
+              <AdminPanelSettings />
             </ListItemIcon>
             <ListItemText>Users</ListItemText>
           </MenuItem>
