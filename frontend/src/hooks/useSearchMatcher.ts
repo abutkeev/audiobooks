@@ -9,7 +9,9 @@ const useSearchMatcher = () => {
   const search = useSearch() || '';
 
   const searchMatcher = useCallback(
-    (searchSource: string, options?: SearchMatcherOptions) => {
+    (searchSource?: string, options?: SearchMatcherOptions) => {
+      if (!searchSource) return false;
+
       const { equels } = options || {};
       if (equels) return search === searchSource;
 
