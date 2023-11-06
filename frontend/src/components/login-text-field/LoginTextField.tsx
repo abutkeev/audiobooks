@@ -3,6 +3,7 @@ import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
 import { useLazySignUpCheckQuery } from '../../api/api';
 import LoginCheckState, { LoginCheckStateProps } from './LoginCheckState';
 import debounce from 'debounce';
+import useAuthData from '../../hooks/useAuthData';
 
 interface LoginTextFieldProps {
   login: string;
@@ -23,6 +24,7 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
 }) => {
   const [check] = useLazySignUpCheckQuery();
   const [state, setState] = useState<LoginCheckStateProps['state']>();
+  const { login: selfLogin } = useAuthData() || {};
 
   useEffect(() => {
     const isLoginValid = (free: boolean) => {
@@ -31,6 +33,12 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
 
     if (!login) {
       setState(undefined);
+      setValid(false);
+      return;
+    }
+
+    if (validType === 'used' && selfLogin && login === selfLogin) {
+      setState('self');
       setValid(false);
       return;
     }
@@ -60,7 +68,11 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
     if (validType === 'used' && state === 'unused') {
       return 'User not found';
     }
-  }, [state, valid, validType]);
+
+    if (state === 'self') {
+      return 'Self login';
+    }
+  }, [state, valid, validType, selfLogin]);
 
   return (
     <TextField
