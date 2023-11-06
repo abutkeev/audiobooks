@@ -5,7 +5,7 @@ import CustomPassword from '../../components/common/CustomPassword';
 import ProgressButton from '../../components/common/ProgressButton';
 import { useSignUpSignUpMutation } from '../../api/api';
 import getErrorMessage from '../../utils/getErrorMessage';
-import LoginTextField from './LoginTextField';
+import LoginTextField from '../../components/login-text-field/LoginTextField';
 import { useAppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { setAuthToken } from '../../store/features/auth';
