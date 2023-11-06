@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AccountCircle, AdminPanelSettings, Key, Logout, Person } from '@mui/icons-material';
+import { AccountCircle, AdminPanelSettings, Key, Logout, People, Person } from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { useAppDispatch } from '../../store';
@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AccountMenu: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
-  const { login, admin } = useAuthData() || {};
+  const { login, admin, enabled } = useAuthData() || {};
   const connected = useWebSocket();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -25,6 +25,11 @@ const AccountMenu: React.FC = () => {
 
   const handleNavigateToUsersPage = () => {
     navigate('/users');
+    closeMenu();
+  };
+
+  const handleNavigateToFriendsPage = () => {
+    navigate('/friends');
     closeMenu();
   };
 
@@ -55,6 +60,14 @@ const AccountMenu: React.FC = () => {
               <AdminPanelSettings />
             </ListItemIcon>
             <ListItemText>Users</ListItemText>
+          </MenuItem>
+        )}
+        {enabled && (
+          <MenuItem divider onClick={handleNavigateToFriendsPage}>
+            <ListItemIcon>
+              <People />
+            </ListItemIcon>
+            <ListItemText>Friends</ListItemText>
           </MenuItem>
         )}
         <MenuItem onClick={handleShowSecurityKeysDialog}>

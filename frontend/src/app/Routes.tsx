@@ -12,6 +12,7 @@ import useAuthData from '../hooks/useAuthData';
 import EditBookPage from '../pages/edit-book';
 import NotActive from '../pages/NotActive';
 import SignUp from '../pages/sign-up';
+import Friends from '../pages/friends';
 
 const userRoutes: RouteObject[] = [
   {
@@ -25,6 +26,10 @@ const userRoutes: RouteObject[] = [
   {
     path: '/book/:id',
     element: <BookPage />,
+  },
+  {
+    path: '/friends',
+    element: <Friends />,
   },
   {
     path: '*',
