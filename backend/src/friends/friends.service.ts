@@ -4,11 +4,13 @@ import { Model } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
 import { FriendRequests } from './schemas/friend-requests.schema';
 import { FriendRequestDto } from './dto/friend-request.dto';
+import { Friend } from './schemas/friends.schema';
 
 @Injectable()
 export class FriendsService {
   constructor(
     @InjectModel(FriendRequests.name) private friendsRequestsModel: Model<FriendRequests>,
+    @InjectModel(Friend.name) private friendsModel: Model<Friend>,
     private usersService: UsersService
   ) {}
 
@@ -28,6 +30,17 @@ export class FriendsService {
       throw new ConflictException('request already exists');
     }
 
+    if (
+      await this.friendsModel.findOne({
+        $or: [
+          { user1: from, user2: to },
+          { user1: to, user2: from },
+        ],
+      })
+    ) {
+      return true;
+    }
+
     await this.friendsRequestsModel.create({ from, to });
     return true;
   }
@@ -41,5 +54,25 @@ export class FriendsService {
       const { login, name } = users.find(({ id }) => id === uid) || {};
       return { id, uid, login, name };
     });
+  }
+
+  async approve(uid: string, request_id: string) {
+    const request = await this.friendsRequestsModel.findOneAndDelete({ _id: request_id, to: uid });
+    if (!request) {
+      throw new NotFoundException(`request ${request_id} not found`);
+    }
+    const { to } = request;
+    if (
+      await this.friendsModel.findOne({
+        $or: [
+          { user1: uid, user2: to },
+          { user1: to, user2: uid },
+        ],
+      })
+    ) {
+      return true;
+    }
+    await this.friendsModel.create({ user1: uid, user2: to });
+    return true;
   }
 }
