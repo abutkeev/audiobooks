@@ -56,7 +56,7 @@ export class FriendsService {
     });
   }
 
-  async approve(uid: string, request_id: string) {
+  async approve(uid: string, request_id: string): Promise<boolean> {
     const request = await this.friendsRequestsModel.findOneAndDelete({ _id: request_id, to: uid });
     if (!request) {
       throw new NotFoundException(`request ${request_id} not found`);
