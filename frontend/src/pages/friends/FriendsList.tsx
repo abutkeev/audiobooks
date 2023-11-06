@@ -48,7 +48,7 @@ const FriendsList: FC<FriendsListProps> = ({ data = [], isLoading, isError, empt
           };
           return (
             <Paper square variant='outlined' key={id}>
-              <Stack spacing={1} direction='row' p={1}>
+              <Stack spacing={1} direction='row' p={1} alignItems='center'>
                 <Typography noWrap flexGrow={1}>
                   {getDisplayName()}
                 </Typography>
