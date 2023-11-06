@@ -12,6 +12,7 @@ import { SeriesModule } from './series/series.module';
 import { BooksModule } from './books/books.module';
 import { DB_URI } from './constants';
 import { SignUpModule } from './sign-up/sign-up.module';
+import { FriendsModule } from './friends/friends.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SignUpModule } from './sign-up/sign-up.module';
     SeriesModule,
     BooksModule,
     SignUpModule,
+    FriendsModule,
   ],
   controllers: [],
   providers: [],
