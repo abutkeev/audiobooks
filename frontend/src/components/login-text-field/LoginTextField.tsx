@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import { InputAdornment, TextField } from '@mui/material';
+import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
 import { useLazySignUpCheckQuery } from '../../api/api';
 import LoginCheckState, { LoginCheckStateProps } from './LoginCheckState';
 import debounce from 'debounce';
@@ -10,9 +10,17 @@ interface LoginTextFieldProps {
   valid: boolean;
   setValid(v: boolean): void;
   validType: 'used' | 'unused';
+  textFieldProps?: TextFieldProps;
 }
 
-const LoginTextField: FC<LoginTextFieldProps> = ({ login, setLogin, valid, setValid, validType = 'unused' }) => {
+const LoginTextField: FC<LoginTextFieldProps> = ({
+  login,
+  setLogin,
+  valid,
+  setValid,
+  validType = 'unused',
+  textFieldProps,
+}) => {
   const [check] = useLazySignUpCheckQuery();
   const [state, setState] = useState<LoginCheckStateProps['state']>();
 
@@ -63,10 +71,13 @@ const LoginTextField: FC<LoginTextFieldProps> = ({ login, setLogin, valid, setVa
       required
       error={!valid && state !== 'waiting' && state !== 'checking'}
       helperText={helperText}
+      {...textFieldProps}
       InputProps={{
+        ...textFieldProps?.InputProps,
         endAdornment: (
           <InputAdornment position='end'>
             <LoginCheckState state={state} validType={validType} />
+            {textFieldProps?.InputProps?.endAdornment}
           </InputAdornment>
         ),
       }}
