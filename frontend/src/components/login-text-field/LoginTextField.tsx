@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { InputAdornment, TextField } from '@mui/material';
 import { useLazySignUpCheckQuery } from '../../api/api';
 import LoginCheckState, { LoginCheckStateProps } from './LoginCheckState';
@@ -9,13 +9,18 @@ interface LoginTextFieldProps {
   setLogin(v: string): void;
   valid: boolean;
   setValid(v: boolean): void;
+  validType: 'used' | 'unused';
 }
 
-const LoginTextField: FC<LoginTextFieldProps> = ({ login, setLogin, valid, setValid }) => {
+const LoginTextField: FC<LoginTextFieldProps> = ({ login, setLogin, valid, setValid, validType = 'unused' }) => {
   const [check] = useLazySignUpCheckQuery();
   const [state, setState] = useState<LoginCheckStateProps['state']>();
 
   useEffect(() => {
+    const isLoginValid = (free: boolean) => {
+      return validType === 'unused' ? free : !free;
+    };
+
     if (!login) {
       setState(undefined);
       setValid(false);
@@ -28,7 +33,7 @@ const LoginTextField: FC<LoginTextFieldProps> = ({ login, setLogin, valid, setVa
       setState('checking');
       try {
         const result = await check({ login }).unwrap();
-        setValid(result);
+        setValid(isLoginValid(result));
         setState(result ? 'unused' : 'used');
       } catch {
         setState(undefined);
@@ -37,7 +42,17 @@ const LoginTextField: FC<LoginTextFieldProps> = ({ login, setLogin, valid, setVa
     }, 500);
     debounced();
     return debounced.clear;
-  }, [login]);
+  }, [login, validType]);
+
+  const helperText = useMemo(() => {
+    if (validType === 'unused' && state === 'used') {
+      return 'Login is used';
+    }
+
+    if (validType === 'used' && state === 'unused') {
+      return 'User not found';
+    }
+  }, [state, valid, validType]);
 
   return (
     <TextField
@@ -47,11 +62,11 @@ const LoginTextField: FC<LoginTextFieldProps> = ({ login, setLogin, valid, setVa
       onChange={({ target: { value } }) => setLogin(value)}
       required
       error={!valid && state !== 'waiting' && state !== 'checking'}
-      helperText={state === 'used' && 'Login is used'}
+      helperText={helperText}
       InputProps={{
         endAdornment: (
           <InputAdornment position='end'>
-            <LoginCheckState state={state} />
+            <LoginCheckState state={state} validType={validType} />
           </InputAdornment>
         ),
       }}

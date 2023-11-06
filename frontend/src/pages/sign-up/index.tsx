@@ -58,7 +58,13 @@ const SignUp: FC = () => {
                 {error}
               </Alert>
             )}
-            <LoginTextField login={login} setLogin={setLogin} valid={loginValid} setValid={setLoginValid} />
+            <LoginTextField
+              login={login}
+              setLogin={setLogin}
+              valid={loginValid}
+              setValid={setLoginValid}
+              validType='unused'
+            />
             <TextField
               label='Name'
               value={name}

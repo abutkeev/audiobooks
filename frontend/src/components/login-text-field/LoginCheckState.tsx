@@ -4,18 +4,21 @@ import { FC } from 'react';
 
 export interface LoginCheckStateProps {
   state?: 'waiting' | 'checking' | 'unused' | 'used';
+  validType: 'used' | 'unused';
 }
 
-const LoginCheckState: FC<LoginCheckStateProps> = ({ state }) => {
+const Valid = () => <Check color='success' />;
+const Invalid = () => <Close color='error' />;
+
+const LoginCheckState: FC<LoginCheckStateProps> = ({ state, validType }) => {
   const { typography } = useTheme();
 
   switch (state) {
     case 'waiting':
       return <HourglassTop color='primary' />;
     case 'unused':
-      return <Check color='success' />;
     case 'used':
-      return <Close color='error' />;
+      return validType === state ? <Valid /> : <Invalid />;
     case 'checking':
       return <CircularProgress size={typography.fontSize * 1.5} color='primary' />;
     default:
