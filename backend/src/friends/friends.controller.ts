@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Request } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FriendsService } from './friends.service';
 import { AddFriendRequestDto } from './dto/add-friend-request.dto';
@@ -27,5 +27,15 @@ export class FriendsController {
   @Post('request/approve/:id')
   approveRequest(@Param('id') request_id: string, @Request() { user: { id } }) {
     return this.friendsService.approve(id, request_id);
+  }
+
+  @Delete('request/in/:id')
+  removeIncomingRequest(@Param('id') request_id: string, @Request() { user: { id } }) {
+    return this.friendsService.removeRequest(id, request_id, 'in');
+  }
+
+  @Delete('request/out/:id')
+  removeOutgoingRequest(@Param('id') request_id: string, @Request() { user: { id } }) {
+    return this.friendsService.removeRequest(id, request_id, 'out');
   }
 }

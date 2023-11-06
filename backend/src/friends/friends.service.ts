@@ -75,4 +75,15 @@ export class FriendsService {
     await this.friendsModel.create({ user1: uid, user2: to });
     return true;
   }
+
+  async removeRequest(uid: string, request_id: string, type: 'in' | 'out'): Promise<boolean> {
+    const request = await this.friendsRequestsModel.findOneAndDelete(
+      type === 'out' ? { _id: request_id, from: uid } : { _id: request_id, to: uid }
+    );
+    if (!request) {
+      throw new NotFoundException(`request ${request_id} not found`);
+    }
+
+    return true;
+  }
 }
