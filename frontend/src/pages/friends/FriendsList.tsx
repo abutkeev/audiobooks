@@ -1,17 +1,26 @@
-import { FC, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 import LoadingWrapper from '../../components/common/LoadingWrapper';
 import EmptyListWrapper from '../../components/common/EmptyListWrapper';
 import useSearchMatcher from '../../hooks/useSearchMatcher';
 import { Paper, Stack, Typography } from '@mui/material';
+import ProgressButton, { ProgressButtonProps } from '../../components/common/ProgressButton';
+
+interface Action {
+  action(id: string): ProgressButtonProps['onClick'];
+  actionText: ReactNode;
+  refreshing?: boolean;
+  progressButtonProps?: ProgressButtonProps;
+}
 
 interface FriendsListProps {
   data?: { id: string; uid: string; login?: string; name?: string }[];
   isLoading: boolean;
   isError: boolean;
   emptyMessage: string;
+  actions?: Action[];
 }
 
-const FriendsList: FC<FriendsListProps> = ({ data = [], isLoading, isError, emptyMessage }) => {
+const FriendsList: FC<FriendsListProps> = ({ data = [], isLoading, isError, emptyMessage, actions = [] }) => {
   const searchMatcher = useSearchMatcher();
 
   const requests = useMemo(() => {
@@ -43,6 +52,17 @@ const FriendsList: FC<FriendsListProps> = ({ data = [], isLoading, isError, empt
                 <Typography noWrap flexGrow={1}>
                   {getDisplayName()}
                 </Typography>
+                {actions.map(({ action, refreshing, actionText, progressButtonProps }, index) => (
+                  <ProgressButton
+                    key={index}
+                    onClick={action(id)}
+                    refreshing={refreshing}
+                    variant='contained'
+                    {...progressButtonProps}
+                  >
+                    {actionText}
+                  </ProgressButton>
+                ))}
               </Stack>
             </Paper>
           );
