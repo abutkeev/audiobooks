@@ -14,7 +14,7 @@ const Friends: FC = () => {
       <AddFriendToolbar />
       <Tabs value={tab} onChange={(_, newTab) => setTab(newTab)}>
         <Tab label='Incoming requests' value={0} />
-        <Tab label='Outgoing requests' value={1}/>
+        <Tab label='Outgoing requests' value={1} />
       </Tabs>
       {tab === 0 && <IncomingRequests />}
       {tab === 1 && <OutgoingRequests />}
