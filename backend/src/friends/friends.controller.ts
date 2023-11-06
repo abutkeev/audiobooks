@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Request } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FriendsService } from './friends.service';
 import { AddFriendRequestDto } from './dto/add-friend-request.dto';
+import { FriendRequestDto } from './dto/friend-request.dto';
 
 @ApiTags('friends')
 @Controller('friends')
@@ -11,5 +12,15 @@ export class FriendsController {
   @Post('request')
   add(@Body() { login }: AddFriendRequestDto, @Request() { user: { id } }): Promise<boolean> {
     return this.friendsService.addRequest(id, login);
+  }
+
+  @Get('requests/in')
+  getIncomingRequests(@Request() { user: { id } }): Promise<FriendRequestDto[]> {
+    return this.friendsService.getRequests(id, 'in');
+  }
+
+  @Get('requests/out')
+  getOutgoingRequests(@Request() { user: { id } }): Promise<FriendRequestDto[]> {
+    return this.friendsService.getRequests(id, 'out');
   }
 }
