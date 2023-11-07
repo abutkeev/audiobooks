@@ -6,6 +6,12 @@ import PasswordAuthForm from './PasswordAuthForm';
 import { webauthnAvailable } from '../../utils/webautn';
 import SecurityKeyAuthButton from './SecurityKeyAuthButton';
 import { useNavigate } from 'react-router-dom';
+import TelegramAuthButton, { TelegramAuthCallback } from '../../components/TelegramAuthButton';
+import { Telegram } from '@mui/icons-material';
+import { useAppDispatch } from '../../store';
+import { useTgLoginMutation } from '../../api/api';
+import { setAuthToken } from '../../store/features/auth';
+import getErrorMessage from '../../utils/getErrorMessage';
 
 export interface CommonAuthProps {
   setLoading(v: boolean): void;
@@ -17,6 +23,18 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [telegramAuth] = useTgLoginMutation();
+
+  const handleTelegramAuth: TelegramAuthCallback = async telegramAuthDataDto => {
+    if (!telegramAuthDataDto) return;
+    try {
+      const { access_token } = await telegramAuth({ telegramAuthDataDto }).unwrap();
+      dispatch(setAuthToken(access_token));
+    } catch (e) {
+      setError(getErrorMessage(e, 'Telegram login failed'));
+    }
+  };
 
   return (
     <LoadingWrapper loading={loading}>
@@ -36,6 +54,14 @@ const Login: React.FC = () => {
               Sign up
             </Button>
             {webauthnAvailable && <SecurityKeyAuthButton setLoading={setLoading} setError={setError} />}
+            {TELEGRAM_BOT_ID && (
+              <TelegramAuthButton
+                progressButtonProps={{ fullWidth: true, startIcon: <Telegram /> }}
+                onAuth={handleTelegramAuth}
+              >
+                Login with telegram
+              </TelegramAuthButton>
+            )}
           </Stack>
         </Paper>
       </Container>
