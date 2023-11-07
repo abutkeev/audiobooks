@@ -45,4 +45,9 @@ export class TgService {
     await this.telegramAccountModel.create({ id, userId, first_name, last_name, username, photo_url });
     return true;
   }
+
+  async remove(userId: string): Promise<true> {
+    await this.telegramAccountModel.deleteOne({ userId });
+    return true;
+  }
 }
