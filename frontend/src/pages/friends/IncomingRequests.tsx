@@ -27,7 +27,12 @@ const IncomingRequests: FC = () => {
       emptyMessage='No requests'
       actions={[
         { action: getApproveHandler, actionText: 'Approve', refreshing: isFetching },
-        { action: getRemoveHandler, actionText: 'Remove', refreshing: isFetching },
+        {
+          action: getRemoveHandler,
+          actionText: 'Remove',
+          refreshing: isFetching,
+          progressButtonProps: { color: 'error' },
+        },
       ]}
     />
   );

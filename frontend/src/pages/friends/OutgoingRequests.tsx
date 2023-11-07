@@ -16,7 +16,14 @@ const OutgoingRequests: FC = () => {
       isLoading={isLoading}
       isError={isError}
       emptyMessage='No requests'
-      actions={[{ action: getRemoveHandler, actionText: 'Remove', refreshing: isFetching }]}
+      actions={[
+        {
+          action: getRemoveHandler,
+          actionText: 'Remove',
+          refreshing: isFetching,
+          progressButtonProps: { color: 'error' },
+        },
+      ]}
     />
   );
 };
