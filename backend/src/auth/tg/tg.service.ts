@@ -1,4 +1,12 @@
-import { BadRequestException, ForbiddenException, Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  ServiceUnavailableException,
+  forwardRef,
+} from '@nestjs/common';
 import { TelegramAccount } from './schemas/telegram-account.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -6,10 +14,21 @@ import { TelegramAuthDataDto } from './dto/telegram-auth-data.dto';
 import { createHash, createHmac } from 'crypto';
 import { TELEGRAM_BOT_TOKEN } from 'src/constants';
 import { TelegramAccountDto } from './dto/telegram-account.dto';
+import { UsersService } from 'src/users/users.service';
+import { AuthService } from '../auth.service';
+import { LoginResponseDto } from '../dto/login-response.dto';
 
 @Injectable()
 export class TgService {
-  constructor(@InjectModel(TelegramAccount.name) private telegramAccountModel: Model<TelegramAccount>) {}
+  constructor(
+    @InjectModel(TelegramAccount.name) private telegramAccountModel: Model<TelegramAccount>,
+
+    @Inject(forwardRef(() => AuthService))
+    private authService: AuthService,
+
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService
+  ) {}
 
   private verifyAuthData({ hash, ...data }: TelegramAuthDataDto): boolean {
     if (!TELEGRAM_BOT_TOKEN) {
@@ -49,5 +68,17 @@ export class TgService {
   async remove(userId: string): Promise<true> {
     await this.telegramAccountModel.deleteOne({ userId });
     return true;
+  }
+
+  async auth(data: TelegramAuthDataDto): Promise<LoginResponseDto> {
+    if (!this.verifyAuthData(data)) {
+      throw new ForbiddenException('hash check failed');
+    }
+    const info = await this.telegramAccountModel.findOne({ id: data.id });
+    if (!info) {
+      throw new NotFoundException('telegram account info not found');
+    }
+    const user = await this.usersService.find(info.userId);
+    return this.authService.login(user);
   }
 }
