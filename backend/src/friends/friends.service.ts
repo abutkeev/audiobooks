@@ -106,4 +106,18 @@ export class FriendsService {
     });
     return true;
   }
+
+  async remove(uid: string, entry_id: string): Promise<boolean> {
+    const request = await this.friendsModel.findOneAndDelete({ _id: entry_id, $or: [{ user1: uid }, { user2: uid }] });
+    if (!request) {
+      throw new NotFoundException(`friend entry ${entry_id} not found`);
+    }
+    const { user1, user2 } = request;
+    this.eventsService.sendToUser({
+      userId: user1.toString() === uid ? user2.toString() : user1.toString(),
+      message: 'invalidate_tag',
+      args: 'friends',
+    });
+    return true;
+  }
 }

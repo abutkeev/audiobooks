@@ -14,6 +14,11 @@ export class FriendsController {
     return this.friendsService.get(id);
   }
 
+  @Delete(':entry_id')
+  remove(@Param('entry_id') entry_id: string, @Request() { user: { id } }): Promise<boolean> {
+    return this.friendsService.remove(id, entry_id);
+  }
+
   @Post('request')
   add(@Body() { login }: AddFriendRequestDto, @Request() { user: { id } }): Promise<boolean> {
     return this.friendsService.addRequest(id, login);
