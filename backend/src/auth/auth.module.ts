@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { WebauthnModule } from './webauthn/webauthn.module';
 import { AdminAuthGuard } from './jwt/admin-auth.guard';
 import { JWT_SECRET } from 'src/constants';
+import { TgModule } from './tg/tg.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { JWT_SECRET } from 'src/constants';
       signOptions: { expiresIn: '7d' },
     }),
     WebauthnModule,
+    TgModule,
   ],
   controllers: [AuthController],
   providers: [
