@@ -19,4 +19,10 @@ export class PositionController {
       updated,
     }));
   }
+
+  @Get(':bookId/friends')
+  @ApiOperation({ description: 'Get user friends positions for book' })
+  async getFriendsBook(@Param('bookId') bookId: string, @Request() { user: { id } }): Promise<PositionEntryDto[]> {
+    return this.positionService.getFriends({ uid: id, bookId });
+  }
 }
