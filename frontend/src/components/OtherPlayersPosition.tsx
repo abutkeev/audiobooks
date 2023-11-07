@@ -24,10 +24,13 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
   const { instanceId } = useAppSelector(({ websocket }) => websocket);
   const dispatch = useAppDispatch();
 
-  const positions = data.filter(
-    entry => entry.instanceId !== instanceId && !(entry.currentChapter === 0 && entry.position === 0)
-  );
-  const friendsPositions = friendsData.filter(entry => !(entry.currentChapter === 0 && entry.position === 0));
+  const positions = data
+    .filter(entry => entry.instanceId !== instanceId && !(entry.currentChapter === 0 && entry.position === 0))
+    .sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
+    
+  const friendsPositions = friendsData
+    .filter(entry => !(entry.currentChapter === 0 && entry.position === 0))
+    .sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
 
   if (positions.length === 0 && friendsPositions.length === 0) return;
 
