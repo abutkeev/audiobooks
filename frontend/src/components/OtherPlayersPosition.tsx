@@ -27,7 +27,7 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
   const positions = data
     .filter(entry => entry.instanceId !== instanceId && !(entry.currentChapter === 0 && entry.position === 0))
     .sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
-    
+
   const friendsPositions = friendsData
     .filter(entry => !(entry.currentChapter === 0 && entry.position === 0))
     .sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
