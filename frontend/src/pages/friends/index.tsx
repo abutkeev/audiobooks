@@ -12,29 +12,35 @@ import FriendsTab from './FriendsTab';
 const Friends: FC = () => {
   useTitle('Friends');
 
-  const [tab, setTab] = useState<'in' | 'out' | 'friends'>('in');
+  const [tab, setTab] = useState<'in' | 'out' | 'friends' | 'default'>('default');
   const { data: incoming, isLoading: incomingLoading, isError: incomingError } = useFriendsGetIncomingRequestsQuery();
   const { data: outgoing, isLoading: outgoingLoading, isError: outgoingError } = useFriendsGetOutgoingRequestsQuery();
 
   const loading = incomingLoading || outgoingLoading;
   const error = incomingError || outgoingError;
 
+  const defaultTab = incoming?.length ? 'in' : 'friends';
+
   return (
     <>
       <AddFriendToolbar />
       <LoadingWrapper loading={loading} error={error}>
-        <Tabs value={tab} onChange={(_, newTab) => setTab(newTab)}>
-          <Tab
-            label='Incoming requests'
-            value='in'
-            icon={<FriendsBage friendsRequests={incoming?.length} ml={1} />}
-            iconPosition='end'
-          />
-          <Tab label='Friends' value='friends' />
-          {(tab === 'out' || outgoing?.length) && <Tab label='Outgoing requests' value='out' />}
-        </Tabs>
-        {tab === 'in' && <IncomingRequests />}
-        {tab === 'friends' && <FriendsTab />}
+        {(!!incoming?.length || !!outgoing?.length || (tab !== 'default' && tab !== 'friends')) && (
+          <Tabs value={tab === 'default' ? defaultTab : tab} onChange={(_, newTab) => setTab(newTab)}>
+            {(tab === 'in' || incoming?.length) && (
+              <Tab
+                label='Incoming requests'
+                value='in'
+                icon={<FriendsBage friendsRequests={incoming?.length} ml={1} />}
+                iconPosition='end'
+              />
+            )}
+            <Tab label='Friends' value='friends' />
+            {(tab === 'out' || outgoing?.length) && <Tab label='Outgoing requests' value='out' />}
+          </Tabs>
+        )}
+        {(tab === 'in' || (!!incoming?.length && tab === 'default')) && <IncomingRequests />}
+        {(tab === 'friends' || (!incoming?.length && tab === 'default')) && <FriendsTab />}
         {tab === 'out' && <OutgoingRequests />}
       </LoadingWrapper>
     </>
