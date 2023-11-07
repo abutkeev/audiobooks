@@ -4,6 +4,7 @@ import EmptyListWrapper from '../../components/common/EmptyListWrapper';
 import useSearchMatcher from '../../hooks/useSearchMatcher';
 import { Paper, Stack, Typography } from '@mui/material';
 import ProgressButton, { ProgressButtonProps } from '../../components/common/ProgressButton';
+import getFriendDisplayName from '../../utils/getFriendDisplayName';
 
 interface Action {
   action(id: string): ProgressButtonProps['onClick'];
@@ -39,18 +40,11 @@ const FriendsList: FC<FriendsListProps> = ({ data = [], isLoading, isError, empt
     <LoadingWrapper loading={isLoading} error={isError}>
       <EmptyListWrapper wrap={requests.length === 0} message={searchMatcher ? `${emptyMessage} found` : emptyMessage}>
         {requests.map(({ id, name, login, uid }) => {
-          const getDisplayName = () => {
-            if (name && name !== login) return `${name} (${login})`;
-
-            if (login) return login;
-
-            return uid;
-          };
           return (
             <Paper square variant='outlined' key={id}>
               <Stack spacing={1} direction='row' p={1} alignItems='center'>
                 <Typography noWrap flexGrow={1}>
-                  {getDisplayName()}
+                  {getFriendDisplayName({ uid, login, name })}
                 </Typography>
                 {actions.map(({ action, refreshing, actionText, progressButtonProps }, index) => (
                   <ProgressButton
