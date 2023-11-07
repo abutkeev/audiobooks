@@ -41,7 +41,16 @@ const Login: React.FC = () => {
       <Container maxWidth='sm'>
         <Paper sx={{ p: 2 }}>
           {error && (
-            <Alert severity='error' variant='outlined' sx={{ mb: 2 }}>
+            <Alert
+              severity='error'
+              variant='outlined'
+              sx={{
+                mb: 2,
+                '& > :first-letter': {
+                  textTransform: 'capitalize',
+                },
+              }}
+            >
               {error}
             </Alert>
           )}
