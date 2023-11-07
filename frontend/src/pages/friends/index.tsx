@@ -7,11 +7,12 @@ import OutgoingRequests from './OutgoingRequests';
 import { useFriendsGetIncomingRequestsQuery, useFriendsGetOutgoingRequestsQuery } from '../../api/api';
 import LoadingWrapper from '../../components/common/LoadingWrapper';
 import FriendsBage from '../../components/FriendsBage';
+import FriendsTab from './FriendsTab';
 
 const Friends: FC = () => {
   useTitle('Friends');
 
-  const [tab, setTab] = useState<'in' | 'out'>('in');
+  const [tab, setTab] = useState<'in' | 'out' | 'friends'>('in');
   const { data: incoming, isLoading: incomingLoading, isError: incomingError } = useFriendsGetIncomingRequestsQuery();
   const { data: outgoing, isLoading: outgoingLoading, isError: outgoingError } = useFriendsGetOutgoingRequestsQuery();
 
@@ -29,9 +30,11 @@ const Friends: FC = () => {
             icon={<FriendsBage friendsRequests={incoming?.length} ml={1} />}
             iconPosition='end'
           />
+          <Tab label='Friends' value='friends' />
           {(tab === 'out' || outgoing?.length) && <Tab label='Outgoing requests' value='out' />}
         </Tabs>
         {tab === 'in' && <IncomingRequests />}
+        {tab === 'friends' && <FriendsTab />}
         {tab === 'out' && <OutgoingRequests />}
       </LoadingWrapper>
     </>
