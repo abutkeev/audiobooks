@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { FriendsService } from './friends.service';
 import { FriendsController } from './friends.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,10 +13,11 @@ import { EventsModule } from 'src/events/events.module';
       { name: FriendRequests.name, schema: FriendRequestSchema },
       { name: Friend.name, schema: FriendSchema },
     ]),
-    UsersModule,
-    EventsModule,
+    forwardRef(() => UsersModule),
+    forwardRef(() => EventsModule),
   ],
   providers: [FriendsService],
+  exports: [FriendsService],
   controllers: [FriendsController],
 })
 export class FriendsModule {}
