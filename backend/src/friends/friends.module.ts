@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { FriendRequests, FriendRequestSchema } from './schemas/friend-requests.schema';
 import { UsersModule } from 'src/users/users.module';
 import { Friend, FriendSchema } from './schemas/friends.schema';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { Friend, FriendSchema } from './schemas/friends.schema';
       { name: Friend.name, schema: FriendSchema },
     ]),
     UsersModule,
+    EventsModule,
   ],
   providers: [FriendsService],
   controllers: [FriendsController],

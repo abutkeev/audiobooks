@@ -5,12 +5,14 @@ import { UsersService } from 'src/users/users.service';
 import { FriendRequests } from './schemas/friend-requests.schema';
 import { FriendRequestDto } from './dto/friend-request.dto';
 import { Friend } from './schemas/friends.schema';
+import { EventsService } from 'src/events/events.service';
 
 @Injectable()
 export class FriendsService {
   constructor(
     @InjectModel(FriendRequests.name) private friendsRequestsModel: Model<FriendRequests>,
     @InjectModel(Friend.name) private friendsModel: Model<Friend>,
+    private eventsService: EventsService,
     private usersService: UsersService
   ) {}
 
@@ -42,6 +44,7 @@ export class FriendsService {
     }
 
     await this.friendsRequestsModel.create({ from, to });
+    this.eventsService.sendToUser({ userId: to.toString(), message: 'invalidate_tag', args: 'friends' });
     return true;
   }
 
@@ -70,9 +73,11 @@ export class FriendsService {
     });
 
     if (friendsRecord) {
+      this.eventsService.sendToUser({ userId: from.toString(), message: 'invalidate_tag', args: 'friends' });
       return true;
     }
     await this.friendsModel.create({ user1: from, user2: to });
+    this.eventsService.sendToUser({ userId: from.toString(), message: 'invalidate_tag', args: 'friends' });
     return true;
   }
 
@@ -83,7 +88,11 @@ export class FriendsService {
     if (!request) {
       throw new NotFoundException(`request ${request_id} not found`);
     }
-
+    this.eventsService.sendToUser({
+      userId: type === 'in' ? request.from.toString() : request.to.toString(),
+      message: 'invalidate_tag',
+      args: 'friends',
+    });
     return true;
   }
 }
