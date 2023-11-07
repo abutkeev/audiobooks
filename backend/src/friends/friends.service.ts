@@ -61,18 +61,18 @@ export class FriendsService {
     if (!request) {
       throw new NotFoundException(`request ${request_id} not found`);
     }
-    const { to } = request;
-    if (
-      await this.friendsModel.findOne({
-        $or: [
-          { user1: uid, user2: to },
-          { user1: to, user2: uid },
-        ],
-      })
-    ) {
+    const { from, to } = request;
+    const friendsRecord = await this.friendsModel.findOne({
+      $or: [
+        { user1: from, user2: to },
+        { user1: to, user2: from },
+      ],
+    });
+
+    if (friendsRecord) {
       return true;
     }
-    await this.friendsModel.create({ user1: uid, user2: to });
+    await this.friendsModel.create({ user1: from, user2: to });
     return true;
   }
 
