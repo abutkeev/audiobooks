@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
 import { FriendRequests } from './schemas/friend-requests.schema';
-import { FriendRequestDto } from './dto/friend-request.dto';
+import { FriendDto } from './dto/friend.dto';
 import { Friend } from './schemas/friends.schema';
 import { EventsService } from 'src/events/events.service';
 
@@ -54,14 +54,14 @@ export class FriendsService {
     return { id: id.toString(), uid: uid.toString(), login, name };
   }
 
-  async getRequests(uid: string, type: 'in' | 'out'): Promise<FriendRequestDto[]> {
+  async getRequests(uid: string, type: 'in' | 'out'): Promise<FriendDto[]> {
     const requests = await this.friendsRequestsModel.find(type === 'in' ? { to: uid } : { from: uid }).exec();
     return Promise.all(
       requests.map(({ _id, from, to }) => this.getFriendEntry({ id: _id, uid: type === 'in' ? from : to }))
     );
   }
 
-  async get(uid: string): Promise<FriendRequestDto[]> {
+  async get(uid: string): Promise<FriendDto[]> {
     const friends = await this.friendsModel.find({ $or: [{ user1: uid }, { user2: uid }] }).exec();
     return Promise.all(
       friends.map(({ _id, user1, user2 }) =>

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Request } from '@nestjs/com
 import { ApiTags } from '@nestjs/swagger';
 import { FriendsService } from './friends.service';
 import { AddFriendRequestDto } from './dto/add-friend-request.dto';
-import { FriendRequestDto } from './dto/friend-request.dto';
+import { FriendDto } from './dto/friend.dto';
 
 @ApiTags('friends')
 @Controller('friends')
@@ -10,7 +10,7 @@ export class FriendsController {
   constructor(private friendsService: FriendsService) {}
 
   @Get()
-  get(@Request() { user: { id } }): Promise<FriendRequestDto[]> {
+  get(@Request() { user: { id } }): Promise<FriendDto[]> {
     return this.friendsService.get(id);
   }
 
@@ -20,12 +20,12 @@ export class FriendsController {
   }
 
   @Get('requests/in')
-  getIncomingRequests(@Request() { user: { id } }): Promise<FriendRequestDto[]> {
+  getIncomingRequests(@Request() { user: { id } }): Promise<FriendDto[]> {
     return this.friendsService.getRequests(id, 'in');
   }
 
   @Get('requests/out')
-  getOutgoingRequests(@Request() { user: { id } }): Promise<FriendRequestDto[]> {
+  getOutgoingRequests(@Request() { user: { id } }): Promise<FriendDto[]> {
     return this.friendsService.getRequests(id, 'out');
   }
 
