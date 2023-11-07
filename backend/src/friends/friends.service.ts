@@ -61,6 +61,15 @@ export class FriendsService {
     );
   }
 
+  async get(uid: string): Promise<FriendRequestDto[]> {
+    const friends = await this.friendsModel.find({ $or: [{ user1: uid }, { user2: uid }] }).exec();
+    return Promise.all(
+      friends.map(({ _id, user1, user2 }) =>
+        this.getFriendEntry({ id: _id, uid: user1.toString() === uid ? user2 : user1 })
+      )
+    );
+  }
+
   async approve(uid: string, request_id: string): Promise<boolean> {
     const request = await this.friendsRequestsModel.findOneAndDelete({ _id: request_id, to: uid });
     if (!request) {

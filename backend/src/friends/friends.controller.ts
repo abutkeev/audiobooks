@@ -9,6 +9,11 @@ import { FriendRequestDto } from './dto/friend-request.dto';
 export class FriendsController {
   constructor(private friendsService: FriendsService) {}
 
+  @Get()
+  get(@Request() { user: { id } }): Promise<FriendRequestDto[]> {
+    return this.friendsService.get(id);
+  }
+
   @Post('request')
   add(@Body() { login }: AddFriendRequestDto, @Request() { user: { id } }): Promise<boolean> {
     return this.friendsService.addRequest(id, login);
