@@ -15,7 +15,7 @@ export class EventsAuthValidationPipe implements PipeTransform {
     try {
       if (value instanceof Socket) {
         if (!('user' in value) || !('instanceId' in value)) {
-          throw new WsException('No user or instace id for socket');
+          throw new WsException('No user or instance id for socket');
         }
 
         if (typeof value.instanceId !== 'string') {
