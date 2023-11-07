@@ -16,7 +16,7 @@ export class TgController {
     return this.tgService.get(user.id);
   }
 
-  @Put('set')
+  @Put()
   @ApiOperation({ description: 'Set telegram account data' })
   setAuthData(@Body() data: TelegramAuthDataDto, @Request() { user }) {
     return this.tgService.set(user.id, data);
