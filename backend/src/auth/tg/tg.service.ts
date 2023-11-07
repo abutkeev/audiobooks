@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { TelegramAuthDataDto } from './dto/telegram-auth-data.dto';
 import { createHash, createHmac } from 'crypto';
 import { TELEGRAM_BOT_TOKEN } from 'src/constants';
+import { TelegramAccountDto } from './dto/telegram-account.dto';
 
 @Injectable()
 export class TgService {
@@ -27,6 +28,11 @@ export class TgService {
     const computedHash = createHmac('sha256', secret).update(dataCheckString).digest('hex');
 
     return hash === computedHash;
+  }
+
+  async get(userId: string): Promise<TelegramAccountDto> {
+    const info = await this.telegramAccountModel.findOne({ userId });
+    return { info };
   }
 
   async set(userId: string, data: TelegramAuthDataDto): Promise<true> {

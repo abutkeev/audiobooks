@@ -1,4 +1,4 @@
-import { Body, Controller, Put, Request } from '@nestjs/common';
+import { Body, Controller, Get, Put, Request } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AllowInactive } from '../allow-inactive.decorator';
 import { TgService } from './tg.service';
@@ -9,6 +9,12 @@ import { TelegramAuthDataDto } from './dto/telegram-auth-data.dto';
 @Controller('auth/tg')
 export class TgController {
   constructor(private tgService: TgService) {}
+
+  @Get()
+  @ApiOperation({ description: 'Get telegram account data' })
+  getAccountInfo(@Request() { user }) {
+    return this.tgService.get(user.id);
+  }
 
   @Put('set')
   @ApiOperation({ description: 'Set telegram account data' })
