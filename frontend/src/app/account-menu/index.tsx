@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AccountCircle, AdminPanelSettings, Key, Link, Logout, People, Person } from '@mui/icons-material';
+import { AccountCircle, AdminPanelSettings, Chat, Key, Link, Logout, People, Person } from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { useAppDispatch } from '../../store';
@@ -51,6 +51,11 @@ const AccountMenu: React.FC = () => {
     closeMenu();
   };
 
+  const handleNavigateToChatsPage = () => {
+    navigate('/chats');
+    closeMenu();
+  };
+
   const handleNavigateToFriendsPage = () => {
     navigate('/friends');
     closeMenu();
@@ -87,6 +92,14 @@ const AccountMenu: React.FC = () => {
               <AdminPanelSettings />
             </ListItemIcon>
             <ListItemText>Users</ListItemText>
+          </MenuItem>
+        )}
+        {admin && (
+          <MenuItem divider onClick={handleNavigateToChatsPage}>
+            <ListItemIcon>
+              <Chat />
+            </ListItemIcon>
+            <ListItemText>Chats</ListItemText>
           </MenuItem>
         )}
         {enabled && (

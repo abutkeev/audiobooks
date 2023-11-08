@@ -13,6 +13,7 @@ import EditBookPage from '../pages/edit-book';
 import NotActive from '../pages/NotActive';
 import SignUp from '../pages/sign-up';
 import Friends from '../pages/friends';
+import Chats from '../pages/chats';
 
 const userRoutes: RouteObject[] = [
   {
@@ -41,6 +42,10 @@ const adminRoutes: RouteObject[] = [
   {
     path: '/users',
     element: <Users />,
+  },
+  {
+    path: '/chats',
+    element: <Chats />,
   },
   {
     path: '/edit/:id',
