@@ -5,12 +5,14 @@ import { Model } from 'mongoose';
 import { ChatDto } from './dto/chat.dto';
 import { Context, Telegraf } from 'telegraf';
 import { InjectBot } from 'nestjs-telegraf';
+import { EventsService } from 'src/events/events.service';
 
 @Injectable()
 export class TelegramService {
   constructor(
     @InjectModel(Chat.name) private chatsModel: Model<Chat>,
-    @InjectBot() private bot: Telegraf<Context>
+    @InjectBot() private bot: Telegraf<Context>,
+    private eventsService: EventsService
   ) {}
 
   private static removedChats = [];
@@ -23,6 +25,7 @@ export class TelegramService {
       return;
     }
     await this.chatsModel.updateOne({ id: data.id }, { $set: data }, { upsert: true });
+    this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'telergam' });
   }
 
   async getChats(): Promise<ChatDto[]> {
@@ -31,6 +34,7 @@ export class TelegramService {
 
   async setChatAuthorized(id: number, authorized: boolean): Promise<true> {
     await this.chatsModel.updateOne({ id }, { $set: { authorized } });
+    this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'telergam' });
     return true;
   }
 
@@ -41,6 +45,7 @@ export class TelegramService {
     }
     await this.chatsModel.deleteOne({ id });
     TelegramService.removedChats.push(id);
+    this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'telergam' });
     return true;
   }
 }

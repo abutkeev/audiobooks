@@ -49,6 +49,14 @@ export class EventsService {
     }
   }
 
+  async sendToAdmins({ message, args }: { message: 'invalidate_tag' | 'refresh_token'; args?: any }) {
+    for (const userId of Object.keys(EventsService.sockets)) {
+      const { admin } = await this.usersService.find(userId);
+      if (!admin) continue;
+      this.sendToUser({ userId, message, args });
+    }
+  }
+
   async sendOutdatedTokenRefreshEvent(token: string, socket: Socket) {
     const info = this.authService.getTokenInfo(token);
     const user = await this.usersService.find(info.id);
