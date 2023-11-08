@@ -15,18 +15,12 @@ export class TelegramController {
   }
 
   @Put('chat/:id/authorized')
-  async authorizeChat(@Param('id') id: string) {
-    if (!isFinite(+id)) {
-      throw new BadRequestException(`bad id ${id}`);
-    }
-    return this.telegramService.setChatAuthorized(+id, true);
+  async authorizeChat(@Param('id') id: number) {
+    return this.telegramService.setChatAuthorized(id, true);
   }
 
   @Delete('chat/:id/authorized')
-  async unauthorizeChat(@Param('id') id: string) {
-    if (!isFinite(+id)) {
-      throw new BadRequestException(`bad id ${id}`);
-    }
-    return this.telegramService.setChatAuthorized(+id, false);
+  async unauthorizeChat(@Param('id') id: number) {
+    return this.telegramService.setChatAuthorized(id, false);
   }
 }
