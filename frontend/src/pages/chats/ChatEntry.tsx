@@ -1,13 +1,20 @@
 import { FC } from 'react';
-import { ChatDto, useTelegramAuthorizeChatMutation, useTelegramUnauthorizeChatMutation } from '../../api/api';
+import {
+  ChatDto,
+  useTelegramAuthorizeChatMutation,
+  useTelegramRemoveChatMutation,
+  useTelegramUnauthorizeChatMutation,
+} from '../../api/api';
 import { Paper, Stack, Typography } from '@mui/material';
 import ChatType from './ChatType';
 import ChatStatus from './ChatStatus';
 import CustomSwitch, { CustomSwitchProps } from '../../components/common/CustomSwitch';
+import DeleteButton from '../../components/common/DeleteButton';
 
 const ChatEntry: FC<ChatDto> = ({ id, type, title, status, authorized }) => {
   const [authorize] = useTelegramAuthorizeChatMutation();
   const [unauthorize] = useTelegramUnauthorizeChatMutation();
+  const [remove] = useTelegramRemoveChatMutation();
 
   const handleChangeAuthorize: CustomSwitchProps['onChange'] = async newState => {
     if (newState) {
@@ -15,6 +22,10 @@ const ChatEntry: FC<ChatDto> = ({ id, type, title, status, authorized }) => {
       return;
     }
     await unauthorize({ id });
+  };
+
+  const handleRemove = async () => {
+    await remove({ id });
   };
 
   return (
@@ -30,6 +41,7 @@ const ChatEntry: FC<ChatDto> = ({ id, type, title, status, authorized }) => {
           checked={authorized}
           onChange={handleChangeAuthorize}
         />
+        <DeleteButton onConfirm={handleRemove} confirmationTitle='Remove chat?' confirmationBody={`Remove chat ${title}?`} />
       </Stack>
     </Paper>
   );
