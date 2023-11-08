@@ -3,7 +3,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema({
   toJSON: {
     transform: (_, ret) => {
-      ret.id = ret._id.toString();
       delete ret._id;
       delete ret.__v;
     },
