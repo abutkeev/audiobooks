@@ -15,4 +15,9 @@ export class TelegramService {
   async getChats(): Promise<ChatDto[]> {
     return this.chatsModel.find().exec();
   }
+
+  async setChatAuthorized(id: number, authorized: boolean): Promise<true> {
+    await this.chatsModel.updateOne({ id }, { $set: { authorized } });
+    return true;
+  }
 }
