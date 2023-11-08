@@ -5,12 +5,14 @@ import { TelegramAccount, TelegramAccountsSchema } from './schemas/telegram-acco
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from '../auth.module';
 import { UsersModule } from 'src/users/users.module';
+import { TelegramModule } from 'src/telegram/telegram.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: TelegramAccount.name, schema: TelegramAccountsSchema }]),
     forwardRef(() => AuthModule),
     forwardRef(() => UsersModule),
+    forwardRef(() => TelegramModule),
   ],
   providers: [TgService],
   controllers: [TgController],

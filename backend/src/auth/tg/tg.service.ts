@@ -17,6 +17,7 @@ import { TelegramAccountDto } from './dto/telegram-account.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from '../auth.service';
 import { LoginResponseDto } from '../dto/login-response.dto';
+import { TelegramService } from 'src/telegram/telegram.service';
 
 @Injectable()
 export class TgService {
@@ -27,7 +28,10 @@ export class TgService {
     private authService: AuthService,
 
     @Inject(forwardRef(() => UsersService))
-    private usersService: UsersService
+    private usersService: UsersService,
+
+    @Inject(forwardRef(() => TelegramService))
+    private telegramService: TelegramService
   ) {}
 
   private verifyAuthData({ hash, ...data }: TelegramAuthDataDto): boolean {
@@ -62,6 +66,11 @@ export class TgService {
     await this.telegramAccountModel.deleteOne({ userId });
     await this.telegramAccountModel.deleteOne({ id });
     await this.telegramAccountModel.create({ id, userId, first_name, last_name, username, photo_url });
+    const user = await this.usersService.find(userId);
+    if (user && !user.enabled && (await this.telegramService.isAuthorizedChatMember(data.id))) {
+      await this.usersService.update(userId, { enabled: true });
+    }
+
     return true;
   }
 

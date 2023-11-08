@@ -48,4 +48,17 @@ export class TelegramService {
     this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'telergam' });
     return true;
   }
+
+  async isAuthorizedChatMember(telegramUid: number) {
+    for (const { id } of await this.chatsModel.find({ authorized: true })) {
+      try {
+        const { status } = await this.bot.telegram.getChatMember(id, telegramUid);
+        if (status === 'left' || status === 'kicked') {
+          continue;
+        }
+        return true;
+      } catch {}
+    }
+    return false;
+  }
 }
