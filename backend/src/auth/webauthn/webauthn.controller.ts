@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Request } from '@nestjs/common';
 import { Public } from '../public.decorator';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ChallengeResponseDto } from './dto/challenge-response.dto';
@@ -39,5 +39,11 @@ export class WebauthnController {
   @ApiOperation({ description: 'Add public key' })
   add(@Body() data: PublicKeyDto, @Request() { user }) {
     this.webauthnService.add(data, user.id);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ description: 'Remove public key' })
+  remove(@Param('id') id: string, @Request() { user }) {
+    return this.webauthnService.remove({ id, userId: user.id });
   }
 }

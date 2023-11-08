@@ -62,6 +62,11 @@ export class WebauthnService {
     }
   }
 
+  async remove({ id, userId }: { id: string; userId: string }): Promise<true> {
+    await this.publicKeyModel.deleteOne({ id, userId });
+    return true;
+  }
+
   async auth(authentication: AuthenticationDto) {
     try {
       const key = await this.publicKeyModel.findOne({ id: authentication.credentialId }).exec();
