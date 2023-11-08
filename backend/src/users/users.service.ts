@@ -62,9 +62,8 @@ export class UsersService {
     if (initUser && initUser.login === login && password === INIT_PASSWD) {
       return initUser;
     }
-    const result = await this.userModel.find({ login });
-    if (result.length === 0) return null;
-    const user = result[0];
+    const user = await this.userModel.findOne({ login });
+    if (!user) return null;
 
     if (!(await bcrypt.compare(password, user.password))) return null;
 
