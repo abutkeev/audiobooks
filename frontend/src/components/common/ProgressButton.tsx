@@ -4,6 +4,7 @@ import useWaitRefreshing from '../../hooks/useWaitRefreshing';
 import ProgressContainer from './ProgressContainer';
 
 export interface ProgressButtonProps extends Pick<ButtonProps, 'disabled' | 'variant'> {
+  iconButton?: boolean;
   progressSize?: number;
   progressColor?: string;
   inProgress?: boolean;
@@ -16,6 +17,7 @@ export interface ProgressButtonProps extends Pick<ButtonProps, 'disabled' | 'var
 const ProgressButton: FC<PropsWithChildren<ProgressButtonProps>> = ({
   disabled,
   variant = 'contained',
+  iconButton,
   children,
   progressSize = 24,
   progressColor,
@@ -44,9 +46,17 @@ const ProgressButton: FC<PropsWithChildren<ProgressButtonProps>> = ({
     }
   };
 
+  const { sx: ButtonSx } = buttonProps || {};
+
   return (
     <ProgressContainer inProgress={inProgress || processing} progressColor={progressColor} progressSize={progressSize}>
-      <Button {...buttonProps} disabled={disabled || inProgress || processing} variant={variant} onClick={handleClick}>
+      <Button
+        {...buttonProps}
+        sx={[...(Array.isArray(ButtonSx) ? ButtonSx : [ButtonSx]), iconButton && { minWidth: 0, p: 1, borderRadius: '50%' }]}
+        disabled={disabled || inProgress || processing}
+        variant={iconButton ? 'text' : variant}
+        onClick={handleClick}
+      >
         {children}
       </Button>
     </ProgressContainer>
