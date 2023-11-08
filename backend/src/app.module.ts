@@ -16,6 +16,7 @@ import { FriendsModule } from './friends/friends.module';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { TgBotModule } from './tg-bot/tg-bot.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { TelegramModule } from './telegram/telegram.module';
     FriendsModule,
     TgBotModule,
     TelegramModule,
+    ProfileModule,
   ],
   controllers: [],
   providers: [],
