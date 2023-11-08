@@ -1,7 +1,8 @@
 import { MouseEventHandler } from 'react';
 import { AdminPanelSettings, Shield } from '@mui/icons-material';
-import { Switch, Tooltip } from '@mui/material';
-import { useUsersActivateMutation, useUsersDeactivateMutation } from '../../api/api';
+import { Tooltip } from '@mui/material';
+import { useUsersActivateMutation, useUsersDeactivateMutation, useUsersGetAllQuery } from '../../api/api';
+import CustomSwitch from '../../components/common/CustomSwitch';
 
 interface UserDisableSwitchProps {
   id: string;
@@ -11,16 +12,18 @@ interface UserDisableSwitchProps {
 }
 
 const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, enabled, id }) => {
+  const { isFetching } = useUsersGetAllQuery();
   const [activate] = useUsersActivateMutation();
   const [deactivate] = useUsersDeactivateMutation();
 
-  const handleSwitchClick: MouseEventHandler = e => {
+  const handleSwitchClick: MouseEventHandler = async e => {
     e.stopPropagation();
     if (enabled) {
-      return deactivate({ id }).unwrap();
+      await deactivate({ id });
+      return;
     }
 
-    return activate({ id }).unwrap;
+    await activate({ id });
   };
 
   if (thisUser) {
@@ -40,11 +43,12 @@ const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, 
   }
 
   return (
-    <Tooltip title={enabled ? 'Disable' : 'Enable'}>
-      <div>
-        <Switch checked={enabled} onClick={handleSwitchClick} />
-      </div>
-    </Tooltip>
+    <CustomSwitch
+      tooltip={enabled ? 'Disable' : 'Enable'}
+      checked={enabled}
+      onClick={handleSwitchClick}
+      refreshing={isFetching}
+    />
   );
 };
 
