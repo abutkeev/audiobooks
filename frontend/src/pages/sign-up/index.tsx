@@ -80,7 +80,7 @@ const SignUp: FC = () => {
               error={!password}
             />
             <ReCaptcha setToken={setCaptchaToken} />
-            <ProgressButton fullWidth size='large' variant='contained' disabled={!valid} onClick={handleSignUp}>
+            <ProgressButton buttonProps={{ fullWidth: true, size: 'large' }} disabled={!valid} onClick={handleSignUp}>
               Sign up
             </ProgressButton>
             <Button fullWidth size='large' variant='contained' onClick={handleSignUpCancel}>

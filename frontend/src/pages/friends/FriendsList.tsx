@@ -47,13 +47,7 @@ const FriendsList: FC<FriendsListProps> = ({ data = [], isLoading, isError, empt
                   {getFriendDisplayName({ uid, login, name })}
                 </Typography>
                 {actions.map(({ action, refreshing, actionText, progressButtonProps }, index) => (
-                  <ProgressButton
-                    key={index}
-                    onClick={action(id)}
-                    refreshing={refreshing}
-                    variant='contained'
-                    {...progressButtonProps}
-                  >
+                  <ProgressButton key={index} onClick={action(id)} refreshing={refreshing} {...progressButtonProps}>
                     {actionText}
                   </ProgressButton>
                 ))}

@@ -1,31 +1,29 @@
-import React, { useState } from 'react';
-import { ButtonProps, Box, Button, CircularProgress, BoxProps, CircularProgressProps, useTheme } from '@mui/material';
+import React, { FC, PropsWithChildren, useState } from 'react';
+import { ButtonProps, Button } from '@mui/material';
 import useWaitRefreshing from '../../hooks/useWaitRefreshing';
+import ProgressContainer from './ProgressContainer';
 
-export interface ProgressButtonProps extends ButtonProps {
+export interface ProgressButtonProps extends Pick<ButtonProps, 'disabled' | 'variant'> {
   progressSize?: number;
   progressColor?: string;
   inProgress?: boolean;
-  boxProps?: BoxProps;
-  progressProps?: Omit<CircularProgressProps, ''>;
   refreshing?: boolean;
   onClick?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> | void;
   onEndWait?(): unknown;
+  buttonProps?: Omit<ButtonProps, 'onClick' | 'children' | 'disabled' | 'variant'>;
 }
 
-const ProgressButton: React.FC<ProgressButtonProps> = ({
+const ProgressButton: FC<PropsWithChildren<ProgressButtonProps>> = ({
+  disabled,
+  variant = 'contained',
   children,
   progressSize = 24,
   progressColor,
   inProgress,
-  disabled,
   refreshing,
   onClick,
   onEndWait,
-  boxProps,
-  progressProps,
-  sx: buttonSx,
-  ...buttonProps
+  buttonProps,
 }) => {
   const [processing, setProcessing] = useState(false);
   const setWaitRefreshing = useWaitRefreshing(refreshing, () => {
@@ -34,48 +32,24 @@ const ProgressButton: React.FC<ProgressButtonProps> = ({
       onEndWait();
     }
   });
-  const { palette } = useTheme();
 
-  const { sx: progressSx } = progressProps || {};
+  const handleClick: ButtonProps['onClick'] = async e => {
+    if (onClick) {
+      setProcessing(true);
+      try {
+        await onClick(e);
+      } finally {
+        setWaitRefreshing(true);
+      }
+    }
+  };
 
   return (
-    <Box {...boxProps}>
-      <Button
-        {...buttonProps}
-        sx={[...(Array.isArray(buttonSx) ? buttonSx : [buttonSx]), { position: 'relative' }]}
-        disabled={disabled || inProgress || processing}
-        onClick={async e => {
-          if (onClick) {
-            setProcessing(true);
-            try {
-              await onClick(e);
-            } finally {
-              setWaitRefreshing(true);
-            }
-          }
-        }}
-      >
-        {(inProgress || processing) && (
-          <CircularProgress
-            {...progressProps}
-            size={progressSize}
-            sx={[
-              ...(Array.isArray(progressSx) ? progressSx : [progressSx]),
-              {
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                color: progressColor ?? palette.secondary.main,
-                mt: `-${progressSize / 2}px`,
-                ml: `-${progressSize / 2}px`,
-                zIndex: 1000,
-              },
-            ]}
-          />
-        )}
+    <ProgressContainer inProgress={inProgress || processing} progressColor={progressColor} progressSize={progressSize}>
+      <Button {...buttonProps} disabled={disabled || inProgress || processing} variant={variant} onClick={handleClick}>
         {children}
       </Button>
-    </Box>
+    </ProgressContainer>
   );
 };
 

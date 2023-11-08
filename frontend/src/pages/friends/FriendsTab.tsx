@@ -21,7 +21,7 @@ const FriendsTab: FC = () => {
           action: getRemoveHandler,
           actionText: 'Remove',
           refreshing: isFetching,
-          progressButtonProps: { color: 'error' },
+          progressButtonProps: { buttonProps: { color: 'error' } },
         },
       ]}
     />

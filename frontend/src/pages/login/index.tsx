@@ -65,7 +65,7 @@ const Login: React.FC = () => {
             {webauthnAvailable && <SecurityKeyAuthButton setLoading={setLoading} setError={setError} />}
             {TELEGRAM_BOT_ID && (
               <TelegramAuthButton
-                progressButtonProps={{ fullWidth: true, startIcon: <Telegram /> }}
+                progressButtonProps={{ buttonProps: { fullWidth: true, startIcon: <Telegram /> } }}
                 onAuth={handleTelegramAuth}
               >
                 Login with telegram

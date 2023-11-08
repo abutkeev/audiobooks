@@ -51,8 +51,7 @@ const LinkedAccountsDialog: React.FC<LinkedAccountsDialogProps> = ({ open, close
                       Refresh
                     </TelegramAuthButton>
                     <ProgressButton
-                      variant='contained'
-                      color='error'
+                      buttonProps={{ color: 'error' }}
                       refreshing={isFetching}
                       onClick={handleTelergamRemove}
                     >

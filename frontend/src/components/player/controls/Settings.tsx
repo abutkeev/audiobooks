@@ -101,7 +101,7 @@ const Settings: React.FC = () => {
         title='Clear cache confirmation'
         open={showClearCacheConfirmation}
         content='Clear all cached chapters?'
-        confirmButtonProps={{ color: 'error' }}
+        confirmButtonProps={{ buttonProps: { color: 'error' } }}
         close={() => setShowClearCacheConfirmation(false)}
         onConfirm={() => chaptersCacheInfo.available && dispatch(removeCachedMedia(chaptersCacheInfo.keys))}
       />

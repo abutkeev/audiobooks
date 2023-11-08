@@ -135,7 +135,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
         )
       }
       confirmButtonText='Upload'
-      confirmButtonProps={{ startIcon: <Upload />, disabled: !valid || !!uploading }}
+      confirmButtonProps={{ buttonProps: { startIcon: <Upload /> }, disabled: !valid || !!uploading }}
       cancelButtonProps={{ disabled: !!uploading }}
       onConfirm={handleUpload}
       close={onClose}
