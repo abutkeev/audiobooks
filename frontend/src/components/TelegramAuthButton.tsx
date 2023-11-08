@@ -2,6 +2,7 @@ import { FC, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import ProgressButton, { ProgressButtonProps } from './common/ProgressButton';
 import { Box } from '@mui/material';
 import useWaitRefreshing from '../hooks/useWaitRefreshing';
+import useAuthData from '../hooks/useAuthData';
 
 // https://stackoverflow.com/questions/56347902/telegram-authorization-without-default-button/63593384#63593384
 interface Options {
@@ -62,6 +63,7 @@ const TelegramAuthButton: FC<PropsWithChildren<TelegramAuthButtonProps>> = ({
   const [scriptError, setScriptError] = useState(false);
   const [processing, setProcessing] = useState(false);
   const setWaitRefreshing = useWaitRefreshing(refreshing, () => setProcessing(false));
+  const { enabled } = useAuthData() || {};
 
   useEffect(() => {
     if (!TELEGRAM_BOT_ID) {
@@ -80,11 +82,13 @@ const TelegramAuthButton: FC<PropsWithChildren<TelegramAuthButtonProps>> = ({
     script.onerror = () => setScriptError(true);
     scriptContainerRef.current?.appendChild(script);
     return () => {
+      if (!enabled) return;
+
       if ('Telegram' in window) {
         delete window.Telegram;
       }
     };
-  }, []);
+  }, [enabled]);
 
   if (!TELEGRAM_BOT_ID) return;
 
