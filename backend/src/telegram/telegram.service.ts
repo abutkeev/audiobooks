@@ -13,7 +13,15 @@ export class TelegramService {
     @InjectBot() private bot: Telegraf<Context>
   ) {}
 
+  private static removedChats = [];
+
   async updateChatData(data: Omit<Chat, 'authorized'>) {
+    const { id, status } = data;
+    // ignore first leave event from recently deleted chat
+    if (status === 'left' && TelegramService.removedChats.includes(id)) {
+      TelegramService.removedChats = TelegramService.removedChats.filter(item => item !== id);
+      return;
+    }
     await this.chatsModel.updateOne({ id: data.id }, { $set: data }, { upsert: true });
   }
 
@@ -32,6 +40,7 @@ export class TelegramService {
       await this.bot.telegram.leaveChat(chat.id);
     }
     await this.chatsModel.deleteOne({ id });
+    TelegramService.removedChats.push(id);
     return true;
   }
 }
