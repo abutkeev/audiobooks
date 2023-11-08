@@ -19,7 +19,7 @@ interface CustomDialogProps {
   cancelButtonText?: string;
   confirmButtonProps?: Omit<ProgressButtonProps, 'onClick' | 'children'>;
   cancelButtonProps?: Omit<ButtonProps, 'onClick' | 'children'>;
-  onConfirm?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): unknown | Promise<unknown>;
+  onConfirm?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void | Promise<void>;
   onCancel?: ButtonProps['onClick'];
   close?: ButtonProps['onClick'];
   extraButtons?: React.ReactNode;
