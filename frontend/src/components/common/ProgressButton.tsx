@@ -1,10 +1,11 @@
-import React, { FC, PropsWithChildren, useState } from 'react';
-import { ButtonProps, Button } from '@mui/material';
+import React, { FC, PropsWithChildren, ReactNode, useState } from 'react';
+import { ButtonProps, Button, Tooltip } from '@mui/material';
 import useWaitRefreshing from '../../hooks/useWaitRefreshing';
 import ProgressContainer from './ProgressContainer';
 
 export interface ProgressButtonProps extends Pick<ButtonProps, 'disabled' | 'variant'> {
   iconButton?: boolean;
+  tooltip?: ReactNode;
   progressSize?: number;
   progressColor?: string;
   inProgress?: boolean;
@@ -18,6 +19,7 @@ const ProgressButton: FC<PropsWithChildren<ProgressButtonProps>> = ({
   disabled,
   variant = 'contained',
   iconButton,
+  tooltip = '',
   children,
   progressSize = 24,
   progressColor,
@@ -49,17 +51,28 @@ const ProgressButton: FC<PropsWithChildren<ProgressButtonProps>> = ({
   const { sx: ButtonSx } = buttonProps || {};
 
   return (
-    <ProgressContainer inProgress={inProgress || processing} progressColor={progressColor} progressSize={progressSize}>
-      <Button
-        {...buttonProps}
-        sx={[...(Array.isArray(ButtonSx) ? ButtonSx : [ButtonSx]), iconButton && { minWidth: 0, p: 1, borderRadius: '50%' }]}
-        disabled={disabled || inProgress || processing}
-        variant={iconButton ? 'text' : variant}
-        onClick={handleClick}
-      >
-        {children}
-      </Button>
-    </ProgressContainer>
+    <Tooltip title={tooltip}>
+      <div>
+        <ProgressContainer
+          inProgress={inProgress || processing}
+          progressColor={progressColor}
+          progressSize={progressSize}
+        >
+          <Button
+            {...buttonProps}
+            sx={[
+              ...(Array.isArray(ButtonSx) ? ButtonSx : [ButtonSx]),
+              iconButton && { minWidth: 0, p: 1, borderRadius: '50%' },
+            ]}
+            disabled={disabled || inProgress || processing}
+            variant={iconButton ? 'text' : variant}
+            onClick={handleClick}
+          >
+            {children}
+          </Button>
+        </ProgressContainer>
+      </div>
+    </Tooltip>
   );
 };
 
