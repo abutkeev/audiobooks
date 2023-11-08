@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Admin } from 'src/auth/admin.decorator';
 import { TelegramService } from './telegram.service';
@@ -22,5 +22,10 @@ export class TelegramController {
   @Delete('chat/:id/authorized')
   async unauthorizeChat(@Param('id') id: number) {
     return this.telegramService.setChatAuthorized(id, false);
+  }
+
+  @Delete('chat/:id')
+  async removeChat(@Param('id') id: number) {
+    return this.telegramService.removeChat(id);
   }
 }
