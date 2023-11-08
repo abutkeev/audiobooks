@@ -22,6 +22,7 @@ interface CustomDialogProps {
   onConfirm?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void | Promise<void>;
   onCancel?: ButtonProps['onClick'];
   close?: ButtonProps['onClick'];
+  refreshing?: boolean;
   extraButtons?: React.ReactNode;
 }
 
@@ -39,6 +40,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
   onConfirm,
   onCancel,
   close,
+  refreshing,
   extraButtons,
 }) => {
   const { variant: cancelButtonVariant, ...otherCancelButtonProps } = cancelButtonProps || {};
@@ -82,6 +84,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
             <ProgressButton
               onClick={handleConfirm}
               variant={confirmButtonVariant || 'contained'}
+              refreshing={refreshing}
               {...otherConfirmButtonProps}
             >
               {confirmButtonText || 'Confirm'}
