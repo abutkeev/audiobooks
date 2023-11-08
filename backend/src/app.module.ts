@@ -10,13 +10,18 @@ import { PersonsModule } from './persons/persons.module';
 import { AuthorsModule } from './authors/authors.module';
 import { SeriesModule } from './series/series.module';
 import { BooksModule } from './books/books.module';
-import { DB_URI } from './constants';
+import { DB_URI, TELEGRAM_BOT_TOKEN } from './constants';
 import { SignUpModule } from './sign-up/sign-up.module';
 import { FriendsModule } from './friends/friends.module';
+import { TelegrafModule } from 'nestjs-telegraf';
+import { TgBotModule } from './tg-bot/tg-bot.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(DB_URI),
+    TelegrafModule.forRoot({
+      token: TELEGRAM_BOT_TOKEN,
+    }),
     UsersModule,
     AuthModule,
     EventsModule,
@@ -29,6 +34,7 @@ import { FriendsModule } from './friends/friends.module';
     BooksModule,
     SignUpModule,
     FriendsModule,
+    TgBotModule,
   ],
   controllers: [],
   providers: [],
