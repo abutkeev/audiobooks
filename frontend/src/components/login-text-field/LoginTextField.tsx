@@ -11,6 +11,7 @@ interface LoginTextFieldProps {
   valid: boolean;
   setValid(v: boolean): void;
   validType: 'used' | 'unused';
+  selfLogin?: string;
   allowSelf?: boolean;
   textFieldProps?: TextFieldProps;
 }
@@ -21,12 +22,15 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
   valid,
   setValid,
   validType = 'unused',
+  selfLogin: selfLoginProp,
   allowSelf,
   textFieldProps,
 }) => {
   const [check] = useLazySignUpCheckQuery();
   const [state, setState] = useState<LoginCheckStateProps['state']>();
-  const { login: selfLogin } = useAuthData() || {};
+  const { login: authLogin } = useAuthData() || {};
+
+  const selfLogin = selfLoginProp || authLogin;
 
   useEffect(() => {
     const isLoginValid = (free: boolean) => {
