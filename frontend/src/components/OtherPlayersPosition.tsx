@@ -43,7 +43,7 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
     const chapterNumber = currentChapter + 1;
     const titleIsChapterNumber = +chapterTitle === chapterNumber;
 
-    return `${chapterNumber} ${!titleIsChapterNumber && `(${chapterTitle})`}`;
+    return `${chapterNumber}${!titleIsChapterNumber ? ` (${chapterTitle})`: ''}`;
   };
 
   const formatUpdated = (updated: string) => {
