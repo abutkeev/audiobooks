@@ -52,14 +52,14 @@ const ChangePasswordDialog: FC<ChangePasswordDialogProps> = ({ open, close }) =>
             required
             error={!oldPassword}
             value={oldPassword}
-            onChange={({ target: { value } }) => setOldPassword(value)}
+            onChange={setOldPassword}
           />
           <CustomPassword
             label='New password'
             required
             error={!newPassword}
             value={newPassword}
-            onChange={({ target: { value } }) => setNewPassword(value)}
+            onChange={setNewPassword}
           />
         </Stack>
       }

@@ -70,7 +70,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ open, close }) => {
             required
             label='Password'
             value={password}
-            onChange={({ target: { value } }) => setPassword(value)}
+            onChange={setPassword}
             onKeyDown={e => e.stopPropagation()}
             error={!password}
           />

@@ -37,13 +37,7 @@ const PasswordAuthForm: React.FC<CommonAuthProps> = ({ setLoading, setError }) =
         required
         error={!login}
       />
-      <CustomPassword
-        label='Password'
-        value={password}
-        onChange={({ target: { value } }) => setPassword(value)}
-        required
-        error={!password}
-      />
+      <CustomPassword label='Password' value={password} onChange={setPassword} required error={!password} />
       <Button size='large' variant='contained' sx={{ mt: 1 }} disabled={!login || !password} onClick={handleLogin}>
         Login
       </Button>

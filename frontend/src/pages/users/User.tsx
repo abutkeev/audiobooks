@@ -95,11 +95,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
               allowSelf
               selfLogin={login}
             />
-            <CustomPassword
-              label='Password'
-              value={password}
-              onChange={({ target: { value } }) => setPassword(value)}
-            />
+            <CustomPassword label='Password' value={password} onChange={setPassword} />
             <AdminSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
           </Stack>
         </FormControl>

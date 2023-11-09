@@ -75,7 +75,8 @@ const SignUp: FC = () => {
             <CustomPassword
               label='Password'
               value={password}
-              onChange={({ target: { value } }) => setPassword(value)}
+              onChange={setPassword}
+              generate
               required
               error={!password}
               autoComplete='new-password'
