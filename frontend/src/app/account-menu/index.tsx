@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AccountCircle, AdminPanelSettings, Chat, People } from '@mui/icons-material';
+import { AccountCircle, Chat, People } from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import useWebSocket from '../../hooks/useWebSocket';
@@ -15,6 +15,7 @@ import ChangePasswordMenuItem from './change-password/ChangePasswordMenuItem';
 import LinkedAccountsMenuItem from './linked-accounts/LinkedAccountsMenuItem';
 import SecurityKeysMenuItem from './security-keys/SecurityKeysMenuItem';
 import LogoutMenuItem from './LogoutMenuItem';
+import UsersMenuItem from './admin/UsersMenuItem';
 
 export interface AccountMenuItemProps {
   closeMenu(): void;
@@ -50,11 +51,6 @@ const AccountMenu: React.FC = () => {
 
   const closeMenu = () => setMenuAnchor(undefined);
 
-  const handleNavigateToUsersPage = () => {
-    navigate('/users');
-    closeMenu();
-  };
-
   const handleNavigateToChatsPage = () => {
     navigate('/chats');
     closeMenu();
@@ -81,14 +77,7 @@ const AccountMenu: React.FC = () => {
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
         <ProfileMenuItem setShowDialog={setShowProfileDialog} closeMenu={closeMenu} />
         <ChangePasswordMenuItem setShowDialog={setShowChangePasswordDialog} closeMenu={closeMenu} />
-        {admin && (
-          <MenuItem divider onClick={handleNavigateToUsersPage}>
-            <ListItemIcon>
-              <AdminPanelSettings />
-            </ListItemIcon>
-            <ListItemText>Users</ListItemText>
-          </MenuItem>
-        )}
+        <UsersMenuItem closeMenu={closeMenu} />
         {admin && (
           <MenuItem divider onClick={handleNavigateToChatsPage}>
             <ListItemIcon>
