@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Chat } from './schemas/chat.schema';
 import { Model } from 'mongoose';
@@ -6,6 +6,8 @@ import { ChatDto } from './dto/chat.dto';
 import { Context, Telegraf } from 'telegraf';
 import { InjectBot } from 'nestjs-telegraf';
 import { EventsService } from 'src/events/events.service';
+
+const logger = new Logger('TelegramService');
 
 @Injectable()
 export class TelegramService {
@@ -53,6 +55,7 @@ export class TelegramService {
     for (const { id } of await this.chatsModel.find({ authorized: true })) {
       try {
         const { status } = await this.bot.telegram.getChatMember(id, telegramUid);
+        logger.debug(`isAuthorizedChatMember: telegramUid ${telegramUid}, status ${status}`);
         if (status === 'left' || status === 'kicked') {
           continue;
         }
