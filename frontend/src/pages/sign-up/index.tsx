@@ -55,19 +55,22 @@ const SignUp: FC = () => {
         <FormControl fullWidth>
           <Stack spacing={2}>
             <ErrorAlert error={error} />{' '}
-            <LoginTextField
-              login={login}
-              setLogin={setLogin}
-              valid={loginValid}
-              setValid={setLoginValid}
-              validType='unused'
-            />
             <TextField
               label='Name'
               value={name}
               onChange={({ target: { value } }) => setName(value)}
               required
               error={!name}
+              autoComplete='name'
+              autoFocus
+            />
+            <LoginTextField
+              login={login}
+              setLogin={setLogin}
+              valid={loginValid}
+              setValid={setLoginValid}
+              validType='unused'
+              textFieldProps={{ autoComplete: 'username', autoFocus: false }}
             />
             <CustomPassword
               label='Password'
@@ -75,6 +78,7 @@ const SignUp: FC = () => {
               onChange={({ target: { value } }) => setPassword(value)}
               required
               error={!password}
+              autoComplete='new-password'
             />
             <ReCaptcha setToken={setCaptchaToken} />
             <ProgressButton buttonProps={{ fullWidth: true, size: 'large' }} disabled={!valid} onClick={handleSignUp}>
