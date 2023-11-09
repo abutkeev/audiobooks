@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
-import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
+import CustomDialog, { AbortOperation } from '../../../components/common/CustomDialog';
 import { Stack } from '@mui/material';
-import CustomPassword from '../../components/common/CustomPassword';
-import { useProfileChangePasswordMutation } from '../../api/api';
-import getErrorMessage from '../../utils/getErrorMessage';
-import ErrorAlert from '../../components/common/ErrorAlert';
+import CustomPassword from '../../../components/common/CustomPassword';
+import { useProfileChangePasswordMutation } from '../../../api/api';
+import getErrorMessage from '../../../utils/getErrorMessage';
+import ErrorAlert from '../../../components/common/ErrorAlert';
 
 interface ChangePasswordDialogProps {
   open: boolean;

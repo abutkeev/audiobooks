@@ -15,13 +15,13 @@ import useAuthData from '../../hooks/useAuthData';
 import { useAppDispatch } from '../../store';
 import { setAuthToken } from '../../store/features/auth';
 import useWebSocket from '../../hooks/useWebSocket';
-import SecurityKeysDialog from './security-keys-dialog';
+import SecurityKeysDialog from './security-keys/SecurityKeysDialog';
 import { useNavigate } from 'react-router-dom';
 import { useLazyFriendsGetIncomingRequestsQuery } from '../../api/api';
 import FriendsBage from '../../components/FriendsBage';
-import LinkedAccountsDialog from './linked-accounts-dialog';
-import ChangePasswordDialog from './ChangePasswordDialog';
-import ProfileDialog from './ProfileDialog';
+import LinkedAccountsDialog from './linked-accounts/SecurityKeysDialog';
+import ChangePasswordDialog from './change-password/ChangePasswordDialog';
+import ProfileDialog from './profile/ProfileDialog';
 
 const AccountMenu: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();

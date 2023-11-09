@@ -1,12 +1,12 @@
 import { FC, useState } from 'react';
-import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
+import CustomDialog, { AbortOperation } from '../../../components/common/CustomDialog';
 import { Stack, TextField } from '@mui/material';
-import { useProfileEditMutation } from '../../api/api';
-import getErrorMessage from '../../utils/getErrorMessage';
-import ErrorAlert from '../../components/common/ErrorAlert';
-import useAuthData from '../../hooks/useAuthData';
-import LoginTextField from '../../components/login-text-field/LoginTextField';
-import useUpdatingState from '../../hooks/useUpdatingState';
+import { useProfileEditMutation } from '../../../api/api';
+import getErrorMessage from '../../../utils/getErrorMessage';
+import ErrorAlert from '../../../components/common/ErrorAlert';
+import useAuthData from '../../../hooks/useAuthData';
+import LoginTextField from '../../../components/login-text-field/LoginTextField';
+import useUpdatingState from '../../../hooks/useUpdatingState';
 
 interface ProfileDialogProps {
   open: boolean;
