@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { AccountCircle, People } from '@mui/icons-material';
-import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+import { AccountCircle } from '@mui/icons-material';
+import { Badge, IconButton, Menu } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import useWebSocket from '../../hooks/useWebSocket';
 import SecurityKeysDialog from './security-keys/SecurityKeysDialog';
-import { useNavigate } from 'react-router-dom';
 import { useLazyFriendsGetIncomingRequestsQuery } from '../../api/api';
-import FriendsBage from '../../components/FriendsBage';
 import LinkedAccountsDialog from './linked-accounts/LinkedAccountsDialog';
 import ChangePasswordDialog from './change-password/ChangePasswordDialog';
 import ProfileMenuItem from './profile/ProfileMenuItem';
@@ -17,6 +15,7 @@ import SecurityKeysMenuItem from './security-keys/SecurityKeysMenuItem';
 import LogoutMenuItem from './LogoutMenuItem';
 import UsersMenuItem from './admin/UsersMenuItem';
 import ChatsMenuItem from './admin/ChatsMenuItem';
+import FriendsMenuItem from './FriendsMenuItem';
 
 export interface AccountMenuItemProps {
   closeMenu(): void;
@@ -31,7 +30,6 @@ const AccountMenu: React.FC = () => {
   const [friendsRequests, setFriendsRequests] = useState(0);
   const { login, enabled } = useAuthData() || {};
   const connected = useWebSocket();
-  const navigate = useNavigate();
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showSecurityKeysDialog, setShowSecurityKeysDialog] = useState(false);
   const [showLinkedAccountsDialog, setShowLinkedAccountsDialog] = useState(false);
@@ -52,11 +50,6 @@ const AccountMenu: React.FC = () => {
 
   const closeMenu = () => setMenuAnchor(undefined);
 
-  const handleNavigateToFriendsPage = () => {
-    navigate('/friends');
-    closeMenu();
-  };
-
   if (!login) return;
 
   return (
@@ -75,15 +68,7 @@ const AccountMenu: React.FC = () => {
         <ChangePasswordMenuItem setShowDialog={setShowChangePasswordDialog} closeMenu={closeMenu} />
         <UsersMenuItem closeMenu={closeMenu} />
         <ChatsMenuItem closeMenu={closeMenu} />
-        {enabled && (
-          <MenuItem divider onClick={handleNavigateToFriendsPage}>
-            <ListItemIcon>
-              <People />
-            </ListItemIcon>
-            <ListItemText>Friends</ListItemText>
-            <FriendsBage friendsRequests={friendsRequests} />
-          </MenuItem>
-        )}
+        <FriendsMenuItem friendsRequests={friendsRequests} closeMenu={closeMenu} />
         <LinkedAccountsMenuItem setShowDialog={setShowLinkedAccountsDialog} closeMenu={closeMenu} />
         <SecurityKeysMenuItem setShowDialog={setShowSecurityKeysDialog} closeMenu={closeMenu} />
         <LogoutMenuItem closeMenu={closeMenu} />
