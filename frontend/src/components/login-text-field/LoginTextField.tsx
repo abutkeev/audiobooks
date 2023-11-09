@@ -11,6 +11,7 @@ interface LoginTextFieldProps {
   valid: boolean;
   setValid(v: boolean): void;
   validType: 'used' | 'unused';
+  allowSelf?: boolean;
   textFieldProps?: TextFieldProps;
 }
 
@@ -20,6 +21,7 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
   valid,
   setValid,
   validType = 'unused',
+  allowSelf,
   textFieldProps,
 }) => {
   const [check] = useLazySignUpCheckQuery();
@@ -37,9 +39,9 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
       return;
     }
 
-    if (validType === 'used' && selfLogin && login === selfLogin) {
+    if (selfLogin && login === selfLogin) {
       setState('self');
-      setValid(false);
+      setValid(!!allowSelf);
       return;
     }
 
@@ -69,7 +71,7 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
       return 'User not found';
     }
 
-    if (state === 'self') {
+    if (state === 'self' && !allowSelf) {
       return 'Self login';
     }
   }, [state, valid, validType, selfLogin]);
