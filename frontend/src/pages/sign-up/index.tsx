@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import useTitle from '../../hooks/useTitle';
-import { Alert, Button, Container, FormControl, Paper, Stack, TextField } from '@mui/material';
+import { Button, Container, FormControl, Paper, Stack, TextField } from '@mui/material';
 import CustomPassword from '../../components/common/CustomPassword';
 import ProgressButton from '../../components/common/ProgressButton';
 import { useSignUpSignUpMutation } from '../../api/api';
@@ -10,6 +10,7 @@ import { useAppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { setAuthToken } from '../../store/features/auth';
 import ReCaptcha from './ReCaptcha';
+import ErrorAlert from '../../components/common/ErrorAlert';
 
 const SignUp: FC = () => {
   useTitle('Sign up');
@@ -53,11 +54,7 @@ const SignUp: FC = () => {
       <Paper sx={{ p: 2 }}>
         <FormControl fullWidth>
           <Stack spacing={2}>
-            {error && (
-              <Alert severity='error' variant='outlined' sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
+            <ErrorAlert error={error} />{' '}
             <LoginTextField
               login={login}
               setLogin={setLogin}

@@ -1,4 +1,4 @@
-import { Alert, Button, Container, Paper, Stack, Typography } from '@mui/material';
+import { Button, Container, Paper, Stack, Typography } from '@mui/material';
 import useTitle from '../../hooks/useTitle';
 import { useState } from 'react';
 import LoadingWrapper from '../../components/common/LoadingWrapper';
@@ -12,6 +12,7 @@ import { useAppDispatch } from '../../store';
 import { useTgLoginMutation } from '../../api/api';
 import { setAuthToken } from '../../store/features/auth';
 import getErrorMessage from '../../utils/getErrorMessage';
+import ErrorAlert from '../../components/common/ErrorAlert';
 
 export interface CommonAuthProps {
   setLoading(v: boolean): void;
@@ -40,20 +41,7 @@ const Login: React.FC = () => {
     <LoadingWrapper loading={loading}>
       <Container maxWidth='sm'>
         <Paper sx={{ p: 2 }}>
-          {error && (
-            <Alert
-              severity='error'
-              variant='outlined'
-              sx={{
-                mb: 2,
-                '& > :first-letter': {
-                  textTransform: 'capitalize',
-                },
-              }}
-            >
-              {error}
-            </Alert>
-          )}
+          <ErrorAlert error={error} />
           <PasswordAuthForm setLoading={setLoading} setError={setError} />
           <Typography align='center' my={1}>
             or
