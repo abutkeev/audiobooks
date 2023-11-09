@@ -7,6 +7,11 @@ import bcrypt from 'bcrypt';
 import { UserDto } from './dto/user.dto';
 import { INIT_ID, INIT_PASSWD } from 'src/constants';
 import { EventsService } from 'src/events/events.service';
+import { TelegramAccount } from 'src/auth/tg/schemas/telegram-account.schema';
+import { PublicKey } from 'src/auth/webauthn/schemas/public-key.schema';
+import { FriendRequests } from 'src/friends/schemas/friend-requests.schema';
+import { Friend } from 'src/friends/schemas/friends.schema';
+import { Position } from 'src/position/schemas/position.schema';
 
 const encryptPassword = (password: string) => {
   const salt = bcrypt.genSaltSync();
@@ -28,6 +33,11 @@ const initUser: UserDto | undefined =
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(TelegramAccount.name) private telegramAccountsModel: Model<TelegramAccount>,
+    @InjectModel(Position.name) private positionsModel: Model<Position>,
+    @InjectModel(FriendRequests.name) private friendRequestsModel: Model<FriendRequests>,
+    @InjectModel(Friend.name) private friendsModel: Model<Friend>,
+    @InjectModel(PublicKey.name) private publicKeysModel: Model<PublicKey>,
 
     @Inject(forwardRef(() => EventsService))
     private eventsService: EventsService
@@ -109,8 +119,13 @@ export class UsersService {
     return this.userModel.updateOne({ _id: id }, { password: encryptPassword(password) });
   }
 
-  async remove(_id: string): Promise<true> {
-    await this.userModel.deleteOne({ _id });
+  async remove(id: string): Promise<true> {
+    await this.userModel.deleteOne({ _id: id });
+    await this.telegramAccountsModel.deleteMany({ userId: id });
+    await this.positionsModel.deleteMany({ userId: id });
+    await this.friendRequestsModel.deleteMany({ $or: [{ from: id }, { to: id }] });
+    await this.friendsModel.deleteMany({ $or: [{ user1: id }, { user2: id }] });
+    await this.publicKeysModel.deleteMany({ userId: id });
     return true;
   }
 }
