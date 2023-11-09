@@ -34,7 +34,7 @@ const AccountMenu: React.FC = () => {
   const [showSecurityKeysDialog, setShowSecurityKeysDialog] = useState(false);
   const [showLinkedAccountsDialog, setShowLinkedAccountsDialog] = useState(false);
   const [showChangePasswordDialog, setShowChangePasswordDialog] = useState(false);
-  const [getFriendsRequests, { status, isFetching }] = useLazyFriendsGetIncomingRequestsQuery();
+  const [getFriendsRequests, { status }] = useLazyFriendsGetIncomingRequestsQuery();
 
   useEffect(() => {
     if (!enabled || !['uninitialized', 'fulfilled'].includes(status)) return;
@@ -46,7 +46,7 @@ const AccountMenu: React.FC = () => {
           setFriendsRequests(result.length);
         });
     } catch {}
-  }, [enabled, status, isFetching]);
+  }, [enabled, status]);
 
   const closeMenu = () => setMenuAnchor(undefined);
 
