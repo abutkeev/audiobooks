@@ -1,15 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  AccountCircle,
-  AdminPanelSettings,
-  Chat,
-  Fingerprint,
-  Key,
-  Link,
-  Logout,
-  People,
-  Person,
-} from '@mui/icons-material';
+import { AccountCircle, AdminPanelSettings, Chat, Fingerprint, Key, Link, Logout, People } from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { useAppDispatch } from '../../store';
@@ -21,7 +11,16 @@ import { useLazyFriendsGetIncomingRequestsQuery } from '../../api/api';
 import FriendsBage from '../../components/FriendsBage';
 import LinkedAccountsDialog from './linked-accounts/SecurityKeysDialog';
 import ChangePasswordDialog from './change-password/ChangePasswordDialog';
+import ProfileMenuItem from './profile/ProfileMenuItem';
 import ProfileDialog from './profile/ProfileDialog';
+
+export interface AccountMenuItemProps {
+  closeMenu(): void;
+}
+
+export interface AccountMenuDialogItemProps extends AccountMenuItemProps {
+  setShowDialog(v: boolean): void;
+}
 
 const AccountMenu: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -49,11 +48,6 @@ const AccountMenu: React.FC = () => {
   }, [enabled, status, isFetching]);
 
   const closeMenu = () => setMenuAnchor(undefined);
-
-  const handleShowProfileDialog = () => {
-    setShowProfileDialog(true);
-    closeMenu();
-  };
 
   const handleShowLinkedAccountsDialog = () => {
     setShowLinkedAccountsDialog(true);
@@ -104,12 +98,7 @@ const AccountMenu: React.FC = () => {
         </Badge>
       </IconButton>
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
-        <MenuItem divider onClick={handleShowProfileDialog}>
-          <ListItemIcon>
-            <Person />
-          </ListItemIcon>
-          <ListItemText>Login: {login}</ListItemText>
-        </MenuItem>
+        <ProfileMenuItem setShowDialog={setShowProfileDialog} closeMenu={closeMenu} />
         <MenuItem onClick={handleShowChangePasswordDialog}>
           <ListItemIcon>
             <Key />
