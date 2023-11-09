@@ -4,7 +4,6 @@ import ProgressButton, { ProgressButtonProps } from './ProgressButton';
 import CustomDialog from './CustomDialog';
 
 export interface DeleteButtonProps {
-  onClick?(): void;
   onConfirm(): void | Promise<void>;
   confirmationTitle: string;
   confirmationBody: ReactNode;
@@ -16,7 +15,6 @@ export interface DeleteButtonProps {
 
 const DeleteButton: FC<PropsWithChildren<DeleteButtonProps>> = ({
   children,
-  onClick,
   onConfirm,
   confirmationTitle,
   confirmationBody,
@@ -30,9 +28,6 @@ const DeleteButton: FC<PropsWithChildren<DeleteButtonProps>> = ({
   const handleShowDeleteConfirmationDialog = async (e: MouseEvent) => {
     e.stopPropagation();
     setShowDeleteConfirmation(true);
-    if (onClick) {
-      await onClick();
-    }
   };
 
   return (
