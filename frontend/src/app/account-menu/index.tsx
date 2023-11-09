@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AccountCircle, Chat, People } from '@mui/icons-material';
+import { AccountCircle, People } from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import useWebSocket from '../../hooks/useWebSocket';
@@ -16,6 +16,7 @@ import LinkedAccountsMenuItem from './linked-accounts/LinkedAccountsMenuItem';
 import SecurityKeysMenuItem from './security-keys/SecurityKeysMenuItem';
 import LogoutMenuItem from './LogoutMenuItem';
 import UsersMenuItem from './admin/UsersMenuItem';
+import ChatsMenuItem from './admin/ChatsMenuItem';
 
 export interface AccountMenuItemProps {
   closeMenu(): void;
@@ -28,7 +29,7 @@ export interface AccountMenuDialogItemProps extends AccountMenuItemProps {
 const AccountMenu: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const [friendsRequests, setFriendsRequests] = useState(0);
-  const { login, admin, enabled } = useAuthData() || {};
+  const { login, enabled } = useAuthData() || {};
   const connected = useWebSocket();
   const navigate = useNavigate();
   const [showProfileDialog, setShowProfileDialog] = useState(false);
@@ -50,11 +51,6 @@ const AccountMenu: React.FC = () => {
   }, [enabled, status, isFetching]);
 
   const closeMenu = () => setMenuAnchor(undefined);
-
-  const handleNavigateToChatsPage = () => {
-    navigate('/chats');
-    closeMenu();
-  };
 
   const handleNavigateToFriendsPage = () => {
     navigate('/friends');
@@ -78,14 +74,7 @@ const AccountMenu: React.FC = () => {
         <ProfileMenuItem setShowDialog={setShowProfileDialog} closeMenu={closeMenu} />
         <ChangePasswordMenuItem setShowDialog={setShowChangePasswordDialog} closeMenu={closeMenu} />
         <UsersMenuItem closeMenu={closeMenu} />
-        {admin && (
-          <MenuItem divider onClick={handleNavigateToChatsPage}>
-            <ListItemIcon>
-              <Chat />
-            </ListItemIcon>
-            <ListItemText>Chats</ListItemText>
-          </MenuItem>
-        )}
+        <ChatsMenuItem closeMenu={closeMenu} />
         {enabled && (
           <MenuItem divider onClick={handleNavigateToFriendsPage}>
             <ListItemIcon>
