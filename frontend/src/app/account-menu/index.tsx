@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AccountCircle, AdminPanelSettings, Chat, Fingerprint, Logout, People } from '@mui/icons-material';
+import { AccountCircle, AdminPanelSettings, Chat, Logout, People } from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { useAppDispatch } from '../../store';
@@ -15,6 +15,7 @@ import ProfileMenuItem from './profile/ProfileMenuItem';
 import ProfileDialog from './profile/ProfileDialog';
 import ChangePasswordMenuItem from './change-password/ChangePasswordMenuItem';
 import LinkedAccountsMenuItem from './linked-accounts/LinkedAccountsMenuItem';
+import SecurityKeysMenuItem from './security-keys/SecurityKeysMenuItem';
 
 export interface AccountMenuItemProps {
   closeMenu(): void;
@@ -50,11 +51,6 @@ const AccountMenu: React.FC = () => {
   }, [enabled, status, isFetching]);
 
   const closeMenu = () => setMenuAnchor(undefined);
-
-  const handleShowSecurityKeysDialog = () => {
-    setShowSecurityKeysDialog(true);
-    closeMenu();
-  };
 
   const handleNavigateToUsersPage = () => {
     navigate('/users');
@@ -118,12 +114,7 @@ const AccountMenu: React.FC = () => {
           </MenuItem>
         )}
         <LinkedAccountsMenuItem setShowDialog={setShowLinkedAccountsDialog} closeMenu={closeMenu} />
-        <MenuItem onClick={handleShowSecurityKeysDialog}>
-          <ListItemIcon>
-            <Fingerprint />
-          </ListItemIcon>
-          <ListItemText>Security keys</ListItemText>
-        </MenuItem>
+        <SecurityKeysMenuItem setShowDialog={setShowSecurityKeysDialog} closeMenu={closeMenu} />
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout />
