@@ -1,34 +1,46 @@
-import { Delete, ExpandMore } from '@mui/icons-material';
+import { ExpandMore } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   FormControl,
-  IconButton,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
-import { UserDto } from '../../api/api';
+import { UserDto, useUsersRemoveMutation } from '../../api/api';
 import CustomPassword from '../../components/common/CustomPassword';
 import useAuthData from '../../hooks/useAuthData';
 import UserDisableSwitch from './UserDisableSwitch';
 import AdminSwitch from './AdminSwitch';
+import DeleteButton from '../../components/common/DeleteButton';
 
 const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
   const auth = useAuthData();
+  const [remove] = useUsersRemoveMutation();
+
   const thisUser = auth?.id === id;
+
+  const handleRemove = async () => {
+    await remove({ id });
+  };
+
+  const formatUser = () => `${login} ${name && ` (${name})`}`;
+
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMore />}>
         <Stack direction='row' flexGrow={1} alignItems='center'>
           <Typography flexGrow={1} noWrap>
-            {login} {name && ` (${name})`}
+            {formatUser()}
           </Typography>
           <UserDisableSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
-          <IconButton disabled sx={{ visibility: thisUser ? 'collapse' : 'visible' }}>
-            <Delete />
-          </IconButton>
+          <DeleteButton
+            confirmationTitle='Remove user?'
+            confirmationBody={`Remove user ${formatUser()}`}
+            onConfirm={handleRemove}
+            deleteButtonProps={{ buttonProps: { sx: { visibility: thisUser ? 'collapse' : 'visible' } } }}
+          />
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
