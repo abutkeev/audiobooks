@@ -5,11 +5,17 @@ import useAuthData from '../../../hooks/useAuthData';
 import { AccountMenuDialogItemProps } from '..';
 
 const ProfileMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog, closeMenu }) => {
-  const { login } = useAuthData()!;
+  const { login, name } = useAuthData()!;
 
   const handleShowDialog = () => {
     setShowDialog(true);
     closeMenu();
+  };
+
+  const formatName = () => {
+    if (!name) return login;
+
+    return `${name} (${login})`;
   };
 
   return (
@@ -17,7 +23,7 @@ const ProfileMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog, closeM
       <ListItemIcon>
         <Person />
       </ListItemIcon>
-      <ListItemText>Login: {login}</ListItemText>
+      <ListItemText>{formatName()}</ListItemText>
     </MenuItem>
   );
 };
