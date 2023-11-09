@@ -3,7 +3,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { ProfileService } from './profile.service';
 import { ProfileDto } from './dto/profile.dto';
 import { NewPasswordDto } from './dto/new-password';
+import { AllowInactive } from 'src/auth/allow-inactive.decorator';
 
+@AllowInactive()
 @ApiTags('profile', 'users')
 @Controller('profile')
 export class ProfileController {
