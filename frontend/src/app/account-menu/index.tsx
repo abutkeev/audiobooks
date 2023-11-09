@@ -9,7 +9,7 @@ import SecurityKeysDialog from './security-keys/SecurityKeysDialog';
 import { useNavigate } from 'react-router-dom';
 import { useLazyFriendsGetIncomingRequestsQuery } from '../../api/api';
 import FriendsBage from '../../components/FriendsBage';
-import LinkedAccountsDialog from './linked-accounts/SecurityKeysDialog';
+import LinkedAccountsDialog from './linked-accounts/LinkedAccountsDialog';
 import ChangePasswordDialog from './change-password/ChangePasswordDialog';
 import ProfileMenuItem from './profile/ProfileMenuItem';
 import ProfileDialog from './profile/ProfileDialog';
