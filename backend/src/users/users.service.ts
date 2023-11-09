@@ -108,4 +108,9 @@ export class UsersService {
 
     return this.userModel.updateOne({ _id: id }, { password: encryptPassword(password) });
   }
+
+  async remove(_id: string): Promise<true> {
+    await this.userModel.deleteOne({ _id });
+    return true;
+  }
 }

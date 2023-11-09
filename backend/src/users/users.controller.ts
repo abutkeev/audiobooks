@@ -36,6 +36,12 @@ export class UsersController {
     return true;
   }
 
+  @Delete(':id')
+  @ApiOperation({ description: 'Remove user' })
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
+  }
+
   @Put('active/:id')
   @ApiOperation({ description: 'Grant admin rights to user' })
   async activate(@Param('id') id: string): Promise<true> {
