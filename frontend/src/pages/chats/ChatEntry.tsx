@@ -41,7 +41,11 @@ const ChatEntry: FC<ChatDto> = ({ id, type, title, status, authorized }) => {
           checked={authorized}
           onChange={handleChangeAuthorize}
         />
-        <DeleteButton onConfirm={handleRemove} confirmationTitle='Remove chat?' confirmationBody={`Remove chat ${title}?`} />
+        <DeleteButton
+          onConfirm={handleRemove}
+          confirmationTitle='Remove chat?'
+          confirmationBody={`Remove chat ${title}?`}
+        />
       </Stack>
     </Paper>
   );
