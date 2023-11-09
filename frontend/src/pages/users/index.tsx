@@ -4,7 +4,7 @@ import LoadingWrapper from '../../components/common/LoadingWrapper';
 import useTitle from '../../hooks/useTitle';
 import User from './User';
 import useSearchMatcher from '../../hooks/useSearchMatcher';
-import { Alert } from '@mui/material';
+import EmptyListWrapper from '../../components/common/EmptyListWrapper';
 
 const Users: React.FC = () => {
   useTitle('Users');
@@ -22,11 +22,11 @@ const Users: React.FC = () => {
 
   return (
     <LoadingWrapper loading={isLoading} error={isError}>
-      {users.length === 0 ? (
-        <Alert severity='info'>No users found</Alert>
-      ) : (
-        users.map(user => <User key={user.id} {...user} />)
-      )}
+      <EmptyListWrapper wrap={users.length === 0} message={searchMatcher ? 'No users found' : 'No users'}>
+        {users.map(user => (
+          <User key={user.id} {...user} />
+        ))}
+      </EmptyListWrapper>
     </LoadingWrapper>
   );
 };
