@@ -1,5 +1,15 @@
 import { useEffect, useState } from 'react';
-import { AccountCircle, AdminPanelSettings, Chat, Key, Link, Logout, People, Person } from '@mui/icons-material';
+import {
+  AccountCircle,
+  AdminPanelSettings,
+  Chat,
+  Fingerprint,
+  Key,
+  Link,
+  Logout,
+  People,
+  Person,
+} from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import { useAppDispatch } from '../../store';
@@ -10,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLazyFriendsGetIncomingRequestsQuery } from '../../api/api';
 import FriendsBage from '../../components/FriendsBage';
 import LinkedAccountsDialog from './linked-accounts-dialog';
+import ChangePasswordDialog from './ChangePasswordDialog';
 
 const AccountMenu: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -20,6 +31,7 @@ const AccountMenu: React.FC = () => {
   const navigate = useNavigate();
   const [showSecurityKeysDialog, setShowSecurityKeysDialog] = useState(false);
   const [showLinkedAccountsDialog, setShowLinkedAccountsDialog] = useState(false);
+  const [showChangePasswordDialog, setShowChangePasswordDialog] = useState(false);
   const [getFriendsRequests, { status, isFetching }] = useLazyFriendsGetIncomingRequestsQuery();
 
   useEffect(() => {
@@ -43,6 +55,11 @@ const AccountMenu: React.FC = () => {
 
   const handleShowSecurityKeysDialog = () => {
     setShowSecurityKeysDialog(true);
+    closeMenu();
+  };
+
+  const handleShowChangePasswordDialog = () => {
+    setShowChangePasswordDialog(true);
     closeMenu();
   };
 
@@ -86,6 +103,12 @@ const AccountMenu: React.FC = () => {
           </ListItemIcon>
           <ListItemText>Login: {login}</ListItemText>
         </MenuItem>
+        <MenuItem onClick={handleShowChangePasswordDialog}>
+          <ListItemIcon>
+            <Key />
+          </ListItemIcon>
+          <ListItemText>Change password</ListItemText>
+        </MenuItem>
         {admin && (
           <MenuItem divider onClick={handleNavigateToUsersPage}>
             <ListItemIcon>
@@ -119,7 +142,7 @@ const AccountMenu: React.FC = () => {
         </MenuItem>
         <MenuItem onClick={handleShowSecurityKeysDialog}>
           <ListItemIcon>
-            <Key />
+            <Fingerprint />
           </ListItemIcon>
           <ListItemText>Security keys</ListItemText>
         </MenuItem>
@@ -132,6 +155,7 @@ const AccountMenu: React.FC = () => {
       </Menu>
       <SecurityKeysDialog open={showSecurityKeysDialog} close={() => setShowSecurityKeysDialog(false)} />
       <LinkedAccountsDialog open={showLinkedAccountsDialog} close={() => setShowLinkedAccountsDialog(false)} />
+      <ChangePasswordDialog open={showChangePasswordDialog} close={() => setShowChangePasswordDialog(false)} />
     </>
   );
 };
