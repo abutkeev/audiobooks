@@ -29,7 +29,7 @@ const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, 
   if (thisUser) {
     return (
       <Tooltip title='This user'>
-        <AdminPanelSettings sx={{ mr: 2 }} />
+        <AdminPanelSettings sx={{ mr: 1 }} />
       </Tooltip>
     );
   }

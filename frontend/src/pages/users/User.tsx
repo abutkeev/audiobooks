@@ -35,12 +35,13 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
             {formatUser()}
           </Typography>
           <UserDisableSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
-          <DeleteButton
-            confirmationTitle='Remove user?'
-            confirmationBody={`Remove user ${formatUser()}`}
-            onConfirm={handleRemove}
-            deleteButtonProps={{ buttonProps: { sx: { visibility: thisUser ? 'collapse' : 'visible' } } }}
-          />
+          {!thisUser && (
+            <DeleteButton
+              confirmationTitle='Remove user?'
+              confirmationBody={`Remove user ${formatUser()}`}
+              onConfirm={handleRemove}
+            />
+          )}
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
