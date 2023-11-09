@@ -13,7 +13,7 @@ const ProfileMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog, closeM
   };
 
   return (
-    <MenuItem divider onClick={handleShowDialog}>
+    <MenuItem onClick={handleShowDialog}>
       <ListItemIcon>
         <Person />
       </ListItemIcon>

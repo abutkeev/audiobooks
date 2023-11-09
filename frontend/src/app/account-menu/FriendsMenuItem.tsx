@@ -22,7 +22,7 @@ const FriendsMenuItem: FC<FriendsMenuItemProps> = ({ friendsRequests, closeMenu 
   if (!enabled) return null;
 
   return (
-    <MenuItem divider onClick={handleNavigateToFriendsPage}>
+    <MenuItem onClick={handleNavigateToFriendsPage}>
       <ListItemIcon>
         <People />
       </ListItemIcon>

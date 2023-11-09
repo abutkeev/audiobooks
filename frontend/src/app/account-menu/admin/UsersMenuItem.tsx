@@ -17,7 +17,7 @@ const UsersMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {
   if (!admin) return null;
 
   return (
-    <MenuItem divider onClick={handleNavigateToUsersPage}>
+    <MenuItem onClick={handleNavigateToUsersPage}>
       <ListItemIcon>
         <AdminPanelSettings />
       </ListItemIcon>

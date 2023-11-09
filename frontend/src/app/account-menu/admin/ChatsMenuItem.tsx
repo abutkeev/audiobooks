@@ -17,7 +17,7 @@ const ChatsMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {
   if (!admin) return null;
 
   return (
-    <MenuItem divider onClick={handleNavigateToChatsPage}>
+    <MenuItem onClick={handleNavigateToChatsPage}>
       <ListItemIcon>
         <Chat />
       </ListItemIcon>
