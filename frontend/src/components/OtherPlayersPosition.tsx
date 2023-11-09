@@ -43,7 +43,7 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
     const chapterNumber = currentChapter + 1;
     const titleIsChapterNumber = +chapterTitle === chapterNumber;
 
-    return `${chapterNumber}${!titleIsChapterNumber ? ` (${chapterTitle})`: ''}`;
+    return `${chapterNumber}${!titleIsChapterNumber ? ` (${chapterTitle})` : ''}`;
   };
 
   const formatUpdated = (updated: string) => {
@@ -56,7 +56,9 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
 
   return (
     <Accordion square>
-      <AccordionSummary expandIcon={<ExpandMore />}>Other players position</AccordionSummary>
+      <AccordionSummary expandIcon={<ExpandMore />} onClick={({ currentTarget }) => currentTarget.blur()}>
+        Other players position
+      </AccordionSummary>
       <AccordionDetails>
         {positions.map(({ instanceId, currentChapter, position, updated }) => {
           return (
