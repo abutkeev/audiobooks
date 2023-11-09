@@ -30,6 +30,16 @@ const DeleteButton: FC<PropsWithChildren<DeleteButtonProps>> = ({
     setShowDeleteConfirmation(true);
   };
 
+  const handleConfirm = async (e: MouseEvent) => {
+    e.stopPropagation();
+    await onConfirm();
+  };
+
+  const handleClose = (e: MouseEvent) => {
+    e.stopPropagation();
+    setShowDeleteConfirmation(false);
+  };
+
   return (
     <>
       <ProgressButton
@@ -47,8 +57,8 @@ const DeleteButton: FC<PropsWithChildren<DeleteButtonProps>> = ({
         content={confirmationBody}
         confirmButtonText={confirmButtonText ?? 'Delete'}
         confirmButtonProps={{ buttonProps: { color: 'error' } }}
-        close={() => setShowDeleteConfirmation(false)}
-        onConfirm={onConfirm}
+        close={handleClose}
+        onConfirm={handleConfirm}
         refreshing={refreshing}
       />
     </>
