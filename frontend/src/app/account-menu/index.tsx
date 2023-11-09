@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AccountCircle, AdminPanelSettings, Chat, Logout, People } from '@mui/icons-material';
+import { AccountCircle, AdminPanelSettings, Chat, People } from '@mui/icons-material';
 import { Badge, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
-import { useAppDispatch } from '../../store';
-import { setAuthToken } from '../../store/features/auth';
 import useWebSocket from '../../hooks/useWebSocket';
 import SecurityKeysDialog from './security-keys/SecurityKeysDialog';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +14,7 @@ import ProfileDialog from './profile/ProfileDialog';
 import ChangePasswordMenuItem from './change-password/ChangePasswordMenuItem';
 import LinkedAccountsMenuItem from './linked-accounts/LinkedAccountsMenuItem';
 import SecurityKeysMenuItem from './security-keys/SecurityKeysMenuItem';
+import LogoutMenuItem from './LogoutMenuItem';
 
 export interface AccountMenuItemProps {
   closeMenu(): void;
@@ -30,7 +29,6 @@ const AccountMenu: React.FC = () => {
   const [friendsRequests, setFriendsRequests] = useState(0);
   const { login, admin, enabled } = useAuthData() || {};
   const connected = useWebSocket();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showSecurityKeysDialog, setShowSecurityKeysDialog] = useState(false);
@@ -64,11 +62,6 @@ const AccountMenu: React.FC = () => {
 
   const handleNavigateToFriendsPage = () => {
     navigate('/friends');
-    closeMenu();
-  };
-
-  const handleLogout = () => {
-    dispatch(setAuthToken(''));
     closeMenu();
   };
 
@@ -115,12 +108,7 @@ const AccountMenu: React.FC = () => {
         )}
         <LinkedAccountsMenuItem setShowDialog={setShowLinkedAccountsDialog} closeMenu={closeMenu} />
         <SecurityKeysMenuItem setShowDialog={setShowSecurityKeysDialog} closeMenu={closeMenu} />
-        <MenuItem onClick={handleLogout}>
-          <ListItemIcon>
-            <Logout />
-          </ListItemIcon>
-          <ListItemText>Logout</ListItemText>
-        </MenuItem>
+        <LogoutMenuItem closeMenu={closeMenu} />
       </Menu>
       <ProfileDialog open={showProfileDialog} close={() => setShowProfileDialog(false)} />
       <SecurityKeysDialog open={showSecurityKeysDialog} close={() => setShowSecurityKeysDialog(false)} />
