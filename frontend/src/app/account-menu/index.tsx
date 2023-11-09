@@ -21,6 +21,7 @@ import { useLazyFriendsGetIncomingRequestsQuery } from '../../api/api';
 import FriendsBage from '../../components/FriendsBage';
 import LinkedAccountsDialog from './linked-accounts-dialog';
 import ChangePasswordDialog from './ChangePasswordDialog';
+import ProfileDialog from './ProfileDialog';
 
 const AccountMenu: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
@@ -29,6 +30,7 @@ const AccountMenu: React.FC = () => {
   const connected = useWebSocket();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showSecurityKeysDialog, setShowSecurityKeysDialog] = useState(false);
   const [showLinkedAccountsDialog, setShowLinkedAccountsDialog] = useState(false);
   const [showChangePasswordDialog, setShowChangePasswordDialog] = useState(false);
@@ -47,6 +49,11 @@ const AccountMenu: React.FC = () => {
   }, [enabled, status, isFetching]);
 
   const closeMenu = () => setMenuAnchor(undefined);
+
+  const handleShowProfileDialog = () => {
+    setShowProfileDialog(true);
+    closeMenu();
+  };
 
   const handleShowLinkedAccountsDialog = () => {
     setShowLinkedAccountsDialog(true);
@@ -97,7 +104,7 @@ const AccountMenu: React.FC = () => {
         </Badge>
       </IconButton>
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
-        <MenuItem divider>
+        <MenuItem divider onClick={handleShowProfileDialog}>
           <ListItemIcon>
             <Person />
           </ListItemIcon>
@@ -153,6 +160,7 @@ const AccountMenu: React.FC = () => {
           <ListItemText>Logout</ListItemText>
         </MenuItem>
       </Menu>
+      <ProfileDialog open={showProfileDialog} close={() => setShowProfileDialog(false)} />
       <SecurityKeysDialog open={showSecurityKeysDialog} close={() => setShowSecurityKeysDialog(false)} />
       <LinkedAccountsDialog open={showLinkedAccountsDialog} close={() => setShowLinkedAccountsDialog(false)} />
       <ChangePasswordDialog open={showChangePasswordDialog} close={() => setShowChangePasswordDialog(false)} />
