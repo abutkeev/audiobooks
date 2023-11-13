@@ -10,8 +10,10 @@ import ChatType from './ChatType';
 import ChatStatus from './ChatStatus';
 import CustomSwitch, { CustomSwitchProps } from '../../components/common/CustomSwitch';
 import DeleteButton from '../../components/common/DeleteButton';
+import { useTranslation } from 'react-i18next';
 
 const ChatEntry: FC<ChatDto> = ({ id, type, title, status, authorized }) => {
+  const { t } = useTranslation();
   const [authorize] = useTelegramAuthorizeChatMutation();
   const [unauthorize] = useTelegramUnauthorizeChatMutation();
   const [remove] = useTelegramRemoveChatMutation();
@@ -37,14 +39,14 @@ const ChatEntry: FC<ChatDto> = ({ id, type, title, status, authorized }) => {
           {title}
         </Typography>
         <CustomSwitch
-          tooltip={authorized ? 'Unauthorize' : 'Authorize'}
+          tooltip={authorized ? t('Unauthorize') : t('Authorize')}
           checked={authorized}
           onChange={handleChangeAuthorize}
         />
         <DeleteButton
           onConfirm={handleRemove}
-          confirmationTitle='Remove chat?'
-          confirmationBody={`Remove chat ${title}?`}
+          confirmationTitle={t('Remove chat?')}
+          confirmationBody={`${t('Remove chat')} ${title}?`}
         />
       </Stack>
     </Paper>
