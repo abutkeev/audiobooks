@@ -66,6 +66,15 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
     }
   };
 
+  const getHelperText = (error: (typeof errors)[0]) => {
+    switch (error) {
+      case 'required':
+        return t('Required field');
+      case 'duplicate':
+        return t('Should be unique');
+    }
+  };
+
   return (
     <CustomDialog
       maxWidth='lg'
@@ -107,7 +116,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
                       onChange={({ target: { value } }) => dispatch(setTitle({ index, title: value }))}
                       required
                       error={!!errors[index]}
-                      helperText={errors[index]}
+                      helperText={getHelperText(errors[index])}
                       disabled={!!uploading}
                     />
                   </TableCell>

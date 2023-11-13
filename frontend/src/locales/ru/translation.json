@@ -96,6 +96,8 @@
   "Chapters": "Главы",
   "Cover": "Обложка",
   "Got error then uploading chapter": "Ошибка при загрузке главы",
+  "Required field": "Обязательное поле",
+  "Should be unique": "Должно быть уникальным",
   "Upload files": "Загрузка файлов",
   "Uploading": "Загрузка",
   "Filename": "Имя файла",

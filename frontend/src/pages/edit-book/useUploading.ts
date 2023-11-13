@@ -6,7 +6,7 @@ interface UploadingState {
     file: File;
     title: string;
   }[];
-  errors: ('Required field' | 'Should be unique' | undefined)[];
+  errors: ('required' | 'duplicate' | undefined)[];
   valid?: boolean;
   uploading?: {
     file: File;
@@ -78,11 +78,11 @@ const uploadingSlice = createSlice({
       state => {
         state.chapters.forEach((chapter, index) => {
           if (!chapter.title) {
-            state.errors[index] = 'Required field';
+            state.errors[index] = 'required';
             return;
           }
           if (state.chapters.find(({ title }, i) => title === chapter.title && index !== i)) {
-            state.errors[index] = 'Should be unique';
+            state.errors[index] = 'duplicate';
             return;
           }
           state.errors[index] = undefined;
