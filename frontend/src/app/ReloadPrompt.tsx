@@ -3,10 +3,12 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import { useAppDispatch } from '../store';
 import { addSnackbar } from '../store/features/snackbars';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const updatesCheckInterval = 1 * 60 * 1000;
 
 const ReloadPrompt: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [updating, setUpdating] = useState(false);
   const {
@@ -40,7 +42,7 @@ const ReloadPrompt: React.FC = () => {
     onOfflineReady: () => {
       // close updating alert if any
       setUpdating(false);
-      dispatch(addSnackbar({ severity: 'success', text: 'App ready to work offline', timeout: 3000 }));
+      dispatch(addSnackbar({ severity: 'success', text: t('App ready to work offline'), timeout: 3000 }));
     },
   });
 
@@ -53,7 +55,7 @@ const ReloadPrompt: React.FC = () => {
     updateAvailable &&
     (updating ? (
       <Alert severity='info' variant='outlined' sx={{ my: 1 }}>
-        Application is updating
+        {t('Application is updating')}
       </Alert>
     ) : (
       <Alert
@@ -62,11 +64,11 @@ const ReloadPrompt: React.FC = () => {
         sx={{ my: 1 }}
         action={
           <Button variant='contained' color='primary' onClick={handleUpdateClick}>
-            Update
+            {t('Update')}
           </Button>
         }
       >
-        New version available, click update button to update app
+        {t('New version available, click update button to update app')}
       </Alert>
     ))
   );
