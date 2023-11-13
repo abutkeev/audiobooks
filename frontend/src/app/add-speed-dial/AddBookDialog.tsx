@@ -6,6 +6,7 @@ import { addSnackbar } from '../../store/features/snackbars';
 import { useAuthorsGetQuery, useBooksCreateMutation, useReadersGetQuery, useSeriesGetQuery } from '../../api/api';
 import CustomComboBox from '../../components/common/CustomComboBox';
 import LoadingWrapper from '../../components/common/LoadingWrapper';
+import { useTranslation } from 'react-i18next';
 
 interface AddBookDialogProps {
   open: boolean;
@@ -13,6 +14,7 @@ interface AddBookDialogProps {
 }
 
 const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [authorId, setAuthorId] = useState('');
   const [readerId, setReaderId] = useState('');
@@ -40,7 +42,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
         },
       }).unwrap();
     } catch (e) {
-      const text = e instanceof Error ? e.message : `got unknown error while creating book`;
+      const text = e instanceof Error ? e.message : t(`got unknown error while creating book`);
       dispatch(addSnackbar({ severity: 'error', text }));
     }
   };
@@ -57,10 +59,10 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
   return (
     <CustomDialog
       open={!!open}
-      title={`Add book`}
+      title={t(`Add book`)}
       close={handleClose}
       onConfirm={handleCreate}
-      confirmButtonText='Create'
+      confirmButtonText={t('Create')}
       confirmButtonProps={{ disabled: !valid || loading || error }}
       content={
         <LoadingWrapper loading={loading} error={error}>
@@ -68,19 +70,25 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
             sx={{ mt: 1 }}
             fullWidth
             required
-            label='Name'
+            label={t('Name')}
             value={name}
             onChange={({ target: { value } }) => setName(value)}
             onKeyDown={e => e.stopPropagation()}
             error={!name}
           />
-          <CustomComboBox options={authors} label='Author' value={authorId} setValue={setAuthorId} />
-          <CustomComboBox options={readers} label='Reader' value={readerId} setValue={setReaderId} />
-          <CustomComboBox options={series} label='Series' value={seriesId} setValue={setSeriesId} required={false} />
+          <CustomComboBox options={authors} label={t('Author')} value={authorId} setValue={setAuthorId} />
+          <CustomComboBox options={readers} label={t('Reader')} value={readerId} setValue={setReaderId} />
+          <CustomComboBox
+            options={series}
+            label={t('Series')}
+            value={seriesId}
+            setValue={setSeriesId}
+            required={false}
+          />
           <TextField
             sx={{ mt: 2 }}
             fullWidth
-            label='Series number'
+            label={t('Series number')}
             value={seriesId ? seriesNumber : ''}
             disabled={!seriesId}
             onChange={({ target: { value } }) => setSeriesNumber(value)}
