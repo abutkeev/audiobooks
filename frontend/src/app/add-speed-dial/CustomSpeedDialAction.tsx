@@ -31,7 +31,7 @@ const CustomSpeedDialAction: React.FC<CustomSpeedDialActionProps> = ({
   if (!open) return;
 
   return (
-    <ButtonBase ref={ref} onClick={handleClick}>
+    <ButtonBase ref={ref} onClick={handleClick} sx={{ justifyContent: 'flex-end' }}>
       <Stack direction='row' alignItems='center' justifyContent='flex-end'>
         <Card raised sx={{ m: 1, mr: 2 }}>
           <Typography noWrap textAlign='end' m={1}>
