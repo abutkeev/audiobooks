@@ -66,7 +66,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
 
   return (
     <Accordion expanded={expanded || modified} onChange={(_, v) => setExpanded(v || modified)}>
-      <AccordionSummary expandIcon={<ExpandMore />} sx={{ cursor: modified ? 'efault' : 'pointer' }}>
+      <AccordionSummary expandIcon={<ExpandMore />}>
         <Stack direction='row' flexGrow={1} alignItems='center'>
           <Typography flexGrow={1} noWrap>
             {formatUser()}
