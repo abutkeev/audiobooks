@@ -2,6 +2,7 @@ import React, { FC, MouseEvent, PropsWithChildren, ReactNode } from 'react';
 import { Delete } from '@mui/icons-material';
 import ProgressButton, { ProgressButtonProps } from './ProgressButton';
 import CustomDialog from './CustomDialog';
+import { useTranslation } from 'react-i18next';
 
 export interface DeleteButtonProps {
   onConfirm(): void | Promise<void>;
@@ -23,6 +24,7 @@ const DeleteButton: FC<PropsWithChildren<DeleteButtonProps>> = ({
   refreshing,
   deleteButtonProps,
 }) => {
+  const { t } = useTranslation();
   const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(false);
 
   const handleShowDeleteConfirmationDialog = async (e: MouseEvent) => {
@@ -55,7 +57,7 @@ const DeleteButton: FC<PropsWithChildren<DeleteButtonProps>> = ({
         open={showDeleteConfirmation}
         title={confirmationTitle}
         content={confirmationBody}
-        confirmButtonText={confirmButtonText ?? 'Delete'}
+        confirmButtonText={confirmButtonText ?? t('Delete')}
         confirmButtonProps={{ buttonProps: { color: 'error' } }}
         close={handleClose}
         onConfirm={handleConfirm}
