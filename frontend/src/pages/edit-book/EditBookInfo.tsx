@@ -64,7 +64,7 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
       };
       save({ id, bookDto: { info, chapters } }).unwrap();
     } catch (e) {
-      const text = e instanceof Error ? e.message : t(`got unknown error while creating book`);
+      const text = e instanceof Error ? e.message : t(`got unknown error while editing book`);
       dispatch(addSnackbar({ severity: 'error', text }));
     }
   };
