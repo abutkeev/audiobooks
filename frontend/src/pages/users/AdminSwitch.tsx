@@ -1,6 +1,7 @@
 import { MouseEventHandler } from 'react';
 import { FormControlLabel, Switch } from '@mui/material';
 import { useUsersGrantMutation, useUsersRevokeMutation } from '../../api/api';
+import { useTranslation } from 'react-i18next';
 
 interface AdminSwitchSwitchProps {
   id: string;
@@ -10,6 +11,7 @@ interface AdminSwitchSwitchProps {
 }
 
 const AdminSwitch: React.FC<AdminSwitchSwitchProps> = ({ thisUser, admin, enabled, id }) => {
+  const { t } = useTranslation();
   const [grant] = useUsersGrantMutation();
   const [revoke] = useUsersRevokeMutation();
 
@@ -26,7 +28,7 @@ const AdminSwitch: React.FC<AdminSwitchSwitchProps> = ({ thisUser, admin, enable
     return;
   }
 
-  return <FormControlLabel control={<Switch checked={admin} onClick={handleSwitchClick} />} label='Admin' />;
+  return <FormControlLabel control={<Switch checked={admin} onClick={handleSwitchClick} />} label={t('Admin')} />;
 };
 
 export default AdminSwitch;

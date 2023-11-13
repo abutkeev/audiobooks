@@ -5,9 +5,11 @@ import useTitle from '../../hooks/useTitle';
 import User from './User';
 import useSearchMatcher from '../../hooks/useSearchMatcher';
 import EmptyListWrapper from '../../components/common/EmptyListWrapper';
+import { useTranslation } from 'react-i18next';
 
 const Users: React.FC = () => {
-  useTitle('Users');
+  const { t } = useTranslation();
+  useTitle(t('Users'));
   const searchMatcher = useSearchMatcher();
 
   const { data = [], isLoading, isError } = useUsersGetAllQuery();
@@ -22,7 +24,7 @@ const Users: React.FC = () => {
 
   return (
     <LoadingWrapper loading={isLoading} error={isError}>
-      <EmptyListWrapper wrap={users.length === 0} message={searchMatcher ? 'No users found' : 'No users'}>
+      <EmptyListWrapper wrap={users.length === 0} message={searchMatcher ? t('No users found') : t('No users')}>
         {users.map(user => (
           <User key={user.id} {...user} />
         ))}

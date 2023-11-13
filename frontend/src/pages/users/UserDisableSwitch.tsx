@@ -3,6 +3,7 @@ import { AdminPanelSettings, Shield } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
 import { useUsersActivateMutation, useUsersDeactivateMutation, useUsersGetAllQuery } from '../../api/api';
 import CustomSwitch from '../../components/common/CustomSwitch';
+import { useTranslation } from 'react-i18next';
 
 interface UserDisableSwitchProps {
   id: string;
@@ -12,6 +13,7 @@ interface UserDisableSwitchProps {
 }
 
 const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, enabled, id }) => {
+  const { t } = useTranslation();
   const { isFetching } = useUsersGetAllQuery();
   const [activate] = useUsersActivateMutation();
   const [deactivate] = useUsersDeactivateMutation();
@@ -28,7 +30,7 @@ const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, 
 
   if (thisUser) {
     return (
-      <Tooltip title='This user'>
+      <Tooltip title={t('This user')}>
         <AdminPanelSettings sx={{ mr: 1 }} />
       </Tooltip>
     );
@@ -36,7 +38,7 @@ const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, 
 
   if (admin) {
     return (
-      <Tooltip title='Admin'>
+      <Tooltip title={t('Admin')}>
         <Shield sx={{ mr: 2 }} />
       </Tooltip>
     );
@@ -44,7 +46,7 @@ const UserDisableSwitch: React.FC<UserDisableSwitchProps> = ({ thisUser, admin, 
 
   return (
     <CustomSwitch
-      tooltip={enabled ? 'Disable' : 'Enable'}
+      tooltip={enabled ? t('Disable') : t('Enable')}
       checked={enabled}
       onClick={handleSwitchClick}
       refreshing={isFetching}

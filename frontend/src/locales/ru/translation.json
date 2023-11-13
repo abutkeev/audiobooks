@@ -132,5 +132,15 @@
   "Authorized telegram chat members can activate their accounts automatically.": "Участники авторизованных чатов могут активировать свою учётную запись автоматически.",
   "Link telegram account and try to activate": "Привязать учётную запись в телеграм и попробовать активировать",
   "Page not found": "Страница не найдена",
-  "Sign up failed": "Ошибка при регистрации"
+  "Sign up failed": "Ошибка при регистрации",
+  "Admin": "Администратор",
+  "No users found": "Пользователи не найдены",
+  "No users": "Нет пользователей",
+  "User edit failed": "Ошибка при редактировании пользователя",
+  "User remove failed": "Ошибка при удалении пользователя",
+  "Remove user?": "Удалить пользователя?",
+  "Remove user": "Удалить пользователя",
+  "This user": "Текущий пользователь",
+  "Disable": "Дезактивировать",
+  "Enable": "Активировать"
 }

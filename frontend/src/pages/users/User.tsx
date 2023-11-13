@@ -23,8 +23,10 @@ import { useAppDispatch } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
 import getErrorMessage from '../../utils/getErrorMessage';
 import LoginTextField from '../../components/login-text-field/LoginTextField';
+import { useTranslation } from 'react-i18next';
 
 const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
+  const { t } = useTranslation();
   const auth = useAuthData();
   const dispatch = useAppDispatch();
   const [newLogin, setNewLogin] = useUpdatingState(login);
@@ -44,7 +46,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
       await update({ id, updateUserDto: { login: newLogin, name: newName, password } }).unwrap();
       setPassword('');
     } catch (e) {
-      dispatch(addSnackbar({ severity: 'error', text: getErrorMessage(e, 'User edit failed') }));
+      dispatch(addSnackbar({ severity: 'error', text: getErrorMessage(e, t('User edit failed')) }));
     }
   };
 
@@ -58,7 +60,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
     try {
       await remove({ id }).unwrap();
     } catch (e) {
-      dispatch(addSnackbar({ severity: 'error', text: getErrorMessage(e, 'User remove failed') }));
+      dispatch(addSnackbar({ severity: 'error', text: getErrorMessage(e, t('User remove failed')) }));
     }
   };
 
@@ -74,8 +76,8 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
           <UserDisableSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
           {!thisUser && (
             <DeleteButton
-              confirmationTitle='Remove user?'
-              confirmationBody={`Remove user ${formatUser()}`}
+              confirmationTitle={t('Remove user?')}
+              confirmationBody={`${t('Remove user')} ${formatUser()}`}
               onConfirm={handleRemove}
             />
           )}
@@ -85,7 +87,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
         <FormControl fullWidth>
           <Stack spacing={2}>
             <Typography variant='body2'>ID: {id}</Typography>
-            <TextField label='Name' value={newName} onChange={({ target: { value } }) => setNewName(value)} />
+            <TextField label={t('Name')} value={newName} onChange={({ target: { value } }) => setNewName(value)} />
             <LoginTextField
               login={newLogin}
               setLogin={setNewLogin}
@@ -95,7 +97,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
               allowSelf
               selfLogin={login}
             />
-            <CustomPassword label='Password' value={password} onChange={setPassword} />
+            <CustomPassword label={t('Password')} value={password} onChange={setPassword} />
             <AdminSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
           </Stack>
         </FormControl>
@@ -104,10 +106,10 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
         <AccordionActions>
           <Stack direction='row' spacing={1}>
             <Button variant='outlined' onClick={handleCancel}>
-              Cancel
+              {t('Cancel')}
             </Button>
             <ProgressButton disabled={!loginValid} onClick={handleUpdate}>
-              Update
+              {t('Update')}
             </ProgressButton>
           </Stack>
         </AccordionActions>
