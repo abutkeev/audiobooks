@@ -23,6 +23,7 @@ const CustomSpeedDial: React.FC<React.PropsWithChildren> = ({ children }) => {
         open={showMenu}
         onOpen={handleSpeedDialOpen}
         onClose={handleSpeedDialClose}
+        FabProps={{ sx: { alignSelf: 'flex-end' } }}
       >
         {children}
       </SpeedDial>
