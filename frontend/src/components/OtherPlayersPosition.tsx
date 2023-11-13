@@ -5,6 +5,7 @@ import formatTime from '../utils/formatTime';
 import { useAppDispatch, useAppSelector } from '../store';
 import { updateBookState } from '../store/features/player';
 import getFriendDisplayName from '../utils/getFriendDisplayName';
+import { useTranslation } from 'react-i18next';
 
 interface OtherPlayersPositionProps {
   bookId: string;
@@ -19,6 +20,7 @@ const paperSx: SxProps = {
 };
 
 const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, chapters }) => {
+  const { t } = useTranslation();
   const { data = [] } = usePositionGetBookQuery({ bookId });
   const { data: friendsData = [] } = usePositionGetFriendsBookQuery({ bookId });
   const { instanceId } = useAppSelector(({ websocket }) => websocket);
@@ -57,15 +59,15 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
   return (
     <Accordion square>
       <AccordionSummary expandIcon={<ExpandMore />} onClick={({ currentTarget }) => currentTarget.blur()}>
-        Other players position
+        {t('Other players position')}
       </AccordionSummary>
       <AccordionDetails>
         {positions.map(({ instanceId, currentChapter, position, updated }) => {
           return (
             <Paper square key={instanceId} sx={paperSx} onClick={getPlayerStateChangeHandler(currentChapter, position)}>
               <Typography>
-                Current chapter {formatChapterName(currentChapter)}, position: {formatTime(position)}, updated:{' '}
-                {formatUpdated(updated)}
+                {t('Current chapter')} {formatChapterName(currentChapter)}, {t('position')}: {formatTime(position)},{' '}
+                {t('updated')}: {formatUpdated(updated)}
               </Typography>
             </Paper>
           );
@@ -80,8 +82,9 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
                 onClick={getPlayerStateChangeHandler(currentChapter, position)}
               >
                 <Typography>
-                  Friend {getFriendDisplayName({ uid: friendId, login: friendLogin, name: friendName })}, current
-                  chapter {formatChapterName(currentChapter)}, position: {formatTime(position)}, updated:{' '}
+                  {t('Friend')} {getFriendDisplayName({ uid: friendId, login: friendLogin, name: friendName })},{' '}
+                  {t('current chapter')}
+                  {formatChapterName(currentChapter)}, {t('position')}: {formatTime(position)}, {t('updated')}:{' '}
                   {formatUpdated(updated)}
                 </Typography>
               </Paper>
