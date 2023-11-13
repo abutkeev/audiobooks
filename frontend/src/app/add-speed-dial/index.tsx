@@ -7,8 +7,10 @@ import AddBookDialog from './AddBookDialog';
 import AddUserDialog from './AddUserDialog';
 import CustomSpeedDial from './CustomSpeedDial';
 import CustomSpeedDialAction from './CustomSpeedDialAction';
+import { useTranslation } from 'react-i18next';
 
 const AddSpeedDial: React.FC = () => {
+  const { t } = useTranslation();
   const { admin } = useAuthData() || {};
   const [addPersonDialogType, setAddPersonDialogType] = useState<'author' | 'reader'>();
   const [showAddSeriesDialog, setShowAddSeriesDialog] = useState(false);
@@ -22,23 +24,27 @@ const AddSpeedDial: React.FC = () => {
       <CustomSpeedDial>
         <CustomSpeedDialAction
           icon={<Edit />}
-          tooltipTitle='Add author'
+          tooltipTitle={t('Add author')}
           onClick={() => setAddPersonDialogType('author')}
         />
         <CustomSpeedDialAction
           icon={<Mic />}
-          tooltipTitle='Add reader'
+          tooltipTitle={t('Add reader')}
           onClick={() => setAddPersonDialogType('reader')}
         />
         <CustomSpeedDialAction
           icon={<LibraryBooks />}
-          tooltipTitle='Add series'
+          tooltipTitle={t('Add series')}
           onClick={() => setShowAddSeriesDialog(true)}
         />
-        <CustomSpeedDialAction icon={<Book />} tooltipTitle='Add book' onClick={() => setShowAddBookDialog(true)} />
+        <CustomSpeedDialAction
+          icon={<Book />}
+          tooltipTitle={t('Add book')}
+          onClick={() => setShowAddBookDialog(true)}
+        />
         <CustomSpeedDialAction
           icon={<PersonAdd />}
-          tooltipTitle='Add user'
+          tooltipTitle={t('Add user')}
           onClick={() => setShowAddUserDialog(true)}
         />
       </CustomSpeedDial>
