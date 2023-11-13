@@ -4,6 +4,7 @@ import Link from './common/Link';
 import { useMemo } from 'react';
 import { BookInfoDto, useBooksGetQuery } from '../api/api';
 import useAuthData from '../hooks/useAuthData';
+import { useTranslation } from 'react-i18next';
 
 interface BookCardProps {
   id: string;
@@ -22,6 +23,7 @@ const BookCard: React.FC<BookCardProps> = ({
   readers,
   series,
 }) => {
+  const { t } = useTranslation();
   const { data: books } = useBooksGetQuery();
   const { admin } = useAuthData() || {};
   const nextBook = useMemo(() => {
@@ -77,7 +79,7 @@ const BookCard: React.FC<BookCardProps> = ({
               {nextBook && (
                 <>
                   <NavigateNext />
-                  <Tooltip title='Next book'>
+                  <Tooltip title={t('Next book')}>
                     <Typography>
                       <Link to={`/book/${nextBook.id}`}>{nextBook.name}</Link>
                     </Typography>
