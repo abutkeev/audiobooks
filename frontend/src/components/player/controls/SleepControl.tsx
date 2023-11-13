@@ -5,8 +5,10 @@ import { Menu, MenuItem, Stack, Typography } from '@mui/material';
 import formatTime from '../../../utils/formatTime';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { pause, setPauseOnChapterEnd } from '../../../store/features/player';
+import { useTranslation } from 'react-i18next';
 
 const SleepControl: React.FC = () => {
+  const { t } = useTranslation();
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const [sleepTimerDuration, setSleepTimerDuration] = useState<number>();
   const [sleepTimerStart, setSleepTimerStart] = useState<Date>();
@@ -80,27 +82,27 @@ const SleepControl: React.FC = () => {
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
         {(!!sleepTimerLeft || pauseOnChapterEnd) && (
           <MenuItem onClick={setSleepTimer(0)}>
-            <Typography>Switch off</Typography>
+            <Typography>{t('Switch off')}</Typography>
           </MenuItem>
         )}
         <MenuItem onClick={setSleepTimer(15)}>
-          <Typography>15 min</Typography>
+          <Typography>15 {t('min')}</Typography>
         </MenuItem>
         <MenuItem onClick={setSleepTimer(30)}>
-          <Typography>30 min</Typography>
+          <Typography>30 {t('min')}</Typography>
         </MenuItem>
         <MenuItem onClick={setSleepTimer(45)}>
-          <Typography>45 min</Typography>
+          <Typography>45 {t('min')}</Typography>
         </MenuItem>
         <MenuItem onClick={setSleepTimer(60)}>
-          <Typography>1 hour</Typography>
+          <Typography>1 {t('hour')}</Typography>
         </MenuItem>
         <MenuItem onClick={setSleepTimer(120)}>
-          <Typography>2 hours</Typography>
+          <Typography>2 {t('hours')}</Typography>
         </MenuItem>
         {!pauseOnChapterEnd && (
           <MenuItem onClick={handlePauseOnChaperEnd}>
-            <Typography>Pause on chapter end</Typography>
+            <Typography>{t('Pause on chapter end')}</Typography>
           </MenuItem>
         )}
       </Menu>

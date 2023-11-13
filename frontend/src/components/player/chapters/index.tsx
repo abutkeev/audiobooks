@@ -5,8 +5,10 @@ import { ExpandMore } from '@mui/icons-material';
 import useMediaCache from '../../../hooks/useMediaCache';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { chapterChange } from '../../../store/features/player';
+import { useTranslation } from 'react-i18next';
 
 const Chapters: React.FC = () => {
+  const { t } = useTranslation();
   const {
     state: { currentChapter },
     chapters,
@@ -25,7 +27,8 @@ const Chapters: React.FC = () => {
     <Accordion square>
       <AccordionSummary expandIcon={<ExpandMore />} onClick={({ currentTarget }) => currentTarget.blur()}>
         <Typography flexGrow={1}>
-          Current chapter {chapterNumber} of {chapters.length} {!titleIsNumber && `(${currentChapterTitle})`}
+          {t('Current chapter')} {chapterNumber} {t('of')} {chapters.length}{' '}
+          {!titleIsNumber && `(${currentChapterTitle})`}
         </Typography>
         <BookCacheIcon />
       </AccordionSummary>

@@ -11,8 +11,10 @@ import CustomDialog from '../../common/CustomDialog';
 import useChaptersCacheInfo from '../chapters/useChaptersCacheInfo';
 import { addMediaToCache, removeCachedMedia } from '../../../store/features/media-cache';
 import { setPreventScreenLock, setResetSleepTimerOnActivity, showMessage } from '../../../store/features/player';
+import { useTranslation } from 'react-i18next';
 
 const Settings: React.FC = () => {
+  const { t } = useTranslation();
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const {
     state: { resetSleepTimerOnActivity, preventScreenLock, position, currentChapter },
@@ -35,7 +37,7 @@ const Settings: React.FC = () => {
   };
   const handleStateCopy = () => {
     copy(JSON.stringify({ bookId, currentChapter, position }, null, 2));
-    dispatch(showMessage({ severity: 'success', text: 'Copied to clipboard', timeout: 2000 }));
+    dispatch(showMessage({ severity: 'success', text: t('Copied to clipboard'), timeout: 2000 }));
     closeMenu();
   };
   const handleUpdateStateDialogOpen = () => {
@@ -64,43 +66,43 @@ const Settings: React.FC = () => {
                 onChange={handleResetSleepTimerOnActivityChange}
               />
             }
-            label='reset sleep timer on activity'
+            label={t('reset sleep timer on activity')}
           />
         </MenuItem>
         {wakelockAvailable && (
           <MenuItem>
             <FormControlLabel
               control={<Switch checked={preventScreenLock} color='primary' onChange={handlePreventScreenLock} />}
-              label='prevent screen lock when playing'
+              label={t('prevent screen lock when playing')}
             />
           </MenuItem>
         )}
         <MenuItem onClick={handleStateCopy}>
           <ContentCopy sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
-          copy state
+          {t('copy state')}
         </MenuItem>
         <MenuItem onClick={handleUpdateStateDialogOpen}>
           <Update sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
-          update state
+          {t('update state')}
         </MenuItem>
         {chaptersCacheInfo.available && !chaptersCacheInfo.all && !chaptersCacheInfo.downloading && (
           <MenuItem onClick={handelStartDownload}>
             <FileDownload sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
-            cache all chapters
+            {t('cache all chapters')}
           </MenuItem>
         )}
         {chaptersCacheInfo.available && chaptersCacheInfo.cached !== 0 && !chaptersCacheInfo.downloading && (
           <MenuItem onClick={handleClearCacheMenuClick}>
             <Clear sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
-            clear cached chapters
+            {t('clear cached chapters')}
           </MenuItem>
         )}
       </Menu>
       <UpdateStateDialog show={showUpdateStateDialog} onClose={() => setShowUpdateStateDialog(false)} />
       <CustomDialog
-        title='Clear cache confirmation'
+        title={t('Clear cache confirmation')}
         open={showClearCacheConfirmation}
-        content='Clear all cached chapters?'
+        content={t('Clear all cached chapters?')}
         confirmButtonProps={{ buttonProps: { color: 'error' } }}
         close={() => setShowClearCacheConfirmation(false)}
         onConfirm={() => void (chaptersCacheInfo.available && dispatch(removeCachedMedia(chaptersCacheInfo.keys)))}

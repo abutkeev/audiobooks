@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from 'react';
 import CustomDialog from '../../common/CustomDialog';
 import { useAppDispatch } from '../../../store';
 import { updateBookState } from '../../../store/features/player';
+import { useTranslation } from 'react-i18next';
 
 interface UpdateStateDialogProps {
   show: boolean;
@@ -11,6 +12,7 @@ interface UpdateStateDialogProps {
 }
 
 const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [value, setValue] = useState('');
   const valid = useMemo(() => {
@@ -57,12 +59,12 @@ const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) 
       close={handleClose}
       onConfirm={handleUpdateClick}
       confirmButtonProps={{ disabled: !valid }}
-      confirmButtonText='Update'
-      title='Update player state'
+      confirmButtonText={t('Update')}
+      title={t('Update player state')}
       content={
         <TextField
           autoFocus
-          label='New player state'
+          label={t('New player state')}
           required
           multiline
           fullWidth
