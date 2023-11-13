@@ -4,8 +4,10 @@ export interface ErrorWrapperProps {
   error?: boolean;
 }
 
-const ErrorWrapper: React.FC<React.PropsWithChildren<ErrorWrapperProps>> = ({ children, error }) =>
-  error ? (
+const ErrorWrapper: React.FC<React.PropsWithChildren<ErrorWrapperProps>> = ({ children, error }) => {
+  if (!error) return children;
+
+  return (
     <Alert
       severity='error'
       variant='outlined'
@@ -17,8 +19,7 @@ const ErrorWrapper: React.FC<React.PropsWithChildren<ErrorWrapperProps>> = ({ ch
     >
       An error occurred
     </Alert>
-  ) : (
-    children
   );
+};
 
 export default ErrorWrapper;
