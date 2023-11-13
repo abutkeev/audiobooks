@@ -17,6 +17,12 @@
   "Password": "Пароль",
   "Login.button": "Войти",
   "Login with security key": "Войти с помощью ключа",
+  "Account is not active": "Учётная запись неактивна",
+  "Account is not active. Contact site administrator to activate it.": "Учётная запись неактивна. Свяжитесь с администратором для её активации.",
+  "Automatic activation failed. If you are authorized chat member, please retry.": "Автоматическая активация не удалась. Если вы состоите в авторизованном чате, повторите попытку.",
+  "Retry": "Повторить",
+  "Authorized telegram chat members can activate their accounts automatically.": "Участники авторизованных чатов могут активировать свою учётную запись автоматически.",
+  "Link telegram account and try to activate": "Привязать учётную запись в телеграм и попробовать активировать",
   "Sign up failed": "Ошибка при регистрации",
   "Name": "Имя",
   "Cancel": "Отмена"

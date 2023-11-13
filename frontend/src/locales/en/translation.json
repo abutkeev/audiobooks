@@ -17,6 +17,12 @@
   "Password": "",
   "Login.button": "Login",
   "Login with security key": "",
+  "Account is not active": "",
+  "Account is not active. Contact site administrator to activate it.": "",
+  "Automatic activation failed. If you are authorized chat member, please retry.": "",
+  "Retry": "",
+  "Authorized telegram chat members can activate their accounts automatically.": "",
+  "Link telegram account and try to activate": "",
   "Sign up failed": "",
   "Name": "",
   "Cancel": ""
