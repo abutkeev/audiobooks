@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AccountCircle } from '@mui/icons-material';
+import { AccountCircle, Settings } from '@mui/icons-material';
 import { Badge, IconButton, Menu } from '@mui/material';
 import useAuthData from '../../hooks/useAuthData';
 import useWebSocket from '../../hooks/useWebSocket';
@@ -53,7 +53,15 @@ const AccountMenu: React.FC = () => {
 
   const closeMenu = () => setMenuAnchor(undefined);
 
-  if (!login) return;
+  if (!login)
+    return (
+      <>
+        <IconButton color='inherit' onClick={() => setShowSettingsDialog(true)}>
+          <Settings />
+        </IconButton>
+        <SettingsDialog open={showSettingsDialog} close={() => setShowSettingsDialog(false)} />
+      </>
+    );
 
   return (
     <>
