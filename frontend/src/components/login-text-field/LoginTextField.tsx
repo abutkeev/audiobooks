@@ -4,6 +4,7 @@ import { useLazySignUpCheckQuery } from '../../api/api';
 import LoginCheckState, { LoginCheckStateProps } from './LoginCheckState';
 import debounce from 'debounce';
 import useAuthData from '../../hooks/useAuthData';
+import { useTranslation } from 'react-i18next';
 
 interface LoginTextFieldProps {
   login: string;
@@ -26,6 +27,7 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
   allowSelf,
   textFieldProps,
 }) => {
+  const { t } = useTranslation();
   const [check] = useLazySignUpCheckQuery();
   const [state, setState] = useState<LoginCheckStateProps['state']>();
   const { login: authLogin } = useAuthData() || {};
@@ -68,22 +70,22 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
 
   const helperText = useMemo(() => {
     if (validType === 'unused' && state === 'used') {
-      return 'Login is used';
+      return t('Login is used');
     }
 
     if (validType === 'used' && state === 'unused') {
-      return 'User not found';
+      return t('User not found');
     }
 
     if (state === 'self' && !allowSelf) {
-      return 'Self login';
+      return t('Self login');
     }
   }, [state, valid, validType, selfLogin]);
 
   return (
     <TextField
       autoFocus
-      label='Login'
+      label={t('Login')}
       value={login}
       onChange={({ target: { value } }) => setLogin(value)}
       required

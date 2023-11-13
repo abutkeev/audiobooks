@@ -2,10 +2,12 @@ import { FC, useEffect, useState } from 'react';
 import { InputAdornment, IconButton, Tooltip, TextFieldProps, TextField } from '@mui/material';
 import { VisibilityOff, Visibility, LockReset } from '@mui/icons-material';
 import { generate as generatePassword } from 'generate-password-browser';
+import { useTranslation } from 'react-i18next';
 
 type CustomPasswordProps = Omit<TextFieldProps, 'onChange'> & { generate?: boolean; onChange(v: string): void };
 
 const CustomPassword: FC<CustomPasswordProps> = ({ sx, onChange, generate, ...props }) => {
+  const { t } = useTranslation();
   const { value } = props;
   const passwordGenerationAvailable = !!generate && !!onChange;
 
@@ -36,7 +38,7 @@ const CustomPassword: FC<CustomPasswordProps> = ({ sx, onChange, generate, ...pr
         endAdornment: (
           <InputAdornment position='end'>
             {passwordGenerationAvailable && (
-              <Tooltip title='Generate new password'>
+              <Tooltip title={t('Generate new password')}>
                 <IconButton onClick={handleGeneratePassword} size='large'>
                   <LockReset />
                 </IconButton>
@@ -44,7 +46,7 @@ const CustomPassword: FC<CustomPasswordProps> = ({ sx, onChange, generate, ...pr
             )}
 
             {!!value && (
-              <Tooltip title={showPassword ? 'Hide password' : 'Show password'}>
+              <Tooltip title={showPassword ? t('Hide password') : t('Show password')}>
                 <IconButton
                   aria-label='Toggle password visibility'
                   onClick={() => setShowPassword(!showPassword)}

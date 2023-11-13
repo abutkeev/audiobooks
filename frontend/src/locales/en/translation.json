@@ -1,11 +1,20 @@
 {
+  "Generate new password": "",
+  "Hide password": "",
+  "Show password": "",
+  "Login is used": "",
+  "User not found": "",
+  "Self login": "",
+  "Login": "",
   "Login.title": "Login",
   "or": "",
   "Sign up": "",
   "Login with telegram": "",
   "Authorization failed": "",
-  "Login": "",
   "Password": "",
   "Login.button": "Login",
-  "Login with security key": ""
+  "Login with security key": "",
+  "Sign up failed": "",
+  "Name": "",
+  "Cancel": ""
 }

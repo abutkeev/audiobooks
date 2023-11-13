@@ -1,11 +1,20 @@
 {
+  "Generate new password": "Сгенерировать новый пароль",
+  "Hide password": "Скрыть пароль",
+  "Show password": "Показать пароль",
+  "Login is used": "Логин занят",
+  "User not found": "Пользователь не найден",
+  "Self login": "Собственный логин",
+  "Login": "Логин",
   "Login.title": "Вход",
   "or": "или",
   "Sign up": "Регистрация",
   "Login with telegram": "Войти через телеграм",
   "Authorization failed": "Ошибка авторизации",
-  "Login": "Логин",
   "Password": "Пароль",
   "Login.button": "Войти",
-  "Login with security key": "Войти с помощью ключа"
+  "Login with security key": "Войти с помощью ключа",
+  "Sign up failed": "Ошибка при регистрации",
+  "Name": "Имя",
+  "Cancel": "Отмена"
 }

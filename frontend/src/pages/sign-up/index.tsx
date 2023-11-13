@@ -11,9 +11,11 @@ import { useNavigate } from 'react-router-dom';
 import { setAuthToken } from '../../store/features/auth';
 import ReCaptcha from './ReCaptcha';
 import ErrorAlert from '../../components/common/ErrorAlert';
+import { useTranslation } from 'react-i18next';
 
 const SignUp: FC = () => {
-  useTitle('Sign up');
+  const { t } = useTranslation();
+  useTitle(t('Sign up'));
   const [login, setLogin] = useState('');
   const [loginValid, setLoginValid] = useState(false);
   const [name, setName] = useState('');
@@ -33,7 +35,7 @@ const SignUp: FC = () => {
 
     const result = await signUp({ signUpDto: { login, password, name, captchaToken } });
     if ('error' in result) {
-      setError(getErrorMessage(result.error, 'Sign up failed'));
+      setError(getErrorMessage(result.error, t('Sign up failed')));
       return;
     }
     dispatch(setAuthToken(result.data.access_token));
@@ -56,7 +58,7 @@ const SignUp: FC = () => {
           <Stack spacing={2}>
             <ErrorAlert error={error} />{' '}
             <TextField
-              label='Name'
+              label={t('Name')}
               value={name}
               onChange={({ target: { value } }) => setName(value)}
               required
@@ -73,7 +75,7 @@ const SignUp: FC = () => {
               textFieldProps={{ autoComplete: 'username', autoFocus: false }}
             />
             <CustomPassword
-              label='Password'
+              label={t('Password')}
               value={password}
               onChange={setPassword}
               generate
@@ -83,10 +85,10 @@ const SignUp: FC = () => {
             />
             <ReCaptcha setToken={setCaptchaToken} />
             <ProgressButton buttonProps={{ fullWidth: true, size: 'large' }} disabled={!valid} onClick={handleSignUp}>
-              Sign up
+              {t('Sign up')}
             </ProgressButton>
             <Button fullWidth size='large' variant='contained' onClick={handleSignUpCancel}>
-              Cancel
+              {t('Cancel')}
             </Button>
           </Stack>
         </FormControl>
