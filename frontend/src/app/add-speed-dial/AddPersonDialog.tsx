@@ -4,6 +4,7 @@ import CustomDialog from '../../components/common/CustomDialog';
 import { useAppDispatch } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
 import { useAuthorsCreateMutation, useReadersCreateMutation } from '../../api/api';
+import { useTranslation } from 'react-i18next';
 
 interface AddPersonDialogProps {
   type?: 'reader' | 'author';
@@ -11,10 +12,13 @@ interface AddPersonDialogProps {
 }
 
 const AddPersonDialog: React.FC<AddPersonDialogProps> = ({ type, close }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const dispatch = useAppDispatch();
   const [createAuthor] = useAuthorsCreateMutation();
   const [createReader] = useReadersCreateMutation();
+
+  if (!type) return null;
 
   const handleCreate = () => {
     const nameDto = { name };
@@ -28,7 +32,16 @@ const AddPersonDialog: React.FC<AddPersonDialogProps> = ({ type, close }) => {
           break;
       }
     } catch (e) {
-      const text = e instanceof Error ? e.message : `got unknown error while creating ${type}`;
+      const localizeTypeError = () => {
+        switch (type) {
+          case 'author':
+            return t('got unknown error while creating author');
+          case 'reader':
+            return t('got unknown error while creating reader');
+        }
+      };
+
+      const text = e instanceof Error ? e.message : localizeTypeError();
       dispatch(addSnackbar({ severity: 'error', text }));
     }
   };
@@ -38,20 +51,29 @@ const AddPersonDialog: React.FC<AddPersonDialogProps> = ({ type, close }) => {
     setName('');
   };
 
+  const getHeader = () => {
+    switch (type) {
+      case 'author':
+        return t('Add author');
+      case 'reader':
+        return t('Add reader');
+    }
+  };
+
   return (
     <CustomDialog
-      open={!!type}
-      title={`Add ${type}`}
+      open
+      title={getHeader()}
       close={handleClose}
       onConfirm={handleCreate}
-      confirmButtonText='Create'
+      confirmButtonText={t('Create')}
       confirmButtonProps={{ disabled: !name }}
       content={
         <TextField
           sx={{ mt: 1 }}
           fullWidth
           required
-          label='Name'
+          label={t('Name')}
           value={name}
           onChange={({ target: { value } }) => setName(value)}
           onKeyDown={e => e.stopPropagation()}
