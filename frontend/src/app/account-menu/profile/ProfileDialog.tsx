@@ -7,6 +7,7 @@ import ErrorAlert from '../../../components/common/ErrorAlert';
 import useAuthData from '../../../hooks/useAuthData';
 import LoginTextField from '../../../components/login-text-field/LoginTextField';
 import useUpdatingState from '../../../hooks/useUpdatingState';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileDialogProps {
   open: boolean;
@@ -14,6 +15,7 @@ interface ProfileDialogProps {
 }
 
 const ProfileDialog: FC<ProfileDialogProps> = ({ open, close }) => {
+  const { t } = useTranslation();
   const { login, name } = useAuthData()!;
   const [newLogin, setNewLogin] = useUpdatingState(login);
   const [newName, setNewName] = useUpdatingState(name);
@@ -26,7 +28,7 @@ const ProfileDialog: FC<ProfileDialogProps> = ({ open, close }) => {
     try {
       await edit({ profileDto: { login: newLogin, name: newName } }).unwrap();
     } catch (e) {
-      setError(getErrorMessage(e, 'Failed to change profile'));
+      setError(getErrorMessage(e, t('Failed to change profile')));
       throw new AbortOperation();
     }
   };
@@ -49,9 +51,9 @@ const ProfileDialog: FC<ProfileDialogProps> = ({ open, close }) => {
       open={open}
       close={handleClose}
       onConfirm={handleEdit}
-      confirmButtonText='Edit'
+      confirmButtonText={t('Edit')}
       confirmButtonProps={{ disabled: !valid }}
-      title='Change profile'
+      title={t('Change profile')}
       content={
         <Stack spacing={2} mt={1}>
           <ErrorAlert error={error} />
@@ -64,7 +66,7 @@ const ProfileDialog: FC<ProfileDialogProps> = ({ open, close }) => {
             allowSelf
           />
           <TextField
-            label='name'
+            label={t('Name')}
             required
             error={!newName}
             value={newName}

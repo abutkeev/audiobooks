@@ -4,8 +4,10 @@ import { AccountMenuItemProps } from '..';
 import { AdminPanelSettings } from '@mui/icons-material';
 import useAuthData from '../../../hooks/useAuthData';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const UsersMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {
+  const { t } = useTranslation();
   const { admin } = useAuthData()!;
   const navigate = useNavigate();
 
@@ -21,7 +23,7 @@ const UsersMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {
       <ListItemIcon>
         <AdminPanelSettings />
       </ListItemIcon>
-      <ListItemText>Users</ListItemText>
+      <ListItemText>{t('Users')}</ListItemText>
     </MenuItem>
   );
 };

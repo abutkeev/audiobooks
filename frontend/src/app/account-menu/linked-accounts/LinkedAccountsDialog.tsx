@@ -5,6 +5,7 @@ import { Telegram } from '@mui/icons-material';
 import TelegramAuthButton, { TelegramAuthCallback } from '../../../components/TelegramAuthButton';
 import { useTgGetAccountInfoQuery, useTgRemoveAuthDataMutation, useTgSetAuthDataMutation } from '../../../api/api';
 import ProgressButton from '../../../components/common/ProgressButton';
+import { useTranslation } from 'react-i18next';
 
 interface LinkedAccountsDialogProps {
   open: boolean;
@@ -12,6 +13,7 @@ interface LinkedAccountsDialogProps {
 }
 
 const LinkedAccountsDialog: React.FC<LinkedAccountsDialogProps> = ({ open, close }) => {
+  const { t } = useTranslation();
   const { data: telegramAccount, isLoading, isError, isFetching } = useTgGetAccountInfoQuery();
   const [setTgAuth] = useTgSetAuthDataMutation();
   const [removeTgAuth] = useTgRemoveAuthDataMutation();
@@ -37,7 +39,7 @@ const LinkedAccountsDialog: React.FC<LinkedAccountsDialogProps> = ({ open, close
     <CustomDialog
       open={open}
       close={close}
-      title='Linked accounts'
+      title={t('Linked accounts')}
       content={
         <LoadingWrapper loading={isLoading} error={isError}>
           <Stack spacing={1}>
@@ -48,21 +50,21 @@ const LinkedAccountsDialog: React.FC<LinkedAccountsDialogProps> = ({ open, close
                   <>
                     <Typography flexGrow={1}>{formatTelegramAccountInfo()}</Typography>
                     <TelegramAuthButton onAuth={handleTelegramAuth} refreshing={isFetching}>
-                      Refresh
+                      {t('Refresh')}
                     </TelegramAuthButton>
                     <ProgressButton
                       buttonProps={{ color: 'error' }}
                       refreshing={isFetching}
                       onClick={handleTelergamRemove}
                     >
-                      Unlink
+                      {t('Unlink')}
                     </ProgressButton>
                   </>
                 ) : (
                   <>
-                    <Typography flexGrow={1}>Not linked</Typography>
+                    <Typography flexGrow={1}>{t('Not linked')}</Typography>
                     <TelegramAuthButton onAuth={handleTelegramAuth} refreshing={isFetching}>
-                      Link
+                      {t('Link')}
                     </TelegramAuthButton>
                   </>
                 )}

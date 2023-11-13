@@ -2,8 +2,10 @@ import { FC } from 'react';
 import { Key } from '@mui/icons-material';
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import { AccountMenuDialogItemProps } from '..';
+import { useTranslation } from 'react-i18next';
 
 const ChangePasswordMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog, closeMenu }) => {
+  const { t } = useTranslation();
   const handleShowDialog = () => {
     setShowDialog(true);
     closeMenu();
@@ -14,7 +16,7 @@ const ChangePasswordMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog,
       <ListItemIcon>
         <Key />
       </ListItemIcon>
-      <ListItemText>Change password</ListItemText>
+      <ListItemText>{t('Change password')}</ListItemText>
     </MenuItem>
   );
 };

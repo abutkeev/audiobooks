@@ -5,6 +5,7 @@ import CustomPassword from '../../../components/common/CustomPassword';
 import { useProfileChangePasswordMutation } from '../../../api/api';
 import getErrorMessage from '../../../utils/getErrorMessage';
 import ErrorAlert from '../../../components/common/ErrorAlert';
+import { useTranslation } from 'react-i18next';
 
 interface ChangePasswordDialogProps {
   open: boolean;
@@ -12,6 +13,7 @@ interface ChangePasswordDialogProps {
 }
 
 const ChangePasswordDialog: FC<ChangePasswordDialogProps> = ({ open, close }) => {
+  const { t } = useTranslation();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,7 +24,7 @@ const ChangePasswordDialog: FC<ChangePasswordDialogProps> = ({ open, close }) =>
     try {
       await change({ newPasswordDto: { old_password: oldPassword, new_password: newPassword } }).unwrap();
     } catch (e) {
-      setError(getErrorMessage(e, 'Failed to change password'));
+      setError(getErrorMessage(e, t('Failed to change password')));
       throw new AbortOperation();
     }
   };
@@ -41,21 +43,21 @@ const ChangePasswordDialog: FC<ChangePasswordDialogProps> = ({ open, close }) =>
       open={open}
       close={handleClose}
       onConfirm={handleChange}
-      confirmButtonText='Change'
+      confirmButtonText={t('Change')}
       confirmButtonProps={{ disabled: !valid }}
-      title='Change password'
+      title={t('Change password')}
       content={
         <Stack spacing={2} mt={1}>
           <ErrorAlert error={error} />
           <CustomPassword
-            label='Old password'
+            label={t('Old password')}
             required
             error={!oldPassword}
             value={oldPassword}
             onChange={setOldPassword}
           />
           <CustomPassword
-            label='New password'
+            label={t('New password')}
             required
             error={!newPassword}
             value={newPassword}

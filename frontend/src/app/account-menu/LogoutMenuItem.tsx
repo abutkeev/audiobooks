@@ -4,8 +4,10 @@ import { AccountMenuItemProps } from '.';
 import { Logout } from '@mui/icons-material';
 import { useAppDispatch } from '../../store';
 import { setAuthToken } from '../../store/features/auth';
+import { useTranslation } from 'react-i18next';
 
 const LogoutMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
@@ -18,7 +20,7 @@ const LogoutMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {
       <ListItemIcon>
         <Logout />
       </ListItemIcon>
-      <ListItemText>Logout</ListItemText>
+      <ListItemText>{t('Logout')}</ListItemText>
     </MenuItem>
   );
 };

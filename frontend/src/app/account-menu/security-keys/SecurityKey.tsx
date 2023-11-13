@@ -1,6 +1,7 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import DeleteButton from '../../../components/common/DeleteButton';
 import { useWebauthnRemoveMutation } from '../../../api/api';
+import { useTranslation } from 'react-i18next';
 
 interface SecurityKeyProps {
   id: string;
@@ -8,6 +9,7 @@ interface SecurityKeyProps {
 }
 
 const SecurityKey: React.FC<SecurityKeyProps> = ({ name, id }) => {
+  const { t } = useTranslation();
   const [remove] = useWebauthnRemoveMutation();
 
   const handleRemove = async () => {
@@ -23,8 +25,8 @@ const SecurityKey: React.FC<SecurityKeyProps> = ({ name, id }) => {
           {keyName}
         </Typography>
         <DeleteButton
-          confirmationTitle='Remove security key?'
-          confirmationBody={`Remove security key ${keyName}`}
+          confirmationTitle={t('Remove security key?')}
+          confirmationBody={`${t('Remove security key')} ${keyName}`}
           onConfirm={handleRemove}
         />
       </Stack>

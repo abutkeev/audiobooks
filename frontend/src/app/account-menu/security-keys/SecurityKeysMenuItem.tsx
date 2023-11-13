@@ -2,8 +2,10 @@ import { FC } from 'react';
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import { AccountMenuDialogItemProps } from '..';
 import { Fingerprint } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const SecurityKeysMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog, closeMenu }) => {
+  const { t } = useTranslation();
   const handleShowDialog = () => {
     setShowDialog(true);
     closeMenu();
@@ -14,7 +16,7 @@ const SecurityKeysMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog, c
       <ListItemIcon>
         <Fingerprint />
       </ListItemIcon>
-      <ListItemText>Security keys</ListItemText>
+      <ListItemText>{t('Security keys')}</ListItemText>
     </MenuItem>
   );
 };

@@ -2,8 +2,10 @@ import { FC } from 'react';
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import { AccountMenuDialogItemProps } from '..';
 import { Link } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const LinkedAccountsMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog, closeMenu }) => {
+  const { t } = useTranslation();
   const handleShowDialog = () => {
     setShowDialog(true);
     closeMenu();
@@ -14,7 +16,7 @@ const LinkedAccountsMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog,
       <ListItemIcon>
         <Link />
       </ListItemIcon>
-      <ListItemText>Linked accounts</ListItemText>
+      <ListItemText>{t('Linked accounts')}</ListItemText>
     </MenuItem>
   );
 };

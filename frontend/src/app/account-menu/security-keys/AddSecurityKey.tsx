@@ -6,8 +6,10 @@ import { useWebauthnAddMutation, useWebauthnGenerateChallengeMutation } from '..
 import useAuthData from '../../../hooks/useAuthData';
 import { useAppDispatch } from '../../../store';
 import { addSnackbar } from '../../../store/features/snackbars';
+import { useTranslation } from 'react-i18next';
 
 const AddSecurityKey: React.FC = () => {
+  const { t } = useTranslation();
   const [showAddForm, setShowAddForm] = useState(false);
   const [name, setName] = useState('');
   const [stageMessage, setStageMessage] = useState<string | undefined>();
@@ -24,18 +26,18 @@ const AddSecurityKey: React.FC = () => {
 
   const handleNewKeyAdd = async () => {
     try {
-      setStageMessage('Waiting for server challenge...');
+      setStageMessage(t('Waiting for server challenge...'));
       const { challenge } = await getChallenge().unwrap();
 
-      setStageMessage('Waiting for input from browser interaction...');
+      setStageMessage(t('Waiting for input from browser interaction...'));
       const registration = await registerSecurityKey({ challenge, username: login });
 
-      setStageMessage('Saving public key...');
+      setStageMessage(t('Saving public key...'));
       savePublicKey({ publicKeyDto: { registration, name } });
 
       closeAddForm();
     } catch (e) {
-      const text = e instanceof Error ? e.message : 'got unknown error while adding security key';
+      const text = e instanceof Error ? e.message : t('got unknown error while adding security key');
       dispatch(addSnackbar({ severity: 'error', text }));
     }
     setStageMessage(undefined);
@@ -59,15 +61,15 @@ const AddSecurityKey: React.FC = () => {
           sx={{ my: 1 }}
           size='small'
           fullWidth
-          label='New key name'
+          label={t('New key name')}
           value={name}
           onChange={({ target: { value } }) => setName(value)}
         />
         <Button sx={{ mr: 1 }} variant='contained' startIcon={<Fingerprint />} onClick={handleNewKeyAdd}>
-          Add security key
+          {t('Add security key')}
         </Button>
         <Button variant='outlined' onClick={closeAddForm}>
-          Cancel
+          {t('Cancel')}
         </Button>
       </>
     );
@@ -75,7 +77,7 @@ const AddSecurityKey: React.FC = () => {
 
   return (
     <Button variant='contained' onClick={() => setShowAddForm(true)}>
-      Register new security key
+      {t('Register new security key')}
     </Button>
   );
 };

@@ -5,12 +5,14 @@ import { People } from '@mui/icons-material';
 import useAuthData from '../../hooks/useAuthData';
 import FriendsBage from '../../components/FriendsBage';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface FriendsMenuItemProps extends AccountMenuItemProps {
   friendsRequests: number;
 }
 
 const FriendsMenuItem: FC<FriendsMenuItemProps> = ({ friendsRequests, closeMenu }) => {
+  const { t } = useTranslation();
   const { enabled } = useAuthData()!;
   const navigate = useNavigate();
 
@@ -26,7 +28,7 @@ const FriendsMenuItem: FC<FriendsMenuItemProps> = ({ friendsRequests, closeMenu 
       <ListItemIcon>
         <People />
       </ListItemIcon>
-      <ListItemText>Friends</ListItemText>
+      <ListItemText>{t('Friends')}</ListItemText>
       <FriendsBage friendsRequests={friendsRequests} />
     </MenuItem>
   );
