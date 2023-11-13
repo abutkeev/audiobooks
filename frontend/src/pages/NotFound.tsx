@@ -1,12 +1,14 @@
 import { Alert } from '@mui/material';
 import useTitle from '../hooks/useTitle';
+import { useTranslation } from 'react-i18next';
 
 const NotFound: React.FC = () => {
-  useTitle('Page not found');
+  const { t } = useTranslation();
+  useTitle(t('Page not found'));
 
   return (
     <Alert severity='error' sx={{ maxWidth: 'md', mx: 'auto' }}>
-      Page not found
+      {t('Page not found')}
     </Alert>
   );
 };
