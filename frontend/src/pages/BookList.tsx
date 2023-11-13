@@ -10,8 +10,10 @@ import { Alert } from '@mui/material';
 import { currentBookVarName } from './Home';
 import useTitle from '../hooks/useTitle';
 import { useBooksGetQuery } from '../api/api';
+import { useTranslation } from 'react-i18next';
 
 const BookList: React.FC = () => {
+  const { t } = useTranslation();
   const { data: books = [], isLoading: booksLoading, isError: booksError } = useBooksGetQuery();
   const { authors, authorsLoading, authorsError } = useAuthors();
   const { readers, readersLoading, readersError } = useReaders();
@@ -22,7 +24,7 @@ const BookList: React.FC = () => {
   const { author_id, reader_id, series_id } = Object.fromEntries(searchParams);
   const searchText = useSearch();
 
-  useTitle('Book list');
+  useTitle(t('Book list'));
 
   useEffect(() => {
     localStorage.removeItem(currentBookVarName);
@@ -85,7 +87,7 @@ const BookList: React.FC = () => {
         ))
       ) : (
         <Alert severity='info'>
-          {author_id || reader_id || series_id || searchText ? 'No books found' : 'No books'}
+          {author_id || reader_id || series_id || searchText ? t('No books found') : t('No books')}
         </Alert>
       )}
     </LoadingWrapper>
