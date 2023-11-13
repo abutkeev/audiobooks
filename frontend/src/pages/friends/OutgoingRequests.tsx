@@ -1,8 +1,10 @@
 import { FC } from 'react';
 import { useFriendsGetOutgoingRequestsQuery, useFriendsRemoveOutgoingRequestMutation } from '../../api/api';
 import FriendsList from './FriendsList';
+import { useTranslation } from 'react-i18next';
 
 const OutgoingRequests: FC = () => {
+  const { t } = useTranslation();
   const { data = [], isLoading, isError, isFetching } = useFriendsGetOutgoingRequestsQuery();
   const [remove] = useFriendsRemoveOutgoingRequestMutation();
 
@@ -15,11 +17,12 @@ const OutgoingRequests: FC = () => {
       data={data}
       isLoading={isLoading}
       isError={isError}
-      emptyMessage='No requests'
+      emptyMessage={t('No requests')}
+      notFoundMessage={t('No requests found')}
       actions={[
         {
           action: getRemoveHandler,
-          actionText: 'Remove',
+          actionText: t('Remove'),
           refreshing: isFetching,
           progressButtonProps: { buttonProps: { color: 'error' } },
         },

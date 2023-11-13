@@ -9,6 +9,7 @@ import {
   Stack,
 } from '@mui/material';
 import ProgressButton, { ProgressButtonProps } from './ProgressButton';
+import { useTranslation } from 'react-i18next';
 
 interface CustomDialogProps {
   open: boolean;
@@ -43,6 +44,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
   refreshing,
   extraButtons,
 }) => {
+  const { t } = useTranslation();
   const { variant: cancelButtonVariant, ...otherCancelButtonProps } = cancelButtonProps || {};
   const { variant: confirmButtonVariant, ...otherConfirmButtonProps } = confirmButtonProps || {};
 
@@ -77,7 +79,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
           {extraButtons}
           {(onCancel || close) && (
             <Button onClick={handleCancel} variant={cancelButtonVariant || 'outlined'} {...otherCancelButtonProps}>
-              {cancelButtonText || (onConfirm || onCancel ? 'Cancel' : 'Close')}
+              {cancelButtonText || (onConfirm || onCancel ? t('Cancel') : t('Close'))}
             </Button>
           )}
           {onConfirm && (
@@ -87,7 +89,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
               refreshing={refreshing}
               {...otherConfirmButtonProps}
             >
-              {confirmButtonText || 'Confirm'}
+              {confirmButtonText || t('Confirm')}
             </ProgressButton>
           )}
         </Stack>

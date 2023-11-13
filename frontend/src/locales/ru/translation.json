@@ -1,4 +1,7 @@
 {
+  "Cancel": "Отмена",
+  "Close": "Закрыть",
+  "Confirm": "Подтвердить",
   "Generate new password": "Сгенерировать новый пароль",
   "Hide password": "Скрыть пароль",
   "Show password": "Показать пароль",
@@ -9,6 +12,19 @@
   "Book list": "Список книг",
   "No books found": "Книги не найдены",
   "No books": "Нет книг",
+  "got unknown error while adding friend": "неизвестная ошибка при добавлении друга",
+  "Add": "Добавить",
+  "Add friend": "Добавить друга",
+  "Friend login": "Логин друга",
+  "No friends": "Нет друзей",
+  "No friends found": "Друзья не найдены",
+  "Remove": "Удалить",
+  "No requests": "Нет запросов",
+  "No requests found": "Запросы не найдены",
+  "Approve": "Одобрить",
+  "Friends": "Друзья",
+  "Incoming requests": "Входящие запросы",
+  "Outgoing requests": "Исходящие запросы",
   "Login.title": "Вход",
   "or": "или",
   "Sign up": "Регистрация",
@@ -25,6 +41,5 @@
   "Link telegram account and try to activate": "Привязать учётную запись в телеграм и попробовать активировать",
   "Page not found": "Страница не найдена",
   "Sign up failed": "Ошибка при регистрации",
-  "Name": "Имя",
-  "Cancel": "Отмена"
+  "Name": "Имя"
 }

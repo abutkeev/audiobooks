@@ -18,10 +18,18 @@ interface FriendsListProps {
   isLoading: boolean;
   isError: boolean;
   emptyMessage: string;
+  notFoundMessage: string;
   actions?: Action[];
 }
 
-const FriendsList: FC<FriendsListProps> = ({ data = [], isLoading, isError, emptyMessage, actions = [] }) => {
+const FriendsList: FC<FriendsListProps> = ({
+  data = [],
+  isLoading,
+  isError,
+  emptyMessage,
+  notFoundMessage,
+  actions = [],
+}) => {
   const searchMatcher = useSearchMatcher();
 
   const requests = useMemo(() => {
@@ -38,7 +46,7 @@ const FriendsList: FC<FriendsListProps> = ({ data = [], isLoading, isError, empt
 
   return (
     <LoadingWrapper loading={isLoading} error={isError}>
-      <EmptyListWrapper wrap={requests.length === 0} message={searchMatcher ? `${emptyMessage} found` : emptyMessage}>
+      <EmptyListWrapper wrap={requests.length === 0} message={searchMatcher ? notFoundMessage : emptyMessage}>
         {requests.map(({ id, name, login, uid }) => {
           return (
             <Paper square variant='outlined' key={id}>

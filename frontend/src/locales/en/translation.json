@@ -1,4 +1,7 @@
 {
+  "Cancel": "",
+  "Close": "",
+  "Confirm": "",
   "Generate new password": "",
   "Hide password": "",
   "Show password": "",
@@ -9,6 +12,19 @@
   "Book list": "",
   "No books found": "",
   "No books": "",
+  "got unknown error while adding friend": "",
+  "Add": "",
+  "Add friend": "",
+  "Friend login": "",
+  "No friends": "",
+  "No friends found": "",
+  "Remove": "",
+  "No requests": "",
+  "No requests found": "",
+  "Approve": "",
+  "Friends": "",
+  "Incoming requests": "",
+  "Outgoing requests": "",
   "Login.title": "Login",
   "or": "",
   "Sign up": "",
@@ -25,6 +41,5 @@
   "Link telegram account and try to activate": "",
   "Page not found": "",
   "Sign up failed": "",
-  "Name": "",
-  "Cancel": ""
+  "Name": ""
 }

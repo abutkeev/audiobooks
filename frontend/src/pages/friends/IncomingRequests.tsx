@@ -5,8 +5,10 @@ import {
   useFriendsRemoveIncomingRequestMutation,
 } from '../../api/api';
 import FriendsList from './FriendsList';
+import { useTranslation } from 'react-i18next';
 
 const IncomingRequests: FC = () => {
+  const { t } = useTranslation();
   const { data = [], isLoading, isError, isFetching } = useFriendsGetIncomingRequestsQuery();
   const [approve] = useFriendsApproveRequestMutation();
   const [remove] = useFriendsRemoveIncomingRequestMutation();
@@ -24,12 +26,13 @@ const IncomingRequests: FC = () => {
       data={data}
       isLoading={isLoading}
       isError={isError}
-      emptyMessage='No requests'
+      emptyMessage={t('No requests')}
+      notFoundMessage={t('No requests found')}
       actions={[
-        { action: getApproveHandler, actionText: 'Approve', refreshing: isFetching },
+        { action: getApproveHandler, actionText: t('Approve'), refreshing: isFetching },
         {
           action: getRemoveHandler,
-          actionText: 'Remove',
+          actionText: t('Remove'),
           refreshing: isFetching,
           progressButtonProps: { buttonProps: { color: 'error' } },
         },

@@ -1,8 +1,10 @@
 import { FC } from 'react';
 import { useFriendsGetQuery, useFriendsRemoveMutation } from '../../api/api';
 import FriendsList from './FriendsList';
+import { useTranslation } from 'react-i18next';
 
 const FriendsTab: FC = () => {
+  const { t } = useTranslation();
   const { data = [], isLoading, isError, isFetching } = useFriendsGetQuery();
   const [remove] = useFriendsRemoveMutation();
 
@@ -15,11 +17,12 @@ const FriendsTab: FC = () => {
       data={data}
       isLoading={isLoading}
       isError={isError}
-      emptyMessage='No friends'
+      emptyMessage={t('No friends')}
+      notFoundMessage={t('No friends found')}
       actions={[
         {
           action: getRemoveHandler,
-          actionText: 'Remove',
+          actionText: t('Remove'),
           refreshing: isFetching,
           progressButtonProps: { buttonProps: { color: 'error' } },
         },

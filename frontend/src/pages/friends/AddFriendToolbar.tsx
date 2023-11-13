@@ -6,8 +6,10 @@ import LoginTextField from '../../components/login-text-field/LoginTextField';
 import { useFriendsAddMutation } from '../../api/api';
 import { useAppDispatch } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
+import { useTranslation } from 'react-i18next';
 
 const AddFriendToolbar: FC = () => {
+  const { t } = useTranslation();
   const [showAddForm, setShowAddForm] = useState(false);
   const [login, setLogin] = useState('');
   const [loginValid, setLoginValid] = useState(false);
@@ -37,7 +39,7 @@ const AddFriendToolbar: FC = () => {
         dispatch(addSnackbar({ severity: 'error', text: e.data.message }));
         throw new AbortOperation();
       }
-      dispatch(addSnackbar({ severity: 'error', text: 'got unknown error while adding friend' }));
+      dispatch(addSnackbar({ severity: 'error', text: t('got unknown error while adding friend') }));
       throw e;
     }
   };
@@ -52,12 +54,12 @@ const AddFriendToolbar: FC = () => {
           onClick={() => setShowAddForm(true)}
           disabled={showAddForm}
         >
-          Add
+          {t('Add')}
         </Button>
       </Toolbar>
       <CustomDialog
         open={showAddForm}
-        title='Add friend'
+        title={t('Add friend')}
         content={
           <LoginTextField
             login={login}
@@ -65,12 +67,12 @@ const AddFriendToolbar: FC = () => {
             valid={loginValid}
             setValid={setLoginValid}
             validType='used'
-            textFieldProps={{ sx: { mt: 1 }, fullWidth: true, label: 'Friend login', autoComplete: 'off' }}
+            textFieldProps={{ sx: { mt: 1 }, fullWidth: true, label: t('Friend login'), autoComplete: 'off' }}
           />
         }
         close={handleClose}
         onConfirm={handleSubmit}
-        confirmButtonText='Add'
+        confirmButtonText={t('Add')}
       />
     </AppBar>
   );

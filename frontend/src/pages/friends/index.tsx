@@ -8,9 +8,11 @@ import { useFriendsGetIncomingRequestsQuery, useFriendsGetOutgoingRequestsQuery 
 import LoadingWrapper from '../../components/common/LoadingWrapper';
 import FriendsBage from '../../components/FriendsBage';
 import FriendsTab from './FriendsTab';
+import { useTranslation } from 'react-i18next';
 
 const Friends: FC = () => {
-  useTitle('Friends');
+  const { t } = useTranslation();
+  useTitle(t('Friends'));
 
   const [tab, setTab] = useState<'in' | 'out' | 'friends' | 'default'>('default');
   const { data: incoming, isLoading: incomingLoading, isError: incomingError } = useFriendsGetIncomingRequestsQuery();
@@ -29,14 +31,14 @@ const Friends: FC = () => {
           <Tabs value={tab === 'default' ? defaultTab : tab} onChange={(_, newTab) => setTab(newTab)}>
             {(tab === 'in' || incoming?.length) && (
               <Tab
-                label='Incoming requests'
+                label={t('Incoming requests')}
                 value='in'
                 icon={<FriendsBage friendsRequests={incoming?.length} ml={1} />}
                 iconPosition='end'
               />
             )}
-            <Tab label='Friends' value='friends' />
-            {(tab === 'out' || outgoing?.length) && <Tab label='Outgoing requests' value='out' />}
+            <Tab label={t('Friends')} value='friends' />
+            {(tab === 'out' || outgoing?.length) && <Tab label={t('Outgoing requests')} value='out' />}
           </Tabs>
         )}
         {(tab === 'in' || (!!incoming?.length && tab === 'default')) && <IncomingRequests />}
