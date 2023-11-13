@@ -39,6 +39,8 @@
   "Hide password": "Скрыть пароль",
   "Show password": "Показать пароль",
   "Delete": "Удалить",
+  "Reload page": "Перезагрузить страницу",
+  "An error occurred": "Произошла ошибка",
   "Login is used": "Логин занят",
   "User not found": "Пользователь не найден",
   "Self login": "Собственный логин",
