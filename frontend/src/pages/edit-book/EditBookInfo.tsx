@@ -12,6 +12,7 @@ import CustomComboBox from '../../components/common/CustomComboBox';
 import ErrorWrapper from '../../components/common/ErrorWrapper';
 import { addSnackbar } from '../../store/features/snackbars';
 import { useAppDispatch } from '../../store';
+import { useTranslation } from 'react-i18next';
 
 interface EditBookInfoProps {
   id: string;
@@ -20,6 +21,7 @@ interface EditBookInfoProps {
 }
 
 const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
+  const { t } = useTranslation();
   const { data: authors = [], isLoading: authorsLoading, isError: authorsError } = useAuthorsGetQuery();
   const { data: readers = [], isLoading: readersLoading, isError: readersError } = useReadersGetQuery();
   const { data: series = [], isLoading: seriesLoading, isError: seriesError } = useSeriesGetQuery();
@@ -62,7 +64,7 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
       };
       save({ id, bookDto: { info, chapters } }).unwrap();
     } catch (e) {
-      const text = e instanceof Error ? e.message : `got unknown error while creating book`;
+      const text = e instanceof Error ? e.message : t(`got unknown error while creating book`);
       dispatch(addSnackbar({ severity: 'error', text }));
     }
   };
@@ -81,7 +83,7 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
         sx={{ mt: 1 }}
         fullWidth
         required
-        label='Name'
+        label={t('Name.book', 'Name')}
         value={name}
         onChange={({ target: { value } }) => setName(value)}
         onKeyDown={e => e.stopPropagation()}
@@ -89,21 +91,21 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
       />
       <CustomComboBox
         options={authors}
-        label='Author'
+        label={t('Author')}
         value={authorId}
         setValue={setAuthorId}
         loading={authorsLoading}
       />
       <CustomComboBox
         options={readers}
-        label='Reader'
+        label={t('Reader')}
         value={readerId}
         setValue={setReaderId}
         loading={readersLoading}
       />
       <CustomComboBox
         options={series}
-        label='Series'
+        label={t('Series')}
         value={seriesId}
         setValue={setSeriesId}
         required={false}
@@ -112,7 +114,7 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
       <TextField
         sx={{ mt: 2 }}
         fullWidth
-        label='Series number'
+        label={t('Series number')}
         value={seriesId ? seriesNumber : ''}
         disabled={!seriesId}
         onChange={({ target: { value } }) => setSeriesNumber(value)}
@@ -120,10 +122,10 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
       {modified && (
         <Stack direction='row' spacing={1} mt={1}>
           <Button variant='outlined' onClick={handleCancel}>
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button variant='contained' disabled={!valid} onClick={handleSave}>
-            Save
+            {t('Save')}
           </Button>
         </Stack>
       )}

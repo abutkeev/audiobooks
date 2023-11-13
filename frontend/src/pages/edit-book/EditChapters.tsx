@@ -4,6 +4,7 @@ import { Upload } from '@mui/icons-material';
 import UploadButton from '../../components/common/UploadButton';
 import { useState } from 'react';
 import UploadDialog from './UploadDialog';
+import { useTranslation } from 'react-i18next';
 
 interface EditChaptersProps {
   bookId: string;
@@ -11,6 +12,7 @@ interface EditChaptersProps {
 }
 
 const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>();
 
   return (
@@ -30,7 +32,7 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
           accept='.mp3'
           multiple
         >
-          Upload
+          {t('Upload')}
         </UploadButton>
       </Stack>
       <UploadDialog bookId={bookId} files={files} onClose={() => setFiles(undefined)} />

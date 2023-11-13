@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
 import axios from 'axios';
 import { api, useBooksExtractCoverMutation, useBooksRemoveCoverMutation } from '../../api/api';
+import { useTranslation } from 'react-i18next';
 
 interface EditCoverProps {
   bookId: string;
@@ -12,6 +13,7 @@ interface EditCoverProps {
 }
 
 const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
+  const { t } = useTranslation();
   const { token } = useAppSelector(({ auth }) => auth);
   const dispatch = useAppDispatch();
   const [remove] = useBooksRemoveCoverMutation();
@@ -31,7 +33,7 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
       });
       dispatch(api.util.invalidateTags(['books']));
     } catch (e) {
-      dispatch(addSnackbar({ severity: 'error', text: `Got error then uploading cover` }));
+      dispatch(addSnackbar({ severity: 'error', text: t(`Got error then uploading cover`) }));
     }
   };
 
@@ -39,7 +41,7 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
     try {
       await remove({ id: bookId }).unwrap();
     } catch (e) {
-      dispatch(addSnackbar({ severity: 'error', text: `Got error then romoving cover` }));
+      dispatch(addSnackbar({ severity: 'error', text: t(`Got error then removing cover`) }));
     }
   };
 
@@ -47,7 +49,7 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
     try {
       await extract({ id: bookId }).unwrap();
     } catch (e) {
-      dispatch(addSnackbar({ severity: 'error', text: `Got error then extracting cover` }));
+      dispatch(addSnackbar({ severity: 'error', text: t(`Got error then extracting cover`) }));
     }
   };
 
@@ -62,13 +64,13 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
             onChange={list => list && list[0] && handleUpload(list[0])}
             accept='image/*'
           >
-            Upload
+            {t('Upload')}
           </UploadButton>
           <Button startIcon={<Delete />} disabled={!cover} variant='contained' color='error' onClick={handleRemove}>
-            Remove
+            {t('Remove')}
           </Button>
           <Button variant='outlined' onClick={handleExtract}>
-            Extract
+            {t('Extract')}
           </Button>
         </Stack>
       </Toolbar>

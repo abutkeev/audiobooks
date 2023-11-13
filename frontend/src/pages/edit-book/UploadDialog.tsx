@@ -25,6 +25,7 @@ import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
 import enhancedApi from '../../api/enhancedApi';
+import { useTranslation } from 'react-i18next';
 
 interface UploadDialogProps {
   bookId: string;
@@ -33,6 +34,7 @@ interface UploadDialogProps {
 }
 
 const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) => {
+  const { t } = useTranslation();
   const [{ chapters, errors, valid, uploading }, dispatch] = useUploading(files);
   const abortControllerRef = useRef<AbortController | undefined>();
   const appDispatch = useAppDispatch();
@@ -57,7 +59,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
       }
     } catch (e) {
       if (typeof e === 'object' && e && 'message' in e && e.message === 'canceled') throw new AbortOperation();
-      appDispatch(addSnackbar({ severity: 'error', text: `Got error then uploading chapter` }));
+      appDispatch(addSnackbar({ severity: 'error', text: t(`Got error then uploading chapter`) }));
       throw e;
     } finally {
       dispatch(stopUploading());
@@ -68,12 +70,12 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
     <CustomDialog
       maxWidth='lg'
       open={!!files}
-      title={'Upload files'}
+      title={t('Upload files')}
       content={
         <>
           {uploading && (
             <>
-              <Typography>{`Uploading ${uploading.file.name} (${uploading.title}): ${uploading.percent.toFixed(
+              <Typography>{`${t('Uploading')} ${uploading.file.name} (${uploading.title}): ${uploading.percent.toFixed(
                 1
               )}%`}</Typography>
               <LinearProgress
@@ -86,8 +88,8 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding='checkbox'>Filename</TableCell>
-                <TableCell>Title</TableCell>
+                <TableCell padding='checkbox'>{t('Filename')}</TableCell>
+                <TableCell>{t('Title')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -100,7 +102,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
                     <TextField
                       size='small'
                       fullWidth
-                      label='Title'
+                      label={t('Title')}
                       value={title}
                       onChange={({ target: { value } }) => dispatch(setTitle({ index, title: value }))}
                       required
@@ -118,23 +120,23 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
       extraButtons={
         uploading ? (
           <Button variant='outlined' color='error' onClick={() => abortControllerRef.current?.abort()}>
-            Abort upload
+            {t('Abort upload')}
           </Button>
         ) : (
           <>
             <Button variant='outlined' onClick={() => dispatch(removeTitles())}>
-              Remove titles
+              {t('Remove titles')}
             </Button>
             <Button variant='outlined' onClick={() => dispatch(resetTitles())}>
-              Reset titles
+              {t('Reset titles')}
             </Button>
             <Button variant='outlined' onClick={() => dispatch(stripPrefixNumbers())}>
-              Strip prefix numbers
+              {t('Strip prefix numbers')}
             </Button>
           </>
         )
       }
-      confirmButtonText='Upload'
+      confirmButtonText={t('Upload')}
       confirmButtonProps={{ buttonProps: { startIcon: <Upload /> }, disabled: !valid || !!uploading }}
       cancelButtonProps={{ disabled: !!uploading }}
       onConfirm={handleUpload}
