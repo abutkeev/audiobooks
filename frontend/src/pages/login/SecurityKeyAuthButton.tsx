@@ -5,8 +5,10 @@ import { useWebauthnGenerateChallengeMutation, useWebauthnLoginMutation } from '
 import { client } from '@passwordless-id/webauthn';
 import { useAppDispatch } from '../../store';
 import { setAuthToken } from '../../store/features/auth';
+import { useTranslation } from 'react-i18next';
 
 const SecurityKeyAuthButton: React.FC<CommonAuthProps> = ({ setLoading, setError }) => {
+  const { t } = useTranslation();
   const [getChallenge] = useWebauthnGenerateChallengeMutation();
   const [login] = useWebauthnLoginMutation();
   const dispatch = useAppDispatch();
@@ -22,13 +24,13 @@ const SecurityKeyAuthButton: React.FC<CommonAuthProps> = ({ setLoading, setError
       const { access_token } = await login({ authenticationDto }).unwrap();
       dispatch(setAuthToken(access_token));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Authorization failed');
+      setError(e instanceof Error ? e.message : t('Authorization failed'));
     }
     setLoading(false);
   };
   return (
     <Button fullWidth variant='contained' startIcon={<Fingerprint />} onClick={handleLogin}>
-      Login with security key
+      {t('Login with security key')}
     </Button>
   );
 };

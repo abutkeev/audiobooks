@@ -11,6 +11,11 @@ import useCreateTheme from './hooks/useCreateTheme';
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import Routes from './app/Routes';
+import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import languageDetector from './locales/languageDetector';
+import en from './locales/en/translation.json';
+import ru from './locales/ru/translation.json';
 
 const App: React.FC = () => {
   const theme = useCreateTheme();
@@ -25,6 +30,22 @@ const App: React.FC = () => {
     </React.StrictMode>
   );
 };
+
+i18next
+  .use(initReactI18next)
+  .use(languageDetector)
+  .init({
+    resources: { ru: { translation: ru }, en: { translation: en } },
+    supportedLngs: ['en', 'ru'],
+    fallbackLng: 'en',
+    returnEmptyString: false,
+    debug: process.env.NODE_ENV === 'development',
+    detection: {
+      order: ['localStorage', 'customDetector'],
+      caches: ['localStorage'],
+      lookupLocalStorage: 'lang',
+    },
+  });
 
 const rootDiv = document.createElement('div');
 rootDiv.setAttribute('id', 'root');

@@ -28,3 +28,5 @@ dist-ssr
 /src/api/api.ts
 
 /public/api
+
+/src/locales/*/*_old.json

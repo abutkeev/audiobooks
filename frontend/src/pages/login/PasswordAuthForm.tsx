@@ -6,8 +6,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../../store';
 import { setAuthToken } from '../../store/features/auth';
 import { CommonAuthProps } from '.';
+import { useTranslation } from 'react-i18next';
 
 const PasswordAuthForm: React.FC<CommonAuthProps> = ({ setLoading, setError }) => {
+  const { t } = useTranslation();
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ const PasswordAuthForm: React.FC<CommonAuthProps> = ({ setLoading, setError }) =
       dispatch(setAuthToken(access_token));
       navigate(pathname, { replace: true });
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Authorization failed');
+      setError(e instanceof Error ? e.message : t('Authorization failed'));
     }
     setLoading(false);
   };
@@ -31,15 +33,15 @@ const PasswordAuthForm: React.FC<CommonAuthProps> = ({ setLoading, setError }) =
   return (
     <FormControl fullWidth>
       <TextField
-        label='Login'
+        label={t('Login')}
         value={login}
         onChange={({ target: { value } }) => setLogin(value)}
         required
         error={!login}
       />
-      <CustomPassword label='Password' value={password} onChange={setPassword} required error={!password} />
+      <CustomPassword label={t('Password')} value={password} onChange={setPassword} required error={!password} />
       <Button size='large' variant='contained' sx={{ mt: 1 }} disabled={!login || !password} onClick={handleLogin}>
-        Login
+        {t('Login.button', 'Login')}
       </Button>
     </FormControl>
   );

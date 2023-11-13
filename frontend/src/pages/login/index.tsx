@@ -13,6 +13,7 @@ import { useTgLoginMutation } from '../../api/api';
 import { setAuthToken } from '../../store/features/auth';
 import getErrorMessage from '../../utils/getErrorMessage';
 import ErrorAlert from '../../components/common/ErrorAlert';
+import { useTranslation } from 'react-i18next';
 
 export interface CommonAuthProps {
   setLoading(v: boolean): void;
@@ -20,7 +21,8 @@ export interface CommonAuthProps {
 }
 
 const Login: React.FC = () => {
-  useTitle('Login');
+  const { t } = useTranslation();
+  useTitle(t('Login.title', 'Login'));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
   const navigate = useNavigate();
@@ -44,11 +46,11 @@ const Login: React.FC = () => {
           <ErrorAlert error={error} />
           <PasswordAuthForm setLoading={setLoading} setError={setError} />
           <Typography align='center' my={1}>
-            or
+            {t('or')}
           </Typography>
           <Stack spacing={1}>
             <Button fullWidth variant='contained' onClick={() => navigate('/sign-up')}>
-              Sign up
+              {t('Sign up')}
             </Button>
             {webauthnAvailable && <SecurityKeyAuthButton setLoading={setLoading} setError={setError} />}
             {TELEGRAM_BOT_ID && (
@@ -56,7 +58,7 @@ const Login: React.FC = () => {
                 progressButtonProps={{ buttonProps: { fullWidth: true, startIcon: <Telegram /> } }}
                 onAuth={handleTelegramAuth}
               >
-                Login with telegram
+                {t('Login with telegram')}
               </TelegramAuthButton>
             )}
           </Stack>
