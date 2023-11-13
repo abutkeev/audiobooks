@@ -6,6 +6,7 @@ import { addSnackbar } from '../../store/features/snackbars';
 import { useAuthorsGetQuery, useSeriesCreateMutation } from '../../api/api';
 import CustomComboBox from '../../components/common/CustomComboBox';
 import LoadingWrapper from '../../components/common/LoadingWrapper';
+import { useTranslation } from 'react-i18next';
 
 interface AddSeriesDialogProps {
   open: boolean;
@@ -13,6 +14,7 @@ interface AddSeriesDialogProps {
 }
 
 const AddSeriesDialog: React.FC<AddSeriesDialogProps> = ({ open, close }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [authorId, setAuthorId] = useState('');
   const dispatch = useAppDispatch();
@@ -23,7 +25,7 @@ const AddSeriesDialog: React.FC<AddSeriesDialogProps> = ({ open, close }) => {
     try {
       create({ newSeriesDto: { name, author_id: authorId } }).unwrap();
     } catch (e) {
-      const text = e instanceof Error ? e.message : `got unknown error while creating series`;
+      const text = e instanceof Error ? e.message : t(`got unknown error while creating series`);
       dispatch(addSnackbar({ severity: 'error', text }));
     }
   };
@@ -37,10 +39,10 @@ const AddSeriesDialog: React.FC<AddSeriesDialogProps> = ({ open, close }) => {
   return (
     <CustomDialog
       open={!!open}
-      title={`Add series`}
+      title={t(`Add series`)}
       close={handleClose}
       onConfirm={handleCreate}
-      confirmButtonText='Create'
+      confirmButtonText={t('Create')}
       confirmButtonProps={{ disabled: !name || !authorId || isLoading || isError }}
       content={
         <LoadingWrapper loading={isLoading} error={isError}>
@@ -48,13 +50,13 @@ const AddSeriesDialog: React.FC<AddSeriesDialogProps> = ({ open, close }) => {
             sx={{ mt: 1 }}
             fullWidth
             required
-            label='Name'
+            label={t('Name')}
             value={name}
             onChange={({ target: { value } }) => setName(value)}
             onKeyDown={e => e.stopPropagation()}
             error={!name}
           />
-          <CustomComboBox options={data} label='Author' value={authorId} setValue={setAuthorId} />
+          <CustomComboBox options={data} label={t('Author')} value={authorId} setValue={setAuthorId} />
         </LoadingWrapper>
       }
     />

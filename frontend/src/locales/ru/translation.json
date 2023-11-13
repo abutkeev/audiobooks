@@ -40,6 +40,8 @@
   "got unknown error while creating reader": "Ошибка при создании чтеца",
   "Add author": "Добавление автора",
   "Add reader": "Добавление чтеца",
+  "got unknown error while creating series": "ошибка при создании серии",
+  "Add series": "Добавление серии",
   "App ready to work offline": "Приложение готово к работе оффлайн",
   "Application is updating": "Приложение обновляется",
   "Update": "Обновить",
