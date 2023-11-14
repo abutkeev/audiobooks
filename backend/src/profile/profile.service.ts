@@ -3,10 +3,15 @@ import { UsersService } from 'src/users/users.service';
 import { ProfileDto } from './dto/profile.dto';
 import { EventsService } from 'src/events/events.service';
 import { NewPasswordDto } from './dto/new-password';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Settings } from './schemas/settings.schema';
+import { SettingsDto } from './dto/settings.dto';
 
 @Injectable()
 export class ProfileService {
   constructor(
+    @InjectModel(Settings.name) private settingsModel: Model<Settings>,
     private usersService: UsersService,
     private eventsService: EventsService
   ) {}
@@ -33,6 +38,22 @@ export class ProfileService {
     }
 
     await this.usersService.updatePassword(id, new_password);
+    return true;
+  }
+
+  async getSettings(userId: string): Promise<SettingsDto> {
+    const result = await this.settingsModel.findOne({ userId });
+
+    if (!result) return {};
+
+    const settings = result.toJSON();
+    delete settings.userId;
+    return settings;
+  }
+
+  async setSettings(userId: string, settings: SettingsDto): Promise<true> {
+    await this.settingsModel.updateOne({ userId }, settings, { upsert: true });
+    this.eventsService.sendToUser({ userId, message: 'invalidate_tag', args: 'settings' });
     return true;
   }
 }

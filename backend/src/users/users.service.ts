@@ -12,6 +12,7 @@ import { PublicKey } from 'src/auth/webauthn/schemas/public-key.schema';
 import { FriendRequests } from 'src/friends/schemas/friend-requests.schema';
 import { Friend } from 'src/friends/schemas/friends.schema';
 import { Position } from 'src/position/schemas/position.schema';
+import { Settings } from 'src/profile/schemas/settings.schema';
 
 const encryptPassword = (password: string) => {
   const salt = bcrypt.genSaltSync();
@@ -38,6 +39,7 @@ export class UsersService {
     @InjectModel(FriendRequests.name) private friendRequestsModel: Model<FriendRequests>,
     @InjectModel(Friend.name) private friendsModel: Model<Friend>,
     @InjectModel(PublicKey.name) private publicKeysModel: Model<PublicKey>,
+    @InjectModel(Settings.name) private settingsModel: Model<Settings>,
 
     @Inject(forwardRef(() => EventsService))
     private eventsService: EventsService
@@ -126,6 +128,7 @@ export class UsersService {
     await this.friendRequestsModel.deleteMany({ $or: [{ from: id }, { to: id }] });
     await this.friendsModel.deleteMany({ $or: [{ user1: id }, { user2: id }] });
     await this.publicKeysModel.deleteMany({ userId: id });
+    await this.settingsModel.deleteOne({ userId: id });
     return true;
   }
 }
