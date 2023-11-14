@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import CustomDialog from '../../../components/common/CustomDialog';
 import { MenuItem, Stack, TextField, TextFieldProps } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useProfileSetSettingsMutation } from '../../../api/api';
+import { useProfileGetSettingsQuery, useProfileSetSettingsMutation } from '../../../api/api';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -12,7 +12,14 @@ interface SettingsDialogProps {
 const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
   const { t, i18n } = useTranslation();
   const { language, changeLanguage } = i18n;
+  const { data: settings } = useProfileGetSettingsQuery();
   const [setSettings] = useProfileSetSettingsMutation();
+
+  useEffect(() => {
+    if (settings?.language && settings.language !== language) {
+      changeLanguage(settings.language);
+    }
+  }, [settings]);
 
   const handleLanguageChange: TextFieldProps['onChange'] = async ({ target: { value } }) => {
     changeLanguage(value);
