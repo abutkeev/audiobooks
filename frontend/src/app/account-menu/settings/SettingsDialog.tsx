@@ -2,6 +2,7 @@ import { FC } from 'react';
 import CustomDialog from '../../../components/common/CustomDialog';
 import { MenuItem, Stack, TextField, TextFieldProps } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useProfileSetSettingsMutation } from '../../../api/api';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -11,9 +12,11 @@ interface SettingsDialogProps {
 const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
   const { t, i18n } = useTranslation();
   const { language, changeLanguage } = i18n;
+  const [setSettings] = useProfileSetSettingsMutation();
 
-  const handleLanguageChange: TextFieldProps['onChange'] = ({ target: { value } }) => {
+  const handleLanguageChange: TextFieldProps['onChange'] = async ({ target: { value } }) => {
     changeLanguage(value);
+    await setSettings({ settingsDto: { language: value } });
   };
 
   const handleClose = () => {
