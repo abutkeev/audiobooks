@@ -15,6 +15,9 @@ import { existsSync, lstatSync, mkdirSync, readdirSync, rmSync, writeFileSync } 
 import path from 'path';
 import { DataDir } from 'src/constants';
 import BookInfoDto from './dto/BookInfoDto';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+import ExternalChapterDto from './dto/ExternalChapterDto';
 
 const logger = new Logger('BooksService');
 const getBookInfoConfig = (id: string) => `books/${id}/info.json`;
@@ -22,7 +25,10 @@ const booksDir = path.resolve(DataDir, 'books');
 
 @Injectable()
 export class BooksService {
-  constructor(private commonService: CommonService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private commonService: CommonService
+  ) {}
 
   getList(): BookEntryDto[] {
     if (!existsSync(booksDir) || !lstatSync(booksDir)?.isDirectory()) return [];
@@ -190,6 +196,48 @@ export class BooksService {
     } catch (e) {
       logger.error(e);
       throw new InternalServerErrorException(`can't extract book ${bookId} cover`);
+    }
+  }
+
+  private getPlaylist(data: string) {
+    try {
+      const result = /file:(\[[^\]]+\])/.exec(data);
+      if (!result) return;
+
+      const playlist = JSON.parse(result[1]);
+      if (!Array.isArray(playlist)) return;
+
+      for (const item of playlist) {
+        if (
+          !item ||
+          typeof item !== 'object' ||
+          !(
+            'title' in item &&
+            'file' in item &&
+            item.title &&
+            item.file &&
+            typeof item.title === 'string' &&
+            typeof item.file === 'string'
+          )
+        ) {
+          return;
+        }
+      }
+      return playlist.map(({ title, file }) => ({ title, url: file }));
+    } catch {}
+  }
+
+  async getChaptersFromUrl(url: string): Promise<ExternalChapterDto[]> {
+    try {
+      const { data } = await firstValueFrom(this.httpService.get(url));
+      const result = this.getPlaylist(data);
+      if (!result) {
+        throw new NotAcceptableException(`url ${url} is not supported`);
+      }
+      return result;
+    } catch (e) {
+      logger.error(e);
+      throw new NotAcceptableException(`url ${url} is not supported`);
     }
   }
 }

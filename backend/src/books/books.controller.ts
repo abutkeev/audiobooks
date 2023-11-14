@@ -104,4 +104,14 @@ export class BooksController {
   removeCover(@Param('id') id: string): boolean {
     return this.service.removeCover(id);
   }
+
+  @Admin()
+  @Get('chapters/:url')
+  @ApiOperation({
+    description: 'Get chapters info from URL',
+    parameters: [{ name: 'url', in: 'path', description: 'base64 encoded url' }],
+  })
+  getChaptersFromUrl(@Param('url') url: string) {
+    return this.service.getChaptersFromUrl(atob(url));
+  }
 }
