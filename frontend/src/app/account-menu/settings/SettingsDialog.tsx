@@ -2,7 +2,8 @@ import { FC, useEffect } from 'react';
 import CustomDialog from '../../../components/common/CustomDialog';
 import { MenuItem, Stack, TextField, TextFieldProps } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useProfileGetSettingsQuery, useProfileSetSettingsMutation } from '../../../api/api';
+import { useLazyProfileGetSettingsQuery, useProfileSetSettingsMutation } from '../../../api/api';
+import useAuthData from '../../../hooks/useAuthData';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -12,18 +13,26 @@ interface SettingsDialogProps {
 const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
   const { t, i18n } = useTranslation();
   const { language, changeLanguage } = i18n;
-  const { data: settings } = useProfileGetSettingsQuery();
+  const auth = useAuthData();
+  const [getSettings, { status }] = useLazyProfileGetSettingsQuery();
   const [setSettings] = useProfileSetSettingsMutation();
 
   useEffect(() => {
-    if (settings?.language && settings.language !== language) {
-      changeLanguage(settings.language);
-    }
-  }, [settings]);
+    if (!auth || !['uninitialized', 'fulfilled'].includes(status)) return;
+    getSettings(undefined, true)
+      .unwrap()
+      .then(settings => {
+        if (settings?.language && settings.language !== language) {
+          changeLanguage(settings.language);
+        }
+      });
+  }, [status]);
 
   const handleLanguageChange: TextFieldProps['onChange'] = async ({ target: { value } }) => {
     changeLanguage(value);
-    await setSettings({ settingsDto: { language: value } });
+    if (auth) {
+      await setSettings({ settingsDto: { language: value } });
+    }
   };
 
   const handleClose = () => {
