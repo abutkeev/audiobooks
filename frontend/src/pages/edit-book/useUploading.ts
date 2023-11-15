@@ -3,25 +3,17 @@ import { useEffect, useReducer } from 'react';
 
 interface UploadingState {
   chapters: {
-    file: File;
     title: string;
+    originalTitle: string;
+    status: 'new' | 'uploading' | 'uploaded';
   }[];
   errors: ('required' | 'duplicate' | undefined)[];
   valid?: boolean;
-  uploading?: {
-    file: File;
-    title: string;
-    percent: number;
-  };
 }
 
 const initialState: UploadingState = {
   chapters: [],
   errors: [],
-};
-
-const getDefaultTitle = ({ name }: File) => {
-  return name.replace(/\.mp3/i, '');
 };
 
 const prefixNumbersRegex = /^[0-9. ]+/;
@@ -30,10 +22,10 @@ const uploadingSlice = createSlice({
   name: 'UploadSlice',
   initialState,
   reducers: {
-    setup: (state, { payload }: PayloadAction<File[]>) => {
+    setup: (state, { payload }: PayloadAction<string[]>) => {
       state.chapters = [];
-      for (const file of payload) {
-        state.chapters.push({ file, title: getDefaultTitle(file) });
+      for (const title of payload) {
+        state.chapters.push({ title, originalTitle: title, status: 'new' });
       }
     },
     setTitle: (state, { payload }: PayloadAction<{ index: number; title: string }>) => {
@@ -42,8 +34,8 @@ const uploadingSlice = createSlice({
       state.chapters[index].title = title;
     },
     resetTitles: state => {
-      state.chapters.forEach(({ file }, index) => {
-        state.chapters[index].title = getDefaultTitle(file);
+      state.chapters.forEach(({ originalTitle }, index) => {
+        state.chapters[index].title = originalTitle;
       });
     },
     stripPrefixNumbers: state => {
@@ -56,20 +48,16 @@ const uploadingSlice = createSlice({
         state.chapters[index].title = `${index + 1}`;
       });
     },
-    startUploading: (state, { payload }: PayloadAction<{ file: File; title: string }>) => {
-      const { file, title } = payload;
-      state.chapters = state.chapters.filter(entry => entry.title !== title);
-      state.uploading = { file, title, percent: 0 };
+    startUploading: (state, { payload }: PayloadAction<number>) => {
+      state.chapters[payload].status = 'uploading';
+    },
+    setUploaded: (state, { payload }: PayloadAction<number>) => {
+      state.chapters[payload].status = 'uploaded';
     },
     stopUploading: state => {
-      if (!state.uploading) return;
-      const { file, title } = state.uploading;
-      state.chapters.unshift({ file, title });
-      state.uploading = undefined;
-    },
-    setProgress: (state, { payload }: PayloadAction<number>) => {
-      if (!state.uploading) return;
-      state.uploading.percent = payload < 0 ? 0 : payload > 100 ? 100 : payload;
+      const index = state.chapters.findIndex(({ status }) => status === 'uploading');
+      if (index === -1) return;
+      state.chapters[index].status = 'new';
     },
   },
   extraReducers: builder => {
@@ -94,16 +82,16 @@ const uploadingSlice = createSlice({
 });
 
 const { setup } = uploadingSlice.actions;
-const useUploading = (files?: File[]) => {
+const useUploading = (titles?: string[]) => {
   const [state, dispatch] = useReducer(uploadingSlice.reducer, uploadingSlice.getInitialState());
   useEffect(() => {
-    if (!files) return;
-    dispatch(setup(files));
-  }, [files]);
+    if (!titles) return;
+    dispatch(setup(titles));
+  }, [titles]);
 
   return [state, dispatch] as const;
 };
 
-export const { setTitle, resetTitles, stripPrefixNumbers, startUploading, stopUploading, setProgress, removeTitles } =
+export const { setTitle, resetTitles, stripPrefixNumbers, startUploading, stopUploading, setUploaded, removeTitles } =
   uploadingSlice.actions;
 export default useUploading;

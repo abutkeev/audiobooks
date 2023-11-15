@@ -13,14 +13,14 @@ import CustomDialog, { AbortOperation } from '../../components/common/CustomDial
 import useUploading, {
   removeTitles,
   resetTitles,
-  setProgress,
   setTitle,
   startUploading,
   stopUploading,
+  setUploaded,
   stripPrefixNumbers,
 } from './useUploading';
 import { Upload } from '@mui/icons-material';
-import { useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
@@ -35,34 +35,44 @@ interface UploadDialogProps {
 
 const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) => {
   const { t } = useTranslation();
-  const [{ chapters, errors, valid, uploading }, dispatch] = useUploading(files);
+  const titles = useMemo(() => files?.map(file => file.name.replace(/\.mp3/i, '')), [files]);
+  const [{ chapters, errors, valid }, dispatch] = useUploading(titles);
   const abortControllerRef = useRef<AbortController | undefined>();
+  const [percent, setPercent] = useState(0);
+  const uploading = useMemo(() => {
+    const index = chapters.findIndex(({ status }) => status === 'uploading');
+    if (index === -1 || !files) return;
+    return { title: chapters[index].title, file: files[index] };
+  }, [chapters, files]);
   const appDispatch = useAppDispatch();
   const { token } = useAppSelector(({ auth }) => auth);
 
   const handleUpload = async () => {
     abortControllerRef.current = new AbortController();
     try {
-      for (const uploading of chapters) {
-        dispatch(startUploading(uploading));
-        const { title, file } = uploading;
+      for (let index = 0; index < chapters.length; index++) {
+        const { title, status } = chapters[index];
+        if (status === 'uploaded' || !files || !files[index]) return;
+        dispatch(startUploading(index));
+        const file = files[index];
         const formData = new FormData();
         formData.append('file', file, encodeURI(file.name));
+        abortControllerRef.current = new AbortController();
         await axios.post(`/api/books/${bookId}/chapter/${title}`, formData, {
-          onUploadProgress: ({ loaded, total }) => setProgress(total ? loaded / total : 0),
+          onUploadProgress: ({ loaded, total }) => setPercent(total ? (loaded * 100) / total : 0),
           signal: abortControllerRef.current.signal,
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        dispatch(setUploaded(index));
         appDispatch(enhancedApi.util.invalidateTags(['books']));
       }
     } catch (e) {
+      dispatch(stopUploading());
       if (typeof e === 'object' && e && 'message' in e && e.message === 'canceled') throw new AbortOperation();
       appDispatch(addSnackbar({ severity: 'error', text: t(`Got error then uploading chapter`) }));
       throw e;
-    } finally {
-      dispatch(stopUploading());
     }
   };
 
@@ -84,12 +94,12 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
         <>
           {uploading && (
             <>
-              <Typography>{`${t('Uploading')} ${uploading.file.name} (${uploading.title}): ${uploading.percent.toFixed(
-                1
-              )}%`}</Typography>
+              <Typography>{`${t('Uploading')} ${uploading.file.name} (${uploading.title})${
+                percent > 0 && percent < 100 ? `: ${percent.toFixed(1)}%` : ''
+              }`}</Typography>
               <LinearProgress
-                variant={uploading.percent <= 0 || uploading.percent >= 100 ? 'indeterminate' : 'determinate'}
-                value={uploading.percent}
+                variant={percent <= 0 || percent >= 100 ? 'indeterminate' : 'determinate'}
+                value={percent}
                 sx={{ mt: 1 }}
               />
             </>
@@ -102,26 +112,30 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
               </TableRow>
             </TableHead>
             <TableBody>
-              {chapters.map(({ title, file: { name } }, index) => (
-                <TableRow key={name}>
-                  <TableCell>
-                    <Typography noWrap> {name}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      size='small'
-                      fullWidth
-                      label={t('Title')}
-                      value={title}
-                      onChange={({ target: { value } }) => dispatch(setTitle({ index, title: value }))}
-                      required
-                      error={!!errors[index]}
-                      helperText={getHelperText(errors[index])}
-                      disabled={!!uploading}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {chapters.map(({ title, status }, index) => {
+                if (status === 'uploaded' || !files) return null;
+                const { name } = files[index];
+                return (
+                  <TableRow key={name}>
+                    <TableCell>
+                      <Typography noWrap> {name}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        size='small'
+                        fullWidth
+                        label={t('Title')}
+                        value={title}
+                        onChange={({ target: { value } }) => dispatch(setTitle({ index, title: value }))}
+                        required
+                        error={!!errors[index]}
+                        helperText={getHelperText(errors[index])}
+                        disabled={!!uploading}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </>
