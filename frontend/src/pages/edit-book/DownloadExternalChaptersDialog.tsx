@@ -1,5 +1,5 @@
 import { LinearProgress, Stack, TextField, Typography } from '@mui/material';
-import CustomDialog from '../../components/common/CustomDialog';
+import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
 import useUploading, { setTitle, startUploading, stopUploading, setUploaded } from './useUploading';
 import { Upload } from '@mui/icons-material';
 import { useMemo } from 'react';
@@ -46,7 +46,7 @@ const DownloadExternalChaptersDialog: React.FC<DownloadExternalChaptersDialogPro
     } catch (e) {
       dispatch(stopUploading());
       appDispatch(addSnackbar({ severity: 'error', text: getErrorMessage(e, t(`Got error then uploading chapter`)) }));
-      throw e;
+      throw new AbortOperation();
     }
   };
 
