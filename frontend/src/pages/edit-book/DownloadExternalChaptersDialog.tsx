@@ -76,7 +76,7 @@ const DownloadExternalChaptersDialog: React.FC<DownloadExternalChaptersDialogPro
           )}
 
           {chapters.map(({ title, status }, index) => {
-            if (status === 'uploaded') return null;
+            if (status === 'uploaded' || status === 'uploading') return null;
             return (
               <Stack direction='row' spacing={1}>
                 <TextField
