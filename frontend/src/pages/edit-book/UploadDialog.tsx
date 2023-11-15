@@ -1,24 +1,6 @@
-import {
-  Button,
-  LinearProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { LinearProgress, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
-import useUploading, {
-  removeTitles,
-  resetTitles,
-  setTitle,
-  startUploading,
-  stopUploading,
-  setUploaded,
-  stripPrefixNumbers,
-} from './useUploading';
+import useUploading, { setTitle, startUploading, stopUploading, setUploaded } from './useUploading';
 import { Upload } from '@mui/icons-material';
 import { useMemo, useRef, useState } from 'react';
 import axios from 'axios';
@@ -26,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
 import enhancedApi from '../../api/enhancedApi';
 import { useTranslation } from 'react-i18next';
+import ExtraButtons from './ExtraButtons';
 
 interface UploadDialogProps {
   bookId: string;
@@ -141,23 +124,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
         </>
       }
       extraButtons={
-        uploading ? (
-          <Button variant='outlined' color='error' onClick={() => abortControllerRef.current?.abort()}>
-            {t('Abort upload')}
-          </Button>
-        ) : (
-          <>
-            <Button variant='outlined' onClick={() => dispatch(removeTitles())}>
-              {t('Remove titles')}
-            </Button>
-            <Button variant='outlined' onClick={() => dispatch(resetTitles())}>
-              {t('Reset titles')}
-            </Button>
-            <Button variant='outlined' onClick={() => dispatch(stripPrefixNumbers())}>
-              {t('Strip prefix numbers')}
-            </Button>
-          </>
-        )
+        <ExtraButtons abortControllerRef={abortControllerRef} uploading={!!uploading} dispatch={dispatch} />
       }
       confirmButtonText={t('Upload')}
       confirmButtonProps={{ buttonProps: { startIcon: <Upload /> }, disabled: !valid || !!uploading }}
