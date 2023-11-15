@@ -29,7 +29,7 @@ export class BooksController {
   @Post()
   @ApiOperation({ description: 'Create book' })
   create(@Body() info: BookInfoDto) {
-    return this.service.create(info);
+    return JSON.stringify(this.service.create(info));
   }
 
   @Admin()
