@@ -240,4 +240,32 @@ export class BooksService {
       throw new NotAcceptableException(`url ${url} is not supported`);
     }
   }
+
+  async downloadExternalChapter(bookId: string, { title, url }: ExternalChapterDto): Promise<true> {
+    const config = getBookInfoConfig(bookId);
+    if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
+    try {
+      const { info, chapters } = this.get(bookId);
+      if (chapters.find(chapter => chapter.title === title)) {
+        throw new UnprocessableEntityException(`chapter ${title} for book ${bookId} is already exists`);
+      }
+      const filename = `${title}.mp3`;
+      if (chapters.find(chapter => chapter.filename === filename)) {
+        throw new UnprocessableEntityException(`chapter file ${filename} for book ${bookId} is already exists`);
+      }
+      const { data } = await firstValueFrom(
+        this.httpService.get(url, {
+          responseType: 'arraybuffer',
+        })
+      );
+      writeFileSync(path.resolve(booksDir, bookId, filename), data, 'binary');
+      chapters.push({ title, filename });
+      this.commonService.writeJSONFile(config, { info, chapters });
+      return true;
+    } catch (e) {
+      if (e instanceof UnprocessableEntityException) throw e;
+      logger.error(e);
+      throw new InternalServerErrorException(`can't add chapter ${title} to book ${bookId}`);
+    }
+  }
 }

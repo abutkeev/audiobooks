@@ -6,6 +6,7 @@ import BookDto from './dto/BookDto';
 import { Admin } from 'src/auth/admin.decorator';
 import BookInfoDto from './dto/BookInfoDto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import ExternalChapterDto from './dto/ExternalChapterDto';
 
 @ApiTags('books')
 @Controller('books')
@@ -113,5 +114,11 @@ export class BooksController {
   })
   getChaptersFromUrl(@Param('url') url: string) {
     return this.service.getChaptersFromUrl(atob(url));
+  }
+
+  @Admin()
+  @Post(':id/external')
+  downloadExternalChapter(@Body() chapter: ExternalChapterDto, @Param('id') bookId: string) {
+    return this.service.downloadExternalChapter(bookId, chapter);
   }
 }
