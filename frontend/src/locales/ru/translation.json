@@ -40,6 +40,7 @@
   "Reader": "Чтец",
   "Series": "Серия",
   "Series number": "Номер в серии",
+  "Goto book edit page": "Перейти на страницу редактирования книги",
   "got unknown error while creating author": "Ошибка при создании автора",
   "got unknown error while creating reader": "Ошибка при создании чтеца",
   "Add author": "Добавление автора",

@@ -7,6 +7,8 @@ import { useAuthorsGetQuery, useBooksCreateMutation, useReadersGetQuery, useSeri
 import CustomComboBox from '../../components/common/CustomComboBox';
 import { useTranslation } from 'react-i18next';
 import getErrorMessage from '../../utils/getErrorMessage';
+import CustomSwitch from '../../components/common/CustomSwitch';
+import { useNavigate } from 'react-router-dom';
 
 interface AddBookDialogProps {
   open: boolean;
@@ -20,6 +22,8 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
   const [readerId, setReaderId] = useState('');
   const [seriesId, setSeriesId] = useState('');
   const [seriesNumber, setSeriesNumber] = useState('');
+  const [gotoBookEditPage, setGotoBookEditPage] = useState(true);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { data: authors = [], isLoading: authorsLoading, isError: authorsError } = useAuthorsGetQuery();
   const { data: readers = [], isLoading: readersLoading, isError: readersError } = useReadersGetQuery();
@@ -32,7 +36,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
 
   const handleCreate = async () => {
     try {
-      await create({
+      const id = await create({
         bookInfoDto: {
           name,
           author_id: authorId,
@@ -41,6 +45,9 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
           series_number: (seriesId && seriesNumber) || undefined,
         },
       }).unwrap();
+      if (gotoBookEditPage) {
+        navigate(`/edit/${id}`);
+      }
     } catch (e) {
       const text = getErrorMessage(e, t(`got unknown error while creating book`));
       dispatch(addSnackbar({ severity: 'error', text }));
@@ -91,6 +98,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
             disabled={!seriesId}
             onChange={({ target: { value } }) => setSeriesNumber(value)}
           />
+          <CustomSwitch label={t('Goto book edit page')} checked={gotoBookEditPage} onChange={setGotoBookEditPage} />
         </Stack>
       }
     />
