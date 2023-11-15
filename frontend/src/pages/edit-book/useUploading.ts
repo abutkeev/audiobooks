@@ -5,7 +5,7 @@ interface UploadingState {
   chapters: {
     title: string;
     originalTitle: string;
-    status: 'new' | 'uploading' | 'uploaded';
+    status: 'new' | 'uploading' | 'uploaded' | 'skip';
   }[];
   errors: ('required' | 'duplicate' | undefined)[];
   valid?: boolean;
@@ -59,12 +59,19 @@ const uploadingSlice = createSlice({
       if (index === -1) return;
       state.chapters[index].status = 'new';
     },
+    toggleSkip: (state, { payload }: PayloadAction<number>) => {
+      const { status } = state.chapters[payload];
+      if (status === 'uploaded' || status === 'uploading') return;
+      state.chapters[payload].status = status === 'new' ? 'skip' : 'new';
+    },
   },
   extraReducers: builder => {
     builder.addMatcher(
       () => true,
       state => {
         state.chapters.forEach((chapter, index) => {
+          if (chapter.status === 'skip') return;
+
           if (!chapter.title) {
             state.errors[index] = 'required';
             return;
@@ -92,6 +99,14 @@ const useUploading = (titles?: string[]) => {
   return [state, dispatch] as const;
 };
 
-export const { setTitle, resetTitles, stripPrefixNumbers, startUploading, stopUploading, setUploaded, removeTitles } =
-  uploadingSlice.actions;
+export const {
+  setTitle,
+  resetTitles,
+  stripPrefixNumbers,
+  startUploading,
+  stopUploading,
+  setUploaded,
+  toggleSkip,
+  removeTitles,
+} = uploadingSlice.actions;
 export default useUploading;

@@ -1,6 +1,6 @@
 import { LinearProgress, Stack, TextField, Typography } from '@mui/material';
 import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
-import useUploading, { setTitle, startUploading, stopUploading, setUploaded } from './useUploading';
+import useUploading, { setTitle, startUploading, stopUploading, setUploaded, toggleSkip } from './useUploading';
 import { Upload } from '@mui/icons-material';
 import { useMemo } from 'react';
 import { useAppDispatch } from '../../store';
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import ExtraButtons from './ExtraButtons';
 import { BooksGetChaptersFromUrlApiResponse, useBooksDownloadExternalChapterMutation } from '../../api/api';
 import getErrorMessage from '../../utils/getErrorMessage';
+import CustomSwitch from '../../components/common/CustomSwitch';
 
 interface DownloadExternalChaptersDialogProps {
   bookId: string;
@@ -36,7 +37,8 @@ const DownloadExternalChaptersDialog: React.FC<DownloadExternalChaptersDialogPro
     try {
       for (let index = 0; index < chapters.length; index++) {
         const { title, status } = chapters[index];
-        if (status === 'uploaded' || !externalChapters || !externalChapters[index]) return;
+        if (!externalChapters || !externalChapters[index]) return;
+        if (status !== 'new') continue;
         dispatch(startUploading(index));
         await downloadChapter({ id: bookId, externalChapterDto: { title, url: externalChapters[index].url } }).unwrap();
         dispatch(setUploaded(index));
@@ -76,18 +78,25 @@ const DownloadExternalChaptersDialog: React.FC<DownloadExternalChaptersDialogPro
           {chapters.map(({ title, status }, index) => {
             if (status === 'uploaded') return null;
             return (
-              <TextField
-                key={index}
-                size='small'
-                fullWidth
-                label={t('Chapter {{index}} title', { index: index + 1 })}
-                value={title}
-                onChange={({ target: { value } }) => dispatch(setTitle({ index, title: value }))}
-                required
-                error={!!errors[index]}
-                helperText={getHelperText(errors[index])}
-                disabled={!!downloading}
-              />
+              <Stack direction='row' spacing={1}>
+                <TextField
+                  key={index}
+                  size='small'
+                  fullWidth
+                  label={t('Chapter {{index}} title', { index: index + 1 })}
+                  value={title}
+                  onChange={({ target: { value } }) => dispatch(setTitle({ index, title: value }))}
+                  required
+                  error={!!errors[index]}
+                  helperText={getHelperText(errors[index])}
+                  disabled={!!downloading || status === 'skip'}
+                />
+                <CustomSwitch
+                  label={t('Skip')}
+                  checked={status === 'skip'}
+                  onClick={() => dispatch(toggleSkip(index))}
+                />
+              </Stack>
             );
           })}
         </Stack>
