@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { TextField } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import CustomDialog from '../../components/common/CustomDialog';
 import { useAppDispatch } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
 import { useAuthorsGetQuery, useBooksCreateMutation, useReadersGetQuery, useSeriesGetQuery } from '../../api/api';
 import CustomComboBox from '../../components/common/CustomComboBox';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
 import { useTranslation } from 'react-i18next';
+import getErrorMessage from '../../utils/getErrorMessage';
 
 interface AddBookDialogProps {
   open: boolean;
@@ -30,9 +30,9 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
   const error = authorsError || readersError || seriesError;
   const valid = !!name && !!authorId && !!readerId;
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     try {
-      create({
+      await create({
         bookInfoDto: {
           name,
           author_id: authorId,
@@ -42,7 +42,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
         },
       }).unwrap();
     } catch (e) {
-      const text = e instanceof Error ? e.message : t(`got unknown error while creating book`);
+      const text = getErrorMessage(e, t(`got unknown error while creating book`));
       dispatch(addSnackbar({ severity: 'error', text }));
     }
   };
@@ -65,9 +65,8 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
       confirmButtonText={t('Create')}
       confirmButtonProps={{ disabled: !valid || loading || error }}
       content={
-        <LoadingWrapper loading={loading} error={error}>
+        <Stack spacing={2} sx={{ mt: 1 }}>
           <TextField
-            sx={{ mt: 1 }}
             fullWidth
             required
             label={t('Name')}
@@ -86,14 +85,13 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
             required={false}
           />
           <TextField
-            sx={{ mt: 2 }}
             fullWidth
             label={t('Series number')}
             value={seriesId ? seriesNumber : ''}
             disabled={!seriesId}
             onChange={({ target: { value } }) => setSeriesNumber(value)}
           />
-        </LoadingWrapper>
+        </Stack>
       }
     />
   );
