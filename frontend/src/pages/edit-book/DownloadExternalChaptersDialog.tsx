@@ -95,6 +95,7 @@ const DownloadExternalChaptersDialog: React.FC<DownloadExternalChaptersDialogPro
                   label={t('Skip')}
                   checked={status === 'skip'}
                   onClick={() => dispatch(toggleSkip(index))}
+                  disabled={!!downloading}
                 />
               </Stack>
             );
