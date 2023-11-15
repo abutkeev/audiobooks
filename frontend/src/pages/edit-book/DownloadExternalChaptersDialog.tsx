@@ -5,7 +5,6 @@ import { Upload } from '@mui/icons-material';
 import { useMemo } from 'react';
 import { useAppDispatch } from '../../store';
 import { addSnackbar } from '../../store/features/snackbars';
-import enhancedApi from '../../api/enhancedApi';
 import { useTranslation } from 'react-i18next';
 import ExtraButtons from './ExtraButtons';
 import { BooksGetChaptersFromUrlApiResponse, useBooksDownloadExternalChapterMutation } from '../../api/api';
@@ -41,7 +40,6 @@ const DownloadExternalChaptersDialog: React.FC<DownloadExternalChaptersDialogPro
         dispatch(startUploading(index));
         await downloadChapter({ id: bookId, externalChapterDto: { title, url: externalChapters[index].url } }).unwrap();
         dispatch(setUploaded(index));
-        appDispatch(enhancedApi.util.invalidateTags(['books']));
       }
     } catch (e) {
       dispatch(stopUploading());
