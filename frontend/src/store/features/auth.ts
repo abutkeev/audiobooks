@@ -34,7 +34,7 @@ mw.startListening({
     typeof action.payload === 'object' &&
     !!action.payload &&
     'status' in action.payload &&
-    action.payload.status === 401,
+    action.payload.status === 403,
   effect: (_, { dispatch }) => void dispatch(setAuthToken('')),
 });
 
