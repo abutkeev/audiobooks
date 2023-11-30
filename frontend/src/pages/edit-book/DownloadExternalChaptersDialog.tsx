@@ -1,15 +1,15 @@
 import { LinearProgress, Stack, TextField, Typography } from '@mui/material';
-import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
+import CustomDialog, { AbortOperation } from '@/components/common/CustomDialog';
 import useUploading, { setTitle, startUploading, stopUploading, setUploaded, toggleSkip } from './useUploading';
 import { Upload } from '@mui/icons-material';
 import { useMemo } from 'react';
-import { useAppDispatch } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
+import { useAppDispatch } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
 import { useTranslation } from 'react-i18next';
 import ExtraButtons from './ExtraButtons';
-import { BooksGetChaptersFromUrlApiResponse, useBooksDownloadExternalChapterMutation } from '../../api/api';
-import getErrorMessage from '../../utils/getErrorMessage';
-import CustomSwitch from '../../components/common/CustomSwitch';
+import { BooksGetChaptersFromUrlApiResponse, useBooksDownloadExternalChapterMutation } from '@/api/api';
+import getErrorMessage from '@/utils/getErrorMessage';
+import CustomSwitch from '@/components/common/CustomSwitch';
 
 interface DownloadExternalChaptersDialogProps {
   bookId: string;

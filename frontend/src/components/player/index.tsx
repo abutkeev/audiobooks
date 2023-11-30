@@ -3,17 +3,10 @@ import { Paper } from '@mui/material';
 import Chapters from './chapters';
 import Controls from './controls';
 import PlayerError from './PlayerError';
-import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
-import useMediaSession from '../../hooks/media-session/useMediaSession';
-import { useAppDispatch } from '../../store';
-import {
-  BookInfo,
-  setBookInfo,
-  playerSetup,
-  playerReset,
-  updateBookState,
-  BookChapter,
-} from '../../store/features/player';
+import useKeyboardShortcuts from '@/hooks/useKeyboardShortcuts';
+import useMediaSession from '@/hooks/media-session/useMediaSession';
+import { useAppDispatch } from '@/store';
+import { BookInfo, setBookInfo, playerSetup, playerReset, updateBookState, BookChapter } from '@/store/features/player';
 
 interface PlayerProps {
   bookId: string;

@@ -1,11 +1,11 @@
 import { Button, CircularProgress, Stack, TextField, Typography, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { Fingerprint } from '@mui/icons-material';
-import { registerSecurityKey, webauthnAvailable } from '../../../utils/webautn';
-import { useWebauthnAddMutation, useWebauthnGenerateChallengeMutation } from '../../../api/api';
-import useAuthData from '../../../hooks/useAuthData';
-import { useAppDispatch } from '../../../store';
-import { addSnackbar } from '../../../store/features/snackbars';
+import { registerSecurityKey, webauthnAvailable } from '@/utils/webautn';
+import { useWebauthnAddMutation, useWebauthnGenerateChallengeMutation } from '@/api/api';
+import useAuthData from '@/hooks/useAuthData';
+import { useAppDispatch } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
 import { useTranslation } from 'react-i18next';
 
 const AddSecurityKey: React.FC = () => {

@@ -1,19 +1,19 @@
 import { RouteObject, RouterProvider, createHashRouter } from 'react-router-dom';
-import BookList from '../pages/BookList';
-import BookPage from '../pages/BookPage';
-import Home from '../pages/Home';
-import NotFound from '../pages/NotFound';
+import BookList from '@/pages/BookList';
+import BookPage from '@/pages/BookPage';
+import Home from '@/pages/Home';
+import NotFound from '@/pages/NotFound';
 import Main from './Main';
 import { useMemo } from 'react';
-import { useAppSelector } from '../store';
-import Login from '../pages/login';
-import Users from '../pages/users';
-import useAuthData from '../hooks/useAuthData';
-import EditBookPage from '../pages/edit-book';
-import NotActive from '../pages/NotActive';
-import SignUp from '../pages/sign-up';
-import Friends from '../pages/friends';
-import Chats from '../pages/chats';
+import { useAppSelector } from '@/store';
+import Login from '@/pages/login';
+import Users from '@/pages/users';
+import useAuthData from '@/hooks/useAuthData';
+import EditBookPage from '@/pages/edit-book';
+import NotActive from '@/pages/NotActive';
+import SignUp from '@/pages/sign-up';
+import Friends from '@/pages/friends';
+import Chats from '@/pages/chats';
 
 const userRoutes: RouteObject[] = [
   {

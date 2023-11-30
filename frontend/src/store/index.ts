@@ -11,11 +11,11 @@ import {
   createLocalStorageMiddleware,
   playerSlice,
 } from './features/player';
-import copyBookStateUrl from '../utils/copyBookStateUrl';
-import showMessage from '../utils/showMessage';
+import copyBookStateUrl from '@/utils/copyBookStateUrl';
+import showMessage from '@/utils/showMessage';
 import authSlice, { authMiddleware } from './features/auth';
 import { websocketMiddleware, websocketSlice } from './features/websocket';
-import enhancedApi from '../api/enhancedApi';
+import enhancedApi from '@/api/enhancedApi';
 
 export const store = configureStore({
   reducer: {

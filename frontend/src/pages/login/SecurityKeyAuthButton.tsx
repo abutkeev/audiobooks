@@ -1,10 +1,10 @@
 import { Button } from '@mui/material';
 import { CommonAuthProps } from '.';
 import { Fingerprint } from '@mui/icons-material';
-import { useWebauthnGenerateChallengeMutation, useWebauthnLoginMutation } from '../../api/api';
+import { useWebauthnGenerateChallengeMutation, useWebauthnLoginMutation } from '@/api/api';
 import { client } from '@passwordless-id/webauthn';
-import { useAppDispatch } from '../../store';
-import { setAuthToken } from '../../store/features/auth';
+import { useAppDispatch } from '@/store';
+import { setAuthToken } from '@/store/features/auth';
 import { useTranslation } from 'react-i18next';
 
 const SecurityKeyAuthButton: React.FC<CommonAuthProps> = ({ setLoading, setError }) => {

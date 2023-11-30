@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { TextField } from '@mui/material';
-import CustomDialog from '../../components/common/CustomDialog';
-import { useAppDispatch } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
-import { useAuthorsGetQuery, useSeriesCreateMutation } from '../../api/api';
-import CustomComboBox from '../../components/common/CustomComboBox';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
+import CustomDialog from '@/components/common/CustomDialog';
+import { useAppDispatch } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
+import { useAuthorsGetQuery, useSeriesCreateMutation } from '@/api/api';
+import CustomComboBox from '@/components/common/CustomComboBox';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
 import { useTranslation } from 'react-i18next';
 
 interface AddSeriesDialogProps {

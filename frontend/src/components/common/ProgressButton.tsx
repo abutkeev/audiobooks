@@ -1,6 +1,6 @@
 import React, { FC, PropsWithChildren, ReactNode, useState } from 'react';
 import { ButtonProps, Button, Tooltip } from '@mui/material';
-import useWaitRefreshing from '../../hooks/useWaitRefreshing';
+import useWaitRefreshing from '@/hooks/useWaitRefreshing';
 import ProgressContainer from './ProgressContainer';
 
 export interface ProgressButtonProps extends Pick<ButtonProps, 'disabled' | 'variant'> {

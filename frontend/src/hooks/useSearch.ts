@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../store';
-import { setSearchText, showSearch } from '../store/features/search';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { setSearchText, showSearch } from '@/store/features/search';
 
 const useSearch = () => {
   const text = useAppSelector(({ search: { text } }) => text);

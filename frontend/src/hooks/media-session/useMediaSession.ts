@@ -2,7 +2,7 @@ import useMediaMetadata from './useMediaMetadata';
 import usePlaybackState from './usePlaybackState';
 import usePositionState from './usePositionState';
 import useMediaKeys from './useMediaKeys';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '@/store';
 
 const useMediaSession = () => {
   const {

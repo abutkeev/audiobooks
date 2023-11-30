@@ -1,6 +1,6 @@
 import { MouseEventHandler } from 'react';
 import { FormControlLabel, Switch } from '@mui/material';
-import { useUsersGrantMutation, useUsersRevokeMutation } from '../../api/api';
+import { useUsersGrantMutation, useUsersRevokeMutation } from '@/api/api';
 import { useTranslation } from 'react-i18next';
 
 interface AdminSwitchSwitchProps {

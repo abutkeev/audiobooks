@@ -2,7 +2,7 @@ import { Container } from '@mui/material';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Snackbar from './Snackbar';
 import AppBar from './app-bar/AppBar';
-import { useAppSelector } from '../store';
+import { useAppSelector } from '@/store';
 import ReloadPrompt from './ReloadPrompt';
 import { Outlet } from 'react-router-dom';
 import AddSpeedDial from './add-speed-dial';

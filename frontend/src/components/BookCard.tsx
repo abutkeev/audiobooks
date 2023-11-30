@@ -2,8 +2,8 @@ import { Edit, Mic, LibraryBooks, NavigateNext, AutoStories } from '@mui/icons-m
 import { Card, CardContent, Typography, Stack, Tooltip, Hidden, IconButton } from '@mui/material';
 import Link from './common/Link';
 import { useMemo } from 'react';
-import { BookInfoDto, useBooksGetQuery } from '../api/api';
-import useAuthData from '../hooks/useAuthData';
+import { BookInfoDto, useBooksGetQuery } from '@/api/api';
+import useAuthData from '@/hooks/useAuthData';
 import { useTranslation } from 'react-i18next';
 
 interface BookCardProps {

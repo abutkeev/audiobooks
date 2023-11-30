@@ -1,9 +1,9 @@
 import { Clear, ContentPaste } from '@mui/icons-material';
 import { InputAdornment, TextField } from '@mui/material';
 import { useMemo, useRef, useState } from 'react';
-import CustomDialog from '../../common/CustomDialog';
-import { useAppDispatch } from '../../../store';
-import { updateBookState } from '../../../store/features/player';
+import CustomDialog from '@/components/common/CustomDialog';
+import { useAppDispatch } from '@/store';
+import { updateBookState } from '@/store/features/player';
 import { useTranslation } from 'react-i18next';
 
 interface UpdateStateDialogProps {

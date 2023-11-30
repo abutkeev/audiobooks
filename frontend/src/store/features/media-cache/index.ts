@@ -1,5 +1,5 @@
 import mediaCacheSlice from './slice';
-import { getSliceActionCreator } from '../..';
+import { getSliceActionCreator } from '@/store';
 
 export { default as createMediaCacheListenerMiddleware } from './getListenerMiddleware';
 export type { MediaCacheEntryState } from './slice';

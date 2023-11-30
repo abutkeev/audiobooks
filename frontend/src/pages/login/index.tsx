@@ -1,18 +1,18 @@
 import { Button, Container, Paper, Stack, Typography } from '@mui/material';
-import useTitle from '../../hooks/useTitle';
+import useTitle from '@/hooks/useTitle';
 import { useState } from 'react';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
 import PasswordAuthForm from './PasswordAuthForm';
-import { webauthnAvailable } from '../../utils/webautn';
+import { webauthnAvailable } from '@/utils/webautn';
 import SecurityKeyAuthButton from './SecurityKeyAuthButton';
 import { useNavigate } from 'react-router-dom';
-import TelegramAuthButton, { TelegramAuthCallback } from '../../components/TelegramAuthButton';
+import TelegramAuthButton, { TelegramAuthCallback } from '@/components/TelegramAuthButton';
 import { Telegram } from '@mui/icons-material';
-import { useAppDispatch } from '../../store';
-import { useTgLoginMutation } from '../../api/api';
-import { setAuthToken } from '../../store/features/auth';
-import getErrorMessage from '../../utils/getErrorMessage';
-import ErrorAlert from '../../components/common/ErrorAlert';
+import { useAppDispatch } from '@/store';
+import { useTgLoginMutation } from '@/api/api';
+import { setAuthToken } from '@/store/features/auth';
+import getErrorMessage from '@/utils/getErrorMessage';
+import ErrorAlert from '@/components/common/ErrorAlert';
 import { useTranslation } from 'react-i18next';
 
 export interface CommonAuthProps {

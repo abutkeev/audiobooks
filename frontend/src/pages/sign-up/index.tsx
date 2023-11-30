@@ -1,16 +1,16 @@
 import { FC, useState } from 'react';
-import useTitle from '../../hooks/useTitle';
+import useTitle from '@/hooks/useTitle';
 import { Button, Container, FormControl, Paper, Stack, TextField } from '@mui/material';
-import CustomPassword from '../../components/common/CustomPassword';
-import ProgressButton from '../../components/common/ProgressButton';
-import { useSignUpSignUpMutation } from '../../api/api';
-import getErrorMessage from '../../utils/getErrorMessage';
-import LoginTextField from '../../components/login-text-field/LoginTextField';
-import { useAppDispatch } from '../../store';
+import CustomPassword from '@/components/common/CustomPassword';
+import ProgressButton from '@/components/common/ProgressButton';
+import { useSignUpSignUpMutation } from '@/api/api';
+import getErrorMessage from '@/utils/getErrorMessage';
+import LoginTextField from '@/components/login-text-field/LoginTextField';
+import { useAppDispatch } from '@/store';
 import { useNavigate } from 'react-router-dom';
-import { setAuthToken } from '../../store/features/auth';
+import { setAuthToken } from '@/store/features/auth';
 import ReCaptcha from './ReCaptcha';
-import ErrorAlert from '../../components/common/ErrorAlert';
+import ErrorAlert from '@/components/common/ErrorAlert';
 import { useTranslation } from 'react-i18next';
 
 const SignUp: FC = () => {

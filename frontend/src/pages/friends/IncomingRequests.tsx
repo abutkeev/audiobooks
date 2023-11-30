@@ -3,7 +3,7 @@ import {
   useFriendsApproveRequestMutation,
   useFriendsGetIncomingRequestsQuery,
   useFriendsRemoveIncomingRequestMutation,
-} from '../../api/api';
+} from '@/api/api';
 import FriendsList from './FriendsList';
 import { useTranslation } from 'react-i18next';
 

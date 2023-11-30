@@ -1,6 +1,6 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import DeleteButton from '../../../components/common/DeleteButton';
-import { useWebauthnRemoveMutation } from '../../../api/api';
+import DeleteButton from '@/components/common/DeleteButton';
+import { useWebauthnRemoveMutation } from '@/api/api';
 import { useTranslation } from 'react-i18next';
 
 interface SecurityKeyProps {

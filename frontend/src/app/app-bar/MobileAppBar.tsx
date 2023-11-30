@@ -1,7 +1,7 @@
 import { Home, Search as SearchIcon } from '@mui/icons-material';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import Search from './Search';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '@/store';
 import { useState } from 'react';
 import AccountMenu from '../account-menu';
 

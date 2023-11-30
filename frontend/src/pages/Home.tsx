@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoadingWrapper from '../components/common/LoadingWrapper';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
 import BookList from './BookList';
-import { useBooksGetQuery } from '../api/api';
+import { useBooksGetQuery } from '@/api/api';
 
 export const currentBookVarName = 'currentBook';
 

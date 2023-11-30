@@ -1,8 +1,8 @@
 import { Alert, Container, Stack } from '@mui/material';
-import useTitle from '../hooks/useTitle';
-import { useTgGetAccountInfoQuery, useTgSetAuthDataMutation } from '../api/api';
-import TelegramAuthButton, { TelegramAuthCallback } from '../components/TelegramAuthButton';
-import LoadingWrapper from '../components/common/LoadingWrapper';
+import useTitle from '@/hooks/useTitle';
+import { useTgGetAccountInfoQuery, useTgSetAuthDataMutation } from '@/api/api';
+import TelegramAuthButton, { TelegramAuthCallback } from '@/components/TelegramAuthButton';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
 import { Telegram } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 

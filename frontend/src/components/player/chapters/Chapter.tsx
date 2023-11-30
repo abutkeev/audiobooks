@@ -1,6 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import ChapterCacheIcon from './ChapterCacheIcon';
-import { MediaCacheEntryState } from '../../../store/features/media-cache';
+import { MediaCacheEntryState } from '@/store/features/media-cache';
 
 interface ChapterProps {
   title: string;

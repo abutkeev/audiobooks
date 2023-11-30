@@ -4,12 +4,12 @@ import {
   useTelegramAuthorizeChatMutation,
   useTelegramRemoveChatMutation,
   useTelegramUnauthorizeChatMutation,
-} from '../../api/api';
+} from '@/api/api';
 import { Paper, Stack, Typography } from '@mui/material';
 import ChatType from './ChatType';
 import ChatStatus from './ChatStatus';
-import CustomSwitch, { CustomSwitchProps } from '../../components/common/CustomSwitch';
-import DeleteButton from '../../components/common/DeleteButton';
+import CustomSwitch, { CustomSwitchProps } from '@/components/common/CustomSwitch';
+import DeleteButton from '@/components/common/DeleteButton';
 import { useTranslation } from 'react-i18next';
 
 const ChatEntry: FC<ChatDto> = ({ id, type, title, status, authorized }) => {

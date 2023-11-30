@@ -1,10 +1,10 @@
 import { ExpandMore } from '@mui/icons-material';
 import { Accordion, AccordionDetails, AccordionSummary, Paper, SxProps, Typography } from '@mui/material';
-import { usePositionGetBookQuery, usePositionGetFriendsBookQuery } from '../api/api';
-import formatTime from '../utils/formatTime';
-import { useAppDispatch, useAppSelector } from '../store';
-import { updateBookState } from '../store/features/player';
-import getFriendDisplayName from '../utils/getFriendDisplayName';
+import { usePositionGetBookQuery, usePositionGetFriendsBookQuery } from '@/api/api';
+import formatTime from '@/utils/formatTime';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { updateBookState } from '@/store/features/player';
+import getFriendDisplayName from '@/utils/getFriendDisplayName';
 import { useTranslation } from 'react-i18next';
 
 interface OtherPlayersPositionProps {

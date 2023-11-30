@@ -1,8 +1,8 @@
 import { MouseEventHandler } from 'react';
 import { AdminPanelSettings, Shield } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
-import { useUsersActivateMutation, useUsersDeactivateMutation, useUsersGetAllQuery } from '../../api/api';
-import CustomSwitch from '../../components/common/CustomSwitch';
+import { useUsersActivateMutation, useUsersDeactivateMutation, useUsersGetAllQuery } from '@/api/api';
+import CustomSwitch from '@/components/common/CustomSwitch';
 import { useTranslation } from 'react-i18next';
 
 interface UserDisableSwitchProps {

@@ -10,19 +10,19 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { UserDto, useUsersRemoveMutation, useUsersUpdateMutation } from '../../api/api';
-import CustomPassword from '../../components/common/CustomPassword';
-import useAuthData from '../../hooks/useAuthData';
+import { UserDto, useUsersRemoveMutation, useUsersUpdateMutation } from '@/api/api';
+import CustomPassword from '@/components/common/CustomPassword';
+import useAuthData from '@/hooks/useAuthData';
 import UserDisableSwitch from './UserDisableSwitch';
 import AdminSwitch from './AdminSwitch';
-import DeleteButton from '../../components/common/DeleteButton';
+import DeleteButton from '@/components/common/DeleteButton';
 import { useState } from 'react';
-import useUpdatingState from '../../hooks/useUpdatingState';
-import ProgressButton from '../../components/common/ProgressButton';
-import { useAppDispatch } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
-import getErrorMessage from '../../utils/getErrorMessage';
-import LoginTextField from '../../components/login-text-field/LoginTextField';
+import useUpdatingState from '@/hooks/useUpdatingState';
+import ProgressButton from '@/components/common/ProgressButton';
+import { useAppDispatch } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
+import getErrorMessage from '@/utils/getErrorMessage';
+import LoginTextField from '@/components/login-text-field/LoginTextField';
 import { useTranslation } from 'react-i18next';
 
 const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {

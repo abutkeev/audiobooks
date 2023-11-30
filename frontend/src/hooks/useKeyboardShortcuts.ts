@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../store';
-import { changeVolume, chapterChange, forward, pause, play, rewind } from '../store/features/player';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { changeVolume, chapterChange, forward, pause, play, rewind } from '@/store/features/player';
 
 const arrowKeysRewindTime = 15;
 const letterKeysRewindTime = 30;

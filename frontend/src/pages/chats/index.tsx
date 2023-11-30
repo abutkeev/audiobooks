@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import useTitle from '../../hooks/useTitle';
-import { useTelegramGetChatsQuery } from '../../api/api';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
-import EmptyListWrapper from '../../components/common/EmptyListWrapper';
+import useTitle from '@/hooks/useTitle';
+import { useTelegramGetChatsQuery } from '@/api/api';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
+import EmptyListWrapper from '@/components/common/EmptyListWrapper';
 import ChatEntry from './ChatEntry';
 import { useTranslation } from 'react-i18next';
 

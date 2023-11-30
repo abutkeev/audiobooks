@@ -2,9 +2,9 @@ import { Bedtime, BedtimeOff } from '@mui/icons-material';
 import ControlButton from './ControlButton';
 import { useEffect, useState } from 'react';
 import { Menu, MenuItem, Stack, Typography } from '@mui/material';
-import formatTime from '../../../utils/formatTime';
-import { useAppDispatch, useAppSelector } from '../../../store';
-import { pause, setPauseOnChapterEnd } from '../../../store/features/player';
+import formatTime from '@/utils/formatTime';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { pause, setPauseOnChapterEnd } from '@/store/features/player';
 import { useTranslation } from 'react-i18next';
 
 const SleepControl: React.FC = () => {

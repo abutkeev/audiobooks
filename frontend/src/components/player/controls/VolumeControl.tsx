@@ -1,7 +1,7 @@
 import { VolumeDown, VolumeUp } from '@mui/icons-material';
 import { Stack, Slider } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../../store';
-import { changeVolume } from '../../../store/features/player';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { changeVolume } from '@/store/features/player';
 
 const VolumeControl: React.FC = () => {
   const { volume } = useAppSelector(({ player: { state } }) => state);

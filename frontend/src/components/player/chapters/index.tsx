@@ -2,9 +2,9 @@ import Chapter from './Chapter';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import BookCacheIcon from './BookCacheIcon';
 import { ExpandMore } from '@mui/icons-material';
-import useMediaCache from '../../../hooks/useMediaCache';
-import { useAppDispatch, useAppSelector } from '../../../store';
-import { chapterChange } from '../../../store/features/player';
+import useMediaCache from '@/hooks/useMediaCache';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { chapterChange } from '@/store/features/player';
 import { useTranslation } from 'react-i18next';
 
 const Chapters: React.FC = () => {

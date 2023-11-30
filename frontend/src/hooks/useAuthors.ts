@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useAuthorsGetQuery } from '../api/api';
+import { useAuthorsGetQuery } from '@/api/api';
 
 const useAuthors = () => {
   const { data: authorsArray, isLoading: authorsLoading, isError: authorsError } = useAuthorsGetQuery();

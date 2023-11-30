@@ -6,12 +6,12 @@ import {
   useBooksEditMutation,
   useReadersGetQuery,
   useSeriesGetQuery,
-} from '../../api/api';
+} from '@/api/api';
 import { Button, Stack, TextField } from '@mui/material';
-import CustomComboBox from '../../components/common/CustomComboBox';
-import ErrorWrapper from '../../components/common/ErrorWrapper';
-import { addSnackbar } from '../../store/features/snackbars';
-import { useAppDispatch } from '../../store';
+import CustomComboBox from '@/components/common/CustomComboBox';
+import ErrorWrapper from '@/components/common/ErrorWrapper';
+import { addSnackbar } from '@/store/features/snackbars';
+import { useAppDispatch } from '@/store';
 import { useTranslation } from 'react-i18next';
 
 interface EditBookInfoProps {

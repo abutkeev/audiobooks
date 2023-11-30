@@ -1,7 +1,7 @@
 import { Alert, Paper } from '@mui/material';
-import { useWebauthnGetQuery } from '../../../api/api';
-import CustomDialog from '../../../components/common/CustomDialog';
-import LoadingWrapper from '../../../components/common/LoadingWrapper';
+import { useWebauthnGetQuery } from '@/api/api';
+import CustomDialog from '@/components/common/CustomDialog';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
 import AddSecurityKey from './AddSecurityKey';
 import SecurityKey from './SecurityKey';
 import { useTranslation } from 'react-i18next';

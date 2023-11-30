@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAppSelector } from '../store';
+import { useAppSelector } from '@/store';
 
 const useWakeLock = () => {
   const { preventScreenLock, playing } = useAppSelector(({ player: { state } }) => state);

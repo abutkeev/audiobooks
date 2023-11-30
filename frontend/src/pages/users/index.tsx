@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import { useUsersGetAllQuery } from '../../api/api';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
-import useTitle from '../../hooks/useTitle';
+import { useUsersGetAllQuery } from '@/api/api';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
+import useTitle from '@/hooks/useTitle';
 import User from './User';
-import useSearchMatcher from '../../hooks/useSearchMatcher';
-import EmptyListWrapper from '../../components/common/EmptyListWrapper';
+import useSearchMatcher from '@/hooks/useSearchMatcher';
+import EmptyListWrapper from '@/components/common/EmptyListWrapper';
 import { useTranslation } from 'react-i18next';
 
 const Users: React.FC = () => {

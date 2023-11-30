@@ -2,15 +2,15 @@ import ControlButton from './ControlButton';
 import { ChangeEvent, useState } from 'react';
 import { FormControlLabel, Menu, MenuItem, Switch } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
-import useWakeLock from '../../../hooks/useWakeLock';
+import useWakeLock from '@/hooks/useWakeLock';
 import copy from 'copy-to-clipboard';
 import { Clear, ContentCopy, FileDownload, Update } from '@mui/icons-material';
 import UpdateStateDialog from './UpdateStateDialog';
-import { useAppDispatch, useAppSelector } from '../../../store';
-import CustomDialog from '../../common/CustomDialog';
+import { useAppDispatch, useAppSelector } from '@/store';
+import CustomDialog from '@/components/common/CustomDialog';
 import useChaptersCacheInfo from '../chapters/useChaptersCacheInfo';
-import { addMediaToCache, removeCachedMedia } from '../../../store/features/media-cache';
-import { setPreventScreenLock, setResetSleepTimerOnActivity, showMessage } from '../../../store/features/player';
+import { addMediaToCache, removeCachedMedia } from '@/store/features/media-cache';
+import { setPreventScreenLock, setResetSleepTimerOnActivity, showMessage } from '@/store/features/player';
 import { useTranslation } from 'react-i18next';
 
 const Settings: React.FC = () => {

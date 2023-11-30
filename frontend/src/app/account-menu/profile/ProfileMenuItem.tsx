@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Person } from '@mui/icons-material';
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
-import useAuthData from '../../../hooks/useAuthData';
+import useAuthData from '@/hooks/useAuthData';
 import { AccountMenuDialogItemProps } from '..';
 
 const ProfileMenuItem: FC<AccountMenuDialogItemProps> = ({ setShowDialog, closeMenu }) => {

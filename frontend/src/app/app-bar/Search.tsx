@@ -1,7 +1,7 @@
 import { Clear, Search as SearchIcon } from '@mui/icons-material';
 import { InputAdornment, TextField } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../store';
-import { setSearchText } from '../../store/features/search';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { setSearchText } from '@/store/features/search';
 import { KeyboardEventHandler, useEffect, useRef } from 'react';
 
 interface SearchProps {

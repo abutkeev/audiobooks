@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../store';
-import { startMediaCacheUpdates, stopMediaCacheUpdates } from '../store/features/media-cache';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { startMediaCacheUpdates, stopMediaCacheUpdates } from '@/store/features/media-cache';
 
 const useMediaCache = () => {
   const dispatch = useAppDispatch();

@@ -1,4 +1,4 @@
-import { getSliceActionCreator } from '../..';
+import { getSliceActionCreator } from '@/store';
 import { playerSlice } from './slice';
 
 export const createSliceAction = getSliceActionCreator(playerSlice);

@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import { useAppSelector } from '../store';
+import { useAppSelector } from '@/store';
 
 const useAuthData = () => {
   const { token } = useAppSelector(({ auth }) => auth);

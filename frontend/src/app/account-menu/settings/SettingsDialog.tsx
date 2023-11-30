@@ -1,9 +1,9 @@
 import { FC, useEffect } from 'react';
-import CustomDialog from '../../../components/common/CustomDialog';
+import CustomDialog from '@/components/common/CustomDialog';
 import { MenuItem, Stack, TextField, TextFieldProps } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useLazyProfileGetSettingsQuery, useProfileSetSettingsMutation } from '../../../api/api';
-import useAuthData from '../../../hooks/useAuthData';
+import { useLazyProfileGetSettingsQuery, useProfileSetSettingsMutation } from '@/api/api';
+import useAuthData from '@/hooks/useAuthData';
 
 interface SettingsDialogProps {
   open: boolean;

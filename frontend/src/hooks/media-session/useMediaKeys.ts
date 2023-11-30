@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../../store';
-import { changePosition, forward, pause, play, rewind } from '../../store/features/player';
+import { useAppDispatch } from '@/store';
+import { changePosition, forward, pause, play, rewind } from '@/store/features/player';
 
 const mediaKeysRewindTime = 10;
 

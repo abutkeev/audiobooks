@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Button, FormControl, TextField } from '@mui/material';
-import CustomPassword from '../../components/common/CustomPassword';
-import { useAuthLoginMutation } from '../../api/api';
+import CustomPassword from '@/components/common/CustomPassword';
+import { useAuthLoginMutation } from '@/api/api';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAppDispatch } from '../../store';
-import { setAuthToken } from '../../store/features/auth';
+import { useAppDispatch } from '@/store';
+import { setAuthToken } from '@/store/features/auth';
 import { CommonAuthProps } from '.';
 import { useTranslation } from 'react-i18next';
 

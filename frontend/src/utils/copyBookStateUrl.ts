@@ -1,7 +1,7 @@
 import copy from 'copy-to-clipboard';
-import { store } from '../store';
-import { BookState } from '../store/features/player';
-import { addSnackbar } from '../store/features/snackbars';
+import { store } from '@/store';
+import { BookState } from '@/store/features/player';
+import { addSnackbar } from '@/store/features/snackbars';
 import { t } from 'i18next';
 
 const copyBookStateUrl = ({ currentChapter, position }: BookState) => {

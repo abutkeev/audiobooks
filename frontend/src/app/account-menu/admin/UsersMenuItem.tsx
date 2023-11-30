@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import { AccountMenuItemProps } from '..';
 import { AdminPanelSettings } from '@mui/icons-material';
-import useAuthData from '../../../hooks/useAuthData';
+import useAuthData from '@/hooks/useAuthData';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

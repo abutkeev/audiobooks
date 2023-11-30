@@ -3,8 +3,8 @@ import { Box, IconButton, Toolbar, Typography, useMediaQuery, useTheme } from '@
 import MuiAppBar from '@mui/material/AppBar';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Search from './Search';
-import { currentBookVarName } from '../../pages/Home';
-import { useAppSelector } from '../../store';
+import { currentBookVarName } from '@/pages/Home';
+import { useAppSelector } from '@/store';
 import MobileAppBar from './MobileAppBar';
 import AccountMenu from '../account-menu';
 

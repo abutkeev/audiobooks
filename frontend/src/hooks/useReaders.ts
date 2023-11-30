@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useReadersGetQuery } from '../api/api';
+import { useReadersGetQuery } from '@/api/api';
 
 const useReaders = () => {
   const { data: readersArray, isLoading: readersLoading, isError: readersError } = useReadersGetQuery();

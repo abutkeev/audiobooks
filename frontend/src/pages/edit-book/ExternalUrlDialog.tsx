@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
-import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
+import CustomDialog, { AbortOperation } from '@/components/common/CustomDialog';
 import { useTranslation } from 'react-i18next';
 import { Stack, TextField } from '@mui/material';
-import { BooksGetChaptersFromUrlApiResponse, useLazyBooksGetChaptersFromUrlQuery } from '../../api/api';
-import getErrorMessage from '../../utils/getErrorMessage';
-import ErrorAlert from '../../components/common/ErrorAlert';
+import { BooksGetChaptersFromUrlApiResponse, useLazyBooksGetChaptersFromUrlQuery } from '@/api/api';
+import getErrorMessage from '@/utils/getErrorMessage';
+import ErrorAlert from '@/components/common/ErrorAlert';
 
 interface ExternalUrlDialogProps {
   open: boolean;

@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import { AccountMenuItemProps } from '.';
 import { People } from '@mui/icons-material';
-import useAuthData from '../../hooks/useAuthData';
-import FriendsBage from '../../components/FriendsBage';
+import useAuthData from '@/hooks/useAuthData';
+import FriendsBage from '@/components/FriendsBage';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

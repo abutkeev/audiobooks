@@ -1,11 +1,11 @@
 import { Add } from '@mui/icons-material';
 import { AppBar, Button, Toolbar } from '@mui/material';
 import { FC, useState } from 'react';
-import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
-import LoginTextField from '../../components/login-text-field/LoginTextField';
-import { useFriendsAddMutation } from '../../api/api';
-import { useAppDispatch } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
+import CustomDialog, { AbortOperation } from '@/components/common/CustomDialog';
+import LoginTextField from '@/components/login-text-field/LoginTextField';
+import { useFriendsAddMutation } from '@/api/api';
+import { useAppDispatch } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
 import { useTranslation } from 'react-i18next';
 
 const AddFriendToolbar: FC = () => {

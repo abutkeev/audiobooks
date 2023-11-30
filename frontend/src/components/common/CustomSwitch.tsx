@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { FormControlLabelProps, SwitchProps, Tooltip } from '@mui/material';
 import ProgressContainer from './ProgressContainer';
-import useWaitRefreshing from '../../hooks/useWaitRefreshing';
+import useWaitRefreshing from '@/hooks/useWaitRefreshing';
 import SwitchWithOptionalLabel from './SwitchWithOptionalLabel';
 
 export interface CustomSwitchProps {

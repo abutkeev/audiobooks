@@ -1,6 +1,6 @@
 import { DownloadForOffline, ErrorOutline } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
-import { MediaCacheEntryState } from '../../../store/features/media-cache';
+import { MediaCacheEntryState } from '@/store/features/media-cache';
 
 interface ChapterCacheIconProps {
   cacheState?: MediaCacheEntryState;

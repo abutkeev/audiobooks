@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import useAuthData from '../../hooks/useAuthData';
+import useAuthData from '@/hooks/useAuthData';
 import { Book, Edit, LibraryBooks, Mic, PersonAdd } from '@mui/icons-material';
 import AddPersonDialog from './AddPersonDialog';
 import AddSeriesDialog from './AddSeriesDialog';

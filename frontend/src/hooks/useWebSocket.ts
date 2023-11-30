@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../store';
-import { connect, disconnect } from '../store/features/websocket';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { connect, disconnect } from '@/store/features/websocket';
 
 const useWebSocket = () => {
   const { connected } = useAppSelector(({ websocket }) => websocket);

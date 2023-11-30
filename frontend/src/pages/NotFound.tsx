@@ -1,5 +1,5 @@
 import { Alert } from '@mui/material';
-import useTitle from '../hooks/useTitle';
+import useTitle from '@/hooks/useTitle';
 import { useTranslation } from 'react-i18next';
 
 const NotFound: React.FC = () => {

@@ -1,10 +1,10 @@
 import { FC, ReactNode, useMemo } from 'react';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
-import EmptyListWrapper from '../../components/common/EmptyListWrapper';
-import useSearchMatcher from '../../hooks/useSearchMatcher';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
+import EmptyListWrapper from '@/components/common/EmptyListWrapper';
+import useSearchMatcher from '@/hooks/useSearchMatcher';
 import { Paper, Stack, Typography } from '@mui/material';
-import ProgressButton, { ProgressButtonProps } from '../../components/common/ProgressButton';
-import getFriendDisplayName from '../../utils/getFriendDisplayName';
+import ProgressButton, { ProgressButtonProps } from '@/components/common/ProgressButton';
+import getFriendDisplayName from '@/utils/getFriendDisplayName';
 
 interface Action {
   action(id: string): ProgressButtonProps['onClick'];

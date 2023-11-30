@@ -1,5 +1,5 @@
-import useMediaCache from '../../../hooks/useMediaCache';
-import { useAppSelector } from '../../../store';
+import useMediaCache from '@/hooks/useMediaCache';
+import { useAppSelector } from '@/store';
 
 const useChaptersCacheInfo = () => {
   const chapters = useAppSelector(({ player: { chapters } }) => chapters);

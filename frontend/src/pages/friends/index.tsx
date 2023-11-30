@@ -1,12 +1,12 @@
 import { FC, useState } from 'react';
-import useTitle from '../../hooks/useTitle';
+import useTitle from '@/hooks/useTitle';
 import AddFriendToolbar from './AddFriendToolbar';
 import IncomingRequests from './IncomingRequests';
 import { Tab, Tabs } from '@mui/material';
 import OutgoingRequests from './OutgoingRequests';
-import { useFriendsGetIncomingRequestsQuery, useFriendsGetOutgoingRequestsQuery } from '../../api/api';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
-import FriendsBage from '../../components/FriendsBage';
+import { useFriendsGetIncomingRequestsQuery, useFriendsGetOutgoingRequestsQuery } from '@/api/api';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
+import FriendsBage from '@/components/FriendsBage';
 import FriendsTab from './FriendsTab';
 import { useTranslation } from 'react-i18next';
 

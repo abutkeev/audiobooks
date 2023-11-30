@@ -1,10 +1,10 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import CustomDialog from '../../../components/common/CustomDialog';
-import LoadingWrapper from '../../../components/common/LoadingWrapper';
+import CustomDialog from '@/components/common/CustomDialog';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
 import { Telegram } from '@mui/icons-material';
-import TelegramAuthButton, { TelegramAuthCallback } from '../../../components/TelegramAuthButton';
-import { useTgGetAccountInfoQuery, useTgRemoveAuthDataMutation, useTgSetAuthDataMutation } from '../../../api/api';
-import ProgressButton from '../../../components/common/ProgressButton';
+import TelegramAuthButton, { TelegramAuthCallback } from '@/components/TelegramAuthButton';
+import { useTgGetAccountInfoQuery, useTgRemoveAuthDataMutation, useTgSetAuthDataMutation } from '@/api/api';
+import ProgressButton from '@/components/common/ProgressButton';
 import { useTranslation } from 'react-i18next';
 
 interface LinkedAccountsDialogProps {

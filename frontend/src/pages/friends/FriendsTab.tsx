@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useFriendsGetQuery, useFriendsRemoveMutation } from '../../api/api';
+import { useFriendsGetQuery, useFriendsRemoveMutation } from '@/api/api';
 import FriendsList from './FriendsList';
 import { useTranslation } from 'react-i18next';
 

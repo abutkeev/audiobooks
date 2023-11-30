@@ -1,9 +1,9 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
-import { useLazySignUpCheckQuery } from '../../api/api';
+import { useLazySignUpCheckQuery } from '@/api/api';
 import LoginCheckState, { LoginCheckStateProps } from './LoginCheckState';
 import debounce from 'debounce';
-import useAuthData from '../../hooks/useAuthData';
+import useAuthData from '@/hooks/useAuthData';
 import { useTranslation } from 'react-i18next';
 
 interface LoginTextFieldProps {

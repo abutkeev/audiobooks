@@ -4,7 +4,7 @@ import { StateSlice } from '.';
 import { setConnected } from './slice';
 import { connect, disconnect } from './actions';
 import { playerSetup } from '../player';
-import enhancedApi from '../../../api/enhancedApi';
+import enhancedApi from '@/api/enhancedApi';
 import { setAuthToken } from '../auth';
 
 let socket: Socket | undefined;

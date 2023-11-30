@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSeriesGetQuery } from '../api/api';
+import { useSeriesGetQuery } from '@/api/api';
 
 const useSeries = () => {
   const { data: seriesArray, isLoading: seriesLoading, isError: seriesError } = useSeriesGetQuery();

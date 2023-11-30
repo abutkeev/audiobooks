@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import { AccountMenuItemProps } from '.';
 import { Logout } from '@mui/icons-material';
-import { useAppDispatch } from '../../store';
-import { setAuthToken } from '../../store/features/auth';
+import { useAppDispatch } from '@/store';
+import { setAuthToken } from '@/store/features/auth';
 import { useTranslation } from 'react-i18next';
 
 const LogoutMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {

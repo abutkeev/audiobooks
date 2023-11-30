@@ -1,7 +1,7 @@
 import { Button, Paper, Stack, Typography } from '@mui/material';
-import { BooksGetChaptersFromUrlApiResponse, ChapterDto } from '../../api/api';
+import { BooksGetChaptersFromUrlApiResponse, ChapterDto } from '@/api/api';
 import { Link, Upload } from '@mui/icons-material';
-import UploadButton from '../../components/common/UploadButton';
+import UploadButton from '@/components/common/UploadButton';
 import { useState } from 'react';
 import UploadDialog from './UploadDialog';
 import { useTranslation } from 'react-i18next';

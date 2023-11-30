@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { AccountCircle, Settings } from '@mui/icons-material';
 import { Badge, IconButton, Menu } from '@mui/material';
-import useAuthData from '../../hooks/useAuthData';
-import useWebSocket from '../../hooks/useWebSocket';
+import useAuthData from '@/hooks/useAuthData';
+import useWebSocket from '@/hooks/useWebSocket';
 import SecurityKeysDialog from './security-keys/SecurityKeysDialog';
-import { useLazyFriendsGetIncomingRequestsQuery } from '../../api/api';
+import { useLazyFriendsGetIncomingRequestsQuery } from '@/api/api';
 import LinkedAccountsDialog from './linked-accounts/LinkedAccountsDialog';
 import ChangePasswordDialog from './change-password/ChangePasswordDialog';
 import ProfileMenuItem from './profile/ProfileMenuItem';

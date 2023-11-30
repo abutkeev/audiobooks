@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { FormControlLabel, Switch, TextField } from '@mui/material';
-import CustomDialog from '../../components/common/CustomDialog';
-import { useAppDispatch } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
-import { useUsersCreateMutation, useUsersGetAllQuery } from '../../api/api';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
-import CustomPassword from '../../components/common/CustomPassword';
+import CustomDialog from '@/components/common/CustomDialog';
+import { useAppDispatch } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
+import { useUsersCreateMutation, useUsersGetAllQuery } from '@/api/api';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
+import CustomPassword from '@/components/common/CustomPassword';
 import { useTranslation } from 'react-i18next';
 
 interface AddUserDialogProps {

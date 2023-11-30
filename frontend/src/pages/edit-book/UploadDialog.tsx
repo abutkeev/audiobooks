@@ -1,12 +1,12 @@
 import { LinearProgress, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
-import CustomDialog, { AbortOperation } from '../../components/common/CustomDialog';
+import CustomDialog, { AbortOperation } from '@/components/common/CustomDialog';
 import useUploading, { setTitle, startUploading, stopUploading, setUploaded } from './useUploading';
 import { Upload } from '@mui/icons-material';
 import { useMemo, useRef, useState } from 'react';
 import axios from 'axios';
-import { useAppDispatch, useAppSelector } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
-import enhancedApi from '../../api/enhancedApi';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
+import enhancedApi from '@/api/enhancedApi';
 import { useTranslation } from 'react-i18next';
 import ExtraButtons from './ExtraButtons';
 

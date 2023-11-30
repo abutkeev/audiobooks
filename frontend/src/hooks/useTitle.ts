@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../store';
-import { setTitle } from '../store/features/title';
+import { useAppDispatch } from '@/store';
+import { setTitle } from '@/store/features/title';
 
 const useTitle = (title: string) => {
   const dispatch = useAppDispatch();

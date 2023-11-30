@@ -1,15 +1,15 @@
 import { useParams, useSearchParams } from 'react-router-dom';
-import BookCard from '../components/BookCard';
-import LoadingWrapper from '../components/common/LoadingWrapper';
-import useAuthors from '../hooks/useAuthors';
-import useReaders from '../hooks/useReaders';
-import useSeries from '../hooks/useSeries';
-import Player from '../components/player';
+import BookCard from '@/components/BookCard';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
+import useAuthors from '@/hooks/useAuthors';
+import useReaders from '@/hooks/useReaders';
+import useSeries from '@/hooks/useSeries';
+import Player from '@/components/player';
 import { useEffect, useMemo } from 'react';
 import { currentBookVarName } from './Home';
-import useTitle from '../hooks/useTitle';
-import OtherPlayersPosition from '../components/OtherPlayersPosition';
-import { useBooksGetBookInfoQuery } from '../api/api';
+import useTitle from '@/hooks/useTitle';
+import OtherPlayersPosition from '@/components/OtherPlayersPosition';
+import { useBooksGetBookInfoQuery } from '@/api/api';
 
 const BookPage: React.FC = () => {
   const { id = '' } = useParams();

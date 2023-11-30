@@ -1,5 +1,5 @@
 import { Alert } from '@mui/material';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '@/store';
 
 const PlayerError: React.FC = () => {
   const error = useAppSelector(

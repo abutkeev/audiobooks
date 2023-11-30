@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { TextField } from '@mui/material';
-import CustomDialog from '../../components/common/CustomDialog';
-import { useAppDispatch } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
-import { useAuthorsCreateMutation, useReadersCreateMutation } from '../../api/api';
+import CustomDialog from '@/components/common/CustomDialog';
+import { useAppDispatch } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
+import { useAuthorsCreateMutation, useReadersCreateMutation } from '@/api/api';
 import { useTranslation } from 'react-i18next';
 
 interface AddPersonDialogProps {

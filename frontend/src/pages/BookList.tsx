@@ -1,15 +1,15 @@
-import LoadingWrapper from '../components/common/LoadingWrapper';
-import BookCard from '../components/BookCard';
-import useAuthors from '../hooks/useAuthors';
-import useReaders from '../hooks/useReaders';
-import useSeries from '../hooks/useSeries';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
+import BookCard from '@/components/BookCard';
+import useAuthors from '@/hooks/useAuthors';
+import useReaders from '@/hooks/useReaders';
+import useSeries from '@/hooks/useSeries';
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import useSearch from '../hooks/useSearch';
+import useSearch from '@/hooks/useSearch';
 import { Alert } from '@mui/material';
 import { currentBookVarName } from './Home';
-import useTitle from '../hooks/useTitle';
-import { useBooksGetQuery } from '../api/api';
+import useTitle from '@/hooks/useTitle';
+import { useBooksGetQuery } from '@/api/api';
 import { useTranslation } from 'react-i18next';
 
 const BookList: React.FC = () => {

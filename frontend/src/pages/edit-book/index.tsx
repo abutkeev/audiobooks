@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { useBooksGetBookInfoQuery } from '../../api/api';
-import LoadingWrapper from '../../components/common/LoadingWrapper';
-import useTitle from '../../hooks/useTitle';
+import { useBooksGetBookInfoQuery } from '@/api/api';
+import LoadingWrapper from '@/components/common/LoadingWrapper';
+import useTitle from '@/hooks/useTitle';
 import EditBookInfo from './EditBookInfo';
 import { useMemo, useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
 import EditChapters from './EditChapters';
-import Link from '../../components/common/Link';
+import Link from '@/components/common/Link';
 import EditCover from './EditCover';
 import { useTranslation } from 'react-i18next';
 

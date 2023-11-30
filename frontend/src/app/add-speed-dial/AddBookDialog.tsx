@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Stack, TextField } from '@mui/material';
-import CustomDialog from '../../components/common/CustomDialog';
-import { useAppDispatch } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
-import { useAuthorsGetQuery, useBooksCreateMutation, useReadersGetQuery, useSeriesGetQuery } from '../../api/api';
-import CustomComboBox from '../../components/common/CustomComboBox';
+import CustomDialog from '@/components/common/CustomDialog';
+import { useAppDispatch } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
+import { useAuthorsGetQuery, useBooksCreateMutation, useReadersGetQuery, useSeriesGetQuery } from '@/api/api';
+import CustomComboBox from '@/components/common/CustomComboBox';
 import { useTranslation } from 'react-i18next';
-import getErrorMessage from '../../utils/getErrorMessage';
-import CustomSwitch from '../../components/common/CustomSwitch';
+import getErrorMessage from '@/utils/getErrorMessage';
+import CustomSwitch from '@/components/common/CustomSwitch';
 import { useNavigate } from 'react-router-dom';
 
 interface AddBookDialogProps {

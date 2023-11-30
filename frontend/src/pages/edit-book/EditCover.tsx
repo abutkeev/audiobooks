@@ -1,10 +1,10 @@
 import { Button, Stack, Toolbar } from '@mui/material';
-import UploadButton from '../../components/common/UploadButton';
+import UploadButton from '@/components/common/UploadButton';
 import { Delete, Upload } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '../../store';
-import { addSnackbar } from '../../store/features/snackbars';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addSnackbar } from '@/store/features/snackbars';
 import axios from 'axios';
-import { api, useBooksExtractCoverMutation, useBooksRemoveCoverMutation } from '../../api/api';
+import { api, useBooksExtractCoverMutation, useBooksRemoveCoverMutation } from '@/api/api';
 import { useTranslation } from 'react-i18next';
 
 interface EditCoverProps {
