@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   BookInfoDto,
   ChapterDto,
@@ -13,6 +12,7 @@ import ErrorWrapper from '@/components/common/ErrorWrapper';
 import { addSnackbar } from '@/store/features/snackbars';
 import { useAppDispatch } from '@/store';
 import { useTranslation } from 'react-i18next';
+import useUpdatingState from '@/hooks/useUpdatingState';
 
 interface EditBookInfoProps {
   id: string;
@@ -26,16 +26,11 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
   const { data: readers = [], isLoading: readersLoading, isError: readersError } = useReadersGetQuery();
   const { data: series = [], isLoading: seriesLoading, isError: seriesError } = useSeriesGetQuery();
   const [save] = useBooksEditMutation();
-  const [name, setName] = useState('');
-  const [authorId, setAuthorId] = useState('');
-  const [readerId, setReaderId] = useState('');
-  const [seriesId, setSeriesId] = useState('');
-  const [seriesNumber, setSeriesNumber] = useState('');
-  useEffect(() => setName(info.name), [info.name]);
-  useEffect(() => setAuthorId(info.author_id), [info.author_id]);
-  useEffect(() => setReaderId(info.reader_id), [info.reader_id]);
-  useEffect(() => setSeriesId(info.series_id || ''), [info.series_id || '']);
-  useEffect(() => setSeriesNumber(info.series_number || ''), [info.series_number || '']);
+  const [name, setName] = useUpdatingState(info.name);
+  const [authorId, setAuthorId] = useUpdatingState(info.author_id);
+  const [readerId, setReaderId] = useUpdatingState(info.reader_id);
+  const [seriesId, setSeriesId] = useUpdatingState(info.series_id || '');
+  const [seriesNumber, setSeriesNumber] = useUpdatingState(info.series_number || '');
   const dispatch = useAppDispatch();
 
   const error = authorsError || readersError || seriesError;
