@@ -11,8 +11,8 @@ class SeriesDto {
   name: string;
 
   @IsNotEmpty()
-  @ApiProperty({ oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }] })
-  author_id: string | string[];
+  @ApiProperty()
+  authors: string[];
 }
 
 export default SeriesDto;

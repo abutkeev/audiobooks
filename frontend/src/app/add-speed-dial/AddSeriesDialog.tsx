@@ -24,10 +24,8 @@ const AddSeriesDialog: React.FC<AddSeriesDialogProps> = ({ open, close }) => {
   const handleCreate = () => {
     if (authors.length === 0) return;
 
-    const author_id = authors.length === 1 ? authors[0] : authors;
-
     try {
-      create({ newSeriesDto: { name, author_id } }).unwrap();
+      create({ newSeriesDto: { name, authors } }).unwrap();
     } catch (e) {
       const text = e instanceof Error ? e.message : t(`got unknown error while creating series`);
       dispatch(addSnackbar({ severity: 'error', text }));
