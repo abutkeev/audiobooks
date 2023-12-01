@@ -18,6 +18,7 @@ import BookInfoDto from './dto/BookInfoDto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import ExternalChapterDto from './dto/ExternalChapterDto';
+import OldBookDto from './dto/OldBookDto';
 
 const logger = new Logger('BooksService');
 const getBookInfoConfig = (id: string) => `books/${id}/info.json`;
@@ -50,18 +51,51 @@ export class BooksService {
     return books;
   }
 
+  private check_config(config): config is OldBookDto | BookDto {
+    if (validateSync(plainToInstance(OldBookDto, config)).length === 0) {
+      return true;
+    }
+
+    const errors = validateSync(plainToInstance(BookDto, config));
+    if (errors.length > 0) {
+      for (const error of errors) {
+        logger.error(error);
+      }
+      logger.log(config);
+      throw new Error('entry validation failed');
+    }
+
+    return true;
+  }
+
+  private is_new_config(config): config is BookDto {
+    return 'series' in config.info;
+  }
+
   get(id: string): BookDto {
     try {
-      const result = this.commonService.readJSONFile(getBookInfoConfig(id));
-      const errors = validateSync(plainToInstance(BookDto, result));
-      if (errors.length > 0) {
-        for (const error of errors) {
-          logger.error(error);
-        }
-        logger.log(result);
-        throw new Error('entry validation failed');
+      const config = this.commonService.readJSONFile(getBookInfoConfig(id));
+      if (!this.check_config(config)) {
+        throw new InternalServerErrorException('config validation failed');
       }
-      return result as BookDto;
+      if (this.is_new_config(config)) {
+        return config;
+      }
+      const {
+        chapters,
+        info: { name, author_id, reader_id, series_id, series_number, cover },
+      } = config;
+      const series = series_id ? [{ id: series_id, number: series_number }] : [];
+      return {
+        chapters,
+        info: {
+          name,
+          authors: [author_id],
+          readers: [reader_id],
+          series,
+          cover,
+        },
+      };
     } catch (e) {
       logger.error(e);
       if (e instanceof NotFoundException) {

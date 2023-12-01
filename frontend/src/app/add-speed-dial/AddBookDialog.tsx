@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import getErrorMessage from '@/utils/getErrorMessage';
 import CustomSwitch from '@/components/common/CustomSwitch';
 import { useNavigate } from 'react-router-dom';
+import MultiSelect from '@/components/common/MultiSelect';
 
 interface AddBookDialogProps {
   open: boolean;
@@ -18,31 +19,30 @@ interface AddBookDialogProps {
 const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
   const { t } = useTranslation();
   const [name, setName] = useState('');
-  const [authorId, setAuthorId] = useState('');
-  const [readerId, setReaderId] = useState('');
+  const [authors, setAuthors] = useState<string[]>([]);
+  const [readers, setReaders] = useState<string[]>([]);
   const [seriesId, setSeriesId] = useState('');
   const [seriesNumber, setSeriesNumber] = useState('');
   const [gotoBookEditPage, setGotoBookEditPage] = useState(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data: authors = [], isLoading: authorsLoading, isError: authorsError } = useAuthorsGetQuery();
-  const { data: readers = [], isLoading: readersLoading, isError: readersError } = useReadersGetQuery();
-  const { data: series = [], isLoading: seriesLoading, isError: seriesError } = useSeriesGetQuery();
+  const { data: authorsList = [], isLoading: authorsLoading, isError: authorsError } = useAuthorsGetQuery();
+  const { data: readersList = [], isLoading: readersLoading, isError: readersError } = useReadersGetQuery();
+  const { data: seriesList = [], isLoading: seriesLoading, isError: seriesError } = useSeriesGetQuery();
   const [create] = useBooksCreateMutation();
 
   const loading = authorsLoading || readersLoading || seriesLoading;
   const error = authorsError || readersError || seriesError;
-  const valid = !!name && !!authorId && !!readerId;
+  const valid = !!name && authors.length !== 0 && readers.length !== 0;
 
   const handleCreate = async () => {
     try {
       const id = await create({
         bookInfoDto: {
           name,
-          author_id: authorId,
-          reader_id: readerId,
-          series_id: seriesId || undefined,
-          series_number: (seriesId && seriesNumber) || undefined,
+          authors,
+          readers,
+          series: seriesId ? [{ id: seriesId, number: seriesNumber }] : [],
         },
       }).unwrap();
       if (gotoBookEditPage) {
@@ -57,8 +57,8 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
   const handleClose = () => {
     close();
     setName('');
-    setAuthorId('');
-    setReaderId('');
+    setAuthors([]);
+    setReaders([]);
     setSeriesId('');
     setSeriesNumber('');
   };
@@ -82,10 +82,26 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
             onKeyDown={e => e.stopPropagation()}
             error={!name}
           />
-          <CustomComboBox options={authors} label={t('Author')} value={authorId} setValue={setAuthorId} />
-          <CustomComboBox options={readers} label={t('Reader')} value={readerId} setValue={setReaderId} />
+          <MultiSelect
+            list={authorsList}
+            label={t('Author')}
+            values={authors}
+            onChange={setAuthors}
+            required
+            selectOptionsText={t('Select authors')}
+            noOptionsText={t('No authors')}
+          />
+          <MultiSelect
+            list={readersList}
+            label={t('Reader')}
+            values={readers}
+            onChange={setReaders}
+            required
+            selectOptionsText={t('Select readers')}
+            noOptionsText={t('No readers')}
+          />
           <CustomComboBox
-            options={series}
+            options={seriesList}
             label={t('Series')}
             value={seriesId}
             setValue={setSeriesId}

@@ -33,13 +33,13 @@ const BookList: React.FC = () => {
   const filtredBooks = useMemo(() => {
     let result = books;
     if (author_id) {
-      result = result.filter(book => book.info.author_id === author_id);
+      result = result.filter(book => book.info.authors.includes(author_id));
     }
     if (reader_id) {
-      result = result.filter(book => book.info.reader_id === reader_id);
+      result = result.filter(book => book.info.readers.includes(reader_id));
     }
     if (series_id) {
-      result = result.filter(book => book.info.series_id === series_id);
+      result = result.filter(book => book.info.series.some(({ id }) => id === series_id));
     }
     if (searchText) {
       const searchTextLower = searchText.toLowerCase();
@@ -53,11 +53,11 @@ const BookList: React.FC = () => {
         .filter(([, name]) => name.toLowerCase().includes(searchTextLower))
         .map(([id]) => id);
       result = result.filter(
-        ({ info: { name, author_id, reader_id, series_id } }) =>
+        ({ info: { name, authors, readers, series } }) =>
           name.toLowerCase().includes(searchTextLower) ||
-          filtredAuhorsIds.includes(author_id) ||
-          filtredReadersIds.includes(reader_id) ||
-          (series_id && filtredSeriesIds.includes(series_id))
+          filtredAuhorsIds.some(author_id => authors.includes(author_id)) ||
+          filtredReadersIds.some(reader_id => readers.includes(reader_id)) ||
+          filtredSeriesIds.some(series_id => series.some(({ id }) => id === series_id))
       );
     }
     return result;
@@ -66,11 +66,19 @@ const BookList: React.FC = () => {
   const sortedBooks = useMemo(
     () =>
       filtredBooks.slice().sort((a, b) => {
-        if (a.info.author_id > b.info.author_id) {
+        if (a.info.authors[0] > b.info.authors[0]) {
           return 1;
         }
-        if (a.info.author_id === b.info.author_id && a.info.series_id && a.info.series_id === b.info.series_id) {
-          if (a.info.series_number && b.info.series_number && a.info.series_number > b.info.series_number) {
+        if (
+          a.info.authors[0] === b.info.authors[0] &&
+          a.info.series.length !== 0 &&
+          a.info.series[0].id === b.info.series[0]?.id
+        ) {
+          if (
+            a.info.series[0].number &&
+            b.info.series[0]?.number &&
+            a.info.series[0].number > b.info.series[0].number
+          ) {
             return 1;
           }
         }
@@ -83,7 +91,7 @@ const BookList: React.FC = () => {
     <LoadingWrapper loading={loading} error={error}>
       {sortedBooks.length !== 0 ? (
         sortedBooks.map(({ id, info }) => (
-          <BookCard key={id} id={id} info={info} authors={authors} readers={readers} series={series} list />
+          <BookCard key={id} id={id} info={info} authorsList={authors} readersList={readers} seriesList={series} list />
         ))
       ) : (
         <Alert severity='info'>

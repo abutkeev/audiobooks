@@ -10,31 +10,32 @@ interface BookCardProps {
   id: string;
   list?: boolean;
   info: BookInfoDto;
-  authors: Record<string, string>;
-  readers: Record<string, string>;
-  series: Record<string, string>;
+  authorsList: Record<string, string>;
+  readersList: Record<string, string>;
+  seriesList: Record<string, string>;
 }
 
 const BookCard: React.FC<BookCardProps> = ({
   id,
   list,
-  info: { name, author_id, reader_id, series_id, series_number, cover },
-  authors,
-  readers,
-  series,
+  info: { name, authors, readers, series, cover },
+  authorsList,
+  readersList,
+  seriesList,
 }) => {
   const { t } = useTranslation();
   const { data: books } = useBooksGetQuery();
   const { admin } = useAuthData() || {};
-  const nextBook = useMemo(() => {
-    if (!books || list || !series_id || !series_number) return undefined;
-    const nextBook = books.find(
-      book =>
-        book.info.series_id === series_id && book.info.series_number && +book.info.series_number === +series_number + 1
+  const nextBooks = useMemo(() => {
+    if (!books || list || series.length === 0) return [];
+    const nextBooks = series.map(({ id, number }) =>
+      books.find(
+        book => !!number && book.info.series.some(series => series.id === id && series.number === `${+number + 1}`)
+      )
     );
-    if (!nextBook) return undefined;
-    return { id: nextBook.id, name: nextBook.info.name };
-  }, [books, list, series_id, series_number]);
+    return nextBooks;
+  }, [books, list, series]);
+
   return (
     <Card raised square>
       <Stack direction='row' flexGrow={1} alignContent='center'>
@@ -56,38 +57,42 @@ const BookCard: React.FC<BookCardProps> = ({
               </IconButton>
             )}
           </Stack>
-          <Stack direction='row' spacing={1}>
-            <Edit />
-            <Typography>
-              <Link to={`/books?author_id=${author_id}`}>{authors[author_id] ?? author_id}</Link>
-            </Typography>
-          </Stack>
-          <Stack direction='row' spacing={1}>
-            <Mic />
-            <Typography>
-              <Link to={`/books?reader_id=${reader_id}`}> {readers[reader_id] ?? reader_id}</Link>
-            </Typography>
-          </Stack>
-          {series_id && (
-            <Stack direction='row' spacing={1}>
+          {authors.map(author_id => (
+            <Stack direction='row' spacing={1} key={author_id}>
+              <Edit />
+              <Typography>
+                <Link to={`/books?author_id=${author_id}`}>{authorsList[author_id] ?? author_id}</Link>
+              </Typography>
+            </Stack>
+          ))}
+          {readers.map(reader_id => (
+            <Stack direction='row' spacing={1} key={reader_id}>
+              <Mic />
+              <Typography>
+                <Link to={`/books?reader_id=${reader_id}`}> {readersList[reader_id] ?? reader_id}</Link>
+              </Typography>
+            </Stack>
+          ))}
+          {series.map(({ id, number }, index) => (
+            <Stack direction='row' spacing={1} key={id}>
               <LibraryBooks />
               <Typography>
-                <Link to={`/books?series_id=${series_id}`}>
-                  {series[series_id] ?? series_id} {series_number && `(${series_number})`}
+                <Link to={`/books?series_id=${id}`}>
+                  {seriesList[id] ?? id} {number && `(${number})`}
                 </Link>
               </Typography>
-              {nextBook && (
+              {nextBooks[index] && (
                 <>
                   <NavigateNext />
                   <Tooltip title={t('Next book')}>
                     <Typography>
-                      <Link to={`/book/${nextBook.id}`}>{nextBook.name}</Link>
+                      <Link to={`/book/${nextBooks[index]!.id}`}>{nextBooks[index]!.info.name}</Link>
                     </Typography>
                   </Tooltip>
                 </>
               )}
             </Stack>
-          )}
+          ))}
         </CardContent>
       </Stack>
     </Card>

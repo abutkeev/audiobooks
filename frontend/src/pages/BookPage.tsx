@@ -44,13 +44,14 @@ const BookPage: React.FC = () => {
     <LoadingWrapper loading={loading} error={error}>
       {data && (
         <>
-          <BookCard id={id} info={data.info} authors={authors} readers={readers} series={series} />
+          <BookCard id={id} info={data.info} authorsList={authors} readersList={readers} seriesList={series} />
           {data.chapters.length !== 0 && (
             <Player
               bookInfo={{
                 name: data.info.name,
-                author: authors[data.info.author_id],
-                series: data.info.series_id && series[data.info.series_id],
+                author: data.info.authors.map(author_id => authors[author_id]).join(','),
+                series:
+                  data.info.series.length !== 0 ? data.info.series.map(({ id }) => series[id]).join(',') : undefined,
                 cover: data.info.cover,
               }}
               bookId={id}
