@@ -106,14 +106,16 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
         required={false}
         loading={seriesLoading}
       />
-      <TextField
-        sx={{ mt: 2 }}
-        fullWidth
-        label={t('Series number')}
-        value={seriesId ? seriesNumber : ''}
-        disabled={!seriesId}
-        onChange={({ target: { value } }) => setSeriesNumber(value)}
-      />
+      {seriesId && (
+        <TextField
+          sx={{ mt: 2 }}
+          fullWidth
+          label={t('Series number')}
+          value={seriesId ? seriesNumber : ''}
+          disabled={!seriesId}
+          onChange={({ target: { value } }) => setSeriesNumber(value)}
+        />
+      )}
       {modified && (
         <Stack direction='row' spacing={1} mt={1}>
           <Button variant='outlined' onClick={handleCancel}>
