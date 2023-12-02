@@ -16,6 +16,9 @@ export class Settings {
 
   @Prop()
   language: string;
+
+  @Prop()
+  theme: string;
 }
 
 export const SettingsSchema = SchemaFactory.createForClass(Settings);
