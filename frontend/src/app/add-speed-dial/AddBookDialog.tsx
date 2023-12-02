@@ -1,15 +1,14 @@
 import { useState } from 'react';
-import { Stack, TextField } from '@mui/material';
+import { Stack } from '@mui/material';
 import CustomDialog from '@/components/common/CustomDialog';
 import { useAppDispatch } from '@/store';
 import { addSnackbar } from '@/store/features/snackbars';
-import { useAuthorsGetQuery, useBooksCreateMutation, useReadersGetQuery, useSeriesGetQuery } from '@/api/api';
-import CustomComboBox from '@/components/common/CustomComboBox';
+import { BookInfoDto, useBooksCreateMutation } from '@/api/api';
 import { useTranslation } from 'react-i18next';
 import getErrorMessage from '@/utils/getErrorMessage';
 import CustomSwitch from '@/components/common/CustomSwitch';
 import { useNavigate } from 'react-router-dom';
-import MultiSelect from '@/components/common/MultiSelect';
+import BookInfoEditForm from '@/components/book-info-edit-form';
 
 interface AddBookDialogProps {
   open: boolean;
@@ -21,18 +20,12 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
   const [name, setName] = useState('');
   const [authors, setAuthors] = useState<string[]>([]);
   const [readers, setReaders] = useState<string[]>([]);
-  const [seriesId, setSeriesId] = useState('');
-  const [seriesNumber, setSeriesNumber] = useState('');
+  const [series, setSeries] = useState<BookInfoDto['series']>([]);
   const [gotoBookEditPage, setGotoBookEditPage] = useState(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data: authorsList = [], isLoading: authorsLoading, isError: authorsError } = useAuthorsGetQuery();
-  const { data: readersList = [], isLoading: readersLoading, isError: readersError } = useReadersGetQuery();
-  const { data: seriesList = [], isLoading: seriesLoading, isError: seriesError } = useSeriesGetQuery();
   const [create] = useBooksCreateMutation();
 
-  const loading = authorsLoading || readersLoading || seriesLoading;
-  const error = authorsError || readersError || seriesError;
   const valid = !!name && authors.length !== 0 && readers.length !== 0;
 
   const handleCreate = async () => {
@@ -42,7 +35,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
           name,
           authors,
           readers,
-          series: seriesId ? [{ id: seriesId, number: seriesNumber }] : [],
+          series,
         },
       }).unwrap();
       if (gotoBookEditPage) {
@@ -59,8 +52,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
     setName('');
     setAuthors([]);
     setReaders([]);
-    setSeriesId('');
-    setSeriesNumber('');
+    setSeries([]);
   };
 
   return (
@@ -70,49 +62,18 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
       close={handleClose}
       onConfirm={handleCreate}
       confirmButtonText={t('Create')}
-      confirmButtonProps={{ disabled: !valid || loading || error }}
+      confirmButtonProps={{ disabled: !valid }}
       content={
-        <Stack spacing={2} sx={{ mt: 1 }}>
-          <TextField
-            fullWidth
-            required
-            label={t('Name')}
-            value={name}
-            onChange={({ target: { value } }) => setName(value)}
-            onKeyDown={e => e.stopPropagation()}
-            error={!name}
-          />
-          <MultiSelect
-            list={authorsList}
-            label={t('Author')}
-            values={authors}
-            onChange={setAuthors}
-            required
-            selectOptionsText={t('Select authors')}
-            noOptionsText={t('No authors')}
-          />
-          <MultiSelect
-            list={readersList}
-            label={t('Reader')}
-            values={readers}
-            onChange={setReaders}
-            required
-            selectOptionsText={t('Select readers')}
-            noOptionsText={t('No readers')}
-          />
-          <CustomComboBox
-            options={seriesList}
-            label={t('Series')}
-            value={seriesId}
-            setValue={setSeriesId}
-            required={false}
-          />
-          <TextField
-            fullWidth
-            label={t('Series number')}
-            value={seriesId ? seriesNumber : ''}
-            disabled={!seriesId}
-            onChange={({ target: { value } }) => setSeriesNumber(value)}
+        <Stack spacing={2}>
+          <BookInfoEditForm
+            name={name}
+            setName={setName}
+            authors={authors}
+            setAuthors={setAuthors}
+            readers={readers}
+            setReaders={setReaders}
+            series={series}
+            setSeries={setSeries}
           />
           <CustomSwitch label={t('Goto book edit page')} checked={gotoBookEditPage} onChange={setGotoBookEditPage} />
         </Stack>
