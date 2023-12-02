@@ -17,6 +17,10 @@ export interface MultiSelectProps extends Omit<TextFieldProps, 'onChange' | 'val
     id: string;
     name: string;
   }[];
+  extraOptions?: {
+    id: string;
+    name: string;
+  }[];
   limitTags?: number;
   onChange(values: string[]): void | Promise<unknown>;
   selectOptionsText?: string;
@@ -30,6 +34,7 @@ export interface MultiSelectProps extends Omit<TextFieldProps, 'onChange' | 'val
 const MultiSelect: FC<MultiSelectProps> = ({
   values,
   list,
+  extraOptions,
   limitTags = 3,
   variant = 'outlined',
   onChange,
@@ -53,6 +58,23 @@ const MultiSelect: FC<MultiSelectProps> = ({
 
     return null;
   }, [values, required, disabled]);
+
+  const options = useMemo(() => {
+    const result = [...list];
+    for (const id of values) {
+      if (result.some(entry => entry.id === id)) {
+        continue;
+      }
+      const extraEntry = extraOptions?.find(entry => entry.id === id);
+      if (extraEntry) {
+        result.push(extraEntry);
+        continue;
+      }
+      result.push({ id, name: id });
+    }
+
+    return result;
+  }, [list, extraOptions, values]);
 
   const [focus, setFocus] = useState(false);
 
@@ -95,9 +117,9 @@ const MultiSelect: FC<MultiSelectProps> = ({
       multiple
       limitTags={limitTags}
       openOnFocus
-      options={list.map(({ id }) => id)}
+      options={options.map(({ id }) => id)}
       getOptionLabel={option => {
-        return list.find(({ id }) => id === option)?.name || `#${option}`;
+        return options.find(({ id }) => id === option)?.name || `#${option}`;
       }}
       onChange={(_e, values) => handleChange(values)}
       value={values}
