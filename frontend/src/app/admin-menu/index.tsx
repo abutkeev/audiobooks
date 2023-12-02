@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { AdminPanelSettings } from '@mui/icons-material';
-import { IconButton, Menu } from '@mui/material';
+import { Menu } from '@mui/material';
 import useAuthData from '@/hooks/useAuthData';
 import UsersMenuItem from './UsersMenuItem';
 import ChatsMenuItem from './ChatsMenuItem';
+import AppbarMenuButton from '../app-bar/AppbarMenuButton';
 
 export interface AdminMenuItemProps {
   closeMenu(): void;
@@ -23,10 +24,10 @@ const AdminMenu: React.FC = () => {
 
   return (
     <>
-      <IconButton color='inherit' onClick={({ currentTarget }) => setMenuAnchor(currentTarget)}>
+      <AppbarMenuButton menuAhchor={menuAhchor} setMenuAnchor={setMenuAnchor}>
         <AdminPanelSettings />
-      </IconButton>
-      <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
+      </AppbarMenuButton>
+      <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu} sx={{ mt: 1 }}>
         <UsersMenuItem closeMenu={closeMenu} />
         <ChatsMenuItem closeMenu={closeMenu} />
       </Menu>

@@ -16,6 +16,7 @@ import LogoutMenuItem from './LogoutMenuItem';
 import FriendsMenuItem from './FriendsMenuItem';
 import SettingsMenuItem from './settings/SettingsMenuItem';
 import SettingsDialog from './settings/SettingsDialog';
+import AppbarMenuButton from '../app-bar/AppbarMenuButton';
 
 export interface AccountMenuItemProps {
   closeMenu(): void;
@@ -63,7 +64,7 @@ const AccountMenu: React.FC = () => {
 
   return (
     <>
-      <IconButton color='inherit' onClick={({ currentTarget }) => setMenuAnchor(currentTarget)}>
+      <AppbarMenuButton menuAhchor={menuAhchor} setMenuAnchor={setMenuAnchor}>
         <Badge
           variant={friendsRequests ? 'standard' : 'dot'}
           badgeContent={friendsRequests || undefined}
@@ -71,8 +72,8 @@ const AccountMenu: React.FC = () => {
         >
           <AccountCircle />
         </Badge>
-      </IconButton>
-      <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
+      </AppbarMenuButton>
+      <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu} sx={{ mt: 1 }}>
         <ProfileMenuItem setShowDialog={setShowProfileDialog} closeMenu={closeMenu} />
         <SettingsMenuItem setShowDialog={setShowSettingsDialog} closeMenu={closeMenu} />
         <ChangePasswordMenuItem setShowDialog={setShowChangePasswordDialog} closeMenu={closeMenu} />
