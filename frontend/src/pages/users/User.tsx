@@ -1,15 +1,4 @@
-import { ExpandMore } from '@mui/icons-material';
-import {
-  Accordion,
-  AccordionActions,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  FormControl,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { FormControl, Stack, TextField, Typography } from '@mui/material';
 import { UserDto, useUsersRemoveMutation, useUsersUpdateMutation } from '@/api/api';
 import CustomPassword from '@/components/common/CustomPassword';
 import useAuthData from '@/hooks/useAuthData';
@@ -18,12 +7,12 @@ import AdminSwitch from './AdminSwitch';
 import DeleteButton from '@/components/common/DeleteButton';
 import { useState } from 'react';
 import useUpdatingState from '@/hooks/useUpdatingState';
-import ProgressButton from '@/components/common/ProgressButton';
 import { useAppDispatch } from '@/store';
 import { addSnackbar } from '@/store/features/snackbars';
 import getErrorMessage from '@/utils/getErrorMessage';
 import LoginTextField from '@/components/login-text-field/LoginTextField';
 import { useTranslation } from 'react-i18next';
+import CustomAccordion from '@/components/common/CustomAccordion';
 
 const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
   const { t } = useTranslation();
@@ -33,7 +22,6 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
   const [loginValid, setLoginValid] = useState(true);
   const [newName, setNewName] = useUpdatingState(name);
   const [password, setPassword] = useState('');
-  const [expanded, setExpanded] = useState(false);
   const [update] = useUsersUpdateMutation();
   const [remove] = useUsersRemoveMutation();
 
@@ -67,8 +55,8 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
   const formatUser = () => `${login} ${name && ` (${name})`}`;
 
   return (
-    <Accordion expanded={expanded || modified} onChange={(_, v) => setExpanded(v || modified)}>
-      <AccordionSummary expandIcon={<ExpandMore />}>
+    <CustomAccordion
+      summary={
         <Stack direction='row' flexGrow={1} alignItems='center'>
           <Typography flexGrow={1} noWrap>
             {formatUser()}
@@ -82,8 +70,8 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
             />
           )}
         </Stack>
-      </AccordionSummary>
-      <AccordionDetails>
+      }
+      details={
         <FormControl fullWidth>
           <Stack spacing={2}>
             <Typography variant='body2'>ID: {id}</Typography>
@@ -101,20 +89,12 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
             <AdminSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
           </Stack>
         </FormControl>
-      </AccordionDetails>
-      {modified && (
-        <AccordionActions>
-          <Stack direction='row' spacing={1}>
-            <Button variant='outlined' onClick={handleCancel}>
-              {t('Cancel')}
-            </Button>
-            <ProgressButton disabled={!loginValid} onClick={handleUpdate}>
-              {t('Update')}
-            </ProgressButton>
-          </Stack>
-        </AccordionActions>
-      )}
-    </Accordion>
+      }
+      modified={modified}
+      valid={loginValid}
+      handleCancel={handleCancel}
+      handleUpdate={handleUpdate}
+    />
   );
 };
 
