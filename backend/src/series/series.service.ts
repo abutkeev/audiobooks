@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CommonService } from 'src/common/common.service';
 import SeriesDto from './dto/SeriesDto';
 import { validateSync } from 'class-validator';
@@ -68,6 +68,21 @@ export class SeriesService {
     } catch (e) {
       logger.error(e);
       throw new InternalServerErrorException(`can't create ${instanceName} ${name}`);
+    }
+  }
+
+  edit(id: string, data: NewSeriesDto) {
+    try {
+      const storage = this.get();
+      const index = storage.findIndex(item => item.id === id);
+      if (index === -1) {
+        throw new NotFoundException(`series ${id} not found`);
+      }
+      storage[index] = { id, ...data };
+      this.commonService.writeJSONFile(configName, storage);
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't edit ${instanceName} ${id}`);
     }
   }
 }
