@@ -6,8 +6,7 @@ import {
   useReadersGetQuery,
   useSeriesGetQuery,
 } from '@/api/api';
-import { Button, Stack, TextField } from '@mui/material';
-import CustomComboBox from '@/components/common/CustomComboBox';
+import { Button, Stack, TextField, TextFieldProps } from '@mui/material';
 import ErrorWrapper from '@/components/common/ErrorWrapper';
 import { addSnackbar } from '@/store/features/snackbars';
 import { useAppDispatch } from '@/store';
@@ -30,18 +29,32 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
   const [name, setName] = useUpdatingState(info.name);
   const [authors, setAuthors] = useUpdatingState(info.authors);
   const [readers, setReaders] = useUpdatingState(info.readers);
-  const [seriesId, setSeriesId] = useUpdatingState(info.series[0]?.id || '');
-  const [seriesNumber, setSeriesNumber] = useUpdatingState(info.series[0]?.number || '');
+  const [series, setSeries] = useUpdatingState(info.series);
   const dispatch = useAppDispatch();
 
   const error = authorsError || readersError || seriesError;
-  const modified =
-    name !== info.name ||
-    authors !== info.authors ||
-    readers !== info.readers ||
-    seriesId !== (info.series[0]?.id || '') ||
-    seriesNumber !== (info.series[0]?.number || '');
+  const modified = name !== info.name || authors !== info.authors || readers !== info.readers || series !== info.series;
   const valid = !!name && authors.length !== 0 && readers.length !== 0;
+
+  const handleSeriesChange = (ids: string[]) => {
+    const newSeries = series.filter(({ id }) => ids.includes(id));
+    for (const id of ids) {
+      if (!newSeries.some(entry => entry.id === id)) {
+        newSeries.push({ id });
+      }
+    }
+    setSeries(newSeries);
+  };
+
+  const getSeriesNumberChangeHandler =
+    (id: string): TextFieldProps['onChange'] =>
+    ({ target: { value } }) => {
+      const index = series.findIndex(entry => entry.id === id);
+      if (index === -1) return;
+      const newSeries = [...series];
+      newSeries[index] = { id, number: value };
+      setSeries(newSeries);
+    };
 
   const handleSave = () => {
     const { cover } = info;
@@ -50,7 +63,7 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
         name,
         authors,
         readers,
-        series: seriesId ? [{ id: seriesId, number: seriesNumber }] : [],
+        series,
         cover,
       };
       save({ id, bookDto: { info, chapters } }).unwrap();
@@ -60,12 +73,16 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
     }
   };
 
+  const getSeriesName = (id: string) => {
+    const { name } = seriesList.find(entry => entry.id === id) || {};
+    return name || id;
+  };
+
   const handleCancel = () => {
     setName(info.name);
     setAuthors(info.authors);
     setReaders(info.readers);
-    setSeriesId(info.series[0]?.id || '');
-    setSeriesNumber(info.series[0]?.number || '');
+    setSeries(info.series);
   };
 
   return (
@@ -100,24 +117,22 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
           selectOptionsText={t('Select readers')}
           noOptionsText={t('No readers')}
         />
-        <CustomComboBox
-          options={seriesList}
+        <MultiSelect
+          list={seriesList}
           label={t('Series')}
-          value={seriesId}
-          setValue={setSeriesId}
-          required={false}
+          values={series.map(({ id }) => id)}
+          onChange={handleSeriesChange}
           loading={seriesLoading}
         />
-        {seriesId && (
+        {series.map(({ id, number }) => (
           <TextField
-            sx={{ mt: 2 }}
+            key={id}
             fullWidth
-            label={t('Series number')}
-            value={seriesId ? seriesNumber : ''}
-            disabled={!seriesId}
-            onChange={({ target: { value } }) => setSeriesNumber(value)}
+            label={t('Number in {{series}} series', { series: getSeriesName(id) })}
+            value={number || ''}
+            onChange={getSeriesNumberChangeHandler(id)}
           />
-        )}
+        ))}
         {modified && (
           <Stack direction='row' spacing={1} mt={1}>
             <Button variant='outlined' onClick={handleCancel}>
