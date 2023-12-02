@@ -1,11 +1,12 @@
-import { SeriesDto, useAuthorsGetQuery, useSeriesEditMutation } from '@/api/api';
+import { SeriesDto, useAuthorsGetQuery, useSeriesEditMutation, useSeriesRemoveMutation } from '@/api/api';
 import CustomAccordion from '@/components/common/CustomAccordion';
+import DeleteButton from '@/components/common/DeleteButton';
 import MultiSelect from '@/components/common/MultiSelect';
 import useUpdatingState from '@/hooks/useUpdatingState';
 import { useAppDispatch } from '@/store';
 import { addSnackbar } from '@/store/features/snackbars';
 import getErrorMessage from '@/utils/getErrorMessage';
-import { FormControl, Stack, TextField } from '@mui/material';
+import { FormControl, Stack, TextField, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -19,6 +20,7 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
   const [authors, setAuthors] = useUpdatingState(item.authors);
   const { data: authorsList = [], isLoading } = useAuthorsGetQuery();
   const [edit] = useSeriesEditMutation();
+  const [remove] = useSeriesRemoveMutation();
   const dispatch = useAppDispatch();
 
   const modified = name !== item.name || authors !== item.authors;
@@ -37,9 +39,28 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
     setAuthors(item.authors);
   };
 
+  const handleRemove = async () => {
+    try {
+      await remove({ id: item.id }).unwrap();
+    } catch (e) {
+      dispatch(addSnackbar({ severity: 'error', text: getErrorMessage(e, t('Series remove failed')) }));
+    }
+  };
+
   return (
     <CustomAccordion
-      summary={item.name}
+      summary={
+        <Stack direction='row' flexGrow={1} alignItems='center'>
+          <Typography flexGrow={1} noWrap>
+            {item.name}
+          </Typography>
+          <DeleteButton
+            confirmationTitle={t('Remove series?')}
+            confirmationBody={t('Remove series {{name}}?', { name: item.name })}
+            onConfirm={handleRemove}
+          />
+        </Stack>
+      }
       details={
         <FormControl fullWidth>
           <Stack spacing={2}>
