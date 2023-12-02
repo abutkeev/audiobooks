@@ -53,6 +53,8 @@ const SeriesEditForm: React.FC<SeriesEditFormProps> = ({ series, setSeries, auth
         values={series.map(({ id }) => id)}
         onChange={handleSeriesChange}
         loading={seriesLoading}
+        selectOptionsText={t('Select series')}
+        noOptionsText={t('No series')}
       />
       {series.map(({ id, number }) => (
         <TextField
