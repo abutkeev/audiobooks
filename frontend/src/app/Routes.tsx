@@ -14,6 +14,7 @@ import NotActive from '@/pages/NotActive';
 import SignUp from '@/pages/sign-up';
 import Friends from '@/pages/friends';
 import Chats from '@/pages/chats';
+import Series from '@/pages/series';
 
 const userRoutes: RouteObject[] = [
   {
@@ -46,6 +47,10 @@ const adminRoutes: RouteObject[] = [
   {
     path: '/chats',
     element: <Chats />,
+  },
+  {
+    path: '/series',
+    element: <Series />,
   },
   {
     path: '/edit/:id',

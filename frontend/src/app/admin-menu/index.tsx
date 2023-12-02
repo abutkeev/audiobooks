@@ -5,6 +5,7 @@ import useAuthData from '@/hooks/useAuthData';
 import UsersMenuItem from './UsersMenuItem';
 import ChatsMenuItem from './ChatsMenuItem';
 import AppbarMenuButton from '../app-bar/AppbarMenuButton';
+import SeriesMenuItem from './SeriesMenuItem';
 
 export interface AdminMenuItemProps {
   closeMenu(): void;
@@ -30,6 +31,7 @@ const AdminMenu: React.FC = () => {
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu} sx={{ mt: 1 }}>
         <UsersMenuItem closeMenu={closeMenu} />
         <ChatsMenuItem closeMenu={closeMenu} />
+        <SeriesMenuItem closeMenu={closeMenu} />
       </Menu>
     </>
   );
