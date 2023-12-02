@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { SeriesService } from './series.service';
 import SeriesDto from './dto/SeriesDto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -29,6 +29,14 @@ export class SeriesController {
   @ApiOperation({ description: 'Edit series' })
   edit(@Param('id') id: string, @Body() body: NewSeriesDto): boolean {
     this.service.edit(id, body);
+    return true;
+  }
+
+  @Admin()
+  @Delete(':id')
+  @ApiOperation({ description: 'Remove series' })
+  remove(@Param('id') id: string): boolean {
+    this.service.remove(id);
     return true;
   }
 }

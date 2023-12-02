@@ -5,6 +5,7 @@ import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import NewSeriesDto from './dto/NewSeriesDto';
 import OldSeriesDto from './dto/OldSeriesDto';
+import { BooksService } from 'src/books/books.service';
 
 const logger = new Logger('SeriesService');
 const configName = 'series.json';
@@ -12,7 +13,10 @@ const instanceName = 'series';
 
 @Injectable()
 export class SeriesService {
-  constructor(private commonService: CommonService) {}
+  constructor(
+    private commonService: CommonService,
+    private booksService: BooksService
+  ) {}
 
   private check_config(config: unknown): config is (OldSeriesDto | SeriesDto)[] {
     if (!Array.isArray(config)) {
@@ -83,6 +87,30 @@ export class SeriesService {
     } catch (e) {
       logger.error(e);
       throw new InternalServerErrorException(`can't edit ${instanceName} ${id}`);
+    }
+  }
+
+  remove(series_id: string) {
+    try {
+      const storage = this.get();
+      const newStorage = storage.filter(item => item.id !== series_id);
+      const books = this.booksService.getList();
+      for (const { id } of books) {
+        const book = this.booksService.get(id);
+        if (!book.info.series.some(series => series.id === series_id)) {
+          continue;
+        }
+        const { series, ...other } = book.info;
+        const info = {
+          series: series.filter(entry => entry.id !== series_id),
+          ...other,
+        };
+        this.booksService.edit(id, { info, chapters: book.chapters });
+      }
+      this.commonService.writeJSONFile(configName, newStorage);
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't edit ${instanceName} ${series_id}`);
     }
   }
 }
