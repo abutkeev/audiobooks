@@ -1,9 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import { useAppSelector } from '@/store';
 
-const useAuthData = () => {
-  const { token } = useAppSelector(({ auth }) => auth);
-
+export const parseToken = (token: string | null) => {
   if (!token) return undefined;
 
   const result = jwtDecode(token);
@@ -28,6 +26,11 @@ const useAuthData = () => {
       admin,
     };
   }
+};
+
+const useAuthData = () => {
+  const { token } = useAppSelector(({ auth }) => auth);
+  return parseToken(token);
 };
 
 export default useAuthData;

@@ -1,7 +1,12 @@
 import { PayloadAction, createListenerMiddleware, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { api } from '@/api/api';
+import { parseToken } from '@/hooks/useAuthData';
 
 const localStorageTokenName = 'authToken';
+
+type AuthStateSlice = {
+  [authSlice.name]: ReturnType<typeof authSlice.getInitialState>;
+};
 
 const initialState = {
   token: localStorage.getItem(localStorageTokenName),
@@ -20,11 +25,16 @@ const authSlice = createSlice({
 
 export const { setAuthToken } = authSlice.actions;
 
-const mw = createListenerMiddleware();
+const mw = createListenerMiddleware<AuthStateSlice>();
 mw.startListening({
   actionCreator: setAuthToken,
-  effect: (_, { dispatch }) => {
-    dispatch(api.util.resetApiState());
+  effect: ({ payload }, { dispatch, getState }) => {
+    const oldAuth = parseToken(getState().auth.token);
+    const newAuth = parseToken(payload);
+
+    if (!oldAuth || !newAuth || oldAuth.admin !== newAuth.admin || oldAuth.enabled !== newAuth.enabled) {
+      dispatch(api.util.resetApiState());
+    }
   },
 });
 
