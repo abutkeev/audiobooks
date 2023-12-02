@@ -13,8 +13,6 @@ import ChangePasswordMenuItem from './change-password/ChangePasswordMenuItem';
 import LinkedAccountsMenuItem from './linked-accounts/LinkedAccountsMenuItem';
 import SecurityKeysMenuItem from './security-keys/SecurityKeysMenuItem';
 import LogoutMenuItem from './LogoutMenuItem';
-import UsersMenuItem from './admin/UsersMenuItem';
-import ChatsMenuItem from './admin/ChatsMenuItem';
 import FriendsMenuItem from './FriendsMenuItem';
 import SettingsMenuItem from './settings/SettingsMenuItem';
 import SettingsDialog from './settings/SettingsDialog';
@@ -78,8 +76,6 @@ const AccountMenu: React.FC = () => {
         <ProfileMenuItem setShowDialog={setShowProfileDialog} closeMenu={closeMenu} />
         <SettingsMenuItem setShowDialog={setShowSettingsDialog} closeMenu={closeMenu} />
         <ChangePasswordMenuItem setShowDialog={setShowChangePasswordDialog} closeMenu={closeMenu} />
-        <UsersMenuItem closeMenu={closeMenu} />
-        <ChatsMenuItem closeMenu={closeMenu} />
         <FriendsMenuItem friendsRequests={friendsRequests} closeMenu={closeMenu} />
         <LinkedAccountsMenuItem setShowDialog={setShowLinkedAccountsDialog} closeMenu={closeMenu} />
         <SecurityKeysMenuItem setShowDialog={setShowSecurityKeysDialog} closeMenu={closeMenu} />

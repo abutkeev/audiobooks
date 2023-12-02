@@ -7,6 +7,7 @@ import { currentBookVarName } from '@/pages/Home';
 import { useAppSelector } from '@/store';
 import MobileAppBar from './MobileAppBar';
 import AccountMenu from '../account-menu';
+import AdminMenu from '../admin-menu';
 
 const AppBar: React.FC = () => {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const AppBar: React.FC = () => {
           </Typography>
           <Box flexGrow={1} />
           <Search />
+          <AdminMenu />
           <AccountMenu />
         </Toolbar>
       </MuiAppBar>

@@ -1,14 +1,12 @@
 import { FC } from 'react';
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
-import { AccountMenuItemProps } from '..';
-import { AdminPanelSettings } from '@mui/icons-material';
-import useAuthData from '@/hooks/useAuthData';
+import { AdminMenuItemProps } from '.';
+import { People } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const UsersMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {
+const UsersMenuItem: FC<AdminMenuItemProps> = ({ closeMenu }) => {
   const { t } = useTranslation();
-  const { admin } = useAuthData()!;
   const navigate = useNavigate();
 
   const handleNavigateToUsersPage = () => {
@@ -16,12 +14,10 @@ const UsersMenuItem: FC<AccountMenuItemProps> = ({ closeMenu }) => {
     closeMenu();
   };
 
-  if (!admin) return null;
-
   return (
     <MenuItem onClick={handleNavigateToUsersPage}>
       <ListItemIcon>
-        <AdminPanelSettings />
+        <People />
       </ListItemIcon>
       <ListItemText>{t('Users')}</ListItemText>
     </MenuItem>
