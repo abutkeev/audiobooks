@@ -66,8 +66,11 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
           return (
             <Paper square key={instanceId} sx={paperSx} onClick={getPlayerStateChangeHandler(currentChapter, position)}>
               <Typography>
-                {t('Current chapter')} {formatChapterName(currentChapter)}, {t('position')}: {formatTime(position)},{' '}
-                {t('updated')}: {formatUpdated(updated)}
+                {t('Current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
+                  currentChapter: formatChapterName(currentChapter),
+                  position: formatTime(position),
+                  updated: formatUpdated(updated),
+                })}
               </Typography>
             </Paper>
           );
@@ -82,10 +85,15 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
                 onClick={getPlayerStateChangeHandler(currentChapter, position)}
               >
                 <Typography>
-                  {t('Friend')} {getFriendDisplayName({ uid: friendId, login: friendLogin, name: friendName })},{' '}
-                  {t('current chapter')}{' '}
-                  {formatChapterName(currentChapter)}, {t('position')}: {formatTime(position)}, {t('updated')}:{' '}
-                  {formatUpdated(updated)}
+                  {t(
+                    'Friend {{friend}}, current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}',
+                    {
+                      friend: getFriendDisplayName({ uid: friendId, login: friendLogin, name: friendName }),
+                      currentChapter: formatChapterName(currentChapter),
+                      position: formatTime(position),
+                      updated: formatUpdated(updated),
+                    }
+                  )}
                 </Typography>
               </Paper>
             );
