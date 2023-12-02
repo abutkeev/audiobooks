@@ -68,7 +68,10 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
           </Typography>
           <DeleteButton
             confirmationTitle={t('Remove series?')}
-            confirmationBody={t('Remove series {{name}}?', { name: item.name })}
+            confirmationBody={t('Remove series {{name}} ({{count}} books)?', {
+              name: item.name,
+              count: booksInSeries.length,
+            })}
             onConfirm={handleRemove}
           />
         </Stack>
