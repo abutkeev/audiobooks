@@ -1,4 +1,10 @@
-import { SeriesDto, useAuthorsGetQuery, useSeriesEditMutation, useSeriesRemoveMutation } from '@/api/api';
+import {
+  SeriesDto,
+  useAuthorsGetQuery,
+  useBooksGetQuery,
+  useSeriesEditMutation,
+  useSeriesRemoveMutation,
+} from '@/api/api';
 import CustomAccordion from '@/components/common/CustomAccordion';
 import DeleteButton from '@/components/common/DeleteButton';
 import MultiSelect from '@/components/common/MultiSelect';
@@ -7,8 +13,9 @@ import { useAppDispatch } from '@/store';
 import { addSnackbar } from '@/store/features/snackbars';
 import getErrorMessage from '@/utils/getErrorMessage';
 import { FormControl, Stack, TextField, Typography } from '@mui/material';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import BooksInSeries from './BooksInSeries';
 
 interface SeriesItemProps {
   item: SeriesDto;
@@ -22,6 +29,11 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
   const [edit] = useSeriesEditMutation();
   const [remove] = useSeriesRemoveMutation();
   const dispatch = useAppDispatch();
+  const { data: books = [] } = useBooksGetQuery();
+  const booksInSeries = useMemo(
+    () => books.filter(({ info }) => info.series.some(({ id }) => id === item.id)),
+    [books]
+  );
 
   const modified = name !== item.name || authors !== item.authors;
   const valid = !!name && authors.length !== 0;
@@ -52,7 +64,7 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
       summary={
         <Stack direction='row' flexGrow={1} alignItems='center'>
           <Typography flexGrow={1} noWrap>
-            {item.name}
+            {item.name} ({t('{{count}} books', { count: booksInSeries.length })})
           </Typography>
           <DeleteButton
             confirmationTitle={t('Remove series?')}
@@ -81,6 +93,7 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
               selectOptionsText={t('Select authors')}
               noOptionsText={t('No authors')}
             />
+            <BooksInSeries books={booksInSeries} />
           </Stack>
         </FormControl>
       }
