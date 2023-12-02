@@ -9,8 +9,8 @@ interface CustomAccordionProps {
   details: ReactNode;
   modified?: boolean;
   valid?: boolean;
-  handleCancel(): void;
-  handleUpdate(): void | Promise<void>;
+  handleCancel?(): void;
+  handleUpdate?(): void | Promise<void>;
 }
 
 const CustomAccordion: FC<CustomAccordionProps> = ({
@@ -43,12 +43,16 @@ const CustomAccordion: FC<CustomAccordionProps> = ({
       {modified && (
         <AccordionActions>
           <Stack direction='row' spacing={1}>
-            <Button variant='outlined' onClick={handleCancel}>
-              {t('Cancel')}
-            </Button>
-            <ProgressButton disabled={!valid} onClick={handleUpdate}>
-              {t('Update')}
-            </ProgressButton>
+            {handleCancel && (
+              <Button variant='outlined' onClick={handleCancel}>
+                {t('Cancel')}
+              </Button>
+            )}{' '}
+            {handleUpdate && (
+              <ProgressButton disabled={!valid} onClick={handleUpdate}>
+                {t('Update')}
+              </ProgressButton>
+            )}
           </Stack>
         </AccordionActions>
       )}
