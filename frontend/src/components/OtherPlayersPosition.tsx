@@ -83,7 +83,7 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
               >
                 <Typography>
                   {t('Friend')} {getFriendDisplayName({ uid: friendId, login: friendLogin, name: friendName })},{' '}
-                  {t('current chapter')}
+                  {t('current chapter')}{' '}
                   {formatChapterName(currentChapter)}, {t('position')}: {formatTime(position)}, {t('updated')}:{' '}
                   {formatUpdated(updated)}
                 </Typography>
