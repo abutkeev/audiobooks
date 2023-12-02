@@ -65,7 +65,7 @@ const BookInfoEditForm: React.FC<BookInfoEditFormProps> = ({
           selectOptionsText={t('Select readers')}
           noOptionsText={t('No readers')}
         />
-        <SeriesEditForm series={series} setSeries={setSeries} />
+        <SeriesEditForm series={series} setSeries={setSeries} authors={authors} />
       </Stack>
     </ErrorWrapper>
   );

@@ -2,15 +2,22 @@ import { BookInfoDto, useSeriesGetQuery } from '@/api/api';
 import { Stack, TextField, TextFieldProps } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import MultiSelect from '@/components/common/MultiSelect';
+import { useMemo } from 'react';
 
 interface SeriesEditFormProps {
   series: BookInfoDto['series'];
   setSeries(v: BookInfoDto['series']): void;
+  authors: string[];
 }
 
-const SeriesEditForm: React.FC<SeriesEditFormProps> = ({ series, setSeries }) => {
+const SeriesEditForm: React.FC<SeriesEditFormProps> = ({ series, setSeries, authors }) => {
   const { t } = useTranslation();
   const { data: seriesList = [], isLoading: seriesLoading } = useSeriesGetQuery();
+
+  const seriesFiltred = useMemo(
+    () => seriesList.filter(entry => authors.some(author_id => entry.authors.some(id => id === author_id))),
+    [seriesList, authors]
+  );
 
   const handleSeriesChange = (ids: string[]) => {
     const newSeries = series.filter(({ id }) => ids.includes(id));
@@ -40,7 +47,8 @@ const SeriesEditForm: React.FC<SeriesEditFormProps> = ({ series, setSeries }) =>
   return (
     <Stack spacing={2}>
       <MultiSelect
-        list={seriesList}
+        list={seriesFiltred}
+        extraOptions={seriesList}
         label={t('Series')}
         values={series.map(({ id }) => id)}
         onChange={handleSeriesChange}
