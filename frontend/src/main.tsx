@@ -7,8 +7,6 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import useCreateTheme from './hooks/useCreateTheme';
-import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import Routes from './app/Routes';
 import i18next from 'i18next';
@@ -16,13 +14,13 @@ import { initReactI18next } from 'react-i18next';
 import languageDetector from './locales/languageDetector';
 import en from './locales/en/translation.json';
 import ru from './locales/ru/translation.json';
+import ThemeProvider from './app/ThemeProvider';
 
 const App: React.FC = () => {
-  const theme = useCreateTheme();
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider>
           <CssBaseline />
           <Routes />
         </ThemeProvider>
