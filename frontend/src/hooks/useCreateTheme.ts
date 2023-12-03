@@ -1,5 +1,5 @@
 import { createTheme, useMediaQuery } from '@mui/material';
-import { blue, blueGrey, grey } from '@mui/material/colors';
+import { blue, blueGrey, green, grey, red } from '@mui/material/colors';
 import { useMemo } from 'react';
 import useSelectedTheme from './useSelectedTheme';
 
@@ -27,7 +27,17 @@ const useCreateTheme = () => {
                 },
               },
             }
-          : { palette: { mode: 'light' } }
+          : {
+              palette: { mode: 'light' },
+              components: {
+                MuiBadge: {
+                  styleOverrides: {
+                    colorSuccess: { backgroundColor: green[500] },
+                    colorError: { backgroundColor: red[500] },
+                  },
+                },
+              },
+            }
       ),
     [darkMode]
   );
