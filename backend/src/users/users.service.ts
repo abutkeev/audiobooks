@@ -13,6 +13,7 @@ import { FriendRequests } from 'src/friends/schemas/friend-requests.schema';
 import { Friend } from 'src/friends/schemas/friends.schema';
 import { Position } from 'src/position/schemas/position.schema';
 import { Settings } from 'src/profile/schemas/settings.schema';
+import { TgService } from 'src/auth/tg/tg.service';
 
 const encryptPassword = (password: string) => {
   const salt = bcrypt.genSaltSync();
@@ -42,7 +43,10 @@ export class UsersService {
     @InjectModel(Settings.name) private settingsModel: Model<Settings>,
 
     @Inject(forwardRef(() => EventsService))
-    private eventsService: EventsService
+    private eventsService: EventsService,
+
+    @Inject(forwardRef(() => TgService))
+    private tgService: TgService
   ) {}
 
   async create({ password, ...user }: CreateUserDto): Promise<string> {
@@ -67,7 +71,13 @@ export class UsersService {
 
   async findAll(): Promise<UserDto[]> {
     const result = await this.userModel.find().exec();
-    return result.map(entry => entry.toJSON());
+    return Promise.all(
+      result.map(async entry => {
+        const user: UserDto = entry.toJSON();
+        const telegram = (await this.tgService.get(user.id))?.info;
+        return { ...user, telegram };
+      })
+    );
   }
 
   async verify(login: string, password: string): Promise<UserDto> {

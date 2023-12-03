@@ -10,6 +10,7 @@ import { FriendRequests, FriendRequestSchema } from 'src/friends/schemas/friend-
 import { Friend, FriendSchema } from 'src/friends/schemas/friends.schema';
 import { Position, PositionSchema } from 'src/position/schemas/position.schema';
 import { Settings, SettingsSchema } from 'src/profile/schemas/settings.schema';
+import { TgModule } from 'src/auth/tg/tg.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { Settings, SettingsSchema } from 'src/profile/schemas/settings.schema';
       { name: Settings.name, schema: SettingsSchema },
     ]),
     forwardRef(() => EventsModule),
+    forwardRef(() => TgModule),
   ],
   providers: [UsersService],
   exports: [UsersService, MongooseModule],

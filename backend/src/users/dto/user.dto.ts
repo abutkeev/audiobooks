@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { TelegramDataDto } from 'src/auth/tg/dto/telegram-account.dto';
 
 export class UserDto {
   @IsNotEmpty()
@@ -16,4 +17,7 @@ export class UserDto {
 
   @ApiProperty({ required: false })
   readonly admin: boolean;
+
+  @ApiProperty({ required: false })
+  readonly telegram?: TelegramDataDto;
 }

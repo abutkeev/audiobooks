@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-class TelegramDataDto {
+export class TelegramDataDto {
   @ApiProperty({ required: true })
   @IsNotEmpty()
   id: number;
