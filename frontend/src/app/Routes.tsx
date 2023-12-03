@@ -15,6 +15,7 @@ import SignUp from '@/pages/sign-up';
 import Friends from '@/pages/friends';
 import Chats from '@/pages/chats';
 import Series from '@/pages/series';
+import Authors from '@/pages/authors';
 
 const userRoutes: RouteObject[] = [
   {
@@ -51,6 +52,10 @@ const adminRoutes: RouteObject[] = [
   {
     path: '/series',
     element: <Series />,
+  },
+  {
+    path: '/authors',
+    element: <Authors />,
   },
   {
     path: '/edit/:id',
