@@ -8,11 +8,11 @@ import useSeries from '@/hooks/useSeries';
 import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-interface BooksInSeriesProps {
+interface BooksAccordionProps {
   books: BookEntryDto[];
 }
 
-const BooksInSeries: FC<BooksInSeriesProps> = ({ books }) => {
+const BooksAccordion: FC<BooksAccordionProps> = ({ books }) => {
   const { authors } = useAuthors();
   const { readers } = useReaders();
   const { series } = useSeries();
@@ -42,4 +42,4 @@ const BooksInSeries: FC<BooksInSeriesProps> = ({ books }) => {
   );
 };
 
-export default BooksInSeries;
+export default BooksAccordion;

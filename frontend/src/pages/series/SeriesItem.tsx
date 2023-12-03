@@ -15,7 +15,7 @@ import getErrorMessage from '@/utils/getErrorMessage';
 import { FormControl, Stack, TextField, Typography } from '@mui/material';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import BooksInSeries from './BooksInSeries';
+import BooksAccordion from '../../components/BooksAccordion';
 
 interface SeriesItemProps {
   item: SeriesDto;
@@ -96,7 +96,7 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
               selectOptionsText={t('Select authors')}
               noOptionsText={t('No authors')}
             />
-            <BooksInSeries books={booksInSeries} />
+            <BooksAccordion books={booksInSeries} />
           </Stack>
         </FormControl>
       }
