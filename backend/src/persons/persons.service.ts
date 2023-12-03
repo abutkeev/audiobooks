@@ -63,4 +63,15 @@ export class PersonsService {
       throw new InternalServerErrorException(`can't edit ${type} ${id}`);
     }
   }
+
+  remove(type: PersonType, id: string) {
+    try {
+      const storage = this.get(type);
+      const newStorage = storage.filter(item => item.id !== id);
+      this.commonService.writeJSONFile(getConfigName(type), newStorage);
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't remove ${type} ${id}`);
+    }
+  }
 }

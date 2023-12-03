@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Admin } from 'src/auth/admin.decorator';
 import NameDto from 'src/persons/dto/NameDto';
@@ -29,6 +29,15 @@ export class AuthorsController {
   @ApiOperation({ description: 'Edit author' })
   edit(@Param('id') id: string, @Body() { name }: NameDto): boolean {
     this.authorsService.edit(id, name);
+    return true;
+  }
+
+  @Admin()
+  @Delete(':id')
+  @ApiOperation({ description: 'Remove author' })
+  @ApiTags('books')
+  remove(@Param('id') id: string): boolean {
+    this.authorsService.remove(id);
     return true;
   }
 }
