@@ -1,4 +1,4 @@
-import { FormControl, Stack, TextField, Typography } from '@mui/material';
+import { FormControl, Link, Stack, TextField, Typography } from '@mui/material';
 import { UserDto, useUsersRemoveMutation, useUsersUpdateMutation } from '@/api/api';
 import CustomPassword from '@/components/common/CustomPassword';
 import useAuthData from '@/hooks/useAuthData';
@@ -14,7 +14,7 @@ import LoginTextField from '@/components/login-text-field/LoginTextField';
 import { useTranslation } from 'react-i18next';
 import CustomAccordion from '@/components/common/CustomAccordion';
 
-const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
+const User: React.FC<UserDto> = ({ id, login, name, enabled, admin, telegram }) => {
   const { t } = useTranslation();
   const auth = useAuthData();
   const dispatch = useAppDispatch();
@@ -75,6 +75,20 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin }) => {
         <FormControl fullWidth>
           <Stack spacing={2}>
             <Typography variant='body2'>ID: {id}</Typography>
+            {telegram && (
+              <Typography variant='body2'>
+                Telegram: {telegram.first_name} {telegram.last_name}{' '}
+                {telegram.username && (
+                  <>
+                    (
+                    <Link href={`https://t.me/${telegram.username}`} target='_blank'>
+                      {telegram.username}
+                    </Link>
+                    )
+                  </>
+                )}
+              </Typography>
+            )}
             <TextField label={t('Name')} value={newName} onChange={({ target: { value } }) => setNewName(value)} />
             <LoginTextField
               login={newLogin}
