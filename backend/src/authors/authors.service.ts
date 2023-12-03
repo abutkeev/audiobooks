@@ -13,4 +13,8 @@ export class AuthorsService {
   create(name: string) {
     return this.personsService.create('author', name);
   }
+
+  edit(id: string, name: string) {
+    return this.personsService.edit('author', id, name);
+  }
 }

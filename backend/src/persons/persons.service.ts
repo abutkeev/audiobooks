@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { CommonService } from 'src/common/common.service';
@@ -46,6 +46,21 @@ export class PersonsService {
     } catch (e) {
       logger.error(e);
       throw new InternalServerErrorException(`can't create ${type} ${name}`);
+    }
+  }
+
+  edit(type: PersonType, id: string, name: string) {
+    try {
+      const storage = this.get(type);
+      const index = storage.findIndex(item => item.id === id);
+      if (index === -1) {
+        throw new NotFoundException(`${type} ${id} not found`);
+      }
+      storage[index] = { id, name };
+      this.commonService.writeJSONFile(getConfigName(type), storage);
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't edit ${type} ${id}`);
     }
   }
 }
