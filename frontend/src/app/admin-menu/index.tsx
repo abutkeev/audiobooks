@@ -1,23 +1,15 @@
 import { useState } from 'react';
-import { AdminPanelSettings } from '@mui/icons-material';
+import { AdminPanelSettings, Chat, LibraryBooks, People } from '@mui/icons-material';
 import { Menu } from '@mui/material';
 import useAuthData from '@/hooks/useAuthData';
-import UsersMenuItem from './UsersMenuItem';
-import ChatsMenuItem from './ChatsMenuItem';
+import NavigateMenuItem from './NavigateMenuItem';
 import AppbarMenuButton from '../app-bar/AppbarMenuButton';
-import SeriesMenuItem from './SeriesMenuItem';
-
-export interface AdminMenuItemProps {
-  closeMenu(): void;
-}
-
-export interface AdminMenuDialogItemProps extends AdminMenuItemProps {
-  setShowDialog(v: boolean): void;
-}
+import { useTranslation } from 'react-i18next';
 
 const AdminMenu: React.FC = () => {
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const { admin } = useAuthData() || {};
+  const { t } = useTranslation();
 
   const closeMenu = () => setMenuAnchor(undefined);
 
@@ -29,9 +21,9 @@ const AdminMenu: React.FC = () => {
         <AdminPanelSettings />
       </AppbarMenuButton>
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu} sx={{ mt: 1 }}>
-        <UsersMenuItem closeMenu={closeMenu} />
-        <ChatsMenuItem closeMenu={closeMenu} />
-        <SeriesMenuItem closeMenu={closeMenu} />
+        <NavigateMenuItem title={t('Users')} page='/users' icon={<People />} closeMenu={closeMenu} />
+        <NavigateMenuItem title={t('Chats')} page='/chats' icon={<Chat />} closeMenu={closeMenu} />
+        <NavigateMenuItem title={t('Series')} page='/series' icon={<LibraryBooks />} closeMenu={closeMenu} />
       </Menu>
     </>
   );
