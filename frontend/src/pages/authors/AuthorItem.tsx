@@ -21,7 +21,7 @@ const AuthorItem: FC<AuthorItemProps> = ({ item }) => {
   const { data: books = [] } = useBooksGetQuery();
   const [edit] = useAuthorsEditMutation();
   const [remove] = useAuthorsRemoveMutation();
-  const booksFiltred = useMemo(() => books.filter(({ info }) => info.authors.includes(item.id)), [books]);
+  const booksFiltred = useMemo(() => books.filter(({ info }) => info.authors.includes(item.id)), [books, item.id]);
   const onlyAuthorBookName = useMemo(
     () => booksFiltred.find(({ info }) => info.authors.length === 1)?.info.name,
     [booksFiltred]

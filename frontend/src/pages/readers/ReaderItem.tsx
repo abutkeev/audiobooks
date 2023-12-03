@@ -21,7 +21,7 @@ const ReaderItem: FC<ReaderItemProps> = ({ item }) => {
   const { data: books = [] } = useBooksGetQuery();
   const [edit] = useReadersEditMutation();
   const [remove] = useReadersRemoveMutation();
-  const booksFiltred = useMemo(() => books.filter(({ info }) => info.readers.includes(item.id)), [books]);
+  const booksFiltred = useMemo(() => books.filter(({ info }) => info.readers.includes(item.id)), [books, item.id]);
   const onlyReaderBookName = useMemo(
     () => booksFiltred.find(({ info }) => info.readers.length === 1)?.info.name,
     [booksFiltred]

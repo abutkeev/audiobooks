@@ -57,7 +57,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
     }
 
     return null;
-  }, [values, required, disabled]);
+  }, [values, required, disabled, t]);
 
   const options = useMemo(() => {
     const result = [...list];
@@ -134,8 +134,8 @@ const MultiSelect: FC<MultiSelectProps> = ({
           helperText={error}
           required={required}
           {...autoSelectProps}
-          onFocus={_ => setFocus(true)}
-          onBlur={_ => setFocus(false)}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
           inputProps={{
             ...inputProps,
             value: getTextFieldValue(inputProps.value),

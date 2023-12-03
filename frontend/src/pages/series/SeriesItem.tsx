@@ -32,7 +32,7 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
   const { data: books = [] } = useBooksGetQuery();
   const booksInSeries = useMemo(
     () => books.filter(({ info }) => info.series.some(({ id }) => id === item.id)),
-    [books]
+    [books, item.id]
   );
 
   const modified = name !== item.name || authors !== item.authors;

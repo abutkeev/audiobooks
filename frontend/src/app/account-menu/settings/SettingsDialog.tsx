@@ -28,7 +28,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
           changeLanguage(settings.language);
         }
       });
-  }, [status]);
+  }, [status, auth, changeLanguage, getSettings, language]);
 
   const handleLanguageChange: TextFieldProps['onChange'] = async ({ target: { value } }) => {
     changeLanguage(value);

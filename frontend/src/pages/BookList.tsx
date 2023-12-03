@@ -61,7 +61,7 @@ const BookList: React.FC = () => {
       );
     }
     return result;
-  }, [author_id, reader_id, series_id, searchText, books]);
+  }, [author_id, reader_id, series_id, searchText, books, authors, readers, series]);
 
   const sortedBooks = useMemo(
     () =>

@@ -66,7 +66,7 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
     }, 500);
     debounced();
     return debounced.clear;
-  }, [login, validType]);
+  }, [login, validType, allowSelf, check, selfLogin, setValid]);
 
   const helperText = useMemo(() => {
     if (validType === 'unused' && state === 'used') {
@@ -80,7 +80,7 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
     if (state === 'self' && !allowSelf) {
       return t('Self login');
     }
-  }, [state, valid, validType, selfLogin]);
+  }, [state, validType, t, allowSelf]);
 
   return (
     <TextField

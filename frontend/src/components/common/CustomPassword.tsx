@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { InputAdornment, IconButton, Tooltip, TextFieldProps, TextField } from '@mui/material';
 import { VisibilityOff, Visibility, LockReset } from '@mui/icons-material';
 import { generate as generatePassword } from 'generate-password-browser';
@@ -13,19 +13,19 @@ const CustomPassword: FC<CustomPasswordProps> = ({ sx, onChange, generate, ...pr
 
   const [showPassword, setShowPassword] = useState(passwordGenerationAvailable);
 
+  const handleGeneratePassword = useCallback(() => {
+    if (!onChange) return;
+    onChange(generatePassword({ excludeSimilarCharacters: true, numbers: true, strict: true }));
+  }, [onChange]);
+
   useEffect(() => {
     if (!passwordGenerationAvailable) return;
     handleGeneratePassword();
-  }, []);
+  }, [passwordGenerationAvailable, handleGeneratePassword]);
 
   const handleChange: TextFieldProps['onChange'] = ({ target: { value } }) => {
     if (!onChange) return;
     onChange(value);
-  };
-
-  const handleGeneratePassword = () => {
-    if (!onChange) return;
-    onChange(generatePassword({ excludeSimilarCharacters: true, numbers: true, strict: true }));
   };
 
   return (

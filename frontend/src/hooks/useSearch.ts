@@ -12,7 +12,7 @@ const useSearch = () => {
       dispatch(showSearch(false));
       dispatch(setSearchText(''));
     };
-  }, []);
+  }, [dispatch]);
 
   return text;
 };

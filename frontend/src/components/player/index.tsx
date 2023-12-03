@@ -23,11 +23,11 @@ const Player: React.FC<PlayerProps> = ({ bookId, bookInfo, chapters, externalSta
     () => {
       dispatch(playerReset());
     };
-  }, [bookId, chapters]);
+  }, [bookId, chapters, dispatch]);
 
   useEffect(() => {
     dispatch(setBookInfo(bookInfo));
-  }, [bookInfo]);
+  }, [bookInfo, dispatch]);
 
   useEffect(() => {
     if (externalState) {
@@ -36,7 +36,7 @@ const Player: React.FC<PlayerProps> = ({ bookId, bookInfo, chapters, externalSta
         onExternalStateApply();
       }
     }
-  }, [externalState, onExternalStateApply]);
+  }, [externalState, onExternalStateApply, bookId, dispatch]);
 
   useKeyboardShortcuts();
   useMediaSession();

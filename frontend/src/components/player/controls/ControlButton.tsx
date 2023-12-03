@@ -2,7 +2,7 @@ import { IconButton, IconButtonProps, SvgIconTypeMap } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 interface ControlButtonProps extends Omit<IconButtonProps, 'children' | 'color' | 'size'> {
-  Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+  Icon: OverridableComponent<SvgIconTypeMap>;
   main?: boolean;
   small?: boolean;
 }

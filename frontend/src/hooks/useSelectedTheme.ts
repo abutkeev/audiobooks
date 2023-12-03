@@ -18,7 +18,7 @@ const useSelectedTheme = () => {
           setTheme(settings.theme);
         }
       });
-  }, [status]);
+  }, [status, auth, getSettings, theme, setTheme]);
 
   const handleThemeChange: TextFieldProps['onChange'] = async ({ target: { value } }) => {
     setTheme(value);

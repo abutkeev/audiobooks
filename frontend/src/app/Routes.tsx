@@ -118,7 +118,7 @@ const Routes: React.FC = () => {
           children: getRoutes({ token, admin, enabled }),
         },
       ]),
-    [token]
+    [token, admin, enabled]
   );
 
   return <RouterProvider router={router} />;

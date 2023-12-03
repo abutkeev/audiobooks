@@ -8,7 +8,7 @@ const usePlaybackState = (playing: boolean) => {
     return () => {
       mediaSession.playbackState = 'none';
     };
-  }, [playing]);
+  }, [playing, mediaSession]);
 };
 
 export default usePlaybackState;

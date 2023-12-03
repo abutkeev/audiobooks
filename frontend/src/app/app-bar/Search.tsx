@@ -17,8 +17,10 @@ const Search: React.FC<SearchProps> = ({ hide, fullWidth }) => {
   useEffect(() => {
     if (!textfieldRef.current || text || !hide) return;
 
-    textfieldRef.current.addEventListener('blur', hide);
-    return () => textfieldRef.current?.removeEventListener('blur', hide);
+    const textfield = textfieldRef.current;
+
+    textfield.addEventListener('blur', hide);
+    return () => textfield.removeEventListener('blur', hide);
   }, [text, hide]);
 
   const handleKeyDown: KeyboardEventHandler = ({ code }) => {

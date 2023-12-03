@@ -32,7 +32,7 @@ const useMediaMetadata = ({ name, author, series, cover, chapterTitle }: BookMet
     return () => {
       mediaSession.metadata = null;
     };
-  }, [name, author, series, chapterTitle]);
+  }, [name, author, series, chapterTitle, cover, mediaSession]);
 };
 
 export default useMediaMetadata;

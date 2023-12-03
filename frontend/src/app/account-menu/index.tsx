@@ -47,8 +47,10 @@ const AccountMenu: React.FC = () => {
         .then(result => {
           setFriendsRequests(result.length);
         });
-    } catch {}
-  }, [enabled, status]);
+    } catch {
+      // ignore errors
+    }
+  }, [enabled, status, getFriendsRequests]);
 
   const closeMenu = () => setMenuAnchor(undefined);
 

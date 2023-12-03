@@ -9,7 +9,7 @@ const useMediaCache = () => {
     return () => {
       dispatch(stopMediaCacheUpdates());
     };
-  }, []);
+  }, [dispatch]);
   return useAppSelector(({ mediaCache }) => mediaCache);
 };
 

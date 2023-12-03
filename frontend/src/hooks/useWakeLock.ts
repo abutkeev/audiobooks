@@ -27,7 +27,7 @@ const useWakeLock = () => {
         }
       };
     }
-  }, [preventScreenLock, playing]);
+  }, [preventScreenLock, playing, wakelockAvailable]);
   return wakelockAvailable;
 };
 

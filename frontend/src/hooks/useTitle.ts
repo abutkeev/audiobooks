@@ -9,7 +9,7 @@ const useTitle = (title: string) => {
     () => {
       dispatch(setTitle(''));
     };
-  }, [title]);
+  }, [title, dispatch]);
 };
 
 export default useTitle;

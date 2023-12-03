@@ -18,7 +18,7 @@ const Home: React.FC = () => {
       navigate(`/book/${currentBook}`, { replace: true });
       initialRenderRef.current = false;
     }
-  }, [currentBook, data]);
+  }, [currentBook, data, navigate]);
 
   if (isLoading || isError) {
     return <LoadingWrapper loading={isLoading} error={isError} />;

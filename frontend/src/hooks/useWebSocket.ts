@@ -15,7 +15,7 @@ const useWebSocket = () => {
     if (connected && !token) {
       dispatch(disconnect());
     }
-  }, [connected, token]);
+  }, [connected, token, dispatch]);
 
   return connected;
 };

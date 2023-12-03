@@ -13,7 +13,7 @@ const PositionControl: React.FC = () => {
 
   return (
     <Stack spacing={2} alignItems='center' direction='row' mx={1}>
-      {!!duration ? (
+      {duration ? (
         <>
           <Typography sx={{ cursor: 'default' }}>{formatTime(position)}</Typography>
           <Slider

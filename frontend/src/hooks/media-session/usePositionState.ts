@@ -14,7 +14,7 @@ const usePositionState = ({ position, duration }: PositionInfo) => {
     return () => {
       mediaSession.setPositionState();
     };
-  }, [duration, position]);
+  }, [duration, position, mediaSession]);
 };
 
 export default usePositionState;

@@ -1,6 +1,6 @@
 import { Bedtime, BedtimeOff } from '@mui/icons-material';
 import ControlButton from './ControlButton';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Menu, MenuItem, Stack, Typography } from '@mui/material';
 import formatTime from '@/utils/formatTime';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -15,6 +15,25 @@ const SleepControl: React.FC = () => {
   const [sleepTimerLeft, setSleepTimerLeft] = useState<number>();
   const { pauseOnChapterEnd, resetSleepTimerOnActivity } = useAppSelector(({ player: { state } }) => state);
   const dispatch = useAppDispatch();
+
+  const closeMenu = useCallback(() => setMenuAnchor(undefined), [setMenuAnchor]);
+
+  const setSleepTimer = useCallback(
+    (duration: number) => () => {
+      closeMenu();
+      dispatch(setPauseOnChapterEnd(false));
+      if (duration <= 0) {
+        setSleepTimerDuration(undefined);
+        setSleepTimerLeft(undefined);
+        setSleepTimerStart(undefined);
+        return;
+      }
+      setSleepTimerDuration(duration);
+      setSleepTimerStart(new Date());
+      setSleepTimerLeft(duration * 60);
+    },
+    [closeMenu, setSleepTimerDuration, setSleepTimerLeft, setSleepTimerStart, dispatch]
+  );
 
   useEffect(() => {
     if (sleepTimerDuration && sleepTimerStart) {
@@ -32,7 +51,7 @@ const SleepControl: React.FC = () => {
       const intervalId = setInterval(updateSleepTimerLeft, 500);
       return () => clearInterval(intervalId);
     }
-  }, [sleepTimerDuration, sleepTimerStart]);
+  }, [sleepTimerDuration, sleepTimerStart, dispatch, setSleepTimer]);
 
   useEffect(() => {
     const resetSleepTimerStart = () => {
@@ -51,20 +70,6 @@ const SleepControl: React.FC = () => {
     removeEventListeners();
   }, [sleepTimerStart, sleepTimerDuration, resetSleepTimerOnActivity]);
 
-  const closeMenu = () => setMenuAnchor(undefined);
-  const setSleepTimer = (duration: number) => () => {
-    closeMenu();
-    dispatch(setPauseOnChapterEnd(false));
-    if (duration <= 0) {
-      setSleepTimerDuration(undefined);
-      setSleepTimerLeft(undefined);
-      setSleepTimerStart(undefined);
-      return;
-    }
-    setSleepTimerDuration(duration);
-    setSleepTimerStart(new Date());
-    setSleepTimerLeft(duration * 60);
-  };
   const handlePauseOnChaperEnd = () => {
     setSleepTimer(0)();
     dispatch(setPauseOnChapterEnd(true));
