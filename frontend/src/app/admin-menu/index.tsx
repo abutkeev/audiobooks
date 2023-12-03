@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AdminPanelSettings, Chat, Edit, LibraryBooks, People } from '@mui/icons-material';
+import { AdminPanelSettings, Chat, Edit, LibraryBooks, Mic, People } from '@mui/icons-material';
 import { Menu } from '@mui/material';
 import useAuthData from '@/hooks/useAuthData';
 import NavigateMenuItem from './NavigateMenuItem';
@@ -24,6 +24,7 @@ const AdminMenu: React.FC = () => {
         <NavigateMenuItem title={t('Users')} page='/users' icon={<People />} closeMenu={closeMenu} />
         <NavigateMenuItem title={t('Chats')} page='/chats' icon={<Chat />} closeMenu={closeMenu} />
         <NavigateMenuItem title={t('Authors')} page='/authors' icon={<Edit />} closeMenu={closeMenu} />
+        <NavigateMenuItem title={t('Readers')} page='/readers' icon={<Mic />} closeMenu={closeMenu} />
         <NavigateMenuItem title={t('Series')} page='/series' icon={<LibraryBooks />} closeMenu={closeMenu} />
       </Menu>
     </>
