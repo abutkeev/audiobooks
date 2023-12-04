@@ -48,7 +48,7 @@ const DeleteButton: FC<PropsWithChildren<DeleteButtonProps>> = ({
         aria-label='delete button'
         onClick={handleShowDeleteConfirmationDialog}
         iconButton
-        tooltip={tooltip}
+        tooltip={tooltip ?? t('Delete')}
         {...deleteButtonProps}
       >
         {children ?? <Delete />}
