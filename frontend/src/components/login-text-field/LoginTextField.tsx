@@ -2,9 +2,9 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
 import { useLazySignUpCheckQuery } from '@/api/api';
 import LoginCheckState, { LoginCheckStateProps } from './LoginCheckState';
-import debounce from 'debounce';
 import useAuthData from '@/hooks/useAuthData';
 import { useTranslation } from 'react-i18next';
+import { debounce } from 'throttle-debounce';
 
 interface LoginTextFieldProps {
   login: string;
@@ -53,7 +53,7 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
 
     setState('waiting');
     setValid(false);
-    const debounced = debounce(async () => {
+    const debounced = debounce(500, async () => {
       setState('checking');
       try {
         const result = await check({ login }).unwrap();
@@ -63,9 +63,9 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
         setState(undefined);
         setValid(true);
       }
-    }, 500);
+    });
     debounced();
-    return debounced.clear;
+    return debounced.cancel;
   }, [login, validType, allowSelf, check, selfLogin, setValid]);
 
   const helperText = useMemo(() => {
