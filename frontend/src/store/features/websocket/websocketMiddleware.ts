@@ -6,10 +6,16 @@ import { connect, disconnect } from './actions';
 import { playerSetup } from '../player';
 import enhancedApi from '@/api/enhancedApi';
 import { setAuthToken } from '../auth';
+import { throttle } from 'throttle-debounce';
 
 let socket: Socket | undefined;
 
 const mw = createListenerMiddleware<StateSlice>();
+
+const updateOnline = throttle(60000, () => socket?.emit('online'), { noLeading: false, noTrailing: false });
+
+window.addEventListener('mousemove', updateOnline);
+window.addEventListener('touchstart', updateOnline);
 
 mw.startListening({
   actionCreator: connect,
@@ -75,6 +81,7 @@ mw.startListening({
     } = getState().player;
     const updated = new Date().toISOString();
     socket?.emit('position_update', { bookId, currentChapter, position, updated });
+    updateOnline();
   },
 });
 
