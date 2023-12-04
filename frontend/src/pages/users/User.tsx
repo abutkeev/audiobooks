@@ -13,8 +13,9 @@ import getErrorMessage from '@/utils/getErrorMessage';
 import LoginTextField from '@/components/login-text-field/LoginTextField';
 import { useTranslation } from 'react-i18next';
 import CustomAccordion from '@/components/common/CustomAccordion';
+import UserOnlineIndicator from '@/components/UserOnlineIndicator';
 
-const User: React.FC<UserDto> = ({ id, login, name, enabled, admin, telegram }) => {
+const User: React.FC<UserDto> = ({ id, login, name, enabled, admin, telegram, online }) => {
   const { t } = useTranslation();
   const auth = useAuthData();
   const dispatch = useAppDispatch();
@@ -59,6 +60,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin, telegram }) 
       summary={
         <Stack direction='row' flexGrow={1} alignItems='center'>
           <Typography flexGrow={1} noWrap>
+            <UserOnlineIndicator online={online} />
             {formatUser()}
           </Typography>
           <UserDisableSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
