@@ -8,7 +8,7 @@ import Player from '@/components/player';
 import { useEffect, useMemo } from 'react';
 import { currentBookVarName } from './Home';
 import useTitle from '@/hooks/useTitle';
-import OtherPlayersPosition from '@/components/OtherPlayersPosition';
+import OtherPlayersPosition from '@/components/other-player-positions';
 import { useBooksGetBookInfoQuery } from '@/api/api';
 
 const BookPage: React.FC = () => {
