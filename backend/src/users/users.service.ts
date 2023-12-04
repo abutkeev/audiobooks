@@ -108,6 +108,8 @@ export class UsersService {
   }
 
   async update(id: string, update: Partial<Omit<User, 'password'>>): Promise<boolean> {
+    if (id === INIT_ID) return false;
+
     const user = this.userModel.findById(id).exec();
     if (!user) {
       throw new NotFoundException(`user ${id} not found`);
@@ -121,6 +123,8 @@ export class UsersService {
   }
 
   async updatePassword(id: string, password?: string): Promise<unknown> {
+    if (id === INIT_ID) return false;
+
     if (!password) return;
 
     const user = this.userModel.findById(id).exec();
@@ -131,7 +135,9 @@ export class UsersService {
     return this.userModel.updateOne({ _id: id }, { password: encryptPassword(password) });
   }
 
-  async remove(id: string): Promise<true> {
+  async remove(id: string): Promise<boolean> {
+    if (id === INIT_ID) return false;
+
     await this.userModel.deleteOne({ _id: id });
     await this.telegramAccountsModel.deleteMany({ userId: id });
     await this.positionsModel.deleteMany({ userId: id });
