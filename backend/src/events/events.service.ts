@@ -59,7 +59,7 @@ export class EventsService {
 
   async sendOutdatedTokenRefreshEvent(token: string, socket: Socket) {
     const info = this.authService.getTokenInfo(token);
-    const user = await this.usersService.find(info.id);
+    const { online: _, telegram: __, ...user } = await this.usersService.find(info.id);
 
     if (!user || JSON.stringify(Object.entries(info).sort()) !== JSON.stringify(Object.entries(user).sort())) {
       this.logger.log(`Token for ${info.login} is outdated`);

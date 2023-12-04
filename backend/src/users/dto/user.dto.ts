@@ -19,5 +19,8 @@ export class UserDto {
   readonly admin: boolean;
 
   @ApiProperty({ required: false })
+  readonly online?: string;
+
+  @ApiProperty({ required: false })
   readonly telegram?: TelegramDataDto;
 }

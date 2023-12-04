@@ -13,6 +13,7 @@ import { PositionDto } from '../position/dto/position.dto';
 import { EventsAuthValidationPipe, SocketWithUser } from './events-auth-validation.pipe';
 import { PositionService } from 'src/position/position.service';
 import { verboseValidationPipeInstance } from './verbose-validation.pipe';
+import { UsersService } from 'src/users/users.service';
 
 @UsePipes(verboseValidationPipeInstance, new EventsAuthValidationPipe())
 @WebSocketGateway({ namespace: 'api/events' })
@@ -26,7 +27,10 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private eventsService: EventsService,
 
     @Inject(forwardRef(() => PositionService))
-    private positionService: PositionService
+    private positionService: PositionService,
+
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService
   ) {}
 
   @SubscribeMessage('log')
@@ -42,6 +46,14 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.positionService
       .savePosition(user.id, instanceId, payload)
       .then(() => this.logger.log(`position updated for user ${user.id}, instance ${instanceId}`));
+    this.usersService.updateOnline(user.id);
+  }
+
+  @SubscribeMessage('online')
+  async handleOnline(@ConnectedSocket() { user, instanceId }: SocketWithUser) {
+    this.usersService
+      .updateOnline(user.id)
+      .then(() => this.logger.log(`online updated for user ${user.id}, instance ${instanceId}`));
   }
 
   handleDisconnect(client: SocketWithUser) {

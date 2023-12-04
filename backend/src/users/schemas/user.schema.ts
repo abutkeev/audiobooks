@@ -31,6 +31,9 @@ export class User {
 
   @Prop()
   admin: boolean;
+
+  @Prop({ isRequired: false })
+  online: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

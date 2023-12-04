@@ -122,6 +122,14 @@ export class UsersService {
     return true;
   }
 
+  async updateOnline(id: string): Promise<boolean> {
+    if (id === INIT_ID) return false;
+
+    await this.userModel.updateOne({ _id: id }, { online: new Date() });
+    this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'users' });
+    return true;
+  }
+
   async updatePassword(id: string, password?: string): Promise<unknown> {
     if (id === INIT_ID) return false;
 
