@@ -77,8 +77,17 @@ const MyBooks: React.FC = () => {
   return (
     <LoadingWrapper loading={loading} error={error}>
       {sortedBooks.length !== 0 ? (
-        sortedBooks.map(({ book: { id, info } }) => (
-          <BookCard key={id} id={id} info={info} authorsList={authors} readersList={readers} seriesList={series} list />
+        sortedBooks.map(({ book: { id, info }, position: { updated } }) => (
+          <BookCard
+            key={id}
+            id={id}
+            info={info}
+            authorsList={authors}
+            readersList={readers}
+            seriesList={series}
+            list
+            updated={updated}
+          />
         ))
       ) : (
         <Alert severity='info'>{searchText ? t('No books found') : t('No books')}</Alert>

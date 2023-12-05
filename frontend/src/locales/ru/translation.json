@@ -73,6 +73,7 @@
   "Number in {{series}} series": "Номер в серии {{series}}",
   "Series.one": "Серия",
   "Next book": "Следующая книга",
+  "Last listen time": "Время последнего прослушивания",
   "{{count}} books_one": "{{count}} книга",
   "{{count}} books_few": "{{count}} книги",
   "{{count}} books_many": "{{count}} книг",

@@ -1,15 +1,17 @@
-import { Edit, Mic, LibraryBooks, NavigateNext, AutoStories } from '@mui/icons-material';
+import { Edit, Mic, LibraryBooks, NavigateNext, AutoStories, AccessTime } from '@mui/icons-material';
 import { Card, CardContent, Typography, Stack, Tooltip, Hidden, IconButton } from '@mui/material';
 import Link from './common/Link';
 import { useMemo } from 'react';
 import { BookInfoDto, useBooksGetQuery } from '@/api/api';
 import useAuthData from '@/hooks/useAuthData';
 import { useTranslation } from 'react-i18next';
+import useFormattedDateTime from '@/hooks/useFormattedDateTime';
 
 interface BookCardProps {
   id: string;
   list?: boolean;
   info: BookInfoDto;
+  updated?: string;
   authorsList: Record<string, string>;
   readersList: Record<string, string>;
   seriesList: Record<string, string>;
@@ -19,6 +21,7 @@ const BookCard: React.FC<BookCardProps> = ({
   id,
   list,
   info: { name, authors, readers, series, cover },
+  updated,
   authorsList,
   readersList,
   seriesList,
@@ -26,6 +29,10 @@ const BookCard: React.FC<BookCardProps> = ({
   const { t } = useTranslation();
   const { data: books } = useBooksGetQuery();
   const { admin } = useAuthData() || {};
+
+  const lastListenTime = useMemo(() => (updated ? new Date(updated) : undefined), [updated]);
+  const lastListenFormattedTime = useFormattedDateTime(lastListenTime);
+
   const nextBooks = useMemo(() => {
     if (!books || list || series.length === 0) return [];
     const nextBooks = series.map(({ id, number }) =>
@@ -101,6 +108,14 @@ const BookCard: React.FC<BookCardProps> = ({
               )}
             </Stack>
           ))}
+          {lastListenFormattedTime && (
+            <Stack direction='row' spacing={1}>
+              <Tooltip title={t('Last listen time')}>
+                <AccessTime />
+              </Tooltip>
+              <Typography>{lastListenFormattedTime}</Typography>
+            </Stack>
+          )}
         </CardContent>
       </Stack>
     </Card>
