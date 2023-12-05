@@ -10,6 +10,9 @@ class Friend {
 
   @ApiProperty()
   name: string;
+
+  @ApiProperty({ required: false })
+  online?: string;
 }
 
 export class FriendPositionsDto {
