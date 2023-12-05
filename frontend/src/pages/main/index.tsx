@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { currentBookVarName } from '../Home';
 import { useSearchParams } from 'react-router-dom';
 import MyBooks from './MyBooks';
+import FriendsBooks from './FriendsBooks';
 
 const MainPage: React.FC = () => {
   const { t } = useTranslation();
@@ -25,11 +26,13 @@ const MainPage: React.FC = () => {
       {showTabs && (
         <Tabs value={currentTab} onChange={(_, index) => setCurrentTab(index)} sx={{ mb: 1 }}>
           <Tab value='my' label={t('My current books')} />
+          <Tab value='friends' label={t("Friends' current books")} />
           <Tab value='all' label={t('All books')} />
         </Tabs>
       )}
 
       {showTabs && currentTab === 'my' && <MyBooks />}
+      {showTabs && currentTab === 'friends' && <FriendsBooks />}
       {(!showTabs || currentTab === 'all') && <BookList />}
     </>
   );
