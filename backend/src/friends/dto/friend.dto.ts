@@ -12,4 +12,7 @@ export class FriendDto {
 
   @ApiProperty()
   readonly name: string | undefined;
+
+  @ApiProperty({ required: false })
+  readonly online?: string;
 }

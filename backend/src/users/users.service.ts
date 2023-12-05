@@ -14,6 +14,7 @@ import { Friend } from 'src/friends/schemas/friends.schema';
 import { Position } from 'src/position/schemas/position.schema';
 import { Settings } from 'src/profile/schemas/settings.schema';
 import { TgService } from 'src/auth/tg/tg.service';
+import { FriendsService } from 'src/friends/friends.service';
 
 const encryptPassword = (password: string) => {
   const salt = bcrypt.genSaltSync();
@@ -46,7 +47,10 @@ export class UsersService {
     private eventsService: EventsService,
 
     @Inject(forwardRef(() => TgService))
-    private tgService: TgService
+    private tgService: TgService,
+
+    @Inject(forwardRef(() => FriendsService))
+    private friendsService: FriendsService
   ) {}
 
   async create({ password, ...user }: CreateUserDto): Promise<string> {
@@ -127,6 +131,10 @@ export class UsersService {
 
     await this.userModel.updateOne({ _id: id }, { online: new Date() });
     this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'users' });
+    const friends = await this.friendsService.get(id);
+    for (const { uid } of friends) {
+      this.eventsService.sendToUser({ userId: uid, message: 'invalidate_tag', args: 'friends' });
+    }
     return true;
   }
 

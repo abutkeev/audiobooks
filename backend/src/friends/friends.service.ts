@@ -1,4 +1,11 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
@@ -12,7 +19,11 @@ export class FriendsService {
   constructor(
     @InjectModel(FriendRequests.name) private friendsRequestsModel: Model<FriendRequests>,
     @InjectModel(Friend.name) private friendsModel: Model<Friend>,
+
+    @Inject(forwardRef(() => EventsService))
     private eventsService: EventsService,
+
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService
   ) {}
 
@@ -50,8 +61,8 @@ export class FriendsService {
 
   private async getFriendEntry({ id, uid }: { id: mongoose.Types.ObjectId; uid: mongoose.Schema.Types.ObjectId }) {
     const users = await this.usersService.findAll();
-    const { login, name } = users.find(({ id }) => id === uid.toString()) || {};
-    return { id: id.toString(), uid: uid.toString(), login, name };
+    const { login, name, online } = users.find(({ id }) => id === uid.toString()) || {};
+    return { id: id.toString(), uid: uid.toString(), login, name, online };
   }
 
   async getRequests(uid: string, type: 'in' | 'out'): Promise<FriendDto[]> {

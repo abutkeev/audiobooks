@@ -11,6 +11,7 @@ import { Friend, FriendSchema } from 'src/friends/schemas/friends.schema';
 import { Position, PositionSchema } from 'src/position/schemas/position.schema';
 import { Settings, SettingsSchema } from 'src/profile/schemas/settings.schema';
 import { TgModule } from 'src/auth/tg/tg.module';
+import { FriendsModule } from 'src/friends/friends.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TgModule } from 'src/auth/tg/tg.module';
     ]),
     forwardRef(() => EventsModule),
     forwardRef(() => TgModule),
+    forwardRef(() => FriendsModule),
   ],
   providers: [UsersService],
   exports: [UsersService, MongooseModule],
