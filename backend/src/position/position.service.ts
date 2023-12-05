@@ -6,6 +6,7 @@ import { PositionDto } from './dto/position.dto';
 import { EventsService } from 'src/events/events.service';
 import { FriendsService } from 'src/friends/friends.service';
 import { FriendPositionEntryDto } from './dto/friend-position-entry.dto';
+import { FriendPositionsDto } from './dto/friend-positions.dto';
 
 @Injectable()
 export class PositionService {
@@ -58,5 +59,32 @@ export class PositionService {
 
   getAll(userId: string) {
     return this.positionModel.find({ userId });
+  }
+
+  async getFriendsAll(uid: string): Promise<FriendPositionsDto[]> {
+    const friends = await this.friendsService.get(uid);
+    const friendIds = friends.map(({ uid }) => uid);
+    const positionsList = await this.positionModel.find({ userId: { $in: friendIds } });
+
+    const result = friends.reduce((result: FriendPositionsDto[], friend) => {
+      const positions = positionsList.filter(
+        ({ userId, currentChapter, position }) =>
+          friend.id === userId.toString() && !(currentChapter === 0 && position === 0)
+      );
+      if (positions) {
+        result.push({
+          friend,
+          positions: positions.map(({ bookId, currentChapter, position, updated }) => ({
+            bookId,
+            currentChapter,
+            position,
+            updated: updated.toISOString(),
+          })),
+        });
+      }
+      return result;
+    }, []);
+
+    return result;
   }
 }

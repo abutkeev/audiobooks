@@ -4,6 +4,7 @@ import { PositionService } from './position.service';
 import { PositionEntryDto } from './dto/position-entry.dto';
 import { FriendPositionEntryDto } from './dto/friend-position-entry.dto';
 import { PositionDto } from './dto/position.dto';
+import { FriendPositionsDto } from './dto/friend-positions.dto';
 
 @ApiTags('position')
 @Controller('position')
@@ -21,6 +22,12 @@ export class PositionController {
       position,
       updated: updated.toISOString(),
     }));
+  }
+
+  @Get('friends')
+  @ApiOperation({ description: 'Get user friends positions' })
+  async getFriends(@Request() { user }): Promise<FriendPositionsDto[]> {
+    return this.positionService.getFriendsAll(user.id);
   }
 
   @Get(':bookId')
