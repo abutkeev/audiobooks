@@ -8,6 +8,7 @@ import { Alert, Typography } from '@mui/material';
 import { BookEntryDto, PositionDto, useBooksGetQuery, usePositionGetFriendsQuery } from '@/api/api';
 import { useTranslation } from 'react-i18next';
 import CustomAccordion from '@/components/common/CustomAccordion';
+import UserOnlineIndicator from '@/components/UserOnlineIndicator';
 
 const FriendsBooks: React.FC = () => {
   const { t } = useTranslation();
@@ -51,7 +52,11 @@ const FriendsBooks: React.FC = () => {
       {friendsBooks.length !== 0 ? (
         friendsBooks.map(({ friend, positions }) => (
           <CustomAccordion
-            summary={<Typography>{`${friend.name} (${friend.login})`}</Typography>}
+            summary={
+              <Typography>
+                <UserOnlineIndicator online={friend.online} /> {`${friend.name} (${friend.login})`}
+              </Typography>
+            }
             details={positions.map(({ book: { id, info }, position: { updated } }) => (
               <BookCard
                 key={id}
