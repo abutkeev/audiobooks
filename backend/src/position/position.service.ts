@@ -42,7 +42,15 @@ export class PositionService {
 
     return positions.map(({ instanceId, currentChapter, position, updated, userId }) => {
       const { uid, login, name } = friends.find(({ uid }) => uid === userId.toString()) || {};
-      return { instanceId, currentChapter, position, updated, friendId: uid, friendLogin: login, friendName: name };
+      return {
+        instanceId,
+        currentChapter,
+        position,
+        updated: updated.toISOString(),
+        friendId: uid,
+        friendLogin: login,
+        friendName: name,
+      };
     });
   }
 }

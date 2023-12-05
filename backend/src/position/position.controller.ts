@@ -17,7 +17,7 @@ export class PositionController {
       instanceId,
       currentChapter,
       position,
-      updated,
+      updated: updated.toISOString(),
     }));
   }
 

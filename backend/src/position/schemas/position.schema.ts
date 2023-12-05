@@ -20,7 +20,7 @@ export class Position {
   position: number;
 
   @Prop()
-  updated: string;
+  updated: Date;
 }
 
 export const PositionSchema = SchemaFactory.createForClass(Position);
