@@ -71,7 +71,7 @@ export class PositionService {
         ({ userId, currentChapter, position }) =>
           friend.id === userId.toString() && !(currentChapter === 0 && position === 0)
       );
-      if (positions) {
+      if (positions.length !== 0) {
         result.push({
           friend,
           positions: positions.map(({ bookId, currentChapter, position, updated }) => ({
