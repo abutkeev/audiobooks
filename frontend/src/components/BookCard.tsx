@@ -52,14 +52,18 @@ const BookCard: React.FC<BookCardProps> = ({
               {list ? <Link to={`/book/${id}`}>{name}</Link> : name}
             </Typography>
             {admin && (
-              <IconButton component={Link} to={`/edit/${id}`}>
-                <Edit />
-              </IconButton>
+              <Tooltip title={t('Edit')}>
+                <IconButton component={Link} to={`/edit/${id}`}>
+                  <Edit />
+                </IconButton>
+              </Tooltip>
             )}
           </Stack>
           {authors.map(author_id => (
             <Stack direction='row' spacing={1} key={author_id}>
-              <Edit />
+              <Tooltip title={t('Author')}>
+                <Edit />
+              </Tooltip>
               <Typography>
                 <Link to={`/books?author_id=${author_id}`}>{authorsList[author_id] ?? author_id}</Link>
               </Typography>
@@ -67,7 +71,9 @@ const BookCard: React.FC<BookCardProps> = ({
           ))}
           {readers.map(reader_id => (
             <Stack direction='row' spacing={1} key={reader_id}>
-              <Mic />
+              <Tooltip title={t('Reader')}>
+                <Mic />
+              </Tooltip>
               <Typography>
                 <Link to={`/books?reader_id=${reader_id}`}> {readersList[reader_id] ?? reader_id}</Link>
               </Typography>
@@ -75,7 +81,9 @@ const BookCard: React.FC<BookCardProps> = ({
           ))}
           {series.map(({ id, number }, index) => (
             <Stack direction='row' spacing={1} key={id}>
-              <LibraryBooks />
+              <Tooltip title={t('Series.one')}>
+                <LibraryBooks />
+              </Tooltip>
               <Typography>
                 <Link to={`/books?series_id=${id}`}>
                   {seriesList[id] ?? id} {number && `(${number})`}

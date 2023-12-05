@@ -71,6 +71,7 @@
   "Select series": "",
   "No series": "",
   "Number in {{series}} series": "",
+  "Series.one": "Series",
   "Next book": "",
   "{{count}} books_one": "{{count}} book",
   "{{count}} books_other": "{{count}} books",

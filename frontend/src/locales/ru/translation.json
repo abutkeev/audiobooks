@@ -71,6 +71,7 @@
   "Select series": "Выберите серии",
   "No series": "Нет серий",
   "Number in {{series}} series": "Номер в серии {{series}}",
+  "Series.one": "Серия",
   "Next book": "Следующая книга",
   "{{count}} books_one": "{{count}} книга",
   "{{count}} books_few": "{{count}} книги",
