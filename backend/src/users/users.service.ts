@@ -70,13 +70,6 @@ export class UsersService {
     if (!result) {
       throw new NotFoundException(`user ${id} not found`);
     }
-    if (!result.online) {
-      const positions = await this.positionsModel.find({ userId: id }).sort({ updated: -1 }).limit(1);
-      if (positions.length) {
-        result.online = positions[0].updated;
-      }
-    }
-
     return result.toJSON();
   }
 
@@ -85,8 +78,16 @@ export class UsersService {
     return Promise.all(
       result.map(async entry => {
         const user: UserDto = entry.toJSON();
+        let online = user.online;
+        if (!online) {
+          const positions = await this.positionsModel.find({ userId: user.id }).sort({ updated: -1 }).limit(1);
+          if (positions.length) {
+            online = positions[0].updated.toISOString();
+          }
+        }
+
         const telegram = (await this.tgService.get(user.id))?.info;
-        return { ...user, telegram };
+        return { ...user, online, telegram };
       })
     );
   }
