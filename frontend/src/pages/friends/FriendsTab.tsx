@@ -15,6 +15,7 @@ const FriendsTab: FC = () => {
   return (
     <FriendsList
       data={data}
+      showOnline
       isLoading={isLoading}
       isError={isError}
       emptyMessage={t('No friends')}

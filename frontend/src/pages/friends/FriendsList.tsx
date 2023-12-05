@@ -5,6 +5,7 @@ import useSearchMatcher from '@/hooks/useSearchMatcher';
 import { Paper, Stack, Typography } from '@mui/material';
 import ProgressButton, { ProgressButtonProps } from '@/components/common/ProgressButton';
 import getFriendDisplayName from '@/utils/getFriendDisplayName';
+import UserOnlineIndicator from '@/components/UserOnlineIndicator';
 
 interface Action {
   action(id: string): ProgressButtonProps['onClick'];
@@ -14,7 +15,8 @@ interface Action {
 }
 
 interface FriendsListProps {
-  data?: { id: string; uid: string; login?: string; name?: string }[];
+  data?: { id: string; uid: string; login?: string; name?: string; online?: string }[];
+  showOnline?: boolean;
   isLoading: boolean;
   isError: boolean;
   emptyMessage: string;
@@ -24,6 +26,7 @@ interface FriendsListProps {
 
 const FriendsList: FC<FriendsListProps> = ({
   data = [],
+  showOnline,
   isLoading,
   isError,
   emptyMessage,
@@ -47,10 +50,11 @@ const FriendsList: FC<FriendsListProps> = ({
   return (
     <LoadingWrapper loading={isLoading} error={isError}>
       <EmptyListWrapper wrap={requests.length === 0} message={searchMatcher ? notFoundMessage : emptyMessage}>
-        {requests.map(({ id, name, login, uid }) => {
+        {requests.map(({ id, name, login, uid, online }) => {
           return (
             <Paper square variant='outlined' key={id}>
               <Stack spacing={1} direction='row' p={1} alignItems='center'>
+                {showOnline && <UserOnlineIndicator online={online} />}
                 <Typography noWrap flexGrow={1}>
                   {getFriendDisplayName({ uid, login, name })}
                 </Typography>
