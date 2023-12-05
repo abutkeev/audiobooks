@@ -3,11 +3,25 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PositionService } from './position.service';
 import { PositionEntryDto } from './dto/position-entry.dto';
 import { FriendPositionEntryDto } from './dto/friend-position-entry.dto';
+import { PositionDto } from './dto/position.dto';
 
 @ApiTags('position')
 @Controller('position')
 export class PositionController {
   constructor(private positionService: PositionService) {}
+
+  @Get()
+  @ApiOperation({ description: 'Get all user books positions' })
+  async get(@Request() { user }): Promise<PositionDto[]> {
+    const result = await this.positionService.getAll(user.id);
+    return result.map(({ bookId, instanceId, currentChapter, position, updated }) => ({
+      bookId,
+      instanceId,
+      currentChapter,
+      position,
+      updated: updated.toISOString(),
+    }));
+  }
 
   @Get(':bookId')
   @ApiOperation({ description: 'Get user positions for book' })

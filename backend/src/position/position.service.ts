@@ -53,4 +53,8 @@ export class PositionService {
       };
     });
   }
+
+  getAll(userId: string) {
+    return this.positionModel.find({ userId });
+  }
 }
