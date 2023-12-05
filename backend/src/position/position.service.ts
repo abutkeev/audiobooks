@@ -69,7 +69,7 @@ export class PositionService {
     const result = friends.reduce((result: FriendPositionsDto[], friend) => {
       const positions = positionsList.filter(
         ({ userId, currentChapter, position }) =>
-          friend.id === userId.toString() && !(currentChapter === 0 && position === 0)
+          friend.uid === userId.toString() && !(currentChapter === 0 && position === 0)
       );
       if (positions.length !== 0) {
         result.push({
