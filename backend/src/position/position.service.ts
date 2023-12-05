@@ -16,7 +16,9 @@ export class PositionService {
 
     @Inject(forwardRef(() => EventsService))
     private eventsService: EventsService
-  ) {}
+  ) {
+    positionModel.syncIndexes();
+  }
 
   find(userId: string, bookId: string) {
     return this.positionModel.find({ userId, bookId });
@@ -24,7 +26,7 @@ export class PositionService {
 
   async savePosition(userId: string, instanceId: string, position: PositionDto) {
     const result = await this.positionModel.replaceOne(
-      { userId, instanceId },
+      { userId, instanceId, bookId: position.bookId },
       { userId, instanceId, ...position },
       { upsert: true }
     );

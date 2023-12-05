@@ -25,4 +25,4 @@ export class Position {
 
 export const PositionSchema = SchemaFactory.createForClass(Position);
 
-PositionSchema.index({ userId: 1, instanceId: 1 }, { unique: true });
+PositionSchema.index({ userId: 1, instanceId: 1, bookId: 1 }, { unique: true });
