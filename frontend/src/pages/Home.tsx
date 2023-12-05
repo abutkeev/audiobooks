@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingWrapper from '@/components/common/LoadingWrapper';
-import BookList from './BookList';
+import MainPage from './main';
 import { useBooksGetQuery } from '@/api/api';
 
 export const currentBookVarName = 'currentBook';
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
     return <LoadingWrapper loading={isLoading} error={isError} />;
   }
 
-  return <BookList />;
+  return <MainPage />;
 };
 
 export default Home;

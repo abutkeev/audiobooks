@@ -1,14 +1,13 @@
+import { useEffect, useMemo } from 'react';
 import LoadingWrapper from '@/components/common/LoadingWrapper';
 import BookCard from '@/components/BookCard';
 import useAuthors from '@/hooks/useAuthors';
 import useReaders from '@/hooks/useReaders';
 import useSeries from '@/hooks/useSeries';
-import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useSearch from '@/hooks/useSearch';
 import { Alert } from '@mui/material';
-import { currentBookVarName } from './Home';
-import useTitle from '@/hooks/useTitle';
+import { currentBookVarName } from '../Home';
 import { useBooksGetQuery } from '@/api/api';
 import { useTranslation } from 'react-i18next';
 
@@ -23,8 +22,6 @@ const BookList: React.FC = () => {
   const [searchParams] = useSearchParams();
   const { author_id, reader_id, series_id } = Object.fromEntries(searchParams);
   const searchText = useSearch();
-
-  useTitle(t('Book list'));
 
   useEffect(() => {
     localStorage.removeItem(currentBookVarName);

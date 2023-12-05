@@ -1,5 +1,5 @@
 import { RouteObject, RouterProvider, createHashRouter } from 'react-router-dom';
-import BookList from '@/pages/BookList';
+import MainPage from '@/pages/main';
 import BookPage from '@/pages/BookPage';
 import Home from '@/pages/Home';
 import NotFound from '@/pages/NotFound';
@@ -25,7 +25,7 @@ const userRoutes: RouteObject[] = [
   },
   {
     path: '/books',
-    element: <BookList />,
+    element: <MainPage />,
   },
   {
     path: '/book/:id',
