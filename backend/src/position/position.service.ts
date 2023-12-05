@@ -30,7 +30,7 @@ export class PositionService {
       { userId, instanceId, ...position },
       { upsert: true }
     );
-    this.eventsService.sendToUser({ userId, skipInstance: instanceId, message: 'invalidate_tag', args: 'position' });
+    this.eventsService.sendToUser({ userId, message: 'invalidate_tag', args: 'position' });
     for (const { uid } of await this.friendsService.get(userId)) {
       this.eventsService.sendToUser({ userId: uid, message: 'invalidate_tag', args: 'position' });
     }
