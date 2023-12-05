@@ -129,6 +129,11 @@ export class UsersService {
   async updateOnline(id: string): Promise<boolean> {
     if (id === INIT_ID) return false;
 
+    const { online } = await this.find(id);
+    if (online && Date.now() - new Date(online).getTime() < 60 * 1000) {
+      return false;
+    }
+
     await this.userModel.updateOne({ _id: id }, { online: new Date() });
     this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'users' });
     const friends = await this.friendsService.get(id);
