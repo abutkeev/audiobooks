@@ -13,6 +13,7 @@ export interface BookInfo {
 export interface BookChapter {
   title: string;
   filename: string;
+  duration?: number;
 }
 
 interface PlayerStore {

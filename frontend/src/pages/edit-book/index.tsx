@@ -17,10 +17,10 @@ const EditBookPage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const chapters = useMemo(
     () =>
-      originalChapters.map(({ title, filename: url }) => {
+      originalChapters.map(({ title, filename: url, duration }) => {
         const entries = url.split('/');
         const filename = decodeURI(entries[entries.length - 1]);
-        return { title, filename };
+        return { title, filename, duration };
       }),
     [originalChapters]
   );
