@@ -79,6 +79,13 @@ export class BooksController {
   }
 
   @Admin()
+  @Post(':id/durations/update')
+  @ApiOperation({ description: 'Update book chapters duration' })
+  updateDurations(@Param('id') id: string): true {
+    return this.service.updateDurations(id);
+  }
+
+  @Admin()
   @Put(':id/cover')
   @ApiOperation({ description: 'Replace book cover' })
   @ApiConsumes('multipart/form-data')

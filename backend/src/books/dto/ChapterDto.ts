@@ -9,6 +9,9 @@ class ChapterDto {
   @IsNotEmpty()
   @ApiProperty()
   filename: string;
+
+  @ApiProperty({ required: false, description: 'Duration in seconds' })
+  duration?: number;
 }
 
 export default ChapterDto;

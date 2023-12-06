@@ -158,8 +158,10 @@ export class BooksService {
       if (!filename.toLowerCase().endsWith('.mp3')) {
         throw new UnprocessableEntityException(`chapter file ${filename} for book ${bookId} is not mp3`);
       }
+      const filePath = path.resolve(booksDir, bookId, filename);
       writeFileSync(path.resolve(booksDir, bookId, filename), buffer);
-      chapters.push({ title, filename });
+      const duration = this.commonService.getDuration(filePath);
+      chapters.push({ title, filename, duration });
       this.commonService.writeJSONFile(config, { info, chapters });
       return true;
     } catch (e) {
@@ -207,6 +209,23 @@ export class BooksService {
       const filename = `${this.commonService.generateID()}.${extension}`;
       writeFileSync(path.resolve(bookDir, filename), buffer);
       info.cover = { type: mimetype, filename };
+      this.commonService.writeJSONFile(config, { info, chapters });
+      return true;
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't add cover to book ${bookId}`);
+    }
+  }
+
+  updateDurations(bookId: string): true {
+    const config = getBookInfoConfig(bookId);
+    const bookDir = path.resolve(booksDir, bookId);
+    if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
+    try {
+      const { info, chapters } = this.get(bookId);
+      chapters.forEach(({ filename }, index) => {
+        chapters[index].duration = this.commonService.getDuration(path.resolve(bookDir, filename));
+      });
       this.commonService.writeJSONFile(config, { info, chapters });
       return true;
     } catch (e) {

@@ -4,6 +4,7 @@ import NodeID3 from 'node-id3';
 import path from 'path';
 import { DataDir } from 'src/constants';
 import { v4 } from 'uuid';
+import getMP3Duration from 'get-mp3-duration';
 
 const logger = new Logger('CommonService');
 
@@ -55,5 +56,10 @@ export class CommonService {
       }
     }
     return undefined;
+  }
+
+  getDuration(filename: string) {
+    const buffer = readFileSync(filename);
+    return getMP3Duration(buffer) / 1000;
   }
 }
