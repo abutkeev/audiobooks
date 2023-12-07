@@ -204,6 +204,7 @@
   "Remove reader {{name}} ({{count}} books)?_one": "Remove reader {{name}} ({{count}} book)?",
   "Remove reader {{name}} ({{count}} books)?_other": "",
   "The only reader of book {{name}}": "",
+  "No series found": "",
   "Series update failed": "",
   "Series remove failed": "",
   "Remove series?": "",

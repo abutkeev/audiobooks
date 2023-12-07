@@ -210,6 +210,7 @@
   "Remove reader {{name}} ({{count}} books)?_many": "Удалить чтеца {{name}} ({{count}} книг)?",
   "Remove reader {{name}} ({{count}} books)?_other": "Удалить чтеца {{name}} ({{count}} книг)?",
   "The only reader of book {{name}}": "Единственный чтец книги {{name}}",
+  "No series found": "Серии не найдены",
   "Series update failed": "Ошибка при редактировании серии",
   "Series remove failed": "Ошибка при удалении серии",
   "Remove series?": "Удалить серию?",
