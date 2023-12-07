@@ -128,6 +128,7 @@
   "Remove author {{name}} ({{count}} books)?_many": "Удалить автора {{name}} ({{count}} книг)?",
   "Remove author {{name}} ({{count}} books)?_other": "Удалить автора {{name}} ({{count}} книг)?",
   "The only author of book {{name}}": "Единственный автор книги {{name}}",
+  "No authors found": "Авторы не найдены",
   "Unauthorize": "Отменить авторизацию",
   "Authorize": "Авторизовать",
   "Remove chat?": "Удалить чат?",

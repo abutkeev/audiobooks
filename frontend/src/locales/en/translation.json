@@ -124,6 +124,7 @@
   "Remove author {{name}} ({{count}} books)?_one": "Remove author {{name}} ({{count}} book)?",
   "Remove author {{name}} ({{count}} books)?_other": "",
   "The only author of book {{name}}": "",
+  "No authors found": "",
   "Unauthorize": "",
   "Authorize": "",
   "Remove chat?": "",
