@@ -16,7 +16,7 @@ const initialState: UploadingState = {
   errors: [],
 };
 
-const prefixNumbersRegex = /^[0-9. ]+/;
+const prefixNumbersRegex = /^[0-9._ ]+/;
 
 const uploadingSlice = createSlice({
   name: 'UploadSlice',
