@@ -11,7 +11,7 @@ export interface ProgressButtonProps extends Pick<ButtonProps, 'disabled' | 'var
   inProgress?: boolean;
   refreshing?: boolean;
   onClick?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> | void;
-  onEndWait?(): unknown;
+  finalAction?(): void;
   buttonProps?: Omit<ButtonProps, 'onClick' | 'children' | 'disabled' | 'variant'>;
 }
 
@@ -26,14 +26,14 @@ const ProgressButton: FC<PropsWithChildren<ProgressButtonProps>> = ({
   inProgress,
   refreshing,
   onClick,
-  onEndWait,
+  finalAction,
   buttonProps,
 }) => {
   const [processing, setProcessing] = useState(false);
   const setWaitRefreshing = useWaitRefreshing(refreshing, () => {
     setProcessing(false);
-    if (onEndWait) {
-      onEndWait();
+    if (finalAction) {
+      finalAction();
     }
   });
 
