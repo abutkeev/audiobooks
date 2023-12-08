@@ -3,12 +3,19 @@ import ExternalChapterDto from 'src/books/dto/ExternalChapterDto';
 
 @Injectable()
 export class ExternalPlaylistService {
+  private extractPlayerJsRawPlaylist(data: string) {
+    const internalResult = /file:(\[[^\]]+\])/.exec(data);
+    if (internalResult && internalResult.length === 2) {
+      return internalResult[1];
+    }
+  }
+
   private getPlayerJsPlaylist(data: string) {
     try {
-      const result = /file:(\[[^\]]+\])/.exec(data);
-      if (!result) return;
+      const rawPlaylist = this.extractPlayerJsRawPlaylist(data);
+      if (!rawPlaylist) return;
 
-      const playlist = JSON.parse(result[1]);
+      const playlist = JSON.parse(rawPlaylist);
       if (!Array.isArray(playlist)) return;
 
       for (const item of playlist) {
