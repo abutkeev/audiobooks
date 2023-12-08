@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import cyrillicToTranslit from 'cyrillic-to-translit-js';
 import { useEffect, useReducer } from 'react';
 
 interface UploadingState {
@@ -46,6 +47,11 @@ const uploadingSlice = createSlice({
     removeTitles: state => {
       state.chapters.forEach((_, index) => {
         state.chapters[index].title = `${index + 1}`;
+      });
+    },
+    decodeTranslit: state => {
+      state.chapters.forEach(({ title }, index) => {
+        state.chapters[index].title = cyrillicToTranslit().reverse(title);
       });
     },
     startUploading: (state, { payload }: PayloadAction<number>) => {
@@ -108,5 +114,6 @@ export const {
   setUploaded,
   toggleSkip,
   removeTitles,
+  decodeTranslit,
 } = uploadingSlice.actions;
 export default useUploading;
