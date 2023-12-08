@@ -11,6 +11,7 @@ export interface ProgressButtonProps extends Pick<ButtonProps, 'disabled' | 'var
   inProgress?: boolean;
   refreshing?: boolean;
   onClick?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> | void;
+  firstAction?(): void;
   finalAction?(): void;
   buttonProps?: Omit<ButtonProps, 'onClick' | 'children' | 'disabled' | 'variant'>;
 }
@@ -26,6 +27,7 @@ const ProgressButton: FC<PropsWithChildren<ProgressButtonProps>> = ({
   inProgress,
   refreshing,
   onClick,
+  firstAction,
   finalAction,
   buttonProps,
 }) => {
@@ -38,6 +40,10 @@ const ProgressButton: FC<PropsWithChildren<ProgressButtonProps>> = ({
   });
 
   const handleClick: ButtonProps['onClick'] = async e => {
+    if (firstAction) {
+      firstAction();
+    }
+
     if (onClick) {
       setProcessing(true);
       try {
