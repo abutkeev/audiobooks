@@ -52,6 +52,7 @@ const FriendsBooks: React.FC = () => {
       {friendsBooks.length !== 0 ? (
         friendsBooks.map(({ friend, positions }) => (
           <CustomAccordion
+            key={friend.uid}
             summary={
               <Typography>
                 <UserOnlineIndicator online={friend.online} /> {`${friend.name} (${friend.login})`}
