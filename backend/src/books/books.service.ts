@@ -285,8 +285,10 @@ export class BooksService {
           responseType: 'arraybuffer',
         })
       );
-      writeFileSync(path.resolve(booksDir, bookId, filename), data, 'binary');
-      chapters.push({ title, filename });
+      const filePath = path.resolve(booksDir, bookId, filename);
+      writeFileSync(filePath, data, 'binary');
+      const duration = this.commonService.getDuration(filePath);
+      chapters.push({ title, filename, duration });
       this.commonService.writeJSONFile(config, { info, chapters });
       return true;
     } catch (e) {
