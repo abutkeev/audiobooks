@@ -4,10 +4,10 @@ import BookCard from '@/components/BookCard';
 import useAuthors from '@/hooks/useAuthors';
 import useReaders from '@/hooks/useReaders';
 import useSeries from '@/hooks/useSeries';
-import useSearch from '@/hooks/useSearch';
 import { Alert } from '@mui/material';
 import { BookEntryDto, PositionDto, useBooksGetQuery, usePositionGetQuery } from '@/api/api';
 import { useTranslation } from 'react-i18next';
+import useSearchMatcher from '@/hooks/useSearchMatcher';
 
 const MyBooks: React.FC = () => {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ const MyBooks: React.FC = () => {
   const { series, seriesLoading, seriesError } = useSeries();
   const loading = booksLoading || authorsLoading || readersLoading || seriesLoading || positionsLoading;
   const error = booksError || authorsError || readersError || seriesError || positionsError;
-  const searchText = useSearch();
+  const searchMatcher = useSearchMatcher();
 
   const books = useMemo(
     () =>
@@ -48,16 +48,15 @@ const MyBooks: React.FC = () => {
   );
 
   const filtredBooks = useMemo(() => {
-    if (!searchText) return books;
-    const searchTextLower = searchText.toLowerCase();
+    if (!searchMatcher) return books;
     const filtredAuhorsIds = Object.entries(authors)
-      .filter(([, name]) => name.toLowerCase().includes(searchTextLower))
+      .filter(([, name]) => searchMatcher(name))
       .map(([id]) => id);
     const filtredReadersIds = Object.entries(readers)
-      .filter(([, name]) => name.toLowerCase().includes(searchTextLower))
+      .filter(([, name]) => searchMatcher(name))
       .map(([id]) => id);
     const filtredSeriesIds = Object.entries(series)
-      .filter(([, name]) => name.toLowerCase().includes(searchTextLower))
+      .filter(([, name]) => searchMatcher(name))
       .map(([id]) => id);
     const result = books.filter(
       ({
@@ -65,13 +64,13 @@ const MyBooks: React.FC = () => {
           info: { name, authors, readers, series },
         },
       }) =>
-        name.toLowerCase().includes(searchTextLower) ||
+        searchMatcher(name) ||
         filtredAuhorsIds.some(author_id => authors.includes(author_id)) ||
         filtredReadersIds.some(reader_id => readers.includes(reader_id)) ||
         filtredSeriesIds.some(series_id => series.some(({ id }) => id === series_id))
     );
     return result;
-  }, [searchText, books, authors, readers, series]);
+  }, [searchMatcher, books, authors, readers, series]);
 
   const sortedBooks = useMemo(
     () => filtredBooks.slice().sort((a, b) => (new Date(a.position.updated) > new Date(b.position.updated) ? -1 : 1)),
@@ -94,7 +93,7 @@ const MyBooks: React.FC = () => {
           />
         ))
       ) : (
-        <Alert severity='info'>{searchText ? t('No books found') : t('No books')}</Alert>
+        <Alert severity='info'>{searchMatcher ? t('No books found') : t('No books')}</Alert>
       )}
     </LoadingWrapper>
   );
