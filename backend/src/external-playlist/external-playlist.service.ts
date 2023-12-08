@@ -31,10 +31,57 @@ export class ExternalPlaylistService {
     } catch {}
   }
 
-  getPlaylist(data: string): ExternalChapterDto[] | undefined {
+  // https://yakniga.org/
+  graphQlStatePlaylist(data: string, bookUrl: string) {
+    const stateExpression = /<script>window.__NUXT__=(\([^<]+\));<\/script>/.exec(data);
+    if (!stateExpression || stateExpression.length !== 2) return;
+
+    const state: unknown = eval(stateExpression[1]);
+    if (
+      !state ||
+      typeof state !== 'object' ||
+      !('apollo' in state) ||
+      !state.apollo ||
+      typeof state.apollo !== 'object' ||
+      !('defaultClient' in state.apollo) ||
+      !state.apollo.defaultClient ||
+      typeof state.apollo.defaultClient !== 'object'
+    ) {
+      return;
+    }
+    const playlist: ExternalChapterDto[] = [];
+    for (const [name, value] of Object.entries(state.apollo.defaultClient as [string, unknown])) {
+      if (name.startsWith('Chapter:')) {
+        if (
+          !value ||
+          typeof value !== 'object' ||
+          !('name' in value) ||
+          typeof value.name !== 'string' ||
+          !('fileUrl' in value) ||
+          typeof value.fileUrl !== 'string'
+        ) {
+          return;
+        }
+        try {
+          const url = new URL(value.fileUrl, bookUrl).toString();
+          playlist.push({ url, title: value.name });
+        } catch {
+          return;
+        }
+      }
+    }
+    return playlist;
+  }
+
+  getPlaylist(data: string, url: string): ExternalChapterDto[] | undefined {
     const playerJsPlaylist = this.getPlayerJsPlaylist(data);
     if (playerJsPlaylist) {
       return playerJsPlaylist;
+    }
+
+    const graphQlStatePlaylist = this.graphQlStatePlaylist(data, url);
+    if (graphQlStatePlaylist) {
+      return graphQlStatePlaylist;
     }
   }
 }
