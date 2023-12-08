@@ -3,6 +3,7 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { FC, MutableRefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { removeTitles, resetTitles, stripPrefixNumbers } from './useUploading';
+import MenuButton from '@/components/common/MenuButton';
 
 interface ExtraButtonsProps {
   uploading: boolean;
@@ -23,17 +24,14 @@ const ExtraButtons: FC<ExtraButtonsProps> = ({ uploading, dispatch, abortControl
   }
 
   return (
-    <>
-      <Button variant='outlined' onClick={() => dispatch(removeTitles())}>
-        {t('Remove titles')}
-      </Button>
-      <Button variant='outlined' onClick={() => dispatch(resetTitles())}>
-        {t('Reset titles')}
-      </Button>
-      <Button variant='outlined' onClick={() => dispatch(stripPrefixNumbers())}>
-        {t('Strip prefix numbers')}
-      </Button>
-    </>
+    <MenuButton
+      actions={[
+        { title: t('Remove titles'), onClick: () => dispatch(removeTitles()) },
+        { title: t('Reset titles'), onClick: () => dispatch(resetTitles()) },
+        { title: t('Strip prefix numbers'), onClick: () => dispatch(stripPrefixNumbers()) },
+      ]}
+      variant='outlined'
+    />
   );
 };
 
