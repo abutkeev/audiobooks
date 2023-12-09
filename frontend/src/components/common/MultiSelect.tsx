@@ -3,6 +3,7 @@ import {
   Autocomplete,
   AutocompleteRenderInputParams,
   CircularProgress,
+  FilterOptionsState,
   InputAdornment,
   TextField,
   TextFieldProps,
@@ -10,6 +11,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useWaitRefreshing from '@/hooks/useWaitRefreshing';
+import { isMatch } from '@/hooks/useSearchMatcher';
 
 export interface MultiSelectProps extends Omit<TextFieldProps, 'onChange' | 'value' | 'defaultValue'> {
   values: string[];
@@ -110,6 +112,16 @@ const MultiSelect: FC<MultiSelectProps> = ({
     }
   };
 
+  const handleFilterOptions = (
+    options: string[],
+    { inputValue: searchString, getOptionLabel }: FilterOptionsState<string>
+  ): string[] => {
+    const result = options.filter(
+      item => item === searchString || isMatch({ value: getOptionLabel(item), searchString })
+    );
+    return result;
+  };
+
   const inProgress = inProgressProp || processing;
 
   return (
@@ -120,6 +132,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
       options={options.map(({ id }) => id)}
       getOptionLabel={option => options.find(({ id }) => id === option)?.name || `#${option}`}
       onChange={(_e, values) => handleChange(values)}
+      filterOptions={handleFilterOptions}
       value={values}
       noOptionsText={noOptionsText || t('No options')}
       disabled={disabled || loading || inProgress}
