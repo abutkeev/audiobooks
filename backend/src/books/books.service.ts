@@ -257,7 +257,7 @@ export class BooksService {
   async getChaptersFromUrl(url: string): Promise<ExternalChapterDto[]> {
     try {
       const { data } = await firstValueFrom(this.httpService.get(url));
-      const result = this.externalPlaylistService.getPlaylist(data, url);
+      const result = await this.externalPlaylistService.getPlaylist(data, url);
       if (!result) {
         throw new NotAcceptableException(`url ${url} is not supported`);
       }

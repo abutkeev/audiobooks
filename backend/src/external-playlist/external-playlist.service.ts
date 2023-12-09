@@ -1,18 +1,32 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { firstValueFrom } from 'rxjs';
 import ExternalChapterDto from 'src/books/dto/ExternalChapterDto';
 
 @Injectable()
 export class ExternalPlaylistService {
-  private extractPlayerJsRawPlaylist(data: string) {
+  constructor(private readonly httpService: HttpService) {}
+
+  private async extractPlayerJsRawPlaylist(data: string) {
     const internalResult = /file:(\[[^\]]+\])/.exec(data);
     if (internalResult && internalResult.length === 2) {
       return internalResult[1];
     }
+
+    const stringResult = /file:"([^"]+)"/.exec(data);
+    if (!stringResult || stringResult.length !== 2) return;
+    try {
+      const url = new URL(stringResult[1]).toString();
+      const { data } = await firstValueFrom(this.httpService.get(url, { responseType: 'text' }));
+      return data;
+    } catch (e) {
+      // ignore error
+    }
   }
 
-  private getPlayerJsPlaylist(data: string) {
+  private async getPlayerJsPlaylist(data: string) {
     try {
-      const rawPlaylist = this.extractPlayerJsRawPlaylist(data);
+      const rawPlaylist = await this.extractPlayerJsRawPlaylist(data);
       if (!rawPlaylist) return;
 
       const playlist = JSON.parse(rawPlaylist);
@@ -34,7 +48,11 @@ export class ExternalPlaylistService {
           return;
         }
       }
-      return playlist.map(({ title, file }) => ({ title, url: file }));
+      return playlist.map(({ title, file }) => {
+        // https://uknig.com
+        const url = file.split(' or ')[0];
+        return { title, url };
+      });
     } catch {}
   }
 
@@ -80,8 +98,8 @@ export class ExternalPlaylistService {
     return playlist;
   }
 
-  getPlaylist(data: string, url: string): ExternalChapterDto[] | undefined {
-    const playerJsPlaylist = this.getPlayerJsPlaylist(data);
+  async getPlaylist(data: string, url: string): Promise<ExternalChapterDto[] | undefined> {
+    const playerJsPlaylist = await this.getPlayerJsPlaylist(data);
     if (playerJsPlaylist) {
       return playerJsPlaylist;
     }
