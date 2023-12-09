@@ -77,7 +77,7 @@ export class ExternalPlaylistService {
   }
 
   // https://yakniga.org/
-  graphQlStatePlaylist(data: string, bookUrl: string) {
+  getGraphQlStatePlaylist(data: string, bookUrl: string) {
     const stateExpression = /<script>window.__NUXT__=(\([^<]+\));<\/script>/.exec(data);
     if (!stateExpression || stateExpression.length !== 2) return;
 
@@ -129,7 +129,7 @@ export class ExternalPlaylistService {
       return dlePlaylist;
     }
 
-    const graphQlStatePlaylist = this.graphQlStatePlaylist(data, url);
+    const graphQlStatePlaylist = this.getGraphQlStatePlaylist(data, url);
     if (graphQlStatePlaylist) {
       return graphQlStatePlaylist;
     }
