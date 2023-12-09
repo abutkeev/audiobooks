@@ -22,8 +22,8 @@ interface CustomDialogProps {
   confirmButtonProps?: Omit<ProgressButtonProps, 'onClick' | 'children'>;
   cancelButtonProps?: Omit<ButtonProps, 'onClick' | 'children'>;
   onConfirm?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void | Promise<void>;
-  onCancel?(e: SyntheticEvent<any>): void;
-  close?(e: SyntheticEvent<any>): void;
+  onCancel?(e: SyntheticEvent<unknown>): void;
+  close?(e: SyntheticEvent<unknown>): void;
   refreshing?: boolean;
   extraButtons?: React.ReactNode;
 }
@@ -49,7 +49,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
   const { variant: cancelButtonVariant, ...otherCancelButtonProps } = cancelButtonProps || {};
   const { variant: confirmButtonVariant, ...otherConfirmButtonProps } = confirmButtonProps || {};
 
-  const handleCancel = (e: SyntheticEvent<any>) => {
+  const handleCancel = (e: SyntheticEvent<unknown>) => {
     if (onCancel) {
       onCancel(e);
     }
