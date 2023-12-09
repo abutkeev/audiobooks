@@ -118,9 +118,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
       limitTags={limitTags}
       openOnFocus
       options={options.map(({ id }) => id)}
-      getOptionLabel={option => {
-        return options.find(({ id }) => id === option)?.name || `#${option}`;
-      }}
+      getOptionLabel={option => options.find(({ id }) => id === option)?.name || `#${option}`}
       onChange={(_e, values) => handleChange(values)}
       value={values}
       noOptionsText={noOptionsText || t('No options')}
