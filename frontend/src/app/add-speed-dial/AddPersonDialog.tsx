@@ -76,7 +76,6 @@ const AddPersonDialog: React.FC<AddPersonDialogProps> = ({ type, close }) => {
           label={t('Name')}
           value={name}
           onChange={({ target: { value } }) => setName(value)}
-          onKeyDown={e => e.stopPropagation()}
           error={!name}
         />
       }

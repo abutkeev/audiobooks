@@ -55,7 +55,6 @@ const AddSeriesDialog: React.FC<AddSeriesDialogProps> = ({ open, close }) => {
               label={t('Name')}
               value={name}
               onChange={({ target: { value } }) => setName(value)}
-              onKeyDown={e => e.stopPropagation()}
               error={!name}
             />
             <MultiSelect

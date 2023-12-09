@@ -62,7 +62,6 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ open, close }) => {
             label={t('Login')}
             value={login}
             onChange={({ target: { value } }) => setLogin(value)}
-            onKeyDown={e => e.stopPropagation()}
             error={!login || duplicateLogin}
             helperText={duplicateLogin ? t('Duplicate login') : undefined}
           />
@@ -73,7 +72,6 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ open, close }) => {
             label={t('Password')}
             value={password}
             onChange={setPassword}
-            onKeyDown={e => e.stopPropagation()}
             error={!password}
           />
           <TextField
@@ -82,7 +80,6 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ open, close }) => {
             label={t('Name')}
             value={name}
             onChange={({ target: { value } }) => setName(value)}
-            onKeyDown={e => e.stopPropagation()}
           />
           <FormControlLabel
             control={<Switch checked={enabled} onChange={(_, checked) => setEnabled(checked)} />}

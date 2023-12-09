@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import ProgressButton, { ProgressButtonProps } from './ProgressButton';
 import { useTranslation } from 'react-i18next';
+import { SyntheticEvent } from 'react';
 
 interface CustomDialogProps {
   open: boolean;
@@ -21,8 +22,8 @@ interface CustomDialogProps {
   confirmButtonProps?: Omit<ProgressButtonProps, 'onClick' | 'children'>;
   cancelButtonProps?: Omit<ButtonProps, 'onClick' | 'children'>;
   onConfirm?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void | Promise<void>;
-  onCancel?: ButtonProps['onClick'];
-  close?: ButtonProps['onClick'];
+  onCancel?(e: SyntheticEvent<any>): void;
+  close?(e: SyntheticEvent<any>): void;
   refreshing?: boolean;
   extraButtons?: React.ReactNode;
 }
@@ -48,7 +49,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
   const { variant: cancelButtonVariant, ...otherCancelButtonProps } = cancelButtonProps || {};
   const { variant: confirmButtonVariant, ...otherConfirmButtonProps } = confirmButtonProps || {};
 
-  const handleCancel: ButtonProps['onClick'] = e => {
+  const handleCancel = (e: SyntheticEvent<any>) => {
     if (onCancel) {
       onCancel(e);
     }
@@ -70,8 +71,15 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
     }
   };
 
+  const handleKeyDown: DialogProps['onKeyDown'] = e => {
+    e.stopPropagation();
+    if (e.code === 'Escape') {
+      handleCancel(e);
+    }
+  };
+
   return (
-    <Dialog open={open} maxWidth={maxWidth} fullWidth onClose={handleCancel}>
+    <Dialog open={open} maxWidth={maxWidth} fullWidth onClose={handleCancel} onKeyDown={handleKeyDown}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
