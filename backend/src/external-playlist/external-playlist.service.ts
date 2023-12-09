@@ -120,7 +120,7 @@ export class ExternalPlaylistService {
 
   async getPlaylist(data: string, url: string): Promise<ExternalChapterDto[] | undefined> {
     const playerJsPlaylist = await this.getPlayerJsPlaylist(data);
-    if (playerJsPlaylist) {
+    if (playerJsPlaylist && playerJsPlaylist.length > 0) {
       return playerJsPlaylist;
     }
 
@@ -130,7 +130,7 @@ export class ExternalPlaylistService {
     }
 
     const graphQlStatePlaylist = this.getGraphQlStatePlaylist(data, url);
-    if (graphQlStatePlaylist) {
+    if (graphQlStatePlaylist && graphQlStatePlaylist.length > 0) {
       return graphQlStatePlaylist;
     }
   }
