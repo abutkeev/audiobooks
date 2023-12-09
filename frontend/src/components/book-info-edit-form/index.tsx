@@ -42,7 +42,6 @@ const BookInfoEditForm: React.FC<BookInfoEditFormProps> = ({
           label={t('Name.book', 'Name')}
           value={name}
           onChange={({ target: { value } }) => setName(value)}
-          onKeyDown={e => e.stopPropagation()}
           error={!name}
         />
         <MultiSelect
