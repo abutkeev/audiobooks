@@ -6,30 +6,39 @@ interface SearchMatcherOptions {
   equels?: boolean;
 }
 
+interface IsMatchOptions {
+  searchString: string;
+  value: string;
+}
+
+export const isMatch = ({ searchString, value }: IsMatchOptions) => {
+  const lowerValue = value.toLocaleLowerCase();
+  const lowerSearchString = searchString.toLocaleLowerCase();
+  const searchString2ruPc = convert_en2ru(searchString, 'pc');
+  const searchString2ruMac = convert_en2ru(searchString, 'mac');
+  return (
+    lowerValue.includes(lowerSearchString) ||
+    lowerValue.includes(searchString2ruPc) ||
+    lowerValue.includes(searchString2ruMac)
+  );
+};
+
 const useSearchMatcher = () => {
-  const search = useSearch() || '';
+  const searchString = useSearch() || '';
 
   const searchMatcher = useCallback(
-    (searchSource?: string, options?: SearchMatcherOptions) => {
-      if (!searchSource) return false;
+    (value?: string, options?: SearchMatcherOptions) => {
+      if (!value) return false;
 
       const { equels } = options || {};
-      if (equels) return search === searchSource;
+      if (equels) return searchString === value;
 
-      const lowerSearchSource = searchSource.toLocaleLowerCase();
-      const lowerSearch = search.toLocaleLowerCase();
-      const search2ruPc = convert_en2ru(search, 'pc');
-      const search2ruMac = convert_en2ru(search, 'mac');
-      return (
-        lowerSearchSource.includes(lowerSearch) ||
-        lowerSearchSource.includes(search2ruPc) ||
-        lowerSearchSource.includes(search2ruMac)
-      );
+      return isMatch({ searchString, value });
     },
-    [search]
+    [searchString]
   );
 
-  if (!search) return undefined;
+  if (!searchString) return undefined;
 
   return searchMatcher;
 };
