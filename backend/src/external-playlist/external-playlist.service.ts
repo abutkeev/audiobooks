@@ -56,6 +56,26 @@ export class ExternalPlaylistService {
     } catch {}
   }
 
+  // https://audioknigivse.ru
+  // https://slushkinvsem.ru/
+  getDlePlaylist(data: string) {
+    const result = /<!--dle_audio_begin:([^>]+)-->/.exec(data);
+    if (!result || result.length !== 2) return;
+
+    const playlist: ExternalChapterDto[] = [];
+    for (const rawChapter of result[1].split(',')) {
+      const chapter = rawChapter.split('|');
+      if (chapter.length !== 2) return;
+      try {
+        playlist.push({ title: chapter[1], url: new URL(chapter[0]).toString() });
+      } catch {
+        // ignore errors
+      }
+    }
+
+    return playlist;
+  }
+
   // https://yakniga.org/
   graphQlStatePlaylist(data: string, bookUrl: string) {
     const stateExpression = /<script>window.__NUXT__=(\([^<]+\));<\/script>/.exec(data);
@@ -102,6 +122,11 @@ export class ExternalPlaylistService {
     const playerJsPlaylist = await this.getPlayerJsPlaylist(data);
     if (playerJsPlaylist) {
       return playerJsPlaylist;
+    }
+
+    const dlePlaylist = this.getDlePlaylist(data);
+    if (dlePlaylist && dlePlaylist.length > 0) {
+      return dlePlaylist;
     }
 
     const graphQlStatePlaylist = this.graphQlStatePlaylist(data, url);
