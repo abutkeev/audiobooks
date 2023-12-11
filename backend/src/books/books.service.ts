@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -233,6 +234,26 @@ export class BooksService {
     } catch (e) {
       logger.error(e);
       throw new InternalServerErrorException(`can't update durations of book ${bookId}`);
+    }
+  }
+
+  editChaperTitle(bookId: string, chapter: number, title: string): true {
+    const config = getBookInfoConfig(bookId);
+    if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
+    try {
+      const book = this.get(bookId);
+      if (chapter < 0 || !isFinite(chapter)) {
+        throw new BadRequestException(`invalid chapter ${chapter}`);
+      }
+      if (chapter >= book.chapters.length) {
+        throw new NotFoundException(`chapter ${chapter} for book ${bookId} not found`);
+      }
+      book.chapters[chapter].title = title;
+      this.commonService.writeJSONFile(config, book);
+      return true;
+    } catch (e) {
+      logger.error(e);
+      throw new InternalServerErrorException(`can't edit chapter ${chapter} of book ${bookId}`);
     }
   }
 

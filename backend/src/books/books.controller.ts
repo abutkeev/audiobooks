@@ -7,6 +7,7 @@ import { Admin } from 'src/auth/admin.decorator';
 import BookInfoDto from './dto/BookInfoDto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import ExternalChapterDto from './dto/ExternalChapterDto';
+import ChapterEditDto from './dto/ChapterEditDto';
 
 @ApiTags('books')
 @Controller('books')
@@ -83,6 +84,13 @@ export class BooksController {
   @ApiOperation({ description: 'Update book chapters duration' })
   updateDurations(@Param('id') id: string): true {
     return this.service.updateDurations(id);
+  }
+
+  @Admin()
+  @Put(':id/chapter/:chapter')
+  @ApiOperation({ description: 'Update book chapter title' })
+  editChapterTitle(@Param('id') id: string, @Param('chapter') chapter: number, @Body() info: ChapterEditDto): true {
+    return this.service.editChaperTitle(id, chapter, info.title);
   }
 
   @Admin()
