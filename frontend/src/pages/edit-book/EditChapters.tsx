@@ -1,6 +1,6 @@
-import { Button, Paper, Stack, Typography } from '@mui/material';
+import { Button, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { BooksGetChaptersFromUrlApiResponse, ChapterDto, useBooksUpdateDurationsMutation } from '@/api/api';
-import { Link, Upload } from '@mui/icons-material';
+import { Edit, Link, Upload } from '@mui/icons-material';
 import UploadButton from '@/components/common/UploadButton';
 import { useState } from 'react';
 import UploadDialog from './UploadDialog';
@@ -12,6 +12,7 @@ import { useAppDispatch } from '@/store';
 import { addSnackbar } from '@/store/features/snackbars';
 import getErrorMessage from '@/utils/getErrorMessage';
 import ProgressButton from '@/components/common/ProgressButton';
+import EditChapterDialog, { ChapterInfo } from './EditChapterDialog';
 
 interface EditChaptersProps {
   bookId: string;
@@ -21,6 +22,7 @@ interface EditChaptersProps {
 const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>();
+  const [editingChapter, setEditingChapter] = useState<ChapterInfo>();
   const [showExternalUrlDialog, setShowExternalUrlDialog] = useState(false);
   const [externalChapters, setExternalChapters] = useState<BooksGetChaptersFromUrlApiResponse>();
   const [updateDurations] = useBooksUpdateDurationsMutation();
@@ -36,10 +38,13 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
 
   return (
     <>
-      {chapters.map(({ title, filename, duration }) => (
+      {chapters.map(({ title, filename, duration }, index) => (
         <Paper key={title} square sx={{ p: 1 }}>
           <Stack direction='row' spacing={1}>
             <Typography flexGrow={1}>{`${title} (${filename})`}</Typography>
+            <IconButton onClick={() => setEditingChapter({ index, title, filename })}>
+              <Edit />
+            </IconButton>
             {duration && <Typography>{formatTime(duration)}</Typography>}
           </Stack>
         </Paper>
@@ -72,6 +77,7 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
         externalChapters={externalChapters}
         onClose={() => setExternalChapters(undefined)}
       />
+      <EditChapterDialog bookId={bookId} chapter={editingChapter} close={() => setEditingChapter(undefined)} />
     </>
   );
 };
