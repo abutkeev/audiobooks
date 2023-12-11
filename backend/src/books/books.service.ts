@@ -232,7 +232,7 @@ export class BooksService {
       return true;
     } catch (e) {
       logger.error(e);
-      throw new InternalServerErrorException(`can't add cover to book ${bookId}`);
+      throw new InternalServerErrorException(`can't update durations of book ${bookId}`);
     }
   }
 
