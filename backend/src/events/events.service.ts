@@ -49,6 +49,15 @@ export class EventsService {
     }
   }
 
+  sendAll({ message, args }: { message: 'invalidate_tag' | 'refresh_token'; args?: any }) {
+    for (const [userId, sockets] of Object.entries(EventsService.sockets)) {
+      for (const { instanceId, socket } of sockets) {
+        this.logger.log(`Sending message ${message}(${JSON.stringify(args)}) to ${userId}(${instanceId})`);
+        socket.emit(message, args);
+      }
+    }
+  }
+
   async sendToAdmins({ message, args }: { message: 'invalidate_tag' | 'refresh_token'; args?: any }) {
     for (const userId of Object.keys(EventsService.sockets)) {
       const { admin } = await this.usersService.find(userId);
