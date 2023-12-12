@@ -41,7 +41,7 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
     <>
       {chapters.map(({ title, filename, duration }, index) => (
         <Paper key={title} square sx={{ p: 1, ':hover': { backgroundColor: palette.primary.dark } }}>
-          <Stack direction='row' spacing={1}>
+          <Stack direction='row' spacing={1} alignItems='center'>
             <Typography flexGrow={1}>{`${title} (${filename})`}</Typography>
             <IconButton onClick={() => setEditingChapter({ index, title, filename })}>
               <Edit />
