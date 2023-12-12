@@ -1,4 +1,4 @@
-import { Button, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Button, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { BooksGetChaptersFromUrlApiResponse, ChapterDto, useBooksUpdateDurationsMutation } from '@/api/api';
 import { Edit, Link, Upload } from '@mui/icons-material';
 import UploadButton from '@/components/common/UploadButton';
@@ -27,6 +27,7 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
   const [externalChapters, setExternalChapters] = useState<BooksGetChaptersFromUrlApiResponse>();
   const [updateDurations] = useBooksUpdateDurationsMutation();
   const dispatch = useAppDispatch();
+  const { palette } = useTheme();
 
   const handleUpdateDurations = async () => {
     try {
@@ -39,7 +40,7 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
   return (
     <>
       {chapters.map(({ title, filename, duration }, index) => (
-        <Paper key={title} square sx={{ p: 1 }}>
+        <Paper key={title} square sx={{ p: 1, ':hover': { backgroundColor: palette.primary.dark } }}>
           <Stack direction='row' spacing={1}>
             <Typography flexGrow={1}>{`${title} (${filename})`}</Typography>
             <IconButton onClick={() => setEditingChapter({ index, title, filename })}>
