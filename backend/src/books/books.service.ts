@@ -21,6 +21,7 @@ import { firstValueFrom } from 'rxjs';
 import ExternalChapterDto from './dto/ExternalChapterDto';
 import OldBookDto from './dto/OldBookDto';
 import { ExternalPlaylistService } from 'src/external-playlist/external-playlist.service';
+import { EventsService } from 'src/events/events.service';
 
 const logger = new Logger('BooksService');
 const getBookInfoConfig = (id: string) => `books/${id}/info.json`;
@@ -31,6 +32,7 @@ export class BooksService {
   constructor(
     private readonly httpService: HttpService,
     private readonly externalPlaylistService: ExternalPlaylistService,
+    private eventsService: EventsService,
     private commonService: CommonService
   ) {}
 
@@ -250,6 +252,7 @@ export class BooksService {
       }
       book.chapters[chapter].title = title;
       this.commonService.writeJSONFile(config, book);
+      this.eventsService.sendAll({ message: 'invalidate_tag', args: 'books' });
       return true;
     } catch (e) {
       logger.error(e);
