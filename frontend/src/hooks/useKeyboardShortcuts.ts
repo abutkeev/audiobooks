@@ -13,7 +13,7 @@ const useKeyboardShortcuts = () => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      const { code, metaKey, ctrlKey, altKey } = e;
+      const { code, metaKey, ctrlKey, altKey, shiftKey } = e;
       const disableDefaultActions = () => {
         e.preventDefault();
       };
@@ -42,12 +42,12 @@ const useKeyboardShortcuts = () => {
           disableDefaultActions();
           break;
         case 'KeyN':
-          if (metaKey || ctrlKey || altKey) break;
+          if (metaKey || ctrlKey || altKey || !shiftKey) break;
           dispatch(chapterChange(currentChapter + 1));
           disableDefaultActions();
           break;
         case 'KeyP':
-          if (metaKey || ctrlKey || altKey) break;
+          if (metaKey || ctrlKey || altKey || !shiftKey) break;
           dispatch(chapterChange(currentChapter - 1));
           disableDefaultActions();
           break;
