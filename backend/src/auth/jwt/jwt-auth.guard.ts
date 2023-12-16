@@ -1,14 +1,20 @@
-import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import { ExecutionContext, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from '../public.decorator';
 import { INACTIVE_ALLOWED_KEY } from '../allow-inactive.decorator';
+import { UsersService } from 'src/users/users.service';
 
 const logger = new Logger('JwtAuthGuard');
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private reflector: Reflector,
+
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService
+  ) {
     super();
   }
 
@@ -28,13 +34,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
       const canActivate = await super.canActivate(context);
 
-      const inactiveAllowed = this.reflector.getAllAndOverride<boolean>(INACTIVE_ALLOWED_KEY, [
-        context.getHandler(),
-        context.getClass(),
-      ]);
       const { user } = super.getRequest(context);
-      if (!user.enabled && !inactiveAllowed) {
-        return false;
+      if (user) {
+        this.usersService.updateOnline(user.id);
+
+        const inactiveAllowed = this.reflector.getAllAndOverride<boolean>(INACTIVE_ALLOWED_KEY, [
+          context.getHandler(),
+          context.getClass(),
+        ]);
+        if (!user.enabled && !inactiveAllowed) {
+          return false;
+        }
       }
 
       if (typeof canActivate === 'boolean') return canActivate;
