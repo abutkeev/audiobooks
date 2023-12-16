@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { copyFileSync, existsSync, readFileSync, renameSync, writeFileSync } from 'fs';
 import NodeID3 from 'node-id3';
 import path from 'path';
@@ -13,7 +13,7 @@ export class CommonService {
   readJSONFile(name: string): unknown {
     const filename = path.resolve(DataDir, name);
     if (!existsSync(filename)) {
-      throw new NotFoundException(`${filename} not found`);
+      return undefined;
     }
     return JSON.parse(readFileSync(filename).toString());
   }

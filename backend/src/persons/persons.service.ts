@@ -15,7 +15,7 @@ export class PersonsService {
 
   get(type: PersonType): PersonDto[] {
     try {
-      const result = this.commonService.readJSONFile(getConfigName(type));
+      const result = this.commonService.readJSONFile(getConfigName(type)) || [];
       if (!Array.isArray(result)) {
         logger.log(result);
         throw new Error('result is not array');

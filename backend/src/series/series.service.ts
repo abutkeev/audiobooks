@@ -42,7 +42,7 @@ export class SeriesService {
 
   get(): SeriesDto[] {
     try {
-      const config = this.commonService.readJSONFile(configName);
+      const config = this.commonService.readJSONFile(configName) || [];
       if (!this.check_config(config)) {
         throw new Error('config validation failed');
       }

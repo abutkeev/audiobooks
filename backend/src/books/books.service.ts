@@ -80,6 +80,7 @@ export class BooksService {
   get(id: string): BookDto {
     try {
       const config = this.commonService.readJSONFile(getBookInfoConfig(id));
+      if (!config) throw new NotFoundException();
       if (!this.check_config(config)) {
         throw new InternalServerErrorException('config validation failed');
       }
