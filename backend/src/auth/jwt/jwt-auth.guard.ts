@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from '../public.decorator';
 import { INACTIVE_ALLOWED_KEY } from '../allow-inactive.decorator';
 import { UsersService } from 'src/users/users.service';
+import { HAS_ONLINE_TAG } from '../has-online-tag.decorator';
 
 const logger = new Logger('JwtAuthGuard');
 
@@ -36,7 +37,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
       const { user } = super.getRequest(context);
       if (user) {
-        this.usersService.updateOnline(user.id);
+        const hasOnlineTag = this.reflector.getAllAndOverride<boolean>(HAS_ONLINE_TAG, [
+          context.getHandler(),
+          context.getClass(),
+        ]);
+
+        if (!hasOnlineTag) {
+          this.usersService.updateOnline(user.id);
+        }
 
         const inactiveAllowed = this.reflector.getAllAndOverride<boolean>(INACTIVE_ALLOWED_KEY, [
           context.getHandler(),

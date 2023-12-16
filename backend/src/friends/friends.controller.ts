@@ -3,13 +3,14 @@ import { ApiTags } from '@nestjs/swagger';
 import { FriendsService } from './friends.service';
 import { AddFriendRequestDto } from './dto/add-friend-request.dto';
 import { FriendDto } from './dto/friend.dto';
+import { HasOnlineTag } from 'src/auth/has-online-tag.decorator';
 
 @ApiTags('friends')
 @Controller('friends')
 export class FriendsController {
   constructor(private friendsService: FriendsService) {}
 
-  @ApiTags('online')
+  @HasOnlineTag()
   @Get()
   get(@Request() { user: { id } }): Promise<FriendDto[]> {
     return this.friendsService.get(id);

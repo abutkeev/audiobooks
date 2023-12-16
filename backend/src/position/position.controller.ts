@@ -5,6 +5,7 @@ import { PositionEntryDto } from './dto/position-entry.dto';
 import { FriendPositionEntryDto } from './dto/friend-position-entry.dto';
 import { PositionDto } from './dto/position.dto';
 import { FriendPositionsDto } from './dto/friend-positions.dto';
+import { HasOnlineTag } from 'src/auth/has-online-tag.decorator';
 
 @ApiTags('position')
 @Controller('position')
@@ -24,7 +25,7 @@ export class PositionController {
     }));
   }
 
-  @ApiTags('online')
+  @HasOnlineTag()
   @Get('friends')
   @ApiOperation({ description: 'Get user friends positions' })
   async getFriends(@Request() { user }): Promise<FriendPositionsDto[]> {

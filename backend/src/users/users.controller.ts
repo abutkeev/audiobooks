@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Admin } from 'src/auth/admin.decorator';
+import { HasOnlineTag } from 'src/auth/has-online-tag.decorator';
 
 @Admin()
 @ApiTags('users')
@@ -11,7 +12,7 @@ import { Admin } from 'src/auth/admin.decorator';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @ApiTags('online')
+  @HasOnlineTag()
   @Get()
   @ApiOperation({ description: 'Get user list' })
   async getAll() {
