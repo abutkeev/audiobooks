@@ -11,6 +11,7 @@ import { Admin } from 'src/auth/admin.decorator';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @ApiTags('online')
   @Get()
   @ApiOperation({ description: 'Get user list' })
   async getAll() {

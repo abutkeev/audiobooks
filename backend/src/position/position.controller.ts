@@ -24,6 +24,7 @@ export class PositionController {
     }));
   }
 
+  @ApiTags('online')
   @Get('friends')
   @ApiOperation({ description: 'Get user friends positions' })
   async getFriends(@Request() { user }): Promise<FriendPositionsDto[]> {

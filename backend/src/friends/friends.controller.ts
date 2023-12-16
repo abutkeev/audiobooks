@@ -9,6 +9,7 @@ import { FriendDto } from './dto/friend.dto';
 export class FriendsController {
   constructor(private friendsService: FriendsService) {}
 
+  @ApiTags('online')
   @Get()
   get(@Request() { user: { id } }): Promise<FriendDto[]> {
     return this.friendsService.get(id);

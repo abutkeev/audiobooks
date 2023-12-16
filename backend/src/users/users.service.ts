@@ -143,10 +143,10 @@ export class UsersService {
     }
 
     await this.userModel.updateOne({ _id: id }, { online: new Date() });
-    this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'users' });
+    this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'online' });
     const friends = await this.friendsService.get(id);
     for (const { uid } of friends) {
-      this.eventsService.sendToUser({ userId: uid, message: 'invalidate_tag', args: 'friends' });
+      this.eventsService.sendToUser({ userId: uid, message: 'invalidate_tag', args: 'online' });
     }
     return true;
   }
