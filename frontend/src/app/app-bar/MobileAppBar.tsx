@@ -4,6 +4,7 @@ import Search from './Search';
 import { useAppSelector } from '@/store';
 import { useState } from 'react';
 import AccountMenu from '../account-menu';
+import AdminMenu from '../admin-menu';
 
 interface MobileAppBarProps {
   handleHomeButtonClick(): void;
@@ -37,6 +38,7 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({ handleHomeButtonClick, show
                   <SearchIcon />
                 </IconButton>
               )}
+              <AdminMenu />
               <AccountMenu />
             </>
           )}
