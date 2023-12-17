@@ -11,6 +11,7 @@ import {
 import ProgressButton, { ProgressButtonProps } from './ProgressButton';
 import { useTranslation } from 'react-i18next';
 import { SyntheticEvent } from 'react';
+import useMobile from '@/hooks/useMobile';
 
 interface CustomDialogProps {
   open: boolean;
@@ -46,6 +47,8 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
   extraButtons,
 }) => {
   const { t } = useTranslation();
+  const mobile = useMobile();
+
   const { variant: cancelButtonVariant, ...otherCancelButtonProps } = cancelButtonProps || {};
   const { variant: confirmButtonVariant, ...otherConfirmButtonProps } = confirmButtonProps || {};
 
@@ -83,10 +86,15 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
-        <Stack direction='row' spacing={1}>
+        <Stack direction={mobile ? 'column' : 'row'} spacing={1} flexGrow={1} justifyContent='flex-end' mx={1} mb={1}>
           {extraButtons}
           {(onCancel || close) && (
-            <Button onClick={handleCancel} variant={cancelButtonVariant || 'outlined'} {...otherCancelButtonProps}>
+            <Button
+              onClick={handleCancel}
+              variant={cancelButtonVariant || 'outlined'}
+              {...otherCancelButtonProps}
+              fullWidth={mobile}
+            >
               {cancelButtonText || (onConfirm || onCancel ? t('Cancel') : t('Close'))}
             </Button>
           )}
@@ -96,6 +104,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
               variant={confirmButtonVariant || 'contained'}
               refreshing={refreshing}
               {...otherConfirmButtonProps}
+              buttonProps={{ fullWidth: mobile, ...otherConfirmButtonProps.buttonProps }}
             >
               {confirmButtonText || t('Confirm')}
             </ProgressButton>

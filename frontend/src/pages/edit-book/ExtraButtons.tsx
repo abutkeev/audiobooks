@@ -4,6 +4,7 @@ import { FC, MutableRefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { decodeTranslit, removeTitles, resetTitles, stripPrefixNumbers } from './useUploading';
 import MenuButton from '@/components/common/MenuButton';
+import useMobile from '@/hooks/useMobile';
 
 interface ExtraButtonsProps {
   uploading: boolean;
@@ -13,6 +14,8 @@ interface ExtraButtonsProps {
 
 const ExtraButtons: FC<ExtraButtonsProps> = ({ uploading, dispatch, abortControllerRef }) => {
   const { t } = useTranslation();
+  const mobile = useMobile();
+
   if (uploading) {
     if (!abortControllerRef) return;
 
@@ -32,6 +35,7 @@ const ExtraButtons: FC<ExtraButtonsProps> = ({ uploading, dispatch, abortControl
         { title: t('Decode translit'), onClick: () => dispatch(decodeTranslit()) },
       ]}
       variant='outlined'
+      buttonProps={{ fullWidth: mobile }}
     />
   );
 };
