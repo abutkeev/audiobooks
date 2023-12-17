@@ -38,6 +38,15 @@ export class PositionService {
     return result;
   }
 
+  async remove({ userId, instanceId, bookId }: { userId: string; instanceId: string; bookId: string }): Promise<true> {
+    await this.positionModel.deleteOne({ userId, instanceId, bookId });
+    this.eventsService.sendToUser({ userId, message: 'invalidate_tag', args: 'position' });
+    for (const { uid } of await this.friendsService.get(userId)) {
+      this.eventsService.sendToUser({ userId: uid, message: 'invalidate_tag', args: 'position' });
+    }
+    return true;
+  }
+
   async getFriends({ uid, bookId }: { uid: string; bookId: string }): Promise<FriendPositionEntryDto[]> {
     const friends = await this.friendsService.get(uid);
     const friendIds = friends.map(({ uid }) => uid);

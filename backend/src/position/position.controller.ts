@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Request } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Request } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PositionService } from './position.service';
 import { PositionEntryDto } from './dto/position-entry.dto';
@@ -42,6 +42,12 @@ export class PositionController {
       position,
       updated: updated.toISOString(),
     }));
+  }
+
+  @Delete(':bookId/:instanceId')
+  @ApiOperation({ description: 'Remove user positions for book' })
+  remove(@Param('bookId') bookId: string, @Param('instanceId') instanceId: string, @Request() { user }) {
+    return this.positionService.remove({ userId: user.id, bookId, instanceId });
   }
 
   @Get(':bookId/friends')
