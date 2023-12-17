@@ -5,7 +5,7 @@ import CustomDialog from './CustomDialog';
 import { useTranslation } from 'react-i18next';
 
 export interface DeleteButtonProps {
-  onConfirm(): void | Promise<void>;
+  onConfirm(e: MouseEvent): void | Promise<void>;
   confirmationTitle: string;
   confirmationBody: ReactNode;
   confirmButtonText?: string;
@@ -34,7 +34,7 @@ const DeleteButton: FC<PropsWithChildren<DeleteButtonProps>> = ({
 
   const handleConfirm = async (e: MouseEvent) => {
     e.stopPropagation();
-    await onConfirm();
+    await onConfirm(e);
   };
 
   const handleClose = (e: MouseEvent) => {
