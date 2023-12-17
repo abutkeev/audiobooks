@@ -13,6 +13,7 @@ import { addSnackbar } from '@/store/features/snackbars';
 import getErrorMessage from '@/utils/getErrorMessage';
 import ProgressButton from '@/components/common/ProgressButton';
 import EditChapterDialog, { ChapterInfo } from './EditChapterDialog';
+import useMobile from '@/hooks/useMobile';
 
 interface EditChaptersProps {
   bookId: string;
@@ -28,6 +29,7 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
   const [updateDurations] = useBooksUpdateDurationsMutation();
   const dispatch = useAppDispatch();
   const { palette } = useTheme();
+  const mobile = useMobile();
 
   const handleUpdateDurations = async () => {
     try {
@@ -50,7 +52,7 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
           </Stack>
         </Paper>
       ))}
-      <Stack direction='row' spacing={1} sx={{ mt: 1 }}>
+      <Stack direction={mobile ? 'column' : 'row'} spacing={1} sx={{ mt: 1 }}>
         <UploadButton
           startIcon={<Upload />}
           variant='contained'
@@ -63,7 +65,7 @@ const EditChapters: React.FC<EditChaptersProps> = ({ bookId, chapters }) => {
         <Button startIcon={<Link />} variant='contained' onClick={() => setShowExternalUrlDialog(true)}>
           {t('Download from external URL')}
         </Button>
-        <ProgressButton variant='outlined' onClick={handleUpdateDurations}>
+        <ProgressButton variant='outlined' buttonProps={{ fullWidth: mobile }} onClick={handleUpdateDurations}>
           {t('Update durations')}
         </ProgressButton>
       </Stack>
