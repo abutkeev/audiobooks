@@ -53,8 +53,8 @@ const MenuButton: FC<MenuButtonProps> = ({
   return (
     <>
       <ProgressButton
-        buttonProps={{ endIcon: <KeyboardArrowDown /> }}
         {...progressButtonProps}
+        buttonProps={{ endIcon: <KeyboardArrowDown />, ...progressButtonProps.buttonProps }}
         inProgress={inProgress || processing}
         refreshing={refreshing}
         disabled={disabled || actions.length === 0}
