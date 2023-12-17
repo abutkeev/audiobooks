@@ -1,5 +1,5 @@
 import { Home } from '@mui/icons-material';
-import { Box, IconButton, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, IconButton, Toolbar, Typography } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Search from './Search';
@@ -8,6 +8,7 @@ import { useAppSelector } from '@/store';
 import MobileAppBar from './MobileAppBar';
 import AccountMenu from '../account-menu';
 import AdminMenu from '../admin-menu';
+import useMobile from '@/hooks/useMobile';
 
 const AppBar: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const AppBar: React.FC = () => {
   const [searchParams] = useSearchParams();
   const title = useAppSelector(({ title }) => title);
   const token = useAppSelector(({ auth: { token } }) => token);
+  const mobile = useMobile();
 
   const handleHomeButtonClick = () => {
     localStorage.removeItem(currentBookVarName);
@@ -23,8 +25,6 @@ const AppBar: React.FC = () => {
 
   const showHomeButton = !!token && (pathname !== '/' || new Set(searchParams.keys()).size !== 0);
 
-  const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   if (mobile) {
     return <MobileAppBar handleHomeButtonClick={handleHomeButtonClick} showHomeButton={showHomeButton} />;
   }
