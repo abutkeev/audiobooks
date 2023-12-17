@@ -29,7 +29,13 @@ const EditBookPage: React.FC = () => {
   return (
     <LoadingWrapper loading={isLoading} error={isError}>
       <Link to={`/book/${id}`}>{t('Go to book page')}</Link>
-      <Tabs value={tabIndex} onChange={(_, index) => setTabIndex(index)} sx={{ mb: 1 }}>
+      <Tabs
+        value={tabIndex}
+        onChange={(_, index) => setTabIndex(index)}
+        sx={{ mb: 1 }}
+        variant='scrollable'
+        scrollButtons='auto'
+      >
         <Tab value={0} label={t('Info')} />
         <Tab value={1} label={t('Chapters')} />
         <Tab value={2} label={t('Cover')} />

@@ -24,7 +24,13 @@ const MainPage: React.FC = () => {
   return (
     <>
       {showTabs && (
-        <Tabs value={currentTab} onChange={(_, index) => setCurrentTab(index)} sx={{ mb: 1 }}>
+        <Tabs
+          value={currentTab}
+          onChange={(_, index) => setCurrentTab(index)}
+          sx={{ mb: 1 }}
+          variant='scrollable'
+          scrollButtons='auto'
+        >
           <Tab value='my' label={t('My current books')} />
           <Tab value='friends' label={t("Friends' current books")} />
           <Tab value='all' label={t('All books')} />
