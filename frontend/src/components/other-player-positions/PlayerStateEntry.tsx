@@ -1,11 +1,13 @@
+import { usePositionRemoveMutation } from '@/api/api';
 import useFormattedDateTime from '@/hooks/useFormattedDateTime';
 import { useAppDispatch } from '@/store';
 import { updateBookState } from '@/store/features/player';
 import formatTime from '@/utils/formatTime';
 import getFriendDisplayName from '@/utils/getFriendDisplayName';
-import { Paper, Typography } from '@mui/material';
-import { FC, useMemo } from 'react';
+import { Paper, Stack, Typography } from '@mui/material';
+import { FC, MouseEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import DeleteButton from '../common/DeleteButton';
 
 interface PlayerStateEntryProps {
   bookId: string;
@@ -19,6 +21,7 @@ interface PlayerStateEntryProps {
 
 const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
   bookId,
+  instanceId,
   currentChapter,
   position,
   updated,
@@ -27,6 +30,7 @@ const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const [remove] = usePositionRemoveMutation();
 
   const chapterName = useMemo(() => {
     const chapterTitle = chapters[currentChapter].title;
@@ -50,6 +54,11 @@ const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
     dispatch(updateBookState({ currentChapter, position, bookId }));
   };
 
+  const handleRemove = async (e: MouseEvent) => {
+    e.stopPropagation();
+    await remove({ bookId, instanceId });
+  };
+
   return (
     <Paper
       square
@@ -61,20 +70,36 @@ const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
       }}
       onClick={handlePlayerStateChange}
     >
-      <Typography>
-        {friend
-          ? t('Friend {{friend}}, current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
-              friend: getFriendDisplayName(friend),
-              currentChapter: chapterName,
-              position: formatTime(position),
-              updated: formattedUpdated,
-            })
-          : t('Current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
-              currentChapter: chapterName,
-              position: formatTime(position),
-              updated: formattedUpdated,
-            })}
-      </Typography>
+      <Stack direction='row' spacing={1} flexGrow={1}>
+        <Typography flexGrow={1}>
+          {friend
+            ? t('Friend {{friend}}, current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
+                friend: getFriendDisplayName(friend),
+                currentChapter: chapterName,
+                position: formatTime(position),
+                updated: formattedUpdated,
+              })
+            : t('Current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
+                currentChapter: chapterName,
+                position: formatTime(position),
+                updated: formattedUpdated,
+              })}
+        </Typography>
+        {!friend && (
+          <DeleteButton
+            onConfirm={handleRemove}
+            confirmationTitle={t('Remove postiton?')}
+            confirmationBody={t(
+              'Remove position (current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}})?',
+              {
+                currentChapter: chapterName,
+                position: formatTime(position),
+                updated: formattedUpdated,
+              }
+            )}
+          />
+        )}
+      </Stack>
     </Paper>
   );
 };
