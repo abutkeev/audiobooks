@@ -83,7 +83,7 @@ const SleepControl: React.FC = () => {
         onClick={e => setMenuAnchor(e.currentTarget)}
       />
       {!!sleepTimerLeft && <Typography>{formatTime(sleepTimerLeft)}</Typography>}
-      {pauseOnChapterEnd && <Typography>on chapter end</Typography>}
+      {pauseOnChapterEnd && <Typography>{t('on chapter end')}</Typography>}
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
         {(!!sleepTimerLeft || pauseOnChapterEnd) && (
           <MenuItem onClick={setSleepTimer(0)}>
