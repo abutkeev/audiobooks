@@ -9,6 +9,10 @@ class ExternalChapterDto {
   @IsNotEmpty()
   @ApiProperty({ required: true })
   url: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
+  bookUrl: string;
 }
 
 export default ExternalChapterDto;

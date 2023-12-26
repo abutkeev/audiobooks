@@ -293,7 +293,7 @@ export class BooksService {
     }
   }
 
-  async downloadExternalChapter(bookId: string, { title, url }: ExternalChapterDto): Promise<true> {
+  async downloadExternalChapter(bookId: string, { title, url, bookUrl }: ExternalChapterDto): Promise<true> {
     const config = getBookInfoConfig(bookId);
     if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
     try {
@@ -305,9 +305,14 @@ export class BooksService {
       if (chapters.find(chapter => chapter.filename === filename)) {
         throw new UnprocessableEntityException(`chapter file ${filename} for book ${bookId} is already exists`);
       }
+      const { origin } = new URL(bookUrl);
       const { data } = await firstValueFrom(
         this.httpService.get(url, {
           responseType: 'arraybuffer',
+          headers: {
+            Origin: origin,
+            Referer: origin,
+          },
         })
       );
       const filePath = path.resolve(booksDir, bookId, filename);

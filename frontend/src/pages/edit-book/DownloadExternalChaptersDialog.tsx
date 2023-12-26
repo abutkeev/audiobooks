@@ -40,7 +40,10 @@ const DownloadExternalChaptersDialog: React.FC<DownloadExternalChaptersDialogPro
         if (!externalChapters || !externalChapters[index]) return;
         if (status !== 'new') continue;
         dispatch(startUploading(index));
-        await downloadChapter({ id: bookId, externalChapterDto: { title, url: externalChapters[index].url } }).unwrap();
+        await downloadChapter({
+          id: bookId,
+          externalChapterDto: { title, url: externalChapters[index].url, bookUrl: externalChapters[index].bookUrl },
+        }).unwrap();
         dispatch(setUploaded(index));
       }
     } catch (e) {

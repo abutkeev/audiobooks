@@ -7,7 +7,7 @@ import ExternalChapterDto from 'src/books/dto/ExternalChapterDto';
 export class ExternalPlaylistService {
   constructor(private readonly httpService: HttpService) {}
 
-  private async extractPlayerJsRawPlaylist(data: string) {
+  private async extractPlayerJsRawPlaylist(data: string, bookUrl) {
     const internalResult = /file:(\[[^\]]+\])/.exec(data);
     if (internalResult && internalResult.length === 2) {
       return internalResult[1];
@@ -17,16 +17,26 @@ export class ExternalPlaylistService {
     if (!stringResult || stringResult.length !== 2) return;
     try {
       const url = new URL(stringResult[1]).toString();
-      const { data } = await firstValueFrom(this.httpService.get(url, { responseType: 'text' }));
+      const { origin } = new URL(bookUrl);
+      const { data } = await firstValueFrom(
+        this.httpService.get(url.toString(), {
+          responseType: 'text',
+          // https://booksrelax.com
+          headers: {
+            Origin: origin,
+            Referer: origin,
+          },
+        })
+      );
       return data;
     } catch (e) {
       // ignore error
     }
   }
 
-  private async getPlayerJsPlaylist(data: string) {
+  private async getPlayerJsPlaylist(data: string, bookUrl: string) {
     try {
-      const rawPlaylist = await this.extractPlayerJsRawPlaylist(data);
+      const rawPlaylist = await this.extractPlayerJsRawPlaylist(data, bookUrl);
       if (!rawPlaylist) return;
 
       const playlist = JSON.parse(rawPlaylist);
@@ -51,14 +61,14 @@ export class ExternalPlaylistService {
       return playlist.map(({ title, file }) => {
         // https://uknig.com
         const url = file.split(' or ')[0];
-        return { title, url };
+        return { title, url, bookUrl };
       });
     } catch {}
   }
 
   // https://audioknigivse.ru
   // https://slushkinvsem.ru/
-  getDlePlaylist(data: string) {
+  getDlePlaylist(data: string, bookUrl: string) {
     const result = /<!--dle_audio_begin:([^>]+)-->/.exec(data);
     if (!result || result.length !== 2) return;
 
@@ -67,7 +77,7 @@ export class ExternalPlaylistService {
       const chapter = rawChapter.split('|');
       if (chapter.length !== 2) return;
       try {
-        playlist.push({ title: chapter[1], url: new URL(chapter[0]).toString() });
+        playlist.push({ title: chapter[1], url: new URL(chapter[0]).toString(), bookUrl });
       } catch {
         // ignore errors
       }
@@ -109,7 +119,7 @@ export class ExternalPlaylistService {
         }
         try {
           const url = new URL(value.fileUrl, bookUrl).toString();
-          playlist.push({ url, title: value.name });
+          playlist.push({ url, title: value.name, bookUrl });
         } catch {
           return;
         }
@@ -119,12 +129,12 @@ export class ExternalPlaylistService {
   }
 
   async getPlaylist(data: string, url: string): Promise<ExternalChapterDto[] | undefined> {
-    const playerJsPlaylist = await this.getPlayerJsPlaylist(data);
+    const playerJsPlaylist = await this.getPlayerJsPlaylist(data, url);
     if (playerJsPlaylist && playerJsPlaylist.length > 0) {
       return playerJsPlaylist;
     }
 
-    const dlePlaylist = this.getDlePlaylist(data);
+    const dlePlaylist = this.getDlePlaylist(data, url);
     if (dlePlaylist && dlePlaylist.length > 0) {
       return dlePlaylist;
     }
