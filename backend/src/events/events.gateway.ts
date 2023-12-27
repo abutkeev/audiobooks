@@ -77,7 +77,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.disconnect();
       return;
     }
-    this.logger.log(`Client connected: ${result.id}, ${result.login}, ${instanceId}`);
+    this.logger.log(`Client connected: ${client.id}, ${result.id}, ${result.login}, ${instanceId}`);
     client.user = result;
     client.instanceId = instanceId;
     this.eventsService.registerSocket(result.id, instanceId, client);
