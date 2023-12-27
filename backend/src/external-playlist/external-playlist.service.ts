@@ -8,7 +8,8 @@ export class ExternalPlaylistService {
   constructor(private readonly httpService: HttpService) {}
 
   private async extractPlayerJsRawPlaylist(data: string, bookUrl) {
-    const internalResult = /file:(\[[^\]]+\])/.exec(data);
+    // https://otrub.in/
+    const internalResult = /["']?file["']?:(\[[^\]]+\])/.exec(data);
     if (internalResult && internalResult.length === 2) {
       return internalResult[1];
     }
