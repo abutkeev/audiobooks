@@ -7,7 +7,7 @@ import ExternalChapterDto from 'src/books/dto/ExternalChapterDto';
 export class ExternalPlaylistService {
   constructor(private readonly httpService: HttpService) {}
 
-  private async extractPlayerJsRawPlaylist(data: string, bookUrl) {
+  private async extractPlayerJsRawPlaylist(data: string, bookUrl: string) {
     // https://otrub.in/
     const internalResult = /["']?file["']?:(\[[^\]]+\])/.exec(data);
     if (internalResult && internalResult.length === 2) {
