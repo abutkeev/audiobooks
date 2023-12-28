@@ -64,6 +64,7 @@ mw.startListening({
     if (
       !socket ||
       !socket.connected ||
+      !currentState.player.state.duration ||
       (currentState.player.state === originalState.player.state &&
         originalState.websocket.connected === currentState.websocket.connected) ||
       currentState.player.bookId === '' ||
