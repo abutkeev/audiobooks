@@ -26,6 +26,12 @@ export class PositionService {
   }
 
   async savePosition(userId: string, instanceId: string, position: PositionDto) {
+    const current = await this.positionModel.findOne({ userId, instanceId, bookId: position.bookId });
+
+    if (current && position.currentChapter === current.currentChapter && position.position === current.position) {
+      return;
+    }
+
     const result = await this.positionModel.replaceOne(
       { userId, instanceId, bookId: position.bookId },
       { userId, instanceId, ...position },
