@@ -9,7 +9,7 @@ export class ExternalPlaylistService {
 
   private async extractPlayerJsRawPlaylist(data: string, bookUrl: string) {
     // https://otrub.in/
-    const internalResult = /["']?file["']?:(\[[^\]]+\])/.exec(data);
+    const internalResult = /["']?file["']?:\s+(\[[^\]]+\])/.exec(data);
     if (internalResult && internalResult.length === 2) {
       return internalResult[1];
     }
