@@ -1,5 +1,5 @@
 import { Edit, Mic, LibraryBooks, NavigateNext, AutoStories, AccessTime, EditNote } from '@mui/icons-material';
-import { Card, CardContent, Typography, Stack, Tooltip, Hidden, IconButton } from '@mui/material';
+import { Card, CardContent, Typography, Stack, Tooltip, Hidden, IconButton, Box } from '@mui/material';
 import Link from './common/Link';
 import { useMemo } from 'react';
 import { BookInfoDto, useBooksGetQuery } from '@/api/api';
@@ -56,11 +56,12 @@ const BookCard: React.FC<BookCardProps> = ({
           )}
         </Hidden>
         <CardContent sx={{ flexGrow: 1 }}>
-          <Stack direction='row' spacing={1}>
-            <Typography variant='h6' sx={{ cursor: 'default', display: 'flex', verticalAlign: 'middle' }} flexGrow={1} noWrap>
+          <Stack direction='row' spacing={1} alignItems='center'>
+            <Typography variant='h6' sx={{ cursor: 'default' }} noWrap>
               {list ? <Link to={`/book/${id}`}>{name}</Link> : name}
-              {draft && <EditNote />}
             </Typography>
+            {draft && <EditNote />}
+            <Box flexGrow={1}/>
             {admin && (
               <Tooltip title={t('Edit')}>
                 <IconButton component={Link} to={`/edit/${id}`}>
