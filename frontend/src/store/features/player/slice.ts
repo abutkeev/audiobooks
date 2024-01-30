@@ -8,6 +8,7 @@ export interface BookInfo {
     type: string;
     filename: string;
   };
+  draft?: boolean;
 }
 
 export interface BookChapter {

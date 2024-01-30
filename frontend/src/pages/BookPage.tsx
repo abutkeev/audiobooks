@@ -53,6 +53,7 @@ const BookPage: React.FC = () => {
                 series:
                   data.info.series.length !== 0 ? data.info.series.map(({ id }) => series[id]).join(',') : undefined,
                 cover: data.info.cover,
+                draft: data.info.draft,
               }}
               bookId={id}
               chapters={data.chapters}

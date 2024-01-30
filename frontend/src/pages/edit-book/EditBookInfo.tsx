@@ -19,9 +19,15 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
   const [authors, setAuthors] = useUpdatingState(info.authors);
   const [readers, setReaders] = useUpdatingState(info.readers);
   const [series, setSeries] = useUpdatingState(info.series);
+  const [draft, setDraft] = useUpdatingState(info.draft);
   const dispatch = useAppDispatch();
 
-  const modified = name !== info.name || authors !== info.authors || readers !== info.readers || series !== info.series;
+  const modified =
+    name !== info.name ||
+    authors !== info.authors ||
+    readers !== info.readers ||
+    series !== info.series ||
+    info.draft !== draft;
   const valid = !!name && authors.length !== 0 && readers.length !== 0;
 
   const handleSave = () => {
@@ -33,6 +39,7 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
         readers,
         series,
         cover,
+        draft,
       };
       save({ id, bookDto: { info, chapters } }).unwrap();
     } catch (e) {
@@ -46,6 +53,7 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
     setAuthors(info.authors);
     setReaders(info.readers);
     setSeries(info.series);
+    setDraft(info.draft);
   };
 
   return (
@@ -59,6 +67,8 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
         setReaders={setReaders}
         series={series}
         setSeries={setSeries}
+        draft={draft}
+        setDraft={setDraft}
       />
       {modified && (
         <Stack direction='row' spacing={1} mt={1}>

@@ -4,6 +4,7 @@ import ErrorWrapper from '@/components/common/ErrorWrapper';
 import { useTranslation } from 'react-i18next';
 import MultiSelect from '@/components/common/MultiSelect';
 import SeriesEditForm from './SeriesEditForm';
+import CustomSwitch from '../common/CustomSwitch';
 
 interface BookInfoEditFormProps {
   name: string;
@@ -14,6 +15,8 @@ interface BookInfoEditFormProps {
   setReaders(v: string[]): void;
   series: BookInfoDto['series'];
   setSeries(v: BookInfoDto['series']): void;
+  draft?: boolean;
+  setDraft(v: boolean): void;
 }
 
 const BookInfoEditForm: React.FC<BookInfoEditFormProps> = ({
@@ -25,6 +28,8 @@ const BookInfoEditForm: React.FC<BookInfoEditFormProps> = ({
   setReaders,
   series,
   setSeries,
+  draft,
+  setDraft,
 }) => {
   const { t } = useTranslation();
   const { data: authorsList = [], isLoading: authorsLoading, isError: authorsError } = useAuthorsGetQuery();
@@ -65,6 +70,7 @@ const BookInfoEditForm: React.FC<BookInfoEditFormProps> = ({
           noOptionsText={t('No readers')}
         />
         <SeriesEditForm series={series} setSeries={setSeries} authors={authors} />
+        <CustomSwitch checked={!!draft} onChange={setDraft} label={t('Draft')} />
       </Stack>
     </ErrorWrapper>
   );

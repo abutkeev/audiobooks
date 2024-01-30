@@ -21,6 +21,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
   const [authors, setAuthors] = useState<string[]>([]);
   const [readers, setReaders] = useState<string[]>([]);
   const [series, setSeries] = useState<BookInfoDto['series']>([]);
+  const [draft, setDraft] = useState<boolean>();
   const [gotoBookEditPage, setGotoBookEditPage] = useState(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
           authors,
           readers,
           series,
+          draft,
         },
       }).unwrap();
       if (gotoBookEditPage) {
@@ -74,6 +76,8 @@ const AddBookDialog: React.FC<AddBookDialogProps> = ({ open, close }) => {
             setReaders={setReaders}
             series={series}
             setSeries={setSeries}
+            draft={draft}
+            setDraft={setDraft}
           />
           <CustomSwitch label={t('Goto book edit page')} checked={gotoBookEditPage} onChange={setGotoBookEditPage} />
         </Stack>
