@@ -37,7 +37,9 @@ const BookCard: React.FC<BookCardProps> = ({
     if (!books || list || series.length === 0) return [];
     const nextBooks = series.map(({ id, number }) =>
       books.find(
-        book => !!number && book.info.series.some(series => series.id === id && series.number === `${+number + 1}`)
+        book =>
+          !!number &&
+          book.info.series.some(series => series.id === id && series.number && +series.number === +number + 1)
       )
     );
     return nextBooks;
