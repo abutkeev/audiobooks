@@ -24,6 +24,9 @@ class BookInfoDto {
 
   @ApiProperty({ required: false })
   cover?: CoverDto;
+
+  @ApiProperty({ required: false })
+  draft?: boolean;
 }
 
 export default BookInfoDto;
