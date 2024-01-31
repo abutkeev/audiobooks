@@ -17,7 +17,7 @@ const Chapter: React.FC<ChapterProps> = ({ title, duration, current, onClick, ca
       square
       sx={theme => ({
         p: 1,
-        backgroundColor: current ? theme.palette.primary.dark : undefined,
+        backgroundColor: current ? theme.palette.action.selected : undefined,
         cursor: 'pointer',
         display: 'flex',
         flexWrap: 'nowrap',
