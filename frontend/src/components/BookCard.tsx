@@ -61,7 +61,7 @@ const BookCard: React.FC<BookCardProps> = ({
               {list ? <Link to={`/book/${id}`}>{name}</Link> : name}
             </Typography>
             {draft && <EditNote />}
-            <Box flexGrow={1}/>
+            <Box flexGrow={1} />
             {admin && (
               <Tooltip title={t('Edit')}>
                 <IconButton component={Link} to={`/edit/${id}`}>
