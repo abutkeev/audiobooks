@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "Alexey Butkeev, Egor Filin",
   "scripts": {
     "dev": "vite",
     "prestart": "npm run prebuild",
