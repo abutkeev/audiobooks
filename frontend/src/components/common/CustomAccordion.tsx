@@ -47,7 +47,7 @@ const CustomAccordion: FC<CustomAccordionProps> = ({
               <Button variant='outlined' onClick={handleCancel}>
                 {t('Cancel')}
               </Button>
-            )}{' '}
+            )}
             {handleUpdate && (
               <ProgressButton disabled={!valid} onClick={handleUpdate}>
                 {t('Update')}
