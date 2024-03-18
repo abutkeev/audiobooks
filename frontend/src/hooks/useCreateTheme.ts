@@ -1,13 +1,13 @@
 import { createTheme, useMediaQuery } from '@mui/material';
 import { blue, blueGrey, green, grey, red } from '@mui/material/colors';
 import { useMemo } from 'react';
-import useSelectedTheme from './useSelectedTheme';
+import { useAppSelector } from '@/store';
 
 const useCreateTheme = () => {
   const systemDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [theme] = useSelectedTheme();
+  const { mode } = useAppSelector(({ theme }) => theme);
 
-  const darkMode = theme === 'dark' || (theme === 'auto' && systemDarkMode);
+  const darkMode = mode === 'dark' || (mode === 'auto' && systemDarkMode);
 
   return useMemo(
     () =>

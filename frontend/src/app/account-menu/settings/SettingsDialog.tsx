@@ -4,7 +4,8 @@ import { MenuItem, Stack, TextField, TextFieldProps } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useLazyProfileGetSettingsQuery, useProfileSetSettingsMutation } from '@/api/api';
 import useAuthData from '@/hooks/useAuthData';
-import useSelectedTheme from '@/hooks/useSelectedTheme';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { setThemeMode } from '@/store/features/theme';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -17,7 +18,8 @@ const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
   const auth = useAuthData();
   const [getSettings, { status }] = useLazyProfileGetSettingsQuery();
   const [setSettings] = useProfileSetSettingsMutation();
-  const [theme, handleThemeChange] = useSelectedTheme();
+  const theme = useAppSelector(({ theme }) => theme.mode);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!auth || !['uninitialized', 'fulfilled'].includes(status)) return;
@@ -27,6 +29,9 @@ const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
         if (settings?.language && settings.language !== language) {
           changeLanguage(settings.language);
         }
+        if (settings?.theme && settings.theme !== theme) {
+          dispatch(setThemeMode(settings.theme));
+        }
       });
   }, [status, auth, changeLanguage, getSettings, language]);
 
@@ -34,6 +39,14 @@ const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
     changeLanguage(value);
     if (auth) {
       await setSettings({ settingsDto: { language: value } });
+    }
+  };
+
+  const handleThemeChange: TextFieldProps['onChange'] = async ({ target: { value } }) => {
+    dispatch(setThemeMode(value));
+
+    if (auth) {
+      await setSettings({ settingsDto: { theme: value } });
     }
   };
 

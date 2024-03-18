@@ -16,6 +16,7 @@ import showMessage from '@/utils/showMessage';
 import authSlice, { authMiddleware } from './features/auth';
 import { websocketMiddleware, websocketSlice } from './features/websocket';
 import enhancedApi from '@/api/enhancedApi';
+import themeSlice from './features/theme';
 
 export const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ export const store = configureStore({
     [playerSlice.name]: playerSlice.reducer,
     [authSlice.name]: authSlice.reducer,
     [websocketSlice.name]: websocketSlice.reducer,
+    [themeSlice.name]: themeSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
