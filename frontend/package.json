@@ -54,8 +54,8 @@
     "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "@vite-pwa/assets-generator": "^0.0.9",
-    "@vitejs/plugin-react-swc": "^3.3.2",
+    "@vite-pwa/assets-generator": "^0.2.4",
+    "@vitejs/plugin-react-swc": "^3.6.0",
     "esbuild-runner": "^2.2.2",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -63,8 +63,8 @@
     "i18next-parser": "^8.9.0",
     "prettier": "^3.0.2",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5",
-    "vite-plugin-pwa": "^0.16.4",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite": "^5.1.6",
+    "vite-plugin-pwa": "^0.19.4",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }
