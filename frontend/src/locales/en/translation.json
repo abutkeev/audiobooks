@@ -59,6 +59,12 @@
   "Chats": "",
   "Readers": "",
   "Series": "",
+  "Alexey Butkeev": "",
+  "Source code": "",
+  "Authorization bot": "",
+  "Report an issue": "",
+  "Version": "",
+  "Build date": "",
   "App ready to work offline": "",
   "Application is updating": "",
   "Update": "",
@@ -227,5 +233,6 @@
   "Remove user": "",
   "This user": "",
   "Disable": "",
-  "Enable": ""
+  "Enable": "",
+  "not set": ""
 }

@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Container } from '@mui/material';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Snackbar from './Snackbar';
@@ -5,10 +6,11 @@ import AppBar from './app-bar/AppBar';
 import { useAppSelector } from '@/store';
 import ReloadPrompt from './ReloadPrompt';
 import { Outlet } from 'react-router-dom';
-import AddSpeedDial from './add-speed-dial';
+import Footer from './footer';
 
 const Main: React.FC = () => {
   const title = useAppSelector(({ title }) => title);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
@@ -19,11 +21,11 @@ const Main: React.FC = () => {
       </HelmetProvider>
       <AppBar />
       <Snackbar />
-      <Container sx={{ my: 1, maxWidth: 'md' }}>
+      <Container ref={mainRef} sx={{ my: 1, maxWidth: 'md' }}>
         <ReloadPrompt />
         <Outlet />
       </Container>
-      <AddSpeedDial />
+      <Footer mainRef={mainRef} />
     </>
   );
 };

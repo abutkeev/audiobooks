@@ -59,6 +59,12 @@
   "Chats": "Чаты",
   "Readers": "Чтецы",
   "Series": "Серии",
+  "Alexey Butkeev": "Алексей Буткеев",
+  "Source code": "Исходный код",
+  "Authorization bot": "Бот для авторизации",
+  "Report an issue": "Сообщить о проблеме",
+  "Version": "Версия",
+  "Build date": "Дата сборки",
   "App ready to work offline": "Приложение готово к работе оффлайн",
   "Application is updating": "Приложение обновляется",
   "Update": "Обновить",
@@ -235,5 +241,6 @@
   "Remove user": "Удалить пользователя",
   "This user": "Текущий пользователь",
   "Disable": "Дезактивировать",
-  "Enable": "Активировать"
+  "Enable": "Активировать",
+  "not set": "не установлено"
 }
