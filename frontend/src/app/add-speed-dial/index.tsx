@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import useAuthData from '@/hooks/useAuthData';
 import { Book, Edit, LibraryBooks, Mic, PersonAdd } from '@mui/icons-material';
 import AddPersonDialog from './AddPersonDialog';
@@ -9,7 +9,7 @@ import CustomSpeedDial from './CustomSpeedDial';
 import CustomSpeedDialAction from './CustomSpeedDialAction';
 import { useTranslation } from 'react-i18next';
 
-const AddSpeedDial: React.FC = () => {
+const AddSpeedDial = forwardRef<HTMLDivElement, { bottom?: number }>(({ bottom }, ref) => {
   const { t } = useTranslation();
   const { admin } = useAuthData() || {};
   const [addPersonDialogType, setAddPersonDialogType] = useState<'author' | 'reader'>();
@@ -21,7 +21,7 @@ const AddSpeedDial: React.FC = () => {
 
   return (
     <>
-      <CustomSpeedDial>
+      <CustomSpeedDial ref={ref} bottom={bottom}>
         <CustomSpeedDialAction
           icon={<Edit />}
           tooltipTitle={t('Add author')}
@@ -54,6 +54,6 @@ const AddSpeedDial: React.FC = () => {
       <AddUserDialog open={showAddUserDialog} close={() => setShowAddUserDialog(false)} />
     </>
   );
-};
+});
 
 export default AddSpeedDial;
