@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { Paper, Stack, Typography } from '@mui/material';
-import { BugReport, GitHub, Telegram } from '@mui/icons-material';
+import { BugReport, Cached, GitHub, Telegram } from '@mui/icons-material';
 import useMobile from '@/hooks/useMobile';
 import { useTranslation } from 'react-i18next';
 import FooterBarSeparator from './FooterBarSeparator';
@@ -38,6 +38,9 @@ const FooterBar = forwardRef<HTMLDivElement>((_, ref) => {
               <Typography variant='body2'>
                 {t('Build date')}: {formatIsoTimeString(BUILD_DATE)}
               </Typography>
+              <FooterLink icon={<Cached />} onClick={() => document.location.reload()}>
+                {t('Reload page')}
+              </FooterLink>
             </Stack>
           }
         />
