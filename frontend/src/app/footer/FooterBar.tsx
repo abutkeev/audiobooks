@@ -48,17 +48,15 @@ const FooterBar = forwardRef<HTMLDivElement>((_, ref) => {
         <>
           <Stack spacing={1} direction='row' justifyContent='center' alignItems='center'>
             <Typography variant='body2'>&copy; 2023–2024, {t('Alexey Butkeev')}</Typography>
-            <>
-              <FooterBarSeparator />
-              <FooterLink icon={<GitHub />} href={src_link}>
-                {t('Source code')}
-              </FooterLink>
-              <FooterBarSeparator />
-              <FooterLink icon={<Telegram />} href={bot_link}>
-                {t('Authorization bot')}
-              </FooterLink>
-              <FooterBarSeparator />
-            </>
+            <FooterBarSeparator />
+            <FooterLink icon={<GitHub />} href={src_link}>
+              {t('Source code')}
+            </FooterLink>
+            <FooterBarSeparator />
+            <FooterLink icon={<Telegram />} href={bot_link}>
+              {t('Authorization bot')}
+            </FooterLink>
+            <FooterBarSeparator />
             <FooterLink icon={<BugReport />} href={new_issue_link}>
               {t('Report an issue')}
             </FooterLink>
