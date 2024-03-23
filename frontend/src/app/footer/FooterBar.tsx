@@ -7,6 +7,7 @@ import FooterBarSeparator from './FooterBarSeparator';
 import FooterLink from './FooterLink';
 import formatIsoTimeString from '@/utils/formatIsoTimeString';
 import CustomAccordion from '@/components/common/CustomAccordion';
+import Copyright from './Copyright';
 
 const src_link = 'https://github.com/abutkeev/audiobooks';
 const bot_link = 'https://t.me/audiobooks_auth_bot';
@@ -20,7 +21,7 @@ const FooterBar = forwardRef<HTMLDivElement>((_, ref) => {
     <Paper ref={ref} sx={{ position: 'fixed', bottom: 0, width: '100%', p: 1 }}>
       {mobile ? (
         <CustomAccordion
-          summary={<Typography variant='body2'>&copy; 2023–2024, {t('Alexey Butkeev')}</Typography>}
+          summary={<Copyright />}
           details={
             <Stack spacing={1} direction='column'>
               <FooterLink icon={<GitHub />} href={src_link}>
@@ -47,7 +48,7 @@ const FooterBar = forwardRef<HTMLDivElement>((_, ref) => {
       ) : (
         <>
           <Stack spacing={1} direction='row' justifyContent='center' alignItems='center'>
-            <Typography variant='body2'>&copy; 2023–2024, {t('Alexey Butkeev')}</Typography>
+            <Copyright />
             <FooterBarSeparator />
             <FooterLink icon={<GitHub />} href={src_link}>
               {t('Source code')}
