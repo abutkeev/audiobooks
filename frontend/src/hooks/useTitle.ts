@@ -6,9 +6,8 @@ const useTitle = (title: string) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setTitle(title));
-    () => {
-      dispatch(setTitle(''));
-    };
+    
+    return () => void dispatch(setTitle(''));
   }, [title, dispatch]);
 };
 
