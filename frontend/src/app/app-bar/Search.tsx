@@ -45,6 +45,10 @@ const Search: React.FC<SearchProps> = ({ hide, fullWidth }) => {
   return (
     show && (
       <TextField
+        name='search'
+        aria-label='search'
+        autoComplete='off'
+        spellCheck={false}
         size='small'
         fullWidth={fullWidth}
         inputProps={{ ref: textfieldRef }}
