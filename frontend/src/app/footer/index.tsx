@@ -14,8 +14,8 @@ const Footer: FC<FooterProps> = ({ mainRef }) => {
   const buttonRef = useRef<HTMLDivElement>(null);
   const buttonOverlaps = useIsOverlaps({ root: mainRef.current, element: buttonRef.current });
 
-  const footerBarHeight = footerBarEntries[0]?.contentRect.height;
-  const buttonHeight = buttonRef.current?.getBoundingClientRect().height || 0;
+  const footerBarHeight = footerBarEntries[0]?.target.scrollHeight;
+  const buttonHeight = buttonRef.current?.scrollHeight || 0;
   const marginHeight = footerBarHeight + (buttonOverlaps ? buttonHeight : 0);
 
   return (
