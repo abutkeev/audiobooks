@@ -1,10 +1,26 @@
 version: "3"
 services:
-  audiobooks:
+  audiobooks-mongo:
+    container_name: "audiobooks-mongo"
+    image: "mongo"
+    networks:
+      - "audiobooks-mongo"
+    volumes:
+      - "${MONGO_STORAGE:-../db:/data/db}"
+    restart: "always"
+  audiobooks-backend:
+    container_name: "audiobooks-backend"
     image: "node:18"
+    depends_on:
+      - "audiobooks-mongo"
+    networks:
+      - "audiobooks-mongo"
     ports: 
-      - "4000:4000"
+      - "4001:4000"
     volumes:
       - "../:/mnt/"
     working_dir: "/mnt/backend"
+    restart: "always"
     command: ["npm", "run", "start:prod"]
+networks:
+  audiobooks-mongo:
