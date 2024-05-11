@@ -25,23 +25,25 @@ const FriendsBooks: React.FC = () => {
       positions.map(({ friend, positions }) => {
         return {
           friend,
-          positions: positions.reduce((result: { position: PositionDto; book: BookEntryDto }[], position) => {
-            const index = result.findIndex(({ position: { bookId } }) => bookId === position.bookId);
-            if (index !== -1) {
-              if (new Date(result[index].position.updated) < new Date(position.updated)) {
-                result[index].position = position;
+          positions: positions
+            .reduce((result: { position: PositionDto; book: BookEntryDto }[], position) => {
+              const index = result.findIndex(({ position: { bookId } }) => bookId === position.bookId);
+              if (index !== -1) {
+                if (new Date(result[index].position.updated) < new Date(position.updated)) {
+                  result[index].position = position;
+                }
+                return result;
               }
-              return result;
-            }
 
-            const book = bookList.find(({ id }) => id === position.bookId);
-            if (!book) {
-              return result;
-            }
+              const book = bookList.find(({ id }) => id === position.bookId);
+              if (!book) {
+                return result;
+              }
 
-            result.push({ position, book });
-            return result;
-          }, []),
+              result.push({ position, book });
+              return result;
+            }, [])
+            .sort((a, b) => new Date(b.position.updated).getTime() - new Date(a.position.updated).getTime()),
         };
       }),
     [positions, bookList]
