@@ -17,6 +17,7 @@ import FriendsMenuItem from './FriendsMenuItem';
 import SettingsMenuItem from './settings/SettingsMenuItem';
 import SettingsDialog from './settings/SettingsDialog';
 import AppbarMenuButton from '../app-bar/AppbarMenuButton';
+import ReconnectMenuItem from './ReconnectMenuItem';
 
 export interface AccountMenuItemProps {
   closeMenu(): void;
@@ -76,6 +77,7 @@ const AccountMenu: React.FC = () => {
         </Badge>
       </AppbarMenuButton>
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu} sx={{ mt: 1 }}>
+        {!connected && <ReconnectMenuItem closeMenu={closeMenu} />}
         <ProfileMenuItem setShowDialog={setShowProfileDialog} closeMenu={closeMenu} />
         <SettingsMenuItem setShowDialog={setShowSettingsDialog} closeMenu={closeMenu} />
         <ChangePasswordMenuItem setShowDialog={setShowChangePasswordDialog} closeMenu={closeMenu} />
