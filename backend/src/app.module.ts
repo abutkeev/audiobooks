@@ -18,6 +18,7 @@ import { TgBotModule } from './tg-bot/tg-bot.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { ProfileModule } from './profile/profile.module';
 import { ExternalPlaylistModule } from './external-playlist/external-playlist.module';
+import { LogModule } from './log/log.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ExternalPlaylistModule } from './external-playlist/external-playlist.mo
     TelegramModule,
     ProfileModule,
     ExternalPlaylistModule,
+    LogModule,
   ],
   controllers: [],
   providers: [],
