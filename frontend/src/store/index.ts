@@ -17,6 +17,7 @@ import authSlice, { authMiddleware } from './features/auth';
 import { websocketMiddleware, websocketSlice } from './features/websocket';
 import enhancedApi from '@/api/enhancedApi';
 import themeSlice from './features/theme';
+import apiErrorSaverMiddleware from './features/api/apiErrorSaverMiddleware';
 
 export const store = configureStore({
   reducer: {
@@ -39,6 +40,7 @@ export const store = configureStore({
         createPlayerUtilsMiddleware({ copyBookStateUrl, showMessage }),
         websocketMiddleware,
         authMiddleware,
+        apiErrorSaverMiddleware,
       ])
       .concat(enhancedApi.middleware),
 });
