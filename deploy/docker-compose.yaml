@@ -21,6 +21,11 @@ services:
       - "../:/mnt/"
     working_dir: "/mnt/backend"
     restart: "always"
-    command: ["npm", "run", "start:prod"]
+    environment:
+      TZ: "Europe/Moscow"
+    command: >
+      sh -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && 
+      echo $TZ > /etc/timezone &&
+      exec npm run start:prod"
 networks:
   audiobooks-mongo:
