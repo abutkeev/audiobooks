@@ -27,7 +27,7 @@ const useFormattedDateTime = (date?: Date, timeStyle: 'medium' | 'short' = 'shor
     if (!date) return undefined;
 
     const time = Intl.DateTimeFormat(undefined, { timeStyle }).format(new Date(date));
-    return t('{{date}} at {{time}}', { date: formattedDate, time });
+    return t('{{date}} at {{time}}', { date: formattedDate, time, interpolation: { escapeValue: false } });
   }, [formattedDate, timeStyle, date, t]);
 
   return formattedDateTime;
