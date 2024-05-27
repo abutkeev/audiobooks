@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const useFormattedDateTime = (date?: Date, timeStyle: 'medium' | 'short' = 'short') => {
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
 
   const todayDateString = new Date().toDateString();
   const yesterdayDateString = new Date(Date.now() - 24 * 60 * 60 * 1000).toDateString();
@@ -18,7 +21,7 @@ const useFormattedDateTime = (date?: Date, timeStyle: 'medium' | 'short' = 'shor
       return t('yesterday');
     }
 
-    return Intl.DateTimeFormat(undefined, {
+    return Intl.DateTimeFormat(language, {
       dateStyle: 'short',
     }).format(new Date(date));
   }, [date, todayDateString, yesterdayDateString, t]);
@@ -26,7 +29,7 @@ const useFormattedDateTime = (date?: Date, timeStyle: 'medium' | 'short' = 'shor
   const formattedDateTime = useMemo(() => {
     if (!date) return undefined;
 
-    const time = Intl.DateTimeFormat(undefined, { timeStyle }).format(new Date(date));
+    const time = Intl.DateTimeFormat(language, { timeStyle }).format(new Date(date));
     return t('{{date}} at {{time}}', { date: formattedDate, time, interpolation: { escapeValue: false } });
   }, [formattedDate, timeStyle, date, t]);
 
