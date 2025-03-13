@@ -21,8 +21,10 @@ const useCreateTheme = () => {
               },
               components: {
                 MuiLink: {
-                  defaultProps: {
-                    color: blue[100],
+                  styleOverrides: {
+                    root: {
+                      color: blue[100],
+                    },
                   },
                 },
               },
