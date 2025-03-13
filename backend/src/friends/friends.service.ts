@@ -83,10 +83,10 @@ export class FriendsService {
 
   async approve(uid: string, request_id: string): Promise<boolean> {
     const request = await this.friendsRequestsModel.findOneAndDelete({ _id: request_id, to: uid });
-    if (!request) {
+    if (!request.ok) {
       throw new NotFoundException(`request ${request_id} not found`);
     }
-    const { from, to } = request;
+    const { from, to } = request.value;
     const friendsRecord = await this.friendsModel.findOne({
       $or: [
         { user1: from, user2: to },
@@ -107,11 +107,11 @@ export class FriendsService {
     const request = await this.friendsRequestsModel.findOneAndDelete(
       type === 'out' ? { _id: request_id, from: uid } : { _id: request_id, to: uid }
     );
-    if (!request) {
+    if (!request.ok) {
       throw new NotFoundException(`request ${request_id} not found`);
     }
     this.eventsService.sendToUser({
-      userId: type === 'in' ? request.from.toString() : request.to.toString(),
+      userId: type === 'in' ? request.value.from.toString() : request.value.to.toString(),
       message: 'invalidate_tag',
       args: 'friends',
     });
@@ -120,10 +120,10 @@ export class FriendsService {
 
   async remove(uid: string, entry_id: string): Promise<boolean> {
     const request = await this.friendsModel.findOneAndDelete({ _id: entry_id, $or: [{ user1: uid }, { user2: uid }] });
-    if (!request) {
+    if (!request.ok) {
       throw new NotFoundException(`friend entry ${entry_id} not found`);
     }
-    const { user1, user2 } = request;
+    const { user1, user2 } = request.value;
     this.eventsService.sendToUser({
       userId: user1.toString() === uid ? user2.toString() : user1.toString(),
       message: 'invalidate_tag',
