@@ -60,23 +60,12 @@ const BookList: React.FC = () => {
         if (a.info.authors[0] > b.info.authors[0]) {
           return 1;
         }
-        if (
-          a.info.authors[0] === b.info.authors[0] &&
-          a.info.series.length !== 0 &&
-          a.info.series[0].id !== b.info.series[0]?.id
-        ) {
-          return a.info.series[0].id > b.info.series[0]?.id ? 1 : -1;
-        }
-        if (
-          a.info.authors[0] === b.info.authors[0] &&
-          a.info.series.length !== 0 &&
-          a.info.series[0].id === b.info.series[0]?.id
-        ) {
-          if (
-            a.info.series[0].number &&
-            b.info.series[0]?.number &&
-            a.info.series[0].number > b.info.series[0].number
-          ) {
+        if (a.info.authors[0] === b.info.authors[0] && a.info.series.length !== 0 && b.info.series.length !== 0) {
+          if (a.info.series[0].id !== b.info.series[0]?.id) {
+            return a.info.series[0].id > b.info.series[0].id ? 1 : -1;
+          }
+          if (a.info.series[0].number && b.info.series[0].number && a.info.series[0].number > b.info.series[0].number) {
+            console.log(a.info.series[0].number, b.info.series[0].number);
             return 1;
           }
         }
