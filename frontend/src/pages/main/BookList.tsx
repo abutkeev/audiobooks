@@ -63,6 +63,13 @@ const BookList: React.FC = () => {
         if (
           a.info.authors[0] === b.info.authors[0] &&
           a.info.series.length !== 0 &&
+          a.info.series[0].id !== b.info.series[0]?.id
+        ) {
+          return a.info.series[0].id > b.info.series[0]?.id ? 1 : -1;
+        }
+        if (
+          a.info.authors[0] === b.info.authors[0] &&
+          a.info.series.length !== 0 &&
           a.info.series[0].id === b.info.series[0]?.id
         ) {
           if (
