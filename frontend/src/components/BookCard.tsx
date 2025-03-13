@@ -50,7 +50,7 @@ const BookCard: React.FC<BookCardProps> = ({
       <Stack direction='row' flexGrow={1} alignContent='center'>
         <Hidden mdDown>
           {cover ? (
-            <img width={200} src={cover.filename} style={{ margin: 5, borderRadius: 5 }} />
+            <img alt={t('Cover image')} width={200} src={cover.filename} style={{ margin: 5, borderRadius: 5 }} />
           ) : (
             <AutoStories sx={{ width: 200, height: 200 }} color='primary' />
           )}
