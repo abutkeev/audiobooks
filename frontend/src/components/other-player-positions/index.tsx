@@ -1,5 +1,5 @@
 import { ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import { usePositionGetBookQuery, usePositionGetFriendsBookQuery } from '@/api/api';
 import { useAppSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +38,7 @@ const OtherPlayersPosition: React.FC<OtherPlayersPositionProps> = ({ bookId, cha
   return (
     <Accordion square>
       <AccordionSummary expandIcon={<ExpandMore />} onClick={({ currentTarget }) => currentTarget.blur()}>
-        {t('Other players position')}
+        <Typography>{t('Other players position')}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         {positions.map(({ instanceId, currentChapter, position, updated }) => {
