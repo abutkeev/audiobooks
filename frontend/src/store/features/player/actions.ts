@@ -3,6 +3,7 @@ import { createSliceAction } from './internal';
 
 export const changePosition = createSliceAction<number>('changePosition');
 export const changeVolume = createSliceAction<number>('changeVolume');
+export const changeSpeed = createSliceAction<number>('changeSpeed');
 export const pause = createSliceAction('pause');
 export const play = createSliceAction('play');
 export const forward = createSliceAction<number>('forward');

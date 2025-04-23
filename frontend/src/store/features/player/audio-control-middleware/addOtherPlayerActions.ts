@@ -1,14 +1,22 @@
 import { AudioControllAddListrers } from '.';
-import { changePosition, changeVolume, chapterChange, playerSlice } from '..';
+import { changePosition, changeSpeed, changeVolume, chapterChange, playerSlice } from '..';
 import { loadChapter } from '../internal';
 
 const addOtherPlayerActions: AudioControllAddListrers = (mw, audio) => {
-  const { updatePosition, updateVolume } = playerSlice.actions;
+  const { updatePosition, updateVolume, updateSpeed } = playerSlice.actions;
   mw.startListening({
     actionCreator: changeVolume,
     effect: ({ payload }, { dispatch }) => {
       audio.volume = payload / 100;
       dispatch(updateVolume(payload));
+    },
+  });
+
+  mw.startListening({
+    actionCreator: changeSpeed,
+    effect: ({ payload }, { dispatch }) => {
+      audio.playbackRate = payload;
+      dispatch(updateSpeed(payload));
     },
   });
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { changeVolume, chapterChange, forward, pause, play, rewind } from '@/store/features/player';
+import { changeSpeed, changeVolume, chapterChange, forward, pause, play, rewind } from '@/store/features/player';
 
 const arrowKeysRewindTime = 15;
 const letterKeysRewindTime = 30;
@@ -8,7 +8,7 @@ const letterKeysRewindTime = 30;
 const volumeChangeValue = 5;
 
 const useKeyboardShortcuts = () => {
-  const { playing, currentChapter, volume } = useAppSelector(({ player: { state } }) => state);
+  const { playing, currentChapter, volume, speed } = useAppSelector(({ player: { state } }) => state);
   const dispatch = useAppDispatch();
 
   const handleKeyDown = useCallback(
@@ -59,9 +59,19 @@ const useKeyboardShortcuts = () => {
           dispatch(changeVolume(volume > volumeChangeValue ? volume - volumeChangeValue : 0));
           disableDefaultActions();
           break;
+        case 'Period':
+          if (metaKey || ctrlKey || altKey || !shiftKey) break;
+          dispatch(changeSpeed(Math.min(speed + 0.25, 2)));
+          disableDefaultActions();
+          break;
+        case 'Comma':
+          if (metaKey || ctrlKey || altKey || !shiftKey) break;
+          dispatch(changeSpeed(Math.max(speed - 0.25, 1)));
+          disableDefaultActions();
+          break;
       }
     },
-    [dispatch, playing, currentChapter, volume]
+    [dispatch, playing, currentChapter, volume, speed]
   );
 
   useEffect(() => {

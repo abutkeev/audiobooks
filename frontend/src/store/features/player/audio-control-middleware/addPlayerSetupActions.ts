@@ -1,5 +1,5 @@
 import { AudioControllAddListrers } from '.';
-import { changeVolume, playerReset, playerSetup } from '..';
+import { changeSpeed, changeVolume, playerReset, playerSetup } from '..';
 import { loadChapter, stopUpdates } from '../internal';
 
 const addPlayerSetupActions: AudioControllAddListrers = (mw, audio) => {
@@ -8,13 +8,14 @@ const addPlayerSetupActions: AudioControllAddListrers = (mw, audio) => {
     effect: (_, { getState, dispatch }) => {
       const {
         chapters,
-        state: { currentChapter, position, volume },
+        state: { currentChapter, position, volume, speed },
       } = getState().player;
 
       if (chapters.length === 0) return;
 
       dispatch(loadChapter({ number: currentChapter, position }));
       dispatch(changeVolume(volume));
+      dispatch(changeSpeed(speed));
     },
   });
 

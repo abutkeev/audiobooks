@@ -22,6 +22,7 @@ interface PlayerStore {
     currentChapter: number;
     position: number;
     volume: number;
+    speed: number;
     duration?: number;
     playing: boolean;
     pauseOnChapterEnd: boolean;
@@ -39,6 +40,7 @@ const initialState: PlayerStore = {
     currentChapter: 0,
     position: 0,
     volume: 100,
+    speed: 1,
     duration: undefined,
     playing: false,
     pauseOnChapterEnd: false,
@@ -78,6 +80,9 @@ export const playerSlice = createSlice({
     },
     updateVolume: (store, { payload }: PayloadAction<number>) => {
       store.state.volume = payload;
+    },
+    updateSpeed: (store, { payload }: PayloadAction<number>) => {
+      store.state.speed = payload;
     },
     updateCurrentChapter: (store, { payload }: PayloadAction<number>) => {
       store.state.currentChapter = payload;
