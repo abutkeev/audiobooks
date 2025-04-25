@@ -41,7 +41,7 @@ const EditBookPage: React.FC = () => {
         <Tab value={2} label={t('Cover')} />
       </Tabs>
       {info && tabIndex === 0 && <EditBookInfo id={id} info={info} chapters={chapters} />}
-      {tabIndex === 1 && <EditChapters bookId={id} chapters={chapters} />}
+      {tabIndex === 1 && <EditChapters bookId={id} chapters={chapters} draft={!!info?.draft} />}
       {tabIndex === 2 && <EditCover bookId={id} cover={info?.cover?.filename} />}
     </LoadingWrapper>
   );
