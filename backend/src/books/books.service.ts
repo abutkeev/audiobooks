@@ -12,8 +12,8 @@ import { validateSync } from 'class-validator';
 import { CommonService } from 'src/common/common.service';
 import BookEntryDto from './dto/BookEntryDto';
 import BookDto from './dto/BookDto';
-import { existsSync, lstatSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'fs';
-import path from 'path';
+import { existsSync, lstatSync, mkdirSync, readdirSync, renameSync, rmSync, writeFileSync } from 'fs';
+import path, { basename, resolve } from 'path';
 import { DataDir } from 'src/constants';
 import BookInfoDto from './dto/BookInfoDto';
 import { HttpService } from '@nestjs/axios';
@@ -325,6 +325,38 @@ export class BooksService {
       if (e instanceof UnprocessableEntityException) throw e;
       logger.error(e);
       throw new InternalServerErrorException(`can't add chapter ${title} to book ${bookId}`);
+    }
+  }
+
+  clearChapters(bookId: string) {
+    const config = getBookInfoConfig(bookId);
+    const bookDir = path.resolve(booksDir, bookId);
+    if (!existsSync(path.resolve(DataDir, config))) throw new NotFoundException(`book ${bookId} not found`);
+    try {
+      const { info, chapters } = this.get(bookId);
+
+      if (!info.draft) {
+        throw new BadRequestException(`book must be draft to clear chapters`);
+      }
+
+      const backupDir = resolve(bookDir, 'backup', new Date().toISOString());
+      mkdirSync(backupDir, { recursive: true });
+
+      const chaptersBackup = resolve(backupDir, 'chapters.json');
+      this.commonService.writeJSONFile(chaptersBackup, chapters);
+
+      for (const { filename } of chapters) {
+        renameSync(resolve(bookDir, filename), resolve(backupDir, basename(filename)));
+      }
+
+      this.commonService.writeJSONFile(config, { info, chapters: [] });
+      return true;
+    } catch (e) {
+      logger.error(e);
+      if (e instanceof BadRequestException) {
+        throw e;
+      }
+      throw new InternalServerErrorException(`can't clear book ${bookId} chapters`);
     }
   }
 }

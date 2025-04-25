@@ -136,4 +136,12 @@ export class BooksController {
   downloadExternalChapter(@Body() chapter: ExternalChapterDto, @Param('id') bookId: string) {
     return this.service.downloadExternalChapter(bookId, chapter);
   }
+
+  @Admin()
+  @Delete(':id/chapters')
+  @ApiOperation({ description: 'Clear chapters' })
+  @UseInterceptors(FileInterceptor('file'))
+  clearChapters(@Param('id') id: string): boolean {
+    return this.service.clearChapters(id);
+  }
 }
