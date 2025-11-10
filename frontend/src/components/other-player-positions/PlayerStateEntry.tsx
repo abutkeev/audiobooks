@@ -33,7 +33,7 @@ const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
   const [remove] = usePositionRemoveMutation();
 
   const chapterName = useMemo(() => {
-    const chapterTitle = chapters[currentChapter].title;
+    const chapterTitle = chapters[currentChapter]?.title || '';
     const chapterNumber = currentChapter + 1;
     const titleIsChapterNumber = +chapterTitle === chapterNumber;
 
