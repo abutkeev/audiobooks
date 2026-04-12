@@ -56,7 +56,10 @@ CORS: добавляет `Origin` и `Referer` заголовки к запро�
 Telegram-интеграция. Путь: `backend/src/telegram/`, `backend/src/tg-bot/`.
 
 - `TelegramService` — API операции, проверка членства в чате
-- `TgBotService` — обработчик команд Telegraf
+- `TgBotService` — обработчик команд Telegraf, реализует `OnModuleInit`
+- Автозапуск бота отключён (`launchOptions: false` в `app.module.ts`)
+- `TgBotService.onModuleInit()` запускает бота вручную с retry каждые 30 секунд при ошибке
+- Backend не падает если Telegram API недоступен
 
 ## log
 

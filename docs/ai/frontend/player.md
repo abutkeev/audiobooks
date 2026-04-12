@@ -31,8 +31,16 @@ components/player/
 
 Состояние плеера хранится в Redux store (`store/features/player/`):
 
-- **audio-control-middleware** — связывает Redux-действия с HTML5 Audio API. При dispatch `play`/`pause`/`changePosition` — управляет реальным аудиоэлементом.
+- **audio-control-middleware** — связывает Redux-действия с HTML5 Audio API и Web Audio API. При dispatch `play`/`pause`/`changePosition` — управляет реальным аудиоэлементом. Громкость управляется через `GainNode` (Web Audio API), что позволяет усиление до 300% (`maxVolume = 300`).
 - **local-storage-middleware** — сохраняет позицию/громкость/скорость в localStorage для восстановления при перезагрузке.
+
+### Web Audio API
+
+Аудио проходит через цепочку: `Audio → MediaElementSource → GainNode → AudioContext.destination`.
+
+- Громкость 0–100%: `gainNode.gain.value` от 0 до 1
+- Громкость 100–300%: `gainNode.gain.value` от 1 до 3 (усиление)
+- `AudioContext.resume()` вызывается при play (Chrome autoplay policy)
 
 ## Синхронизация позиции
 

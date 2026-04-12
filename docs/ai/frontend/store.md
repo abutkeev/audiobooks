@@ -18,7 +18,7 @@ Redux Toolkit store с несколькими слайсами и кастомн
   - `audio-control-middleware` — управление HTML5 Audio
   - `local-storage-middleware` — сохранение состояния
   - `createPlayerUtilsMiddleware` — вспомогательные операции
-- Константа: `maxVolume = 300`
+- Константа: `maxVolume = 300` (усиление через Web Audio API GainNode)
 
 ### media-cache
 
