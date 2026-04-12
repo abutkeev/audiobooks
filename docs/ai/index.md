@@ -21,7 +21,7 @@
 | [frontend/player.md](frontend/player.md) | Аудиоплеер: компоненты, управление, кеширование |
 | [frontend/hooks.md](frontend/hooks.md) | Пользовательские хуки |
 | [frontend/patterns.md](frontend/patterns.md) | Паттерны и антипаттерны |
-| [frontend/mui9-migration.md](frontend/mui9-migration.md) | Гайд миграции MUI 6 → 9 (+ React 19, RTK 2, Vite 7) |
+| [frontend/migration.md](frontend/migration.md) | Гайд миграции зависимостей (Vite 7, React 19, MUI 9, RTK 2) |
 
 ### Страницы
 

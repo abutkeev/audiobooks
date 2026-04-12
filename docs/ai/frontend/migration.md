@@ -1,6 +1,6 @@
-# Миграция MUI 6 → MUI 9
+# Миграция зависимостей
 
-Гайд по миграции проекта с MUI 6 на MUI 9. Применимо к проектам с React 18→19, RTK 1→2 и сопутствующими зависимостями.
+Гайд по миграции: Vite 6→7, React 18→19, MUI 6→9, RTK 1→2 и сопутствующие зависимости.
 
 ## System props удалены
 
@@ -219,6 +219,34 @@ resolve: {
 ```typescript
 import { Buffer } from 'buffer';
 (globalThis as unknown as Record<string, unknown>).Buffer = Buffer;
+```
+
+### i18next-parser → i18next-cli
+
+`i18next-parser` deprecated, заменён на `i18next-cli`.
+
+```bash
+npm uninstall i18next-parser
+npm install -D i18next-cli
+```
+
+Миграция конфига:
+```bash
+npx i18next-cli migrate-config ./src/locales/i18next-parser.config.ts
+```
+
+Скрипт в package.json:
+```json
+"i18next:extract": "i18next-cli extract"
+```
+
+Конфиг `i18next.config.ts` в корне модуля (не в `src/locales/`).
+
+### @types/uuid
+
+`uuid` v11 имеет встроенные типы — `@types/uuid` не нужен:
+```bash
+npm uninstall @types/uuid
 ```
 
 ## Порядок миграции
