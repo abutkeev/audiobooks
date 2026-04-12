@@ -20,7 +20,7 @@ const SecurityKey: React.FC<SecurityKeyProps> = ({ name, id }) => {
 
   return (
     <Paper square variant='outlined'>
-      <Stack spacing={1} sx={{ flexDirection: 'row', px: 1.5, alignItems: 'center' }}>
+      <Stack spacing={1} direction='row' sx={{ px: 1.5, alignItems: 'center' }}>
         <Typography noWrap sx={{ flexGrow: 1 }}>
           {keyName}
         </Typography>

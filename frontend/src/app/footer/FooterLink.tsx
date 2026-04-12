@@ -9,7 +9,7 @@ interface FooterLinkProps {
 
 const FooterLink: FC<PropsWithChildren<FooterLinkProps>> = ({ icon, href, onClick, children }) => {
   return (
-    <Stack spacing={1} sx={{ flexDirection: 'row', alignItems: 'center' }}>
+    <Stack spacing={1} direction='row' sx={{ alignItems: 'center' }}>
       <Typography variant='body2'>{icon}</Typography>
       <Link variant='body2' href={href} target='_blank' onClick={onClick}>
         {children}

@@ -24,6 +24,18 @@
 - **Typography**: `variant`, `noWrap`, `align` — собственные пропы
 - **Grid**: `container`, `spacing` — собственные пропы
 
+### direction на Stack — только через проп
+
+`direction` на Stack **нельзя** переносить в `sx` как `flexDirection`. Stack использует `direction` проп для расчёта spacing (gap между элементами). Если direction в sx, spacing будет применяться по неправильной оси.
+
+```tsx
+// Неправильно — spacing считает direction = column (дефолт), а визуально row
+<Stack spacing={1} sx={{ flexDirection: 'row' }}>
+
+// Правильно — direction как проп
+<Stack spacing={1} direction='row'>
+```
+
 ### Мерж с существующим `sx`
 
 ```tsx

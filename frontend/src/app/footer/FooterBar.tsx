@@ -23,7 +23,7 @@ const FooterBar = forwardRef<HTMLDivElement>((_, ref) => {
         <CustomAccordion
           summary={<Copyright />}
           details={
-            <Stack spacing={1} sx={{ flexDirection: 'column' }}>
+            <Stack spacing={1} direction='column'>
               <FooterLink icon={<GitHub />} href={src_link}>
                 {t('Source code')}
               </FooterLink>
@@ -47,7 +47,7 @@ const FooterBar = forwardRef<HTMLDivElement>((_, ref) => {
         />
       ) : (
         <>
-          <Stack spacing={1} sx={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+          <Stack spacing={1} direction='row' sx={{ justifyContent: 'center', alignItems: 'center' }}>
             <Copyright />
             <FooterBarSeparator />
             <FooterLink icon={<GitHub />} href={src_link}>
@@ -62,7 +62,7 @@ const FooterBar = forwardRef<HTMLDivElement>((_, ref) => {
               {t('Report an issue')}
             </FooterLink>
           </Stack>
-          <Stack spacing={1} sx={{ flexDirection: 'row', mb: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Stack spacing={1} direction='row' sx={{ mb: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Typography variant='body2'>
               {t('Version')}: {VERSION}
             </Typography>

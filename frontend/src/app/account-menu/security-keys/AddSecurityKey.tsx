@@ -47,7 +47,7 @@ const AddSecurityKey: React.FC = () => {
 
   if (stageMessage) {
     return (
-      <Stack spacing={1} sx={{ flexDirection: 'row', alignItems: 'center' }}>
+      <Stack spacing={1} direction='row' sx={{ alignItems: 'center' }}>
         <CircularProgress size={theme.typography.body1.fontSize} />
         <Typography>{stageMessage}</Typography>
       </Stack>

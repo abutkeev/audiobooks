@@ -44,7 +44,7 @@ const LinkedAccountsDialog: React.FC<LinkedAccountsDialogProps> = ({ open, close
         <LoadingWrapper loading={isLoading} error={isError}>
           <Stack spacing={1}>
             <Paper sx={{ p: 1 }}>
-              <Stack spacing={1} sx={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Stack spacing={1} direction='row' sx={{ alignItems: 'center' }}>
                 <Telegram />
                 {telegramAccount?.info ? (
                   <>
