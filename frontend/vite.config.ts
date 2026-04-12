@@ -46,6 +46,8 @@ export default defineConfig(async ({ mode }) => {
         manifest: {
           name: 'Audio books',
           short_name: 'Audio books',
+          theme_color: '#212121',
+          background_color: '#212121',
           icons: [
             {
               src: 'pwa-64x64.png',
