@@ -55,6 +55,8 @@ const ReloadPrompt: React.FC = () => {
       window.location.reload();
     });
     updateServiceWorker(true);
+    // fallback if controllerchange doesn't fire
+    setTimeout(() => window.location.reload(), 3000);
   };
 
   return (
