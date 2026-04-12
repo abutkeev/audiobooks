@@ -1,0 +1,69 @@
+# Страницы книг
+
+## Home (`pages/Home.tsx`)
+
+Маршрут: `/`. Редирект-обёртка.
+
+- Если `currentBook` в localStorage есть в списке книг → редирект на `/book/{id}`
+- Иначе → рендерит MainPage
+
+## MainPage (`pages/main/index.tsx`)
+
+Маршрут: `/books`. Три вкладки.
+
+### Вкладки
+
+| Вкладка | Компонент | Описание |
+|---|---|---|
+| Мои книги | `MyBooks` | Текущие книги пользователя |
+| Книги друзей | `FriendsBooks` | Книги, которые слушают друзья |
+| Все книги | `BookList` | Полный каталог с фильтрацией |
+
+Вкладки скрываются при наличии фильтров (`author_id`, `reader_id`, `series_id` в URL).
+
+### MyBooks (`pages/main/MyBooks.tsx`)
+
+**API:** `useBooksGetQuery()`, `usePositionGetQuery()`, `useAuthors()`, `useReaders()`, `useSeries()`
+
+**Логика:**
+- Фильтрует позиции: исключает незначащие (position=0 && currentChapter=0)
+- Дедупликация по книгам (последнее обновление)
+- Поиск через `useSearchMatcher()` по имени книги, автору, чтецу, серии
+- Сортировка по дате обновления (новые первые)
+
+### FriendsBooks (`pages/main/FriendsBooks.tsx`)
+
+**API:** `useBooksGetQuery()`, `usePositionGetFriendsQuery()`
+
+**Логика:**
+- Группирует по��иции по другу
+- Каждый друг — `CustomAccordion` с `BookCard[]`
+- `UserOnlineIndicator` для статуса онлайн
+
+### BookList (`pages/main/BookList.tsx`)
+
+**API:** `useBooksGetQuery()`
+
+**Логика:**
+- Фильтрация по URL-параметрам: `author_id`, `reader_id`, `series_id`
+- Поиск через `useSearchMatcher()`
+- Сортировка: автор → серия → н��мер в серии
+
+## BookPage (`pages/BookPage.tsx`)
+
+Маршрут: `/book/:id`.
+
+```
+BookPage
+├── LoadingWrapper
+├── BookCard
+├── Player (если есть гл��вы)
+└── OtherPlayersPosition
+```
+
+**API:** `useBooksGetBookInfoQuery({ id })`, `useAuthors()`, `useReaders()`, `useSeries()`
+
+**Логика:**
+- Устанавливает `currentBook` в localStorage
+- Если в URL есть `position`/`currentChapter` — передаёт как externalState в Player
+- Отображает п��зиции других слушателей (`OtherPlayersPosition`)
