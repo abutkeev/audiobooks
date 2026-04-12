@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { changeSpeed, changeVolume, chapterChange, forward, pause, play, rewind } from '@/store/features/player';
+import { changeSpeed, changeVolume, chapterChange, forward, maxVolume, pause, play, rewind } from '@/store/features/player';
 
 const arrowKeysRewindTime = 15;
 const letterKeysRewindTime = 30;
@@ -52,7 +52,7 @@ const useKeyboardShortcuts = () => {
           disableDefaultActions();
           break;
         case 'ArrowUp':
-          dispatch(changeVolume(volume < 100 - volumeChangeValue ? volume + volumeChangeValue : 100));
+          dispatch(changeVolume(volume < maxVolume - volumeChangeValue ? volume + volumeChangeValue : maxVolume));
           disableDefaultActions();
           break;
         case 'ArrowDown':

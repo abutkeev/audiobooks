@@ -1,7 +1,7 @@
 import { VolumeDown, VolumeUp } from '@mui/icons-material';
 import { Stack, Slider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { changeVolume } from '@/store/features/player';
+import { changeVolume, maxVolume } from '@/store/features/player';
 
 const VolumeControl: React.FC = () => {
   const { volume } = useAppSelector(({ player: { state } }) => state);
@@ -11,6 +11,7 @@ const VolumeControl: React.FC = () => {
     <Stack direction='row' spacing={2} alignItems='center'>
       <VolumeDown color='primary' sx={{ cursor: 'pointer' }} onClick={() => dispatch(changeVolume(0))} />
       <Slider
+        max={maxVolume}
         value={volume}
         onChange={(_, newLevel) => typeof newLevel === 'number' && dispatch(changeVolume(newLevel))}
       />

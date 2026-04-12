@@ -19,6 +19,14 @@ export type AudioControllAddListrers = (
 const mw = createListenerMiddleware<PlayerStateSlice>();
 const audio = new Audio();
 
+const audioCtx = new AudioContext();
+const source = audioCtx.createMediaElementSource(audio);
+const gainNode = audioCtx.createGain();
+source.connect(gainNode);
+gainNode.connect(audioCtx.destination);
+
+export { audioCtx, gainNode };
+
 addAudioEventListeners(mw, audio);
 addPlayerUpdates(mw, audio);
 addPlayerSetupActions(mw, audio);

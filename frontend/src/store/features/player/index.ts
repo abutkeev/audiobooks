@@ -8,3 +8,5 @@ export { createPlayerUtilsMiddleware } from './createPlayerUtilsMiddleware';
 export type { BookState } from './createPlayerUtilsMiddleware';
 
 export type PlayerStateSlice = { [playerSlice.name]: ReturnType<typeof playerSlice.getInitialState> };
+
+export const maxVolume = 300;

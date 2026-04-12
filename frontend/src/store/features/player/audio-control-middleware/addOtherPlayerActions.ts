@@ -1,4 +1,4 @@
-import { AudioControllAddListrers } from '.';
+import { AudioControllAddListrers, gainNode } from '.';
 import { changePosition, changeSpeed, changeVolume, chapterChange, playerSlice } from '..';
 import { loadChapter } from '../internal';
 
@@ -7,7 +7,7 @@ const addOtherPlayerActions: AudioControllAddListrers = (mw, audio) => {
   mw.startListening({
     actionCreator: changeVolume,
     effect: ({ payload }, { dispatch }) => {
-      audio.volume = payload / 100;
+      gainNode.gain.value = payload / 100;
       dispatch(updateVolume(payload));
     },
   });

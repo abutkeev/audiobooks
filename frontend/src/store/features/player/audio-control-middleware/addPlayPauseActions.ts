@@ -1,4 +1,4 @@
-import { AudioControllAddListrers } from '.';
+import { AudioControllAddListrers, audioCtx } from '.';
 import { pause, play, playerSlice } from '..';
 import { loadChapter, startUpdates, stopUpdates } from '../internal';
 
@@ -31,6 +31,7 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
       }
       dispatch(updatePlaying(true));
       dispatch(startUpdates());
+      audioCtx.resume();
       audio.play();
     },
   });

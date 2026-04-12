@@ -1,5 +1,5 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
-import { PlayerStateSlice, playerSetup, playerSlice, setPreventScreenLock, setResetSleepTimerOnActivity } from '..';
+import { PlayerStateSlice, maxVolume, playerSetup, playerSlice, setPreventScreenLock, setResetSleepTimerOnActivity } from '..';
 import { parseSavedState } from '.';
 import { setPreventLocalStorageSave } from '../internal';
 
@@ -15,7 +15,7 @@ const addPlayerStateSetup = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
       const { currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock, bookId } =
         parseSavedState(playerStateName);
 
-      if (isFinite(volume) && volume >= 0 && volume <= 100) {
+      if (isFinite(volume) && volume >= 0 && volume <= maxVolume) {
         dispatch(updateVolume(volume));
       }
 
