@@ -25,6 +25,7 @@ import { LogModule } from './log/log.module';
     MongooseModule.forRoot(DB_URI),
     TelegrafModule.forRoot({
       token: TELEGRAM_BOT_TOKEN,
+      launchOptions: false,
     }),
     UsersModule,
     AuthModule,
