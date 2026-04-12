@@ -55,7 +55,7 @@ const ProfileDialog: FC<ProfileDialogProps> = ({ open, close }) => {
       confirmButtonProps={{ disabled: !valid }}
       title={t('Change profile')}
       content={
-        <Stack spacing={2} mt={1}>
+        <Stack spacing={2} sx={{ mt: 1 }}>
           <ErrorAlert error={error} />
           <LoginTextField
             login={newLogin}

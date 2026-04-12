@@ -17,7 +17,7 @@ const EmptyListWrapper: React.FC<React.PropsWithChildren<EmptyListWrapperProps>>
   action,
 }) =>
   wrap ? (
-    <Box mt={1} width={fullWidth ? '100%' : undefined}>
+    <Box sx={{ mt: 1, width: fullWidth ? '100%' : undefined }}>
       <Alert severity='info' variant='outlined' action={action}>
         {message}
       </Alert>

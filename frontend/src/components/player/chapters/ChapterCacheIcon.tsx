@@ -1,4 +1,4 @@
-import { DownloadForOffline, ErrorOutline } from '@mui/icons-material';
+import { DownloadForOffline, ErrorOutlined } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import { MediaCacheEntryState } from '@/store/features/media-cache';
 
@@ -21,7 +21,7 @@ const ChapterCacheIcon: React.FC<ChapterCacheIconProps> = ({ cacheState }) => {
         />
       );
     case 'error':
-      return <ErrorOutline color='error' />;
+      return <ErrorOutlined color='error' />;
     default:
       console.error(`unknown chapter cache state ${state}`);
       return null;

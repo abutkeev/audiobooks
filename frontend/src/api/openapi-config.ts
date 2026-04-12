@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ConfigFile } from '@rtk-query/codegen-openapi';
 import { resolve } from 'path';
 

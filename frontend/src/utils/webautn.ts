@@ -8,5 +8,5 @@ interface RegisterSecurityKeyOptions {
 }
 
 export const registerSecurityKey = ({ username, challenge }: RegisterSecurityKeyOptions) => {
-  return client.register(username, challenge);
+  return client.register({ user: username, challenge });
 };

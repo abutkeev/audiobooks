@@ -33,7 +33,7 @@ const AddSecurityKey: React.FC = () => {
       const registration = await registerSecurityKey({ challenge, username: login });
 
       setStageMessage(t('Saving public key...'));
-      savePublicKey({ publicKeyDto: { registration, name } });
+      savePublicKey({ publicKeyDto: { registration: registration as any, name } });
 
       closeAddForm();
     } catch (e) {
@@ -47,7 +47,7 @@ const AddSecurityKey: React.FC = () => {
 
   if (stageMessage) {
     return (
-      <Stack direction='row' spacing={1} alignItems='center'>
+      <Stack spacing={1} sx={{ flexDirection: 'row', alignItems: 'center' }}>
         <CircularProgress size={theme.typography.body1.fontSize} />
         <Typography>{stageMessage}</Typography>
       </Stack>

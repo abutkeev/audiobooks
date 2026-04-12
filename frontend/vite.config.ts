@@ -15,6 +15,11 @@ export default defineConfig(async ({ mode }) => {
 
   return {
     base: '',
+    resolve: {
+      alias: {
+        buffer: 'buffer/',
+      },
+    },
     server: {
       proxy: {
         '/api/': {
@@ -67,6 +72,7 @@ export default defineConfig(async ({ mode }) => {
           ],
         },
         workbox: {
+          clientsClaim: true,
           globPatterns: ['**/*.{js,css,html,woff2}'],
           runtimeCaching: [
             {

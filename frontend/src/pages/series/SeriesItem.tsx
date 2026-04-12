@@ -62,8 +62,8 @@ const SeriesItem: FC<SeriesItemProps> = ({ item }) => {
   return (
     <CustomAccordion
       summary={
-        <Stack direction='row' flexGrow={1} alignItems='center'>
-          <Typography flexGrow={1} noWrap>
+        <Stack direction='row' sx={{ flexGrow: 1, alignItems: 'center' }}>
+          <Typography sx={{ flexGrow: 1 }} noWrap>
             {item.name} ({t('{{count}} books', { count: booksInSeries.length })})
           </Typography>
           <DeleteButton

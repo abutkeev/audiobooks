@@ -10,7 +10,7 @@ const AppbarMenuButton: FC<PropsWithChildren<AppbarMenuButtonProps>> = ({ menuAh
   const { palette } = useTheme();
 
   return (
-    <Box mx={1} sx={{ background: menuAhchor ? palette.primary.dark : undefined }}>
+    <Box sx={{ mx: 1, background: menuAhchor ? palette.primary.dark : undefined }}>
       <IconButton
         disableFocusRipple
         disableTouchRipple

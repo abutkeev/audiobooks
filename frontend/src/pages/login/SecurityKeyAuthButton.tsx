@@ -19,9 +19,9 @@ const SecurityKeyAuthButton: React.FC<CommonAuthProps> = ({ setLoading, setError
     try {
       const { challenge } = await getChallenge().unwrap();
 
-      const authenticationDto = await client.authenticate([], challenge);
+      const authenticationDto = await client.authenticate({ allowCredentials: [], challenge });
 
-      const { access_token } = await login({ authenticationDto }).unwrap();
+      const { access_token } = await login({ authenticationDto: authenticationDto as any }).unwrap();
       dispatch(setAuthToken(access_token));
     } catch (e) {
       setError(e instanceof Error ? e.message : t('Authorization failed'));

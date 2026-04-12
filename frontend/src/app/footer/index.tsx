@@ -6,7 +6,7 @@ import useIsOverlaps from '@/hooks/useIsOverlaps';
 import AddSpeedDial from '../add-speed-dial';
 
 interface FooterProps {
-  mainRef: RefObject<HTMLElement>;
+  mainRef: RefObject<HTMLElement | null>;
 }
 
 const Footer: FC<FooterProps> = ({ mainRef }) => {
@@ -20,7 +20,7 @@ const Footer: FC<FooterProps> = ({ mainRef }) => {
 
   return (
     <>
-      <Box height={marginHeight} mt={1} />
+      <Box sx={{ height: marginHeight, mt: 1 }} />
       <AddSpeedDial ref={buttonRef} bottom={footerBarHeight} />
       <FooterBar ref={footerBarRef} />
     </>

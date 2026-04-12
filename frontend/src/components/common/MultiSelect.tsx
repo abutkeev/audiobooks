@@ -80,7 +80,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
 
   const [focus, setFocus] = useState(false);
 
-  const getTextFieldValue = (inputPropsValue: AutocompleteRenderInputParams['inputProps']['value']) => {
+  const getTextFieldValue = (inputPropsValue: AutocompleteRenderInputParams['slotProps']['htmlInput']['value']) => {
     if (loading) {
       if (loadingText) return loadingText;
 
@@ -137,7 +137,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
       noOptionsText={noOptionsText || t('No options')}
       disabled={disabled || loading || inProgress}
       fullWidth
-      renderInput={({ inputProps, InputProps, ...autoSelectProps }) => (
+      renderInput={({ slotProps: { htmlInput, input }, ...autoSelectProps }) => (
         <TextField
           variant={variant}
           {...(otherProps as TextFieldProps)}
@@ -147,20 +147,22 @@ const MultiSelect: FC<MultiSelectProps> = ({
           {...autoSelectProps}
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
-          inputProps={{
-            ...inputProps,
-            value: getTextFieldValue(inputProps.value),
-          }}
-          InputProps={{
-            ...InputProps,
-            endAdornment:
-              loading || inProgress ? (
-                <InputAdornment position='end'>
-                  <CircularProgress size={theme.typography.fontSize * 1.4} />
-                </InputAdornment>
-              ) : (
-                InputProps.endAdornment
-              ),
+          slotProps={{
+            htmlInput: {
+              ...htmlInput,
+              value: getTextFieldValue(htmlInput.value),
+            },
+            input: {
+              ...input,
+              endAdornment:
+                loading || inProgress ? (
+                  <InputAdornment position='end'>
+                    <CircularProgress size={theme.typography.fontSize * 1.4} />
+                  </InputAdornment>
+                ) : (
+                  input.endAdornment
+                ),
+            },
           }}
         />
       )}

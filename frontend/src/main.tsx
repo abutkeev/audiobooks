@@ -1,3 +1,6 @@
+import { Buffer } from 'buffer';
+(globalThis as unknown as Record<string, unknown>).Buffer = Buffer;
+
 import ReactDOM from 'react-dom/client';
 import './main.css';
 import '@fontsource/roboto/300.css';
@@ -19,7 +22,7 @@ i18next
     supportedLngs: ['en', 'ru'],
     fallbackLng: 'en',
     returnEmptyString: false,
-    debug: process.env.NODE_ENV === 'development',
+    debug: import.meta.env.DEV,
     detection: {
       order: ['localStorage', 'customDetector'],
       caches: ['localStorage'],

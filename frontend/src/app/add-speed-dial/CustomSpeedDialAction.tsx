@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ButtonBase, Card, SpeedDialActionProps, Stack, Typography } from '@mui/material';
+import { ButtonBase, Card, Stack, Typography } from '@mui/material';
 import { CustomSpeedDialContext } from './CustomSpeedDial';
 
 interface CustomSpeedDialActionProps {
@@ -7,9 +7,7 @@ interface CustomSpeedDialActionProps {
   icon: React.ReactNode;
   tooltipTitle: string;
   onClick?(): void;
-  FabProps?: {
-    ref: NonNullable<SpeedDialActionProps['FabProps']>['ref'];
-  };
+  slotProps?: { fab?: { ref?: React.Ref<HTMLButtonElement> } };
 }
 
 const CustomSpeedDialAction: React.FC<CustomSpeedDialActionProps> = ({
@@ -17,8 +15,9 @@ const CustomSpeedDialAction: React.FC<CustomSpeedDialActionProps> = ({
   icon,
   tooltipTitle,
   onClick,
-  FabProps: { ref } = {},
+  slotProps,
 }) => {
+  const ref = slotProps?.fab?.ref;
   const { closeSpeedDial } = useContext(CustomSpeedDialContext);
 
   const handleClick = () => {
@@ -32,9 +31,9 @@ const CustomSpeedDialAction: React.FC<CustomSpeedDialActionProps> = ({
 
   return (
     <ButtonBase ref={ref} onClick={handleClick} sx={{ justifyContent: 'flex-end' }}>
-      <Stack direction='row' alignItems='center' justifyContent='flex-end'>
+      <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'flex-end' }}>
         <Card raised sx={{ m: 1, mr: 2 }}>
-          <Typography noWrap textAlign='end' m={1}>
+          <Typography noWrap sx={{ textAlign: 'end', m: 1 }}>
             {tooltipTitle}
           </Typography>
         </Card>

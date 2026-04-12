@@ -71,7 +71,7 @@ const EditBookInfo: React.FC<EditBookInfoProps> = ({ id, info, chapters }) => {
         setDraft={setDraft}
       />
       {modified && (
-        <Stack direction='row' spacing={1} mt={1}>
+        <Stack direction='row' spacing={1} sx={{ mt: 1 }}>
           <Button variant='outlined' onClick={handleCancel}>
             {t('Cancel')}
           </Button>

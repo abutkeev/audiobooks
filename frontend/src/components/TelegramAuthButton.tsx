@@ -109,7 +109,7 @@ const TelegramAuthButton: FC<PropsWithChildren<TelegramAuthButtonProps>> = ({
 
   return (
     <>
-      <Box display='none' ref={scriptContainerRef} />
+      <Box sx={{ display: 'none' }} ref={scriptContainerRef} />
       <ProgressButton
         variant={variant}
         inProgress={inProgress || scriptLoading || processing}

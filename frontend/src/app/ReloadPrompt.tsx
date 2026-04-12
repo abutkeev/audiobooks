@@ -18,7 +18,7 @@ const ReloadPrompt: React.FC = () => {
     onRegisteredSW: (swUrl, registration) => {
       if (!registration) return;
 
-      setInterval(async () => {
+      const intervalId = setInterval(async () => {
         if (registration.installing || !navigator) return;
 
         if ('connection' in navigator && !navigator.onLine) return;
@@ -35,12 +35,15 @@ const ReloadPrompt: React.FC = () => {
           await registration.update();
         }
       }, updatesCheckInterval);
+
+      registration.addEventListener('updatefound', () => {
+        clearInterval(intervalId);
+      });
     },
     onRegisterError: e => {
       console.error('SW registration error', e);
     },
     onOfflineReady: () => {
-      // close updating alert if any
       setUpdating(false);
       dispatch(addSnackbar({ severity: 'success', text: t('App ready to work offline'), timeout: 3000 }));
     },
@@ -48,6 +51,9 @@ const ReloadPrompt: React.FC = () => {
 
   const handleUpdateClick = () => {
     setUpdating(true);
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      window.location.reload();
+    });
     updateServiceWorker(true);
   };
 

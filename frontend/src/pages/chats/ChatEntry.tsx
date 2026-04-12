@@ -32,10 +32,10 @@ const ChatEntry: FC<ChatDto> = ({ id, type, title, status, authorized }) => {
 
   return (
     <Paper square variant='outlined'>
-      <Stack spacing={1} direction='row' p={1} alignItems='center'>
+      <Stack spacing={1} direction='row' sx={{ p: 1, alignItems: 'center' }}>
         <ChatType type={type} />
         <ChatStatus status={status} />
-        <Typography noWrap flexGrow={1}>
+        <Typography noWrap sx={{ flexGrow: 1 }}>
           {title}
         </Typography>
         <CustomSwitch

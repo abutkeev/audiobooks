@@ -20,7 +20,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ bookId, files, onClose }) =
   const { t } = useTranslation();
   const titles = useMemo(() => files?.map(file => file.name.replace(/\.mp3/i, '')), [files]);
   const [{ chapters, errors, valid }, dispatch] = useUploading(titles);
-  const abortControllerRef = useRef<AbortController | undefined>();
+  const abortControllerRef = useRef<AbortController | undefined>(undefined);
   const [percent, setPercent] = useState(0);
   const uploading = useMemo(() => {
     const index = chapters.findIndex(({ status }) => status === 'uploading');

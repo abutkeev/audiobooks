@@ -56,9 +56,9 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
   };
 
   return (
-    <Stack direction='column' spacing={1} flexGrow={1} alignItems='center'>
+    <Stack direction='column' spacing={1} sx={{ flexGrow: 1, alignItems: 'center' }}>
       {cover && <img width={200} src={cover} style={{ margin: 5, borderRadius: 5 }} />}
-      <Stack direction={mobile ? 'column' : 'row'} spacing={1} width='100%' justifyContent='center'>
+      <Stack direction={mobile ? 'column' : 'row'} spacing={1} sx={{ width: '100%', justifyContent: 'center' }}>
         <UploadButton
           startIcon={<Upload />}
           variant='contained'

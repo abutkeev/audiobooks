@@ -45,7 +45,7 @@ const Login: React.FC = () => {
         <Paper sx={{ p: 2 }}>
           <ErrorAlert error={error} />
           <PasswordAuthForm setLoading={setLoading} setError={setError} />
-          <Typography align='center' my={1}>
+          <Typography align='center' sx={{ my: 1 }}>
             {t('or')}
           </Typography>
           <Stack spacing={1}>

@@ -53,9 +53,9 @@ const FriendsList: FC<FriendsListProps> = ({
         {requests.map(({ id, name, login, uid, online }) => {
           return (
             <Paper square variant='outlined' key={id}>
-              <Stack spacing={1} direction='row' p={1} alignItems='center'>
+              <Stack spacing={1} direction='row' sx={{ p: 1, alignItems: 'center' }}>
                 {showOnline && <UserOnlineIndicator online={online} />}
-                <Typography noWrap flexGrow={1}>
+                <Typography noWrap sx={{ flexGrow: 1 }}>
                   {getFriendDisplayName({ uid, login, name })}
                 </Typography>
                 {actions.map(({ action, refreshing, actionText, progressButtonProps }, index) => (

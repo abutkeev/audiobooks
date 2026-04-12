@@ -34,30 +34,32 @@ const CustomPassword: FC<CustomPasswordProps> = ({ sx, onChange, generate, ...pr
       onChange={handleChange}
       sx={{ mt: 2, ...sx }}
       type={showPassword ? 'text' : 'password'}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position='end'>
-            {passwordGenerationAvailable && (
-              <Tooltip title={t('Generate new password')}>
-                <IconButton onClick={handleGeneratePassword} size='large'>
-                  <LockReset />
-                </IconButton>
-              </Tooltip>
-            )}
+      slotProps={{
+        input: {
+          endAdornment: (
+            <InputAdornment position='end'>
+              {passwordGenerationAvailable && (
+                <Tooltip title={t('Generate new password')}>
+                  <IconButton onClick={handleGeneratePassword} size='large'>
+                    <LockReset />
+                  </IconButton>
+                </Tooltip>
+              )}
 
-            {!!value && (
-              <Tooltip title={showPassword ? t('Hide password') : t('Show password')}>
-                <IconButton
-                  aria-label='Toggle password visibility'
-                  onClick={() => setShowPassword(!showPassword)}
-                  size='large'
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </Tooltip>
-            )}
-          </InputAdornment>
-        ),
+              {!!value && (
+                <Tooltip title={showPassword ? t('Hide password') : t('Show password')}>
+                  <IconButton
+                    aria-label='Toggle password visibility'
+                    onClick={() => setShowPassword(!showPassword)}
+                    size='large'
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </Tooltip>
+              )}
+            </InputAdornment>
+          ),
+        },
       }}
     />
   );

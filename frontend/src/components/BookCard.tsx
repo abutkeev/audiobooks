@@ -1,5 +1,5 @@
 import { Edit, Mic, LibraryBooks, NavigateNext, AutoStories, AccessTime, EditNote } from '@mui/icons-material';
-import { Card, CardContent, Typography, Stack, Tooltip, Hidden, IconButton, Box } from '@mui/material';
+import { Card, CardContent, Typography, Stack, Tooltip, IconButton, Box } from '@mui/material';
 import Link from './common/Link';
 import { useMemo } from 'react';
 import { BookInfoDto, useBooksGetQuery } from '@/api/api';
@@ -47,21 +47,21 @@ const BookCard: React.FC<BookCardProps> = ({
 
   return (
     <Card raised square>
-      <Stack direction='row' flexGrow={1} alignContent='center'>
-        <Hidden mdDown>
+      <Stack direction='row' sx={{ flexGrow: 1, alignContent: 'center' }}>
+        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
           {cover ? (
             <img alt={t('Cover image')} width={200} src={cover.filename} style={{ margin: 5, borderRadius: 5 }} />
           ) : (
             <AutoStories sx={{ width: 200, height: 200 }} color='primary' />
           )}
-        </Hidden>
+        </Box>
         <CardContent sx={{ flexGrow: 1 }}>
-          <Stack direction='row' spacing={1} alignItems='center'>
+          <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
             <Typography variant='h6' sx={{ cursor: 'default' }} noWrap>
               {list ? <Link to={`/book/${id}`}>{name}</Link> : name}
             </Typography>
             {draft && <EditNote />}
-            <Box flexGrow={1} />
+            <Box sx={{ flexGrow: 1 }} />
             {admin && (
               <Tooltip title={t('Edit')}>
                 <IconButton component={Link} to={`/edit/${id}`}>

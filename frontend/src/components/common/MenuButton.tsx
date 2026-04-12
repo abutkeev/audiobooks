@@ -63,7 +63,7 @@ const MenuButton: FC<MenuButtonProps> = ({
       >
         {children || t('Actions')}
       </ProgressButton>
-      <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu} MenuListProps={{ sx: { py: 0 } }}>
+      <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu} slotProps={{ list: { sx: { py: 0 } } }}>
         {actions.map(({ title }, index) => (
           <MenuItem key={index} onClick={getActionClickHandler(index)}>
             {title}

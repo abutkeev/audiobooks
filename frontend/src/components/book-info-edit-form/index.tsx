@@ -40,7 +40,7 @@ const BookInfoEditForm: React.FC<BookInfoEditFormProps> = ({
 
   return (
     <ErrorWrapper error={error}>
-      <Stack spacing={2} pt={1}>
+      <Stack spacing={2} sx={{ pt: 1 }}>
         <TextField
           fullWidth
           required

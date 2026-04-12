@@ -47,7 +47,7 @@ const ChangePasswordDialog: FC<ChangePasswordDialogProps> = ({ open, close }) =>
       confirmButtonProps={{ disabled: !valid }}
       title={t('Change password')}
       content={
-        <Stack spacing={2} mt={1}>
+        <Stack spacing={2} sx={{ mt: 1 }}>
           <ErrorAlert error={error} />
           <CustomPassword
             label={t('Old password')}

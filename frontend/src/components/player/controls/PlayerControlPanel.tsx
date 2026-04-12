@@ -12,7 +12,7 @@ const PlayerControlPanel: React.FC = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <Stack direction='row' justifyContent='center'>
+    <Stack direction='row' sx={{ justifyContent: 'center' }}>
       <ControlButton
         Icon={SkipPrevious}
         disabled={currentChapter === 0}

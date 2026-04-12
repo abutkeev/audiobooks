@@ -60,7 +60,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
       close={handleClose}
       title={t('Settings')}
       content={
-        <Stack spacing={2} mt={1}>
+        <Stack spacing={2} sx={{ mt: 1 }}>
           <TextField label={t('Language')} select required value={language} onChange={handleLanguageChange}>
             <MenuItem value='en'>{t('English')}</MenuItem>
             <MenuItem value='ru'>{t('Russian')}</MenuItem>

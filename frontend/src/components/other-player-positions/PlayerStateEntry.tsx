@@ -70,8 +70,8 @@ const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
       }}
       onClick={handlePlayerStateChange}
     >
-      <Stack direction='row' spacing={1} flexGrow={1}>
-        <Typography flexGrow={1}>
+      <Stack direction='row' spacing={1} sx={{ flexGrow: 1 }}>
+        <Typography sx={{ flexGrow: 1 }}>
           {friend
             ? t('Friend {{friend}}, current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
                 friend: getFriendDisplayName(friend),

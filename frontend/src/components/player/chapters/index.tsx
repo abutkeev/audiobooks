@@ -47,7 +47,7 @@ const Chapters: React.FC = () => {
   return (
     <Accordion square>
       <AccordionSummary expandIcon={<ExpandMore />} onClick={({ currentTarget }) => currentTarget.blur()}>
-        <Typography flexGrow={1}>
+        <Typography sx={{ flexGrow: 1 }}>
           {t('Current chapter')} {chapterNumber} {t('of')} {chapters.length}{' '}
           {!titleIsNumber && `(${currentChapterTitle})`}
         </Typography>

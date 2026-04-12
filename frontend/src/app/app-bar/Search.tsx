@@ -51,31 +51,33 @@ const Search: React.FC<SearchProps> = ({ hide, fullWidth }) => {
         spellCheck={false}
         size='small'
         fullWidth={fullWidth}
-        inputProps={{ ref: textfieldRef }}
-        InputProps={{
-          sx: theme => ({
-            backgroundColor: theme.palette.primary.dark,
-            fontSize: theme.typography.body2.fontSize,
-            color: theme.palette.getContrastText(theme.palette.primary.dark),
-          }),
-          startAdornment: (
-            <InputAdornment position='start'>
-              <SearchIcon
-                sx={theme => ({
-                  color: theme.palette.getContrastText(theme.palette.primary.dark),
-                })}
-              />
-            </InputAdornment>
-          ),
-          endAdornment: (text || hide) && (
-            <InputAdornment position='end' onClick={handleClearText} sx={{ cursor: 'pointer' }}>
-              <Clear
-                sx={theme => ({
-                  color: theme.palette.getContrastText(theme.palette.primary.dark),
-                })}
-              />
-            </InputAdornment>
-          ),
+        slotProps={{
+          htmlInput: { ref: textfieldRef },
+          input: {
+            sx: theme => ({
+              backgroundColor: theme.palette.primary.dark,
+              fontSize: theme.typography.body2.fontSize,
+              color: theme.palette.getContrastText(theme.palette.primary.dark),
+            }),
+            startAdornment: (
+              <InputAdornment position='start'>
+                <SearchIcon
+                  sx={theme => ({
+                    color: theme.palette.getContrastText(theme.palette.primary.dark),
+                  })}
+                />
+              </InputAdornment>
+            ),
+            endAdornment: (text || hide) && (
+              <InputAdornment position='end' onClick={handleClearText} sx={{ cursor: 'pointer' }}>
+                <Clear
+                  sx={theme => ({
+                    color: theme.palette.getContrastText(theme.palette.primary.dark),
+                  })}
+                />
+              </InputAdornment>
+            ),
+          },
         }}
         value={text}
         onChange={({ target: { value } }) => dispatch(setSearchText(value))}

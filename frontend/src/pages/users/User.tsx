@@ -58,8 +58,8 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin, telegram, on
   return (
     <CustomAccordion
       summary={
-        <Stack direction='row' flexGrow={1} alignItems='center'>
-          <Typography flexGrow={1} noWrap>
+        <Stack direction='row' sx={{ flexGrow: 1, alignItems: 'center' }}>
+          <Typography sx={{ flexGrow: 1 }} noWrap>
             <UserOnlineIndicator online={online} />
             {formatUser()}
           </Typography>

@@ -13,11 +13,12 @@ const PositionControl: React.FC = () => {
   const [showRemaining, setShowRemaining] = useState(false);
 
   return (
-    <Stack spacing={2} alignItems='center' direction='row' mx={1}>
+    <Stack spacing={2} direction='row' sx={{ alignItems: 'center', mx: 1 }}>
       {duration ? (
         <>
           <Typography sx={{ cursor: 'default' }}>{formatTime(position)}</Typography>
           <Slider
+            sx={{ flexGrow: 1 }}
             value={position}
             onChange={(_, position) => typeof position === 'number' && handlePositionChange(position)}
             max={duration}
@@ -34,9 +35,10 @@ const PositionControl: React.FC = () => {
             <Typography>00:00</Typography>
           </Skeleton>
           <Slider
+            sx={{ flexGrow: 1 }}
             value={0}
             disabled
-            componentsProps={{ thumb: { style: { display: 'none' } }, track: { style: { display: 'none' } } }}
+            slotProps={{ thumb: { style: { display: 'none' } }, track: { style: { display: 'none' } } }}
           />
           <Skeleton>
             <Typography>00:00</Typography>

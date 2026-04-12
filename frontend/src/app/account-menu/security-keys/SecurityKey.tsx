@@ -20,8 +20,8 @@ const SecurityKey: React.FC<SecurityKeyProps> = ({ name, id }) => {
 
   return (
     <Paper square variant='outlined'>
-      <Stack spacing={1} direction='row' px={1.5} alignItems='center'>
-        <Typography noWrap flexGrow={1}>
+      <Stack spacing={1} sx={{ flexDirection: 'row', px: 1.5, alignItems: 'center' }}>
+        <Typography noWrap sx={{ flexGrow: 1 }}>
           {keyName}
         </Typography>
         <DeleteButton

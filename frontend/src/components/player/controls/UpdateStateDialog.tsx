@@ -72,17 +72,19 @@ const UpdateStateDialog: React.FC<UpdateStateDialogProps> = ({ show, onClose }) 
           error={!valid}
           value={value}
           onChange={({ target: { value } }) => setValue(value)}
-          inputProps={{ ref: textFieldRef }}
-          InputProps={{
-            endAdornment: value ? (
-              <InputAdornment position='end' onClick={() => setValue('')}>
-                <Clear />
-              </InputAdornment>
-            ) : (
-              <InputAdornment position='end' onClick={handlePaste}>
-                <ContentPaste />
-              </InputAdornment>
-            ),
+          slotProps={{
+            htmlInput: { ref: textFieldRef },
+            input: {
+              endAdornment: value ? (
+                <InputAdornment position='end' onClick={() => setValue('')}>
+                  <Clear />
+                </InputAdornment>
+              ) : (
+                <InputAdornment position='end' onClick={handlePaste}>
+                  <ContentPaste />
+                </InputAdornment>
+              ),
+            },
           }}
         />
       }

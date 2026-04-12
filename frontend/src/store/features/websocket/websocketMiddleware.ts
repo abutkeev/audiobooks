@@ -47,7 +47,7 @@ mw.startListening({
     socket.on('invalidate_tag', tag => dispatch(enhancedApi.util.invalidateTags([tag])));
     socket.on('refresh_token', async () => {
       const response = await dispatch(enhancedApi.endpoints.authGenerateToken.initiate());
-      if ('data' in response) {
+      if ('data' in response && response.data) {
         const { access_token } = response.data;
         dispatch(setAuthToken(access_token));
         if (socket) {

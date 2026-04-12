@@ -28,7 +28,7 @@ const PlaybackRate: FC = () => {
   return (
     <MenuIconButton
       icon={
-        <Stack direction='row' alignItems='center' spacing={0.3}>
+        <Stack direction='row' spacing={0.3} sx={{ alignItems: 'center' }}>
           <Speed color='primary' />
           <Typography color='primary'>{speed.toFixed(2)}</Typography>
         </Stack>

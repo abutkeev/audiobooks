@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useEffect } from 'react';
 import { useAuthGenerateTokenMutation } from '@/api/api';

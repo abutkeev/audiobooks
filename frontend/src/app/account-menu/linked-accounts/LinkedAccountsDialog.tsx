@@ -44,11 +44,11 @@ const LinkedAccountsDialog: React.FC<LinkedAccountsDialogProps> = ({ open, close
         <LoadingWrapper loading={isLoading} error={isError}>
           <Stack spacing={1}>
             <Paper sx={{ p: 1 }}>
-              <Stack direction='row' spacing={1} alignItems='center'>
+              <Stack spacing={1} sx={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Telegram />
                 {telegramAccount?.info ? (
                   <>
-                    <Typography flexGrow={1}>{formatTelegramAccountInfo()}</Typography>
+                    <Typography sx={{ flexGrow: 1 }}>{formatTelegramAccountInfo()}</Typography>
                     <TelegramAuthButton onAuth={handleTelegramAuth} refreshing={isFetching}>
                       {t('Refresh')}
                     </TelegramAuthButton>
@@ -62,7 +62,7 @@ const LinkedAccountsDialog: React.FC<LinkedAccountsDialogProps> = ({ open, close
                   </>
                 ) : (
                   <>
-                    <Typography flexGrow={1}>{t('Not linked')}</Typography>
+                    <Typography sx={{ flexGrow: 1 }}>{t('Not linked')}</Typography>
                     <TelegramAuthButton onAuth={handleTelegramAuth} refreshing={isFetching}>
                       {t('Link')}
                     </TelegramAuthButton>

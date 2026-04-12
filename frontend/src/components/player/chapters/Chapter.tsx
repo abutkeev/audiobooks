@@ -24,7 +24,7 @@ const Chapter: React.FC<ChapterProps> = ({ title, duration, current, onClick, ca
       })}
       onClick={onClick}
     >
-      <Typography flexGrow={1}>{title}</Typography>
+      <Typography sx={{ flexGrow: 1 }}>{title}</Typography>
       {duration && <Typography>{formatTime(duration)}</Typography>}
       <ChapterCacheIcon cacheState={cacheState} />
     </Paper>

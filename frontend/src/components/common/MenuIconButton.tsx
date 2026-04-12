@@ -66,7 +66,7 @@ const MenuIconButton: FC<MenuIconButtonProps> = ({ iconButtonProps, icon, items,
 
           if (typeof item === 'string') {
             return (
-              <Typography key={index} mx={2} my={1}>
+              <Typography key={index} sx={{ mx: 2, my: 1 }}>
                 {item}
               </Typography>
             );

@@ -92,14 +92,16 @@ const LoginTextField: FC<LoginTextFieldProps> = ({
       error={!valid && state !== 'waiting' && state !== 'checking'}
       helperText={helperText}
       {...textFieldProps}
-      InputProps={{
-        ...textFieldProps?.InputProps,
-        endAdornment: (
-          <InputAdornment position='end'>
-            <LoginCheckState state={state} validType={validType} />
-            {textFieldProps?.InputProps?.endAdornment}
-          </InputAdornment>
-        ),
+      slotProps={{
+        input: {
+          ...textFieldProps?.slotProps?.input,
+          endAdornment: (
+            <InputAdornment position='end'>
+              <LoginCheckState state={state} validType={validType} />
+              {(textFieldProps?.slotProps?.input as { endAdornment?: React.ReactNode })?.endAdornment}
+            </InputAdornment>
+          ),
+        },
       }}
     />
   );

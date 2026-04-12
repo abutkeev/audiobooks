@@ -8,9 +8,10 @@ const VolumeControl: React.FC = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <Stack direction='row' spacing={2} alignItems='center'>
+    <Stack direction='row' spacing={2} sx={{ alignItems: 'center' }}>
       <VolumeDown color='primary' sx={{ cursor: 'pointer' }} onClick={() => dispatch(changeVolume(0))} />
       <Slider
+        sx={{ flexGrow: 1 }}
         max={maxVolume}
         value={volume}
         onChange={(_, newLevel) => typeof newLevel === 'number' && dispatch(changeVolume(newLevel))}

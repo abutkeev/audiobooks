@@ -29,10 +29,10 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({ handleHomeButtonClick, show
                   <Home />
                 </IconButton>
               )}
-              <Typography variant='h6' ml={1} noWrap>
+              <Typography variant='h6' noWrap sx={{ ml: 1 }}>
                 {title}
               </Typography>
-              <Box flexGrow={1} />
+              <Box sx={{ flexGrow: 1 }} />
               {showSearch && (
                 <IconButton color='inherit' onClick={() => setShowSearchTextField(true)}>
                   <SearchIcon />
