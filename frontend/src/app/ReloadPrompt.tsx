@@ -49,10 +49,15 @@ const ReloadPrompt: React.FC = () => {
     },
   });
 
-  const handleUpdateClick = async () => {
+  const handleUpdateClick = () => {
     setUpdating(true);
-    await updateServiceWorker(true);
-    window.location.reload();
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      window.location.reload();
+    });
+    updateServiceWorker(true).then(() => {
+      // if controllerchange already fired or won't fire, force reload after timeout
+      setTimeout(() => window.location.reload(), 5000);
+    });
   };
 
   return (
