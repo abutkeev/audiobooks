@@ -20,14 +20,20 @@ window.addEventListener('touchstart', updateOnline);
 mw.startListening({
   actionCreator: connect,
   effect: (_, { getState, dispatch }) => {
-    if (socket) return;
-
     const {
       auth: { token },
       websocket: { instanceId },
     } = getState();
 
     if (!token) return;
+
+    if (socket?.connected) return;
+
+    if (socket) {
+      socket.auth = { token, instanceId };
+      socket.connect();
+      return;
+    }
 
     socket = io('/api/events', {
       transports: ['websocket'],
@@ -44,6 +50,9 @@ mw.startListening({
       if ('data' in response) {
         const { access_token } = response.data;
         dispatch(setAuthToken(access_token));
+        if (socket) {
+          socket.auth = { token: access_token, instanceId: getState().websocket.instanceId };
+        }
       }
     });
   },
@@ -52,7 +61,7 @@ mw.startListening({
 mw.startListening({
   actionCreator: disconnect,
   effect: () => {
-    if (socket && socket.connected) {
+    if (socket) {
       socket.close();
       socket = undefined;
     }
