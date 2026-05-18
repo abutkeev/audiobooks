@@ -1,4 +1,4 @@
-import { AudioControllAddListrers, gainNode } from '.';
+import { AudioControllAddListrers, ensureGainGraph, getGainNode } from '.';
 import { changePosition, changeSpeed, changeVolume, chapterChange, playerSlice } from '..';
 import { loadChapter } from '../internal';
 
@@ -7,7 +7,15 @@ const addOtherPlayerActions: AudioControllAddListrers = (mw, audio) => {
   mw.startListening({
     actionCreator: changeVolume,
     effect: ({ payload }, { dispatch }) => {
-      gainNode.gain.value = payload / 100;
+      // Route through Web Audio only when boost (>100%) is needed.
+      // Otherwise keep the native path so iOS keeps playing in background.
+      const gain = payload > 100 ? ensureGainGraph() : getGainNode();
+      if (gain) {
+        audio.volume = 1;
+        gain.gain.value = payload / 100;
+      } else {
+        audio.volume = payload / 100;
+      }
       dispatch(updateVolume(payload));
     },
   });

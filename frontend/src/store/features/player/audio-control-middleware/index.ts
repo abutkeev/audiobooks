@@ -19,13 +19,21 @@ export type AudioControllAddListrers = (
 const mw = createListenerMiddleware<PlayerStateSlice>();
 const audio = new Audio();
 
-const audioCtx = new AudioContext();
-const source = audioCtx.createMediaElementSource(audio);
-const gainNode = audioCtx.createGain();
-source.connect(gainNode);
-gainNode.connect(audioCtx.destination);
+let audioCtx: AudioContext | null = null;
+let gainNode: GainNode | null = null;
 
-export { audioCtx, gainNode };
+export const getAudioCtx = () => audioCtx;
+export const getGainNode = () => gainNode;
+
+export const ensureGainGraph = (): GainNode => {
+  if (gainNode) return gainNode;
+  audioCtx = new AudioContext();
+  const source = audioCtx.createMediaElementSource(audio);
+  gainNode = audioCtx.createGain();
+  source.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  return gainNode;
+};
 
 addAudioEventListeners(mw, audio);
 addPlayerUpdates(mw, audio);

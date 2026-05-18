@@ -1,4 +1,4 @@
-import { AudioControllAddListrers, audioCtx } from '.';
+import { AudioControllAddListrers, getAudioCtx } from '.';
 import { pause, play, playerSlice } from '..';
 import { loadChapter, startUpdates, stopUpdates } from '../internal';
 
@@ -12,8 +12,8 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
       const rewind = 5;
       const newPosition = position > rewind ? position - rewind : 0;
 
-      audio.pause();
       audio.currentTime = newPosition;
+      audio.pause();
 
       dispatch(updatePosition(newPosition));
       dispatch(updatePlaying(false));
@@ -31,7 +31,7 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
       }
       dispatch(updatePlaying(true));
       dispatch(startUpdates());
-      audioCtx.resume();
+      getAudioCtx()?.resume();
       audio.play();
     },
   });
