@@ -11,7 +11,7 @@ export class TgBotService implements OnModuleInit {
 
   constructor(
     @InjectBot() private bot: Telegraf<Context>,
-    private telergamService: TelegramService,
+    private telergamService: TelegramService
   ) {}
 
   async onModuleInit() {

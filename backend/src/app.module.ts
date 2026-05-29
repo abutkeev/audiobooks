@@ -10,10 +10,11 @@ import { PersonsModule } from './persons/persons.module';
 import { AuthorsModule } from './authors/authors.module';
 import { SeriesModule } from './series/series.module';
 import { BooksModule } from './books/books.module';
-import { DB_URI, TELEGRAM_BOT_TOKEN } from './constants';
+import { DB_URI, TELEGRAM_BOT_TOKEN, TELEGRAM_PROXY } from './constants';
 import { SignUpModule } from './sign-up/sign-up.module';
 import { FriendsModule } from './friends/friends.module';
 import { TelegrafModule } from 'nestjs-telegraf';
+import { SocksProxyAgent } from 'socks-proxy-agent';
 import { TgBotModule } from './tg-bot/tg-bot.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { ProfileModule } from './profile/profile.module';
@@ -26,6 +27,7 @@ import { LogModule } from './log/log.module';
     TelegrafModule.forRoot({
       token: TELEGRAM_BOT_TOKEN,
       launchOptions: false,
+      options: TELEGRAM_PROXY ? { telegram: { agent: new SocksProxyAgent(TELEGRAM_PROXY) } } : undefined,
     }),
     UsersModule,
     AuthModule,

@@ -13,4 +13,5 @@ export const {
   RECAPTCHA_SITE_KEY,
   RECAPTCHA_VERIFY_URL,
   TELEGRAM_BOT_TOKEN,
+  TELEGRAM_PROXY,
 } = process.env;
