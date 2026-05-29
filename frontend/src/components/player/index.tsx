@@ -20,7 +20,7 @@ const Player: React.FC<PlayerProps> = ({ bookId, bookInfo, chapters, externalSta
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(playerSetup({ bookId, chapters }));
-    () => {
+    return () => {
       dispatch(playerReset());
     };
   }, [bookId, chapters, dispatch]);

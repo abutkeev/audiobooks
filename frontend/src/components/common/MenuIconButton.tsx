@@ -16,7 +16,7 @@ import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 export type MenuIconButtonItem =
   | {
-      Icon?: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+      Icon?: OverridableComponent<SvgIconTypeMap>;
       icon?: ReactNode;
       title: string;
       action(e: MouseEvent<HTMLLIElement>): void;

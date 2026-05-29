@@ -33,6 +33,8 @@ const SettingsDialog: FC<SettingsDialogProps> = ({ open, close }) => {
           dispatch(setThemeMode(settings.theme));
         }
       });
+    // run once when auth/settings become ready; theme/language are read only for comparison
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, auth, changeLanguage, getSettings, language]);
 
   const handleLanguageChange: TextFieldProps['onChange'] = async ({ target: { value } }) => {

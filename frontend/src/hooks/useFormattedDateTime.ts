@@ -24,14 +24,14 @@ const useFormattedDateTime = (date?: Date, timeStyle: 'medium' | 'short' = 'shor
     return Intl.DateTimeFormat(language, {
       dateStyle: 'short',
     }).format(new Date(date));
-  }, [date, todayDateString, yesterdayDateString, t]);
+  }, [date, todayDateString, yesterdayDateString, t, language]);
 
   const formattedDateTime = useMemo(() => {
     if (!date) return undefined;
 
     const time = Intl.DateTimeFormat(language, { timeStyle }).format(new Date(date));
     return t('{{date}} at {{time}}', { date: formattedDate, time, interpolation: { escapeValue: false } });
-  }, [formattedDate, timeStyle, date, t]);
+  }, [formattedDate, timeStyle, date, t, language]);
 
   return formattedDateTime;
 };

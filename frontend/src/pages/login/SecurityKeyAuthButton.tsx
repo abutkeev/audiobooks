@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { CommonAuthProps } from '.';
 import { Fingerprint } from '@mui/icons-material';
-import { useWebauthnGenerateChallengeMutation, useWebauthnLoginMutation } from '@/api/api';
+import { AuthenticationDto, useWebauthnGenerateChallengeMutation, useWebauthnLoginMutation } from '@/api/api';
 import { client } from '@passwordless-id/webauthn';
 import { useAppDispatch } from '@/store';
 import { setAuthToken } from '@/store/features/auth';
@@ -21,7 +21,9 @@ const SecurityKeyAuthButton: React.FC<CommonAuthProps> = ({ setLoading, setError
 
       const authenticationDto = await client.authenticate({ allowCredentials: [], challenge });
 
-      const { access_token } = await login({ authenticationDto: authenticationDto as any }).unwrap();
+      const { access_token } = await login({
+        authenticationDto: authenticationDto as unknown as AuthenticationDto,
+      }).unwrap();
       dispatch(setAuthToken(access_token));
     } catch (e) {
       setError(e instanceof Error ? e.message : t('Authorization failed'));

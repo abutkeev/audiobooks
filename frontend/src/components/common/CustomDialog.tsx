@@ -29,6 +29,7 @@ interface CustomDialogProps {
   extraButtons?: React.ReactNode;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export class AbortOperation {}
 
 const CustomDialog: React.FC<CustomDialogProps> = ({

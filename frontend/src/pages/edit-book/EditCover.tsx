@@ -34,7 +34,7 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
         },
       });
       dispatch(api.util.invalidateTags(['books']));
-    } catch (e) {
+    } catch {
       dispatch(addSnackbar({ severity: 'error', text: t(`Got error then uploading cover`) }));
     }
   };
@@ -42,7 +42,7 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
   const handleRemove = async () => {
     try {
       await remove({ id: bookId }).unwrap();
-    } catch (e) {
+    } catch {
       dispatch(addSnackbar({ severity: 'error', text: t(`Got error then removing cover`) }));
     }
   };
@@ -50,7 +50,7 @@ const EditCover: React.FC<EditCoverProps> = ({ bookId, cover }) => {
   const handleExtract = async () => {
     try {
       await extract({ id: bookId }).unwrap();
-    } catch (e) {
+    } catch {
       dispatch(addSnackbar({ severity: 'error', text: t(`Got error then extracting cover`) }));
     }
   };

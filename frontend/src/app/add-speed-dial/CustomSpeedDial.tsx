@@ -1,6 +1,7 @@
 import { PropsWithChildren, createContext, forwardRef, useState } from 'react';
 import { Box, SpeedDial, SpeedDialIcon, SpeedDialProps, useTheme } from '@mui/material';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const CustomSpeedDialContext = createContext({ closeSpeedDial: () => {} });
 
 const CustomSpeedDial = forwardRef<HTMLDivElement, PropsWithChildren<{ bottom?: number }>>(

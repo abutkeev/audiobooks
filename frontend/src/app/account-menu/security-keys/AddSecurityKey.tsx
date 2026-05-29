@@ -2,7 +2,7 @@ import { Button, CircularProgress, Stack, TextField, Typography, useTheme } from
 import { useState } from 'react';
 import { Fingerprint } from '@mui/icons-material';
 import { registerSecurityKey, webauthnAvailable } from '@/utils/webautn';
-import { useWebauthnAddMutation, useWebauthnGenerateChallengeMutation } from '@/api/api';
+import { RegistrationDto, useWebauthnAddMutation, useWebauthnGenerateChallengeMutation } from '@/api/api';
 import useAuthData from '@/hooks/useAuthData';
 import { useAppDispatch } from '@/store';
 import { addSnackbar } from '@/store/features/snackbars';
@@ -33,7 +33,7 @@ const AddSecurityKey: React.FC = () => {
       const registration = await registerSecurityKey({ challenge, username: login });
 
       setStageMessage(t('Saving public key...'));
-      savePublicKey({ publicKeyDto: { registration: registration as any, name } });
+      savePublicKey({ publicKeyDto: { registration: registration as unknown as RegistrationDto, name } });
 
       closeAddForm();
     } catch (e) {

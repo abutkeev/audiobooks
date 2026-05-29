@@ -22,7 +22,7 @@ const PlaybackRate: FC = () => {
             resetFocus();
           },
         })),
-    [speed]
+    [speed, dispatch]
   );
 
   return (
