@@ -6,6 +6,7 @@ import PlayerControlPanel from './PlayerControlPanel';
 import SleepControl from './SleepControl';
 import Settings from './Settings';
 import CopyPosition from './CopyPosition';
+import Bookmarks from './Bookmarks';
 
 const Controls: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const Controls: React.FC = () => {
           <VolumeControl />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 8 }} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Bookmarks />
           <CopyPosition />
           <SleepControl />
           <Settings />
