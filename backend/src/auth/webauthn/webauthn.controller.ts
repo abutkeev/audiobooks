@@ -37,8 +37,8 @@ export class WebauthnController {
 
   @Post('add')
   @ApiOperation({ description: 'Add public key' })
-  add(@Body() data: PublicKeyDto, @Request() { user }) {
-    this.webauthnService.add(data, user.id);
+  async add(@Body() data: PublicKeyDto, @Request() { user }) {
+    return await this.webauthnService.add(data, user.id);
   }
 
   @Delete(':id')
