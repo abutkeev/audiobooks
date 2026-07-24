@@ -45,7 +45,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     this.positionService
       .savePosition(user.id, instanceId, payload)
-      .then(() => this.logger.log(`position updated for user ${user.id}, instance ${instanceId}`));
+      .then(() => this.logger.log(`position updated for user ${user.login} (${user.id}), instance ${instanceId}`));
     this.usersService.updateOnline(user.id);
   }
 
@@ -53,7 +53,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleOnline(@ConnectedSocket() { user, instanceId }: SocketWithUser) {
     this.usersService
       .updateOnline(user.id)
-      .then(() => this.logger.log(`online updated for user ${user.id}, instance ${instanceId}`));
+      .then(() => this.logger.log(`online updated for user ${user.login} (${user.id}), instance ${instanceId}`));
   }
 
   handleDisconnect(client: SocketWithUser) {
