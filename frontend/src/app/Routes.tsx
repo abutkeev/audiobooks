@@ -121,7 +121,11 @@ const Routes: React.FC = () => {
     [token, admin, enabled]
   );
 
-  return <RouterProvider router={router} />;
+  // RouterProvider does not swap its rendered tree when the router instance changes,
+  // so remount it whenever the active route set changes (login, logout, role change).
+  const routeSet = !token ? 'guest' : !enabled ? 'inactive' : admin ? 'admin' : 'user';
+
+  return <RouterProvider key={routeSet} router={router} />;
 };
 
 export default Routes;
