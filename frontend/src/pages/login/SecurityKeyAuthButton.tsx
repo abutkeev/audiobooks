@@ -6,12 +6,14 @@ import { client } from '@passwordless-id/webauthn';
 import { useAppDispatch } from '@/store';
 import { setAuthToken } from '@/store/features/auth';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const SecurityKeyAuthButton: React.FC<CommonAuthProps> = ({ setLoading, setError }) => {
   const { t } = useTranslation();
   const [getChallenge] = useWebauthnGenerateChallengeMutation();
   const [login] = useWebauthnLoginMutation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     setLoading(true);
@@ -25,6 +27,7 @@ const SecurityKeyAuthButton: React.FC<CommonAuthProps> = ({ setLoading, setError
         authenticationDto: authenticationDto as unknown as AuthenticationDto,
       }).unwrap();
       dispatch(setAuthToken(access_token));
+      navigate('/', { replace: true });
     } catch (e) {
       setError(e instanceof Error ? e.message : t('Authorization failed'));
     }
