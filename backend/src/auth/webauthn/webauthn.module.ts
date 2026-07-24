@@ -3,12 +3,16 @@ import { WebauthnController } from './webauthn.controller';
 import { WebauthnService } from './webauthn.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PublicKey, PublicKeySchema } from './schemas/public-key.schema';
+import { Challenge, ChallengeSchema } from './schemas/challenge.schema';
 import { AuthModule } from '../auth.module';
 import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: PublicKey.name, schema: PublicKeySchema }]),
+    MongooseModule.forFeature([
+      { name: PublicKey.name, schema: PublicKeySchema },
+      { name: Challenge.name, schema: ChallengeSchema },
+    ]),
     forwardRef(() => AuthModule),
     forwardRef(() => UsersModule),
   ],

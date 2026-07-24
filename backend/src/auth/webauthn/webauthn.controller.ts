@@ -18,8 +18,8 @@ export class WebauthnController {
   @Public()
   @Post('challenge')
   @ApiOperation({ description: 'Generate Web Authentication API challange' })
-  generateChallenge(): ChallengeResponseDto {
-    return { challenge: this.webauthnService.registerChallenge() };
+  async generateChallenge(): Promise<ChallengeResponseDto> {
+    return { challenge: await this.webauthnService.registerChallenge() };
   }
 
   @Public()

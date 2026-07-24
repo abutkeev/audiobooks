@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { randomBytes } from 'crypto';
 import { Model } from 'mongoose';
 import { PublicKey } from './schemas/public-key.schema';
+import { Challenge } from './schemas/challenge.schema';
 import { PublicKeyDto } from './dto/public-key.dto';
 import { AuthenticationDto } from './dto/authentication.dto';
 import { server } from '@abutkeev/webauthn';
@@ -13,14 +14,12 @@ const logger = new Logger('WebauthnService');
 
 @Injectable()
 export class WebauthnService {
-  private challenges: string[] = [];
-
-  private verifyChallenge = (challenge: string) => {
-    if (!this.challenges.includes(challenge)) {
+  private verifyChallenge = async (challenge: string) => {
+    const used = await this.challengeModel.findOneAndDelete({ challenge });
+    if (!used) {
       logger.error(`challenge ${challenge} is not registred`);
       return false;
     }
-    this.challenges = this.challenges.filter(entry => entry !== challenge);
     return true;
   };
 
@@ -32,6 +31,8 @@ export class WebauthnService {
   constructor(
     @InjectModel(PublicKey.name) private publicKeyModel: Model<PublicKey>,
 
+    @InjectModel(Challenge.name) private challengeModel: Model<Challenge>,
+
     @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
 
@@ -39,9 +40,9 @@ export class WebauthnService {
     private usersService: UsersService
   ) {}
 
-  registerChallenge() {
+  async registerChallenge() {
     const challenge = randomBytes(32).toString('base64url');
-    this.challenges.push(challenge);
+    await this.challengeModel.create({ challenge });
     return challenge;
   }
 
