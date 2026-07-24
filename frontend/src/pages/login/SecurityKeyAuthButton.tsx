@@ -1,8 +1,8 @@
 import { Button } from '@mui/material';
 import { CommonAuthProps } from '.';
 import { Fingerprint } from '@mui/icons-material';
-import { AuthenticationDto, useWebauthnGenerateChallengeMutation, useWebauthnLoginMutation } from '@/api/api';
-import { client } from '@passwordless-id/webauthn';
+import { useWebauthnGenerateChallengeMutation, useWebauthnLoginMutation } from '@/api/api';
+import { authenticateSecurityKey } from '@/utils/webautn';
 import { useAppDispatch } from '@/store';
 import { setAuthToken } from '@/store/features/auth';
 import { useTranslation } from 'react-i18next';
@@ -21,11 +21,9 @@ const SecurityKeyAuthButton: React.FC<CommonAuthProps> = ({ setLoading, setError
     try {
       const { challenge } = await getChallenge().unwrap();
 
-      const authenticationDto = await client.authenticate({ allowCredentials: [], challenge });
+      const authenticationDto = await authenticateSecurityKey(challenge);
 
-      const { access_token } = await login({
-        authenticationDto: authenticationDto as unknown as AuthenticationDto,
-      }).unwrap();
+      const { access_token } = await login({ authenticationDto }).unwrap();
       dispatch(setAuthToken(access_token));
       navigate('/', { replace: true });
     } catch (e) {
