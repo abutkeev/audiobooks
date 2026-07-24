@@ -57,6 +57,7 @@ export class WebauthnService {
         origin: this.verifyOrigin,
       });
       await this.publicKeyModel.create({ ...credential, name, userId });
+      logger.log(`security key added: id ${credential.id}, name ${name}, user ${userId}`);
     } catch (e) {
       logger.error(e);
       throw new BadRequestException('add key failed');
