@@ -44,6 +44,7 @@ interface TelegramAuthButtonProps
   request_access?: boolean;
   lang?: string;
   onAuth: TelegramAuthCallback;
+  onError?: (reason: string) => void;
   progressButtonProps?: Omit<ProgressButtonProps, 'children' | 'onClick' | 'variant' | 'refreshing' | 'onEndWait'>;
 }
 
@@ -54,6 +55,7 @@ const TelegramAuthButton: FC<PropsWithChildren<TelegramAuthButtonProps>> = ({
   disabled,
   progressButtonProps,
   onAuth,
+  onError,
   request_access,
   lang,
   refreshing,
@@ -64,6 +66,9 @@ const TelegramAuthButton: FC<PropsWithChildren<TelegramAuthButtonProps>> = ({
   const [processing, setProcessing] = useState(false);
   const setWaitRefreshing = useWaitRefreshing(refreshing, () => setProcessing(false));
   const { enabled } = useAuthData() || {};
+
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
 
   useEffect(() => {
     if (!TELEGRAM_BOT_ID) {
@@ -77,9 +82,13 @@ const TelegramAuthButton: FC<PropsWithChildren<TelegramAuthButtonProps>> = ({
       setScriptLoading(false);
       if (!getTelegramAuth()) {
         setScriptError(true);
+        onErrorRef.current?.('telegram widget script loaded but auth function is unavailable');
       }
     };
-    script.onerror = () => setScriptError(true);
+    script.onerror = () => {
+      setScriptError(true);
+      onErrorRef.current?.('telegram widget script failed to load');
+    };
     scriptContainerRef.current?.appendChild(script);
     return () => {
       if (!enabled) return;
@@ -103,7 +112,10 @@ const TelegramAuthButton: FC<PropsWithChildren<TelegramAuthButtonProps>> = ({
 
   const handleButtonClick = () => {
     const auth = getTelegramAuth();
-    if (!auth) return;
+    if (!auth) {
+      onError?.('telegram auth function is unavailable on click');
+      return;
+    }
     auth({ bot_id: TELEGRAM_BOT_ID, request_access, lang }, handleAuth);
   };
 

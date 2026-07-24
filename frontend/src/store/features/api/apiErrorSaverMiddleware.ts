@@ -19,7 +19,7 @@ apiErrorSaver.startListening({
 
     dispatch(
       api.endpoints.logWrite.initiate({
-        object: { apiError: { endpointName, type, originalArgs, url, status, statusText } },
+        object: { apiError: { endpointName, type, originalArgs, url, status, statusText, userAgent: navigator.userAgent } },
       })
     );
   },

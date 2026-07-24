@@ -60,7 +60,9 @@ export class TelegramService {
           continue;
         }
         return true;
-      } catch {}
+      } catch (error) {
+        logger.debug(`isAuthorizedChatMember: chat ${id}, telegramUid ${telegramUid} check failed: ${error}`);
+      }
     }
     return false;
   }

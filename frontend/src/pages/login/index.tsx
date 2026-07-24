@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import TelegramAuthButton, { TelegramAuthCallback } from '@/components/TelegramAuthButton';
 import { Telegram } from '@mui/icons-material';
 import { useAppDispatch } from '@/store';
-import { useTgLoginMutation } from '@/api/api';
+import { useLogWriteMutation, useTgLoginMutation } from '@/api/api';
 import { setAuthToken } from '@/store/features/auth';
 import getErrorMessage from '@/utils/getErrorMessage';
 import ErrorAlert from '@/components/common/ErrorAlert';
@@ -28,13 +28,24 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [telegramAuth] = useTgLoginMutation();
+  const [logWrite] = useLogWriteMutation();
+
+  const logTelegramDiagnostic = (stage: string, message: string) => {
+    logWrite({ object: { telegramLogin: { stage, message, userAgent: navigator.userAgent } } });
+  };
 
   const handleTelegramAuth: TelegramAuthCallback = async telegramAuthDataDto => {
-    if (!telegramAuthDataDto) return;
+    if (!telegramAuthDataDto) {
+      logTelegramDiagnostic('widget', 'telegram widget returned no auth data');
+      setError(t('Telegram login failed'));
+      return;
+    }
     try {
       const { access_token } = await telegramAuth({ telegramAuthDataDto }).unwrap();
       dispatch(setAuthToken(access_token));
+      navigate('/', { replace: true });
     } catch (e) {
+      logTelegramDiagnostic('login', getErrorMessage(e, 'telegram login request failed'));
       setError(getErrorMessage(e, 'Telegram login failed'));
     }
   };
@@ -57,6 +68,7 @@ const Login: React.FC = () => {
               <TelegramAuthButton
                 progressButtonProps={{ buttonProps: { fullWidth: true, startIcon: <Telegram /> } }}
                 onAuth={handleTelegramAuth}
+                onError={reason => logTelegramDiagnostic('widget', reason)}
               >
                 {t('Login with telegram')}
               </TelegramAuthButton>
