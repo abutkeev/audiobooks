@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import mongoose, { Model, ObjectId } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { UserDto } from './dto/user.dto';
 import { INIT_ID, INIT_PASSWD } from 'src/constants';
 import { EventsService } from 'src/events/events.service';
