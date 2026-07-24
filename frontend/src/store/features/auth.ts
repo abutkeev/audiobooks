@@ -28,8 +28,8 @@ export const { setAuthToken } = authSlice.actions;
 const mw = createListenerMiddleware<AuthStateSlice>();
 mw.startListening({
   actionCreator: setAuthToken,
-  effect: ({ payload }, { dispatch, getState }) => {
-    const oldAuth = parseToken(getState().auth.token);
+  effect: ({ payload }, { dispatch, getOriginalState }) => {
+    const oldAuth = parseToken(getOriginalState().auth.token);
     const newAuth = parseToken(payload);
 
     if (!oldAuth || !newAuth || oldAuth.admin !== newAuth.admin || oldAuth.enabled !== newAuth.enabled) {
