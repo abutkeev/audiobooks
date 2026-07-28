@@ -4,7 +4,7 @@ import EmptyListWrapper from '@/components/common/EmptyListWrapper';
 import useSearchMatcher from '@/hooks/useSearchMatcher';
 import { Paper, Stack, Typography } from '@mui/material';
 import ProgressButton, { ProgressButtonProps } from '@/components/common/ProgressButton';
-import getFriendDisplayName from '@/utils/getFriendDisplayName';
+import getUserDisplayName from '@/utils/getUserDisplayName';
 import UserOnlineIndicator from '@/components/UserOnlineIndicator';
 
 interface Action {
@@ -56,7 +56,7 @@ const FriendsList: FC<FriendsListProps> = ({
               <Stack spacing={1} direction='row' sx={{ p: 1, alignItems: 'center' }}>
                 {showOnline && <UserOnlineIndicator online={online} />}
                 <Typography noWrap sx={{ flexGrow: 1 }}>
-                  {getFriendDisplayName({ uid, login, name })}
+                  {getUserDisplayName({ uid, login, name })}
                 </Typography>
                 {actions.map(({ action, refreshing, actionText, progressButtonProps }, index) => (
                   <ProgressButton key={index} onClick={action(id)} refreshing={refreshing} {...progressButtonProps}>

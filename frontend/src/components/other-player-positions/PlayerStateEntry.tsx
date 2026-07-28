@@ -3,7 +3,7 @@ import useFormattedDateTime from '@/hooks/useFormattedDateTime';
 import { useAppDispatch } from '@/store';
 import { updateBookState } from '@/store/features/player';
 import formatTime from '@/utils/formatTime';
-import getFriendDisplayName from '@/utils/getFriendDisplayName';
+import getUserDisplayName from '@/utils/getUserDisplayName';
 import { Paper, Stack, Typography } from '@mui/material';
 import { FC, MouseEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ interface PlayerStateEntryProps {
   position: number;
   updated: string;
   friend?: { uid: string; login: string; name: string };
+  user?: { uid: string; login: string; name: string };
   chapters: { title: string }[];
 }
 
@@ -26,6 +27,7 @@ const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
   position,
   updated,
   friend,
+  user,
   chapters,
 }) => {
   const { t } = useTranslation();
@@ -50,6 +52,26 @@ const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
 
   const formattedUpdated = useFormattedDateTime(updatedDate, 'medium');
 
+  const text = useMemo(() => {
+    const params = { currentChapter: chapterName, position: formatTime(position), updated: formattedUpdated };
+
+    if (friend) {
+      return t('Friend {{friend}}, current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
+        friend: getUserDisplayName(friend),
+        ...params,
+      });
+    }
+
+    if (user) {
+      return t('User {{user}}, current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
+        user: getUserDisplayName(user),
+        ...params,
+      });
+    }
+
+    return t('Current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', params);
+  }, [t, friend, user, chapterName, position, formattedUpdated]);
+
   const handlePlayerStateChange = () => {
     dispatch(updateBookState({ currentChapter, position, bookId }));
   };
@@ -71,21 +93,8 @@ const PlayerStateEntry: FC<PlayerStateEntryProps> = ({
       onClick={handlePlayerStateChange}
     >
       <Stack direction='row' spacing={1} sx={{ flexGrow: 1 }}>
-        <Typography sx={{ flexGrow: 1 }}>
-          {friend
-            ? t('Friend {{friend}}, current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
-                friend: getFriendDisplayName(friend),
-                currentChapter: chapterName,
-                position: formatTime(position),
-                updated: formattedUpdated,
-              })
-            : t('Current chapter {{currentChapter}}, position: {{position}}, updated: {{updated}}', {
-                currentChapter: chapterName,
-                position: formatTime(position),
-                updated: formattedUpdated,
-              })}
-        </Typography>
-        {!friend && (
+        <Typography sx={{ flexGrow: 1 }}>{text}</Typography>
+        {!friend && !user && (
           <DeleteButton
             onConfirm={handleRemove}
             confirmationTitle={t('Remove postiton?')}

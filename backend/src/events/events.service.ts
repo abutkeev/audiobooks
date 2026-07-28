@@ -58,8 +58,17 @@ export class EventsService {
     }
   }
 
-  async sendToAdmins({ message, args }: { message: 'invalidate_tag' | 'refresh_token'; args?: any }) {
+  async sendToAdmins({
+    message,
+    args,
+    skipUsers,
+  }: {
+    message: 'invalidate_tag' | 'refresh_token';
+    args?: any;
+    skipUsers?: string[];
+  }) {
     for (const userId of Object.keys(EventsService.sockets)) {
+      if (skipUsers?.includes(userId)) continue;
       const { admin } = await this.usersService.find(userId);
       if (!admin) continue;
       this.sendToUser({ userId, message, args });

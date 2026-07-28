@@ -7,6 +7,9 @@ import { EventsService } from 'src/events/events.service';
 import { FriendsService } from 'src/friends/friends.service';
 import { FriendPositionEntryDto } from './dto/friend-position-entry.dto';
 import { FriendPositionsDto } from './dto/friend-positions.dto';
+import { UserPositionEntryDto } from './dto/user-position-entry.dto';
+import { UserPositionsDto } from './dto/user-positions.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class PositionService {
@@ -14,6 +17,9 @@ export class PositionService {
     @InjectModel(Position.name) private positionModel: Model<Position>,
 
     private friendsService: FriendsService,
+
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService,
 
     @Inject(forwardRef(() => EventsService))
     private eventsService: EventsService
@@ -37,20 +43,24 @@ export class PositionService {
       { userId, instanceId, ...position },
       { upsert: true }
     );
-    this.eventsService.sendToUser({ userId, message: 'invalidate_tag', args: 'position' });
-    for (const { uid } of await this.friendsService.get(userId)) {
-      this.eventsService.sendToUser({ userId: uid, message: 'invalidate_tag', args: 'position' });
-    }
+    await this.notifyPositionChange(userId);
     return result;
   }
 
   async remove({ userId, instanceId, bookId }: { userId: string; instanceId: string; bookId: string }): Promise<true> {
     await this.positionModel.deleteOne({ userId, instanceId, bookId });
+    await this.notifyPositionChange(userId);
+    return true;
+  }
+
+  private async notifyPositionChange(userId: string) {
     this.eventsService.sendToUser({ userId, message: 'invalidate_tag', args: 'position' });
-    for (const { uid } of await this.friendsService.get(userId)) {
+    const friends = await this.friendsService.get(userId);
+    for (const { uid } of friends) {
       this.eventsService.sendToUser({ userId: uid, message: 'invalidate_tag', args: 'position' });
     }
-    return true;
+    const notified = [userId, ...friends.map(({ uid }) => uid)];
+    await this.eventsService.sendToAdmins({ message: 'invalidate_tag', args: 'position', skipUsers: notified });
   }
 
   async getFriends({ uid, bookId }: { uid: string; bookId: string }): Promise<FriendPositionEntryDto[]> {
@@ -72,8 +82,43 @@ export class PositionService {
     });
   }
 
+  async getUser({ userId, bookId }: { userId: string; bookId: string }): Promise<UserPositionEntryDto[]> {
+    const { id, login, name } = await this.usersService.find(userId);
+    const positions = await this.positionModel.find({ bookId, userId: id });
+
+    return positions.map(({ instanceId, currentChapter, position, updated }) => ({
+      instanceId,
+      currentChapter,
+      position,
+      updated: updated.toISOString(),
+      userId: id,
+      userLogin: login,
+      userName: name,
+    }));
+  }
+
   getAll(userId: string) {
     return this.positionModel.find({ userId });
+  }
+
+  async getUsersAll(): Promise<UserPositionsDto[]> {
+    const positionsList = await this.positionModel.find();
+
+    return positionsList.reduce((result: UserPositionsDto[], { userId, bookId, currentChapter, position, updated }) => {
+      if (currentChapter === 0 && position === 0) {
+        return result;
+      }
+
+      const entry = { bookId, currentChapter, position, updated: updated.toISOString() };
+      const user = result.find(({ userId: id }) => id === userId.toString());
+      if (user) {
+        user.positions.push(entry);
+        return result;
+      }
+
+      result.push({ userId: userId.toString(), positions: [entry] });
+      return result;
+    }, []);
   }
 
   async getFriendsAll(uid: string): Promise<FriendPositionsDto[]> {

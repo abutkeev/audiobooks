@@ -10,7 +10,7 @@ import { PersonsModule } from './persons/persons.module';
 import { AuthorsModule } from './authors/authors.module';
 import { SeriesModule } from './series/series.module';
 import { BooksModule } from './books/books.module';
-import { DB_URI, TELEGRAM_BOT_TOKEN, TELEGRAM_PROXY } from './constants';
+import { DB_URI, LAZY_DB_CONNECTION, TELEGRAM_BOT_TOKEN, TELEGRAM_PROXY } from './constants';
 import { SignUpModule } from './sign-up/sign-up.module';
 import { FriendsModule } from './friends/friends.module';
 import { TelegrafModule } from 'nestjs-telegraf';
@@ -24,7 +24,7 @@ import { BookmarksModule } from './bookmarks/bookmarks.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(DB_URI),
+    MongooseModule.forRoot(DB_URI, { lazyConnection: LAZY_DB_CONNECTION === 'true' }),
     TelegrafModule.forRoot({
       token: TELEGRAM_BOT_TOKEN,
       launchOptions: false,

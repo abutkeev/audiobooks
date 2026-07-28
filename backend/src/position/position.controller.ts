@@ -5,7 +5,10 @@ import { PositionEntryDto } from './dto/position-entry.dto';
 import { FriendPositionEntryDto } from './dto/friend-position-entry.dto';
 import { PositionDto } from './dto/position.dto';
 import { FriendPositionsDto } from './dto/friend-positions.dto';
+import { UserPositionEntryDto } from './dto/user-position-entry.dto';
+import { UserPositionsDto } from './dto/user-positions.dto';
 import { HasOnlineTag } from 'src/auth/has-online-tag.decorator';
+import { Admin } from 'src/auth/admin.decorator';
 
 @ApiTags('position')
 @Controller('position')
@@ -30,6 +33,13 @@ export class PositionController {
   @ApiOperation({ description: 'Get user friends positions' })
   async getFriends(@Request() { user }): Promise<FriendPositionsDto[]> {
     return this.positionService.getFriendsAll(user.id);
+  }
+
+  @Admin()
+  @Get('users')
+  @ApiOperation({ description: 'Get all users positions' })
+  async getUsers(): Promise<UserPositionsDto[]> {
+    return this.positionService.getUsersAll();
   }
 
   @Get(':bookId')
@@ -57,5 +67,12 @@ export class PositionController {
     @Request() { user: { id } }
   ): Promise<FriendPositionEntryDto[]> {
     return this.positionService.getFriends({ uid: id, bookId });
+  }
+
+  @Admin()
+  @Get(':bookId/user/:userId')
+  @ApiOperation({ description: 'Get user positions for book' })
+  async getUserBook(@Param('bookId') bookId: string, @Param('userId') userId: string): Promise<UserPositionEntryDto[]> {
+    return this.positionService.getUser({ userId, bookId });
   }
 }

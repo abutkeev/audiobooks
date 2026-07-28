@@ -14,4 +14,5 @@ export const {
   RECAPTCHA_VERIFY_URL,
   TELEGRAM_BOT_TOKEN,
   TELEGRAM_PROXY,
+  LAZY_DB_CONNECTION,
 } = process.env;

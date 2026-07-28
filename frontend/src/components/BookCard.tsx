@@ -12,6 +12,7 @@ interface BookCardProps {
   list?: boolean;
   info: BookInfoDto;
   updated?: string;
+  to?: string;
   authorsList: Record<string, string>;
   readersList: Record<string, string>;
   seriesList: Record<string, string>;
@@ -22,6 +23,7 @@ const BookCard: React.FC<BookCardProps> = ({
   list,
   info: { name, authors, readers, series, cover, draft },
   updated,
+  to,
   authorsList,
   readersList,
   seriesList,
@@ -58,7 +60,7 @@ const BookCard: React.FC<BookCardProps> = ({
         <CardContent sx={{ flexGrow: 1 }}>
           <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
             <Typography variant='h6' sx={{ cursor: 'default' }} noWrap>
-              {list ? <Link to={`/book/${id}`}>{name}</Link> : name}
+              {list ? <Link to={to ?? `/book/${id}`}>{name}</Link> : name}
             </Typography>
             {draft && <EditNote />}
             <Box sx={{ flexGrow: 1 }} />

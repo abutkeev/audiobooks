@@ -14,6 +14,7 @@ import LoginTextField from '@/components/login-text-field/LoginTextField';
 import { useTranslation } from 'react-i18next';
 import CustomAccordion from '@/components/common/CustomAccordion';
 import UserOnlineIndicator from '@/components/UserOnlineIndicator';
+import UserBooks from './UserBooks';
 
 const User: React.FC<UserDto> = ({ id, login, name, enabled, admin, telegram, online }) => {
   const { t } = useTranslation();
@@ -103,6 +104,7 @@ const User: React.FC<UserDto> = ({ id, login, name, enabled, admin, telegram, on
             />
             <CustomPassword label={t('Password')} value={password} onChange={setPassword} />
             <AdminSwitch id={id} thisUser={thisUser} admin={admin} enabled={enabled} />
+            <UserBooks userId={id} />
           </Stack>
         </FormControl>
       }
