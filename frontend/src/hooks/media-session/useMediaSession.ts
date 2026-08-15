@@ -10,7 +10,7 @@ const useMediaSession =
         const {
           bookInfo,
           chapters,
-          state: { currentChapter, playing, position, duration },
+          state: { currentChapter, playing, position, duration, speed },
         } = useAppSelector(({ player }) => player);
 
         const chapterTitle =
@@ -18,7 +18,7 @@ const useMediaSession =
 
         useMediaMetadata({ ...bookInfo, chapterTitle });
         usePlaybackState(playing);
-        usePositionState({ position, duration });
+        usePositionState({ position, duration, playbackRate: speed });
         useMediaKeys();
       }
     : () => {};
