@@ -87,7 +87,11 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
-        <Stack spacing={1} direction={mobile ? 'column' : 'row'} sx={{ flexGrow: 1, justifyContent: 'flex-end', mx: 1, mb: 1 }}>
+        <Stack
+          spacing={1}
+          direction={mobile ? 'column' : 'row'}
+          sx={{ flexGrow: 1, justifyContent: 'flex-end', mx: 1, mb: 1 }}
+        >
           {extraButtons}
           {(onCancel || close) && (
             <Button

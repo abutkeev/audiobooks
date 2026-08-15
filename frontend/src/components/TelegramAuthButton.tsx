@@ -39,8 +39,10 @@ const getTelegramAuth = () => {
   return window.Telegram.Login.auth as (options: Options, callback: TelegramAuthCallback) => void;
 };
 
-interface TelegramAuthButtonProps
-  extends Pick<ProgressButtonProps, 'variant' | 'inProgress' | 'disabled' | 'refreshing'> {
+interface TelegramAuthButtonProps extends Pick<
+  ProgressButtonProps,
+  'variant' | 'inProgress' | 'disabled' | 'refreshing'
+> {
   request_access?: boolean;
   lang?: string;
   onAuth: TelegramAuthCallback;
