@@ -1,10 +1,18 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
-import { PlayerStateSlice, maxVolume, playerSetup, playerSlice, setPreventScreenLock, setResetSleepTimerOnActivity } from '..';
+import {
+  PlayerStateSlice,
+  maxVolume,
+  normalizeSpeed,
+  playerSetup,
+  playerSlice,
+  setPreventScreenLock,
+  setResetSleepTimerOnActivity,
+} from '..';
 import { parseSavedState } from '.';
 import { setPreventLocalStorageSave } from '../internal';
 
 const addPlayerStateSetup = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, playerStateName: string) => {
-  const { updatePosition, updateCurrentChapter, updateVolume } = playerSlice.actions;
+  const { updatePosition, updateCurrentChapter, updateVolume, updateSpeed } = playerSlice.actions;
 
   mw.startListening({
     actionCreator: playerSetup,
@@ -12,11 +20,15 @@ const addPlayerStateSetup = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
       dispatch(setPreventLocalStorageSave(true));
       const { bookId: currentBookId, chapters } = getState().player;
 
-      const { currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock, bookId } =
+      const { currentChapter, position, volume, speed, resetSleepTimerOnActivity, preventScreenLock, bookId } =
         parseSavedState(playerStateName);
 
       if (isFinite(volume) && volume >= 0 && volume <= maxVolume) {
         dispatch(updateVolume(volume));
+      }
+
+      if (typeof speed === 'number') {
+        dispatch(updateSpeed(normalizeSpeed(speed)));
       }
 
       if (typeof preventScreenLock === 'boolean') {

@@ -18,7 +18,8 @@ Redux Toolkit store с несколькими слайсами и кастомн
   - `audio-control-middleware` — управление HTML5 Audio
   - `local-storage-middleware` — сохранение состояния
   - `createPlayerUtilsMiddleware` — вспомогательные операции
-- Константа: `maxVolume = 300` (усиление через Web Audio API GainNode)
+- Константы: `maxVolume = 300` (усиление через Web Audio API GainNode), `minSpeed = 0.25`, `maxSpeed = 3`, `speedStep = 0.05`
+- `changeSpeed` нормализует значение (`normalizeSpeed`: clamp в `[minSpeed, maxSpeed]` и округление до сотых) в `audio-control-middleware` — так что любой источник скорости приходит к допустимому значению
 
 ### media-cache
 

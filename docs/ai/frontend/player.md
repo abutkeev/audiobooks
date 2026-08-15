@@ -34,6 +34,17 @@ components/player/
 - **audio-control-middleware** — связывает Redux-действия с HTML5 Audio API и Web Audio API. При dispatch `play`/`pause`/`changePosition` — управляет реальным аудиоэлементом. Громкость управляется через `GainNode` (Web Audio API), что позволяет усиление до 300% (`maxVolume = 300`).
 - **local-storage-middleware** — сохраняет позицию/громкость/скорость в localStorage для восстановления при перезагрузке.
 
+### Скорость воспроизведения
+
+- Пресеты 0.50–2.00 и произвольное значение слайдером в диапазоне `[minSpeed, maxSpeed]` с шагом `speedStep` (`controls/PlaybackRate.tsx`)
+- `changeSpeed` задаёт и `playbackRate`, и `defaultPlaybackRate`: `audio.load()` при смене главы сбрасывает `playbackRate` к `defaultPlaybackRate`
+- Клавиши `Shift+.` / `Shift+,` двигают скорость по сетке 0.25 к следующему круглому значению
+- Скорость сохраняется в localStorage вместе с позицией и громкостью и передаётся в `mediaSession.setPositionState` — иначе прогресс на локскрине считается как при обычной скорости
+
+### Клавиатурные сокращения
+
+Шорткаты плеера (`hooks/useKeyboardShortcuts.ts`) не срабатывают, когда событие пришло из поля ввода, меню или диалога: там своя обработка клавиш. Слайдеры плеера — исключение, MUI оставляет фокус на скрытом `input[type=range]` после клика, и без этого исключения после клика по прогресс-бару перестали бы работать все сокращения.
+
 ### Web Audio API
 
 Аудио проходит через цепочку: `Audio → MediaElementSource → GainNode → AudioContext.destination`.

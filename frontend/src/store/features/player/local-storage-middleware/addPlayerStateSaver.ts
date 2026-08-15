@@ -28,7 +28,7 @@ const addPlayerStateSaver = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
     effect: (_, { getState }) => {
       const {
         bookId,
-        state: { currentChapter, position, volume, resetSleepTimerOnActivity, preventScreenLock },
+        state: { currentChapter, position, volume, speed, resetSleepTimerOnActivity, preventScreenLock },
       } = getState().player;
       localStorage.setItem(
         playerStateName,
@@ -37,6 +37,7 @@ const addPlayerStateSaver = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
           currentChapter,
           position,
           volume,
+          speed,
           resetSleepTimerOnActivity,
           preventScreenLock,
           updated: new Date().toISOString(),

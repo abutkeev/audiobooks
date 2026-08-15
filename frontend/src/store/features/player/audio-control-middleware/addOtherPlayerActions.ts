@@ -1,5 +1,5 @@
 import { AudioControllAddListrers, ensureGainGraph, getGainNode } from '.';
-import { changePosition, changeSpeed, changeVolume, chapterChange, playerSlice } from '..';
+import { changePosition, changeSpeed, changeVolume, chapterChange, normalizeSpeed, playerSlice } from '..';
 import { loadChapter } from '../internal';
 
 const addOtherPlayerActions: AudioControllAddListrers = (mw, audio) => {
@@ -23,8 +23,11 @@ const addOtherPlayerActions: AudioControllAddListrers = (mw, audio) => {
   mw.startListening({
     actionCreator: changeSpeed,
     effect: ({ payload }, { dispatch }) => {
-      audio.playbackRate = payload;
-      dispatch(updateSpeed(payload));
+      const speed = normalizeSpeed(payload);
+      // audio.load() on chapter change resets playbackRate to defaultPlaybackRate
+      audio.defaultPlaybackRate = speed;
+      audio.playbackRate = speed;
+      dispatch(updateSpeed(speed));
     },
   });
 
