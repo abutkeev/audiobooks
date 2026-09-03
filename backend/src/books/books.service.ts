@@ -339,7 +339,8 @@ export class BooksService {
         throw new BadRequestException(`book must be draft to clear chapters`);
       }
 
-      const backupDir = resolve(bookDir, 'backup', new Date().toISOString());
+      // outside data/books: that directory is served as static files without authorization
+      const backupDir = resolve(DataDir, 'backup', bookId, new Date().toISOString());
       mkdirSync(backupDir, { recursive: true });
 
       const chaptersBackup = resolve(backupDir, 'chapters.json');

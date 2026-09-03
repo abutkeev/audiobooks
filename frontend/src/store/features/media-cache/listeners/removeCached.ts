@@ -7,8 +7,11 @@ function addRemoveCachedMediaListner<State>(mw: ListenerMiddlewareInstance<State
     actionCreator: removeCachedMedia,
     effect: async ({ payload }) => {
       const cache = await getCache();
-      for (const key of payload) {
-        cache.delete(key);
+      const results = await Promise.allSettled(payload.map(key => cache.delete(key)));
+      for (const result of results) {
+        if (result.status === 'rejected') {
+          console.error("can't remove cached media", result.reason);
+        }
       }
     },
   });

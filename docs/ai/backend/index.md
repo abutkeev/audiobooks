@@ -71,14 +71,21 @@
 
 ```
 data/
-├── books/{bookId}/
+├── books/{bookId}/     # раздаётся как статика по /api/books/
 │   ├── info.json       # {info, chapters[]}
 │   ├── cover.*         # Обложка
 │   └── *.mp3           # Аудиофайлы
+├── backup/{bookId}/{timestamp}/  # главы, снятые clearChapters
 ├── authors.json        # [{id, name}]
 ├── readers.json        # [{id, name}]
 └── series.json         # [{id, name, authors[]}]
 ```
+
+**Файлы книг публичны по URL.** `data/books/` раздаётся статикой и не проходит через
+`JwtAuthGuard`: аудиофайлы, обложки и `info.json` доступны без токена. На этом держится
+клиентская схема воспроизведения и кеширования — тег `audio` и Service Worker не умеют
+добавлять заголовок авторизации. Поэтому внутри `data/books/` не должно быть ничего, кроме
+файлов самой книги: бэкапы глав лежат в `data/backup/`.
 
 ## Подробнее
 

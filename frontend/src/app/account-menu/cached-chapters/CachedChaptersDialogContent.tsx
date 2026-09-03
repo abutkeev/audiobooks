@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import CustomDialog from '@/components/common/CustomDialog';
 import DeleteButton from '@/components/common/DeleteButton';
 import EmptyListWrapper from '@/components/common/EmptyListWrapper';
+import ErrorAlert from '@/components/common/ErrorAlert';
 import LoadingWrapper from '@/components/common/LoadingWrapper';
 import useMobile from '@/hooks/useMobile';
 import { useAppDispatch } from '@/store';
@@ -20,7 +21,7 @@ const CachedChaptersDialogContent: FC<CachedChaptersDialogContentProps> = ({ clo
   const { t } = useTranslation();
   const mobile = useMobile();
   const dispatch = useAppDispatch();
-  const { cachedBooks, available, loading, error } = useCachedBooks();
+  const { cachedBooks, available, loading, catalogError } = useCachedBooks();
 
   const chapters = cachedBooks.reduce((total, { urls }) => total + urls.length, 0);
   const size = cachedBooks.reduce((total, { size }) => total + size, 0);
@@ -35,7 +36,8 @@ const CachedChaptersDialogContent: FC<CachedChaptersDialogContentProps> = ({ clo
       close={close}
       title={t('Cached chapters')}
       content={
-        <LoadingWrapper loading={loading} error={error}>
+        <LoadingWrapper loading={loading}>
+          <ErrorAlert error={catalogError ? t('Book list is not available') : undefined} />
           <EmptyListWrapper
             wrap={cachedBooks.length === 0}
             message={available ? t('No cached chapters') : t('Cache state is not available')}

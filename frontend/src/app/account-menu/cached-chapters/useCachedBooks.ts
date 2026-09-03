@@ -54,7 +54,8 @@ const useCachedBooks = () => {
     cachedBooks,
     available,
     loading: booksLoading || authorsLoading,
-    error: booksError || authorsError,
+    // the list itself comes from the cache, so a failed catalog only costs book names
+    catalogError: booksError || authorsError,
   };
 };
 

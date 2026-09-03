@@ -32,7 +32,7 @@ data/books/{bookId}/
 | `extractCover(bookId)` | Парсинг ID3 из первой главы с обложкой; `NotAcceptableException` если нет |
 | `getChaptersFromUrl(url)` | Получение HTML, делегирование ExternalPlaylistService |
 | `downloadExternalChapter(bookId, data)` | Загрузка MP3 с внеш��его URL с CORS-заголовками |
-| `clearChapters(bookId)` | Бэкап существующих глав (требует draft), очистка массива |
+| `clearChapters(bookId)` | Бэкап существующих глав в `data/backup/{bookId}/` (требует draft), очистка массива |
 
 ## BooksController
 

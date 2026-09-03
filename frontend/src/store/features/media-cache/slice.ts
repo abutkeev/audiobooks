@@ -50,8 +50,13 @@ const mediaCacheSlice = createSlice({
       }
       state.entries[url] = {
         state: 'downloading',
-        progress: progress && progress > 0 && progress < 100 ? progress : undefined,
+        progress: progress && progress > 0 && progress < 100 ? Math.round(progress) : undefined,
       };
+    },
+    clearCachedMediaProgress: (state, { payload }: PayloadAction<string>) => {
+      if (state.entries[payload]?.state === 'downloading') {
+        delete state.entries[payload];
+      }
     },
     setCachedMediaError: (state, { payload }: PayloadAction<string>) => {
       state.entries[payload] = { state: 'error' };

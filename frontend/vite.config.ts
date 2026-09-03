@@ -4,6 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePWA } from 'vite-plugin-pwa';
 import { promisify } from 'util';
 import { exec } from 'child_process';
+import mediaCacheName from './src/store/features/media-cache/cacheName';
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
@@ -78,17 +79,21 @@ export default defineConfig(async ({ mode }) => {
           globPatterns: ['**/*.{js,css,html,woff2}'],
           runtimeCaching: [
             {
-              urlPattern: ({ url }) => url.pathname.startsWith('/api/') && !url.pathname.endsWith('.mp3'),
+              urlPattern: ({ url, sameOrigin }) =>
+                sameOrigin && url.pathname.startsWith('/api/') && !url.pathname.toLowerCase().endsWith('.mp3'),
               handler: 'NetworkFirst',
               options: {
                 cacheName: 'api',
               },
             },
             {
-              urlPattern: ({ url }) => url.pathname.endsWith('.mp3'),
+              urlPattern: ({ url, sameOrigin }) =>
+                sameOrigin &&
+                url.pathname.toLowerCase().startsWith('/api/books/') &&
+                url.pathname.toLowerCase().endsWith('.mp3'),
               handler: 'CacheFirst',
               options: {
-                cacheName: 'mp3',
+                cacheName: mediaCacheName,
                 cacheableResponse: { statuses: [200] },
                 rangeRequests: true,
               },

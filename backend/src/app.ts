@@ -9,7 +9,7 @@ import path from 'path';
 export async function setup(options?: NestApplicationOptions) {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, options);
   app.useStaticAssets(FrontendDir);
-  app.useStaticAssets(path.resolve(DataDir, 'books'), { prefix: '/api/books/' });
+  app.useStaticAssets(path.resolve(DataDir, 'books'), { prefix: '/api/books/', index: false, redirect: false });
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
 
