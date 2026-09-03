@@ -84,3 +84,4 @@ run npm audit fix
 
 1. `npm run lint`
 2. `npm run build` (или `tsc --noEmit`)
+3. `npm run test` — во frontend, если затронутая область покрыта тестами

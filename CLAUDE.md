@@ -29,6 +29,8 @@ npm run generate-openapi  # Генерация OpenAPI-спецификации
 npm run dev           # Dev-сервер Vite
 npm run build         # TypeScript + Vite сборка
 npm run lint          # ESLint (--max-warnings 0)
+npm run test          # Vitest (однократный прогон)
+npm run test:watch    # Vitest в watch-режиме
 npm run format        # Prettier
 npm run compile-openapi   # Генерация RTK Query API из OpenAPI
 ```
@@ -48,6 +50,7 @@ npm run extract_cover     # Извлечение обложек
 ```bash
 npm run lint
 npm run build   # или tsc --noEmit
+npm run test    # frontend: если тесты есть в затронутой области
 ```
 
 ## Code conventions

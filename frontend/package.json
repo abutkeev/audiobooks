@@ -11,6 +11,8 @@
     "prebuild": "npm run compile-openapi",
     "build": "tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "format:check": "prettier -c .",
     "format": "prettier -w .",
     "compile-openapi": "rtk-query-codegen-openapi src/api/openapi-config.ts",
@@ -65,7 +67,8 @@
     "typescript": "^6.0.2",
     "vite": "^7.3.2",
     "vite-plugin-pwa": "^1.2.0",
-    "vite-tsconfig-paths": "^6.1.1"
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^5.0.0"
   },
   "overrides": {
     "sharp": "^0.35.4"

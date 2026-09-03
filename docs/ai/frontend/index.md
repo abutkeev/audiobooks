@@ -10,6 +10,7 @@
 - **RTK Query** — API-слой (автогенерация из OpenAPI)
 - **Socket.io** — real-time обновления
 - **i18next** — интернационализация (en, ru)
+- **Vitest** — тесты
 - **Workbox** — Service Worker / PWA
 
 ## Структура `frontend/src/`
@@ -85,6 +86,21 @@ src/
 3. Кастомизации в `api/enhancedApi.ts` (трансформация URL обложек)
 
 Базовый URL: `/api`, авторизация через Bearer-токен из store.
+
+## Тесты
+
+Vitest, конфигурация — `vitest.config.ts` (отдельно от сборочного конфига, чтобы плагины react и pwa
+не участвовали в прогоне; алиасы берутся из tsconfig). Файлы — `*.test.ts` рядом с проверяемым кодом,
+окружение `node`.
+
+```bash
+npm run test         # однократный прогон
+npm run test:watch   # watch-режим
+```
+
+Покрыты чистые функции: `utils/isMatch` (поиск: регистр, е/ё, раскладка), `utils/formatSize`,
+`store/features/media-cache/parseContentLength`. Тестов на компоненты и хуки пока нет —
+для них потребуется jsdom и testing-library.
 
 ## Паттерны
 
