@@ -1,11 +1,14 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
-import mediaCacheSlice, { MediaCacheStateSlice, startMediaCacheUpdates, stopMediaCacheUpdates } from '..';
-import { GetCache } from '../getListenerMiddleware';
+// slice is taken directly: importing it through the index would read it before
+// that module finished initializing, since the index imports this one back
+import mediaCacheSlice from '../slice';
+import type { MediaCacheStateSlice } from '..';
+import type { GetCache } from '../getListenerMiddleware';
 import parseContentLength from '../parseContentLength';
 
 const updateInterval = 1 * 60 * 1000;
 
-const { updateCachedMedia } = mediaCacheSlice.actions;
+const { updateCachedMedia, startMediaCacheUpdates, stopMediaCacheUpdates } = mediaCacheSlice.actions;
 
 type Dispatch = (action: ReturnType<typeof updateCachedMedia>) => void;
 

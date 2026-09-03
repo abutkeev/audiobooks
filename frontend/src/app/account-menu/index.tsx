@@ -45,15 +45,17 @@ const AccountMenu: React.FC = () => {
   useEffect(() => {
     if (!enabled || !['uninitialized', 'fulfilled'].includes(status)) return;
 
-    try {
-      getFriendsRequests(undefined, true)
-        .unwrap()
-        .then(result => {
+    getFriendsRequests(undefined, true)
+      .unwrap()
+      .then(result => {
+        // the cached entry is empty right after the api cache reset on login
+        if (result) {
           setFriendsRequests(result.length);
-        });
-    } catch {
-      // ignore errors
-    }
+        }
+      })
+      .catch(() => {
+        // the requests badge is not worth surfacing a failure for
+      });
   }, [enabled, status, getFriendsRequests]);
 
   const closeMenu = () => setMenuAnchor(undefined);
