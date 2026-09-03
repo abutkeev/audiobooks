@@ -1,27 +1,10 @@
 import { useCallback } from 'react';
 import useSearch from './useSearch';
-import { convert_en2ru } from '@/utils/convert-layout';
+import isMatch from '@/utils/isMatch';
 
 interface SearchMatcherOptions {
   equels?: boolean;
 }
-
-interface IsMatchOptions {
-  searchString: string;
-  value: string;
-}
-
-export const isMatch = ({ searchString, value }: IsMatchOptions) => {
-  const lowerValue = value.toLocaleLowerCase();
-  const lowerSearchString = searchString.toLocaleLowerCase();
-  const searchString2ruPc = convert_en2ru(searchString, 'pc');
-  const searchString2ruMac = convert_en2ru(searchString, 'mac');
-  return (
-    lowerValue.includes(lowerSearchString) ||
-    lowerValue.includes(searchString2ruPc) ||
-    lowerValue.includes(searchString2ruMac)
-  );
-};
 
 const useSearchMatcher = () => {
   const searchString = useSearch() || '';

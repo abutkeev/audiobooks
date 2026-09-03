@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useWaitRefreshing from '@/hooks/useWaitRefreshing';
-import { isMatch } from '@/hooks/useSearchMatcher';
+import isMatch from '@/utils/isMatch';
 
 export interface MultiSelectProps extends Omit<TextFieldProps, 'onChange' | 'value' | 'defaultValue'> {
   values: string[];
