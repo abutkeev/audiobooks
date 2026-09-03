@@ -7,6 +7,8 @@ import useAuthData from '@/hooks/useAuthData';
 import { useTranslation } from 'react-i18next';
 import useFormattedDateTime from '@/hooks/useFormattedDateTime';
 
+const coverSize = { xs: 110, md: 200 };
+
 interface BookCardProps {
   id: string;
   list?: boolean;
@@ -49,12 +51,17 @@ const BookCard: React.FC<BookCardProps> = ({
 
   return (
     <Card raised square>
-      <Stack direction='row' sx={{ flexGrow: 1, alignContent: 'center' }}>
-        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+      <Stack direction='row' sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexShrink: 0, alignSelf: 'center', m: '5px' }}>
           {cover ? (
-            <img alt={t('Cover image')} width={200} src={cover.filename} style={{ margin: 5, borderRadius: 5 }} />
+            <Box
+              component='img'
+              alt={t('Cover image')}
+              src={cover.filename}
+              sx={{ display: 'block', width: coverSize, borderRadius: '5px' }}
+            />
           ) : (
-            <AutoStories sx={{ width: 200, height: 200 }} color='primary' />
+            <AutoStories sx={{ width: coverSize, height: coverSize }} color='primary' />
           )}
         </Box>
         <CardContent sx={{ flexGrow: 1 }}>
