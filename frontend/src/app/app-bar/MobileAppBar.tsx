@@ -21,7 +21,7 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({ handleHomeButtonClick, show
       <AppBar position='fixed'>
         <Toolbar>
           {showSearchTextfield && showSearch ? (
-            <Search fullWidth hide={() => setShowSearchTextField(false)} />
+            <Search fullWidth autoFocus hide={() => setShowSearchTextField(false)} />
           ) : (
             <>
               {showHomeButton && (

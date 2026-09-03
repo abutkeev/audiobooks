@@ -7,9 +7,10 @@ import { KeyboardEventHandler, useEffect, useRef } from 'react';
 interface SearchProps {
   hide?(): void;
   fullWidth?: boolean;
+  autoFocus?: boolean;
 }
 
-const Search: React.FC<SearchProps> = ({ hide, fullWidth }) => {
+const Search: React.FC<SearchProps> = ({ hide, fullWidth, autoFocus }) => {
   const { show, text } = useAppSelector(({ search }) => search);
   const dispatch = useAppDispatch();
   const textfieldRef = useRef<HTMLInputElement>(null);
@@ -51,6 +52,7 @@ const Search: React.FC<SearchProps> = ({ hide, fullWidth }) => {
         spellCheck={false}
         size='small'
         fullWidth={fullWidth}
+        autoFocus={autoFocus}
         slotProps={{
           htmlInput: { ref: textfieldRef },
           input: {
