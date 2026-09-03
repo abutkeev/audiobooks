@@ -10,7 +10,7 @@ services:
     restart: "always"
   audiobooks-backend:
     container_name: "audiobooks-backend"
-    image: "node:18"
+    image: "node:24"
     depends_on:
       - "audiobooks-mongo"
     networks:
