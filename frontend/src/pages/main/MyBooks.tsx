@@ -7,8 +7,9 @@ import useSeries from '@/hooks/useSeries';
 import { Alert } from '@mui/material';
 import { useBooksGetQuery, usePositionGetQuery } from '@/api/api';
 import { useTranslation } from 'react-i18next';
-import useSearchMatcher from '@/hooks/useSearchMatcher';
+import useBookSearchFilter from '@/hooks/useBookSearchFilter';
 import getBooksWithPositions from '@/utils/getBooksWithPositions';
+import CatalogSearchResults from './CatalogSearchResults';
 
 const MyBooks: React.FC = () => {
   const { t } = useTranslation();
@@ -19,42 +20,25 @@ const MyBooks: React.FC = () => {
   const { series, seriesLoading, seriesError } = useSeries();
   const loading = booksLoading || authorsLoading || readersLoading || seriesLoading || positionsLoading;
   const error = booksError || authorsError || readersError || seriesError || positionsError;
-  const searchMatcher = useSearchMatcher();
+  const matchesSearch = useBookSearchFilter();
 
   const books = useMemo(() => getBooksWithPositions(positions, bookList), [positions, bookList]);
 
-  const filtredBooks = useMemo(() => {
-    if (!searchMatcher) return books;
-    const filtredAuhorsIds = Object.entries(authors)
-      .filter(([, name]) => searchMatcher(name))
-      .map(([id]) => id);
-    const filtredReadersIds = Object.entries(readers)
-      .filter(([, name]) => searchMatcher(name))
-      .map(([id]) => id);
-    const filtredSeriesIds = Object.entries(series)
-      .filter(([, name]) => searchMatcher(name))
-      .map(([id]) => id);
-    const result = books.filter(
-      ({
-        book: {
-          info: { name, authors, readers, series },
-        },
-      }) =>
-        searchMatcher(name) ||
-        filtredAuhorsIds.some(author_id => authors.includes(author_id)) ||
-        filtredReadersIds.some(reader_id => readers.includes(reader_id)) ||
-        filtredSeriesIds.some(series_id => series.some(({ id }) => id === series_id))
-    );
-    return result;
-  }, [searchMatcher, books, authors, readers, series]);
+  const filtredBooks = useMemo(
+    () => (matchesSearch ? books.filter(({ book: { info } }) => matchesSearch(info)) : books),
+    [matchesSearch, books]
+  );
+
+  const shownBookIds = useMemo(() => books.map(({ book: { id } }) => id), [books]);
 
   return (
     <LoadingWrapper loading={loading} error={error}>
       {filtredBooks.length !== 0 ? (
         <BookPositionList books={filtredBooks} authorsList={authors} readersList={readers} seriesList={series} />
       ) : (
-        <Alert severity='info'>{searchMatcher ? t('No books found') : t('No books')}</Alert>
+        <Alert severity='info'>{matchesSearch ? t('No matches among your books') : t('No books')}</Alert>
       )}
+      <CatalogSearchResults shownBookIds={shownBookIds} />
     </LoadingWrapper>
   );
 };

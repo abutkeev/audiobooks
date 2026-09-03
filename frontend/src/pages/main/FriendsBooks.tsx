@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import CustomAccordion from '@/components/common/CustomAccordion';
 import UserOnlineIndicator from '@/components/UserOnlineIndicator';
 import getBooksWithPositions from '@/utils/getBooksWithPositions';
+import CatalogSearchResults from './CatalogSearchResults';
 
 const FriendsBooks: React.FC = () => {
   const { t } = useTranslation();
@@ -24,6 +25,11 @@ const FriendsBooks: React.FC = () => {
   const friendsBooks = useMemo(
     () => positions.map(({ friend, positions }) => ({ friend, books: getBooksWithPositions(positions, bookList) })),
     [positions, bookList]
+  );
+
+  const shownBookIds = useMemo(
+    () => friendsBooks.flatMap(({ books }) => books.map(({ book: { id } }) => id)),
+    [friendsBooks]
   );
 
   return (
@@ -43,6 +49,7 @@ const FriendsBooks: React.FC = () => {
       ) : (
         <Alert severity='info'>{t('No books')}</Alert>
       )}
+      <CatalogSearchResults shownBookIds={shownBookIds} />
     </LoadingWrapper>
   );
 };
