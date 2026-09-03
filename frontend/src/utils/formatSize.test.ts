@@ -22,4 +22,10 @@ describe('formatSize', () => {
   it('drops the fraction for large values', () => {
     expect(formatSize(150 * 1024 * 1024)).toBe('150 MB');
   });
+
+  it('moves to the next unit when rounding reaches it', () => {
+    expect(formatSize(1024 * 1024 - 1)).toBe('1.0 MB');
+    expect(formatSize(1024 * 1024 * 1024 - 1)).toBe('1.0 GB');
+    expect(formatSize(1024 - 1)).toBe('1023 B');
+  });
 });
