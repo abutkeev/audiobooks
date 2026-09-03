@@ -31,7 +31,7 @@ src/
 ├── pages/                # Страницы (по маршрутам)
 ├── store/                # Redux store, слайсы, middleware
 │   └── features/         # auth, player, theme, search, websocket, media-cache...
-└── utils/                # Утилиты (formatTime, getErrorMessage, convert-layout...)
+└── utils/                # Утилиты (formatTime, formatSize, getErrorMessage, convert-layout...)
 ```
 
 ## Маршрутизация

@@ -1,10 +1,12 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
 import mediaCacheSlice, { MediaCacheStateSlice, addMediaToCache } from '..';
 import axios from 'axios';
+import parseContentLength from '../parseContentLength';
+import { GetCache } from '../getListenerMiddleware';
 
 function addMediaToCacheListner<State extends MediaCacheStateSlice>(
   mw: ListenerMiddlewareInstance<State>,
-  cache: Cache
+  getCache: GetCache
 ) {
   const { setCachedMediaProgress, setCachedMediaError } = mediaCacheSlice.actions;
 
@@ -12,10 +14,17 @@ function addMediaToCacheListner<State extends MediaCacheStateSlice>(
     actionCreator: addMediaToCache,
     effect: async ({ payload }, api) => {
       api.cancelActiveListeners();
+      const cache = await getCache();
       for (const url of payload) {
         const cached = await cache.match(url);
         if (cached?.ok && cached.status === 200) {
-          api.dispatch(setCachedMediaProgress({ url, progress: 100 }));
+          api.dispatch(
+            setCachedMediaProgress({
+              url,
+              progress: 100,
+              size: parseContentLength(cached.headers.get('content-length')),
+            })
+          );
           continue;
         }
         const result = axios({
@@ -25,7 +34,15 @@ function addMediaToCacheListner<State extends MediaCacheStateSlice>(
             api.dispatch(setCachedMediaProgress({ url, progress: total ? (loaded * 100) / total : undefined }));
           },
         })
-          .then(() => api.dispatch(setCachedMediaProgress({ url, progress: 100 })))
+          .then(({ headers }) =>
+            api.dispatch(
+              setCachedMediaProgress({
+                url,
+                progress: 100,
+                size: parseContentLength(String(headers['content-length'] ?? '')),
+              })
+            )
+          )
           .catch(e => {
             console.error(`can't download ${url}`, e);
             api.dispatch(setCachedMediaError(url));

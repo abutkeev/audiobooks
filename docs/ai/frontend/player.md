@@ -64,6 +64,7 @@ components/player/
 - `media-cache` slice в store управляет состоянием кеша
 - Service Worker (Workbox) кеширует аудиофайлы для офлайн-прослушивания
 - `BookCacheIcon` / `ChapterCacheIcon` показывают статус кеширования
+- Кеш всех книг (не только открытой) управляется из меню аккаунта — `app/account-menu/cached-chapters/`
 
 ## Media Session API
 

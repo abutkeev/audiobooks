@@ -18,6 +18,8 @@ import SettingsMenuItem from './settings/SettingsMenuItem';
 import SettingsDialog from './settings/SettingsDialog';
 import AppbarMenuButton from '../app-bar/AppbarMenuButton';
 import ReconnectMenuItem from './ReconnectMenuItem';
+import CachedChaptersMenuItem from './cached-chapters/CachedChaptersMenuItem';
+import CachedChaptersDialog from './cached-chapters/CachedChaptersDialog';
 
 export interface AccountMenuItemProps {
   closeMenu(): void;
@@ -37,6 +39,7 @@ const AccountMenu: React.FC = () => {
   const [showSecurityKeysDialog, setShowSecurityKeysDialog] = useState(false);
   const [showLinkedAccountsDialog, setShowLinkedAccountsDialog] = useState(false);
   const [showChangePasswordDialog, setShowChangePasswordDialog] = useState(false);
+  const [showCachedChaptersDialog, setShowCachedChaptersDialog] = useState(false);
   const [getFriendsRequests, { status }] = useLazyFriendsGetIncomingRequestsQuery();
 
   useEffect(() => {
@@ -84,6 +87,7 @@ const AccountMenu: React.FC = () => {
         <FriendsMenuItem friendsRequests={friendsRequests} closeMenu={closeMenu} />
         <LinkedAccountsMenuItem setShowDialog={setShowLinkedAccountsDialog} closeMenu={closeMenu} />
         <SecurityKeysMenuItem setShowDialog={setShowSecurityKeysDialog} closeMenu={closeMenu} />
+        <CachedChaptersMenuItem setShowDialog={setShowCachedChaptersDialog} closeMenu={closeMenu} />
         <LogoutMenuItem closeMenu={closeMenu} />
       </Menu>
       <ProfileDialog open={showProfileDialog} close={() => setShowProfileDialog(false)} />
@@ -91,6 +95,7 @@ const AccountMenu: React.FC = () => {
       <SecurityKeysDialog open={showSecurityKeysDialog} close={() => setShowSecurityKeysDialog(false)} />
       <LinkedAccountsDialog open={showLinkedAccountsDialog} close={() => setShowLinkedAccountsDialog(false)} />
       <ChangePasswordDialog open={showChangePasswordDialog} close={() => setShowChangePasswordDialog(false)} />
+      <CachedChaptersDialog open={showCachedChaptersDialog} close={() => setShowCachedChaptersDialog(false)} />
     </>
   );
 };
