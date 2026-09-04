@@ -104,7 +104,8 @@ npm run test:watch   # watch-режим
 
 Покрыты функции, не требующие React и DOM: `utils/isMatch` (поиск: регистр, е/ё, раскладка), `utils/formatSize`,
 `store/features/media-cache/parseContentLength`, `store/features/api/redactSecrets`,
-`store/features/player/audio-control-middleware/waitForMetadata`, `startPlayback` и `diagnosticsLog`.
+`store/features/player/audio-control-middleware/waitForMetadata`, `startPlayback` и `diagnosticsLog`,
+`utils/getTelegramAuthError`.
 Слушатели среднего слоя покрыты в `addLoadChapterAction.test.ts` и `addDiagnostics.test.ts`. Тестов на компоненты и хуки пока нет —
 для них потребуется jsdom и testing-library.
 

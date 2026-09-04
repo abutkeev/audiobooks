@@ -2,10 +2,11 @@ import { Paper, Stack, Typography } from '@mui/material';
 import CustomDialog from '@/components/common/CustomDialog';
 import LoadingWrapper from '@/components/common/LoadingWrapper';
 import { Telegram } from '@mui/icons-material';
-import TelegramAuthButton, { TelegramAuthCallback } from '@/components/TelegramAuthButton';
-import { useTgGetAccountInfoQuery, useTgRemoveAuthDataMutation, useTgSetAuthDataMutation } from '@/api/api';
+import TelegramAuthButton from '@/components/TelegramAuthButton';
+import { useTgGetAccountInfoQuery, useTgRemoveAuthDataMutation } from '@/api/api';
 import ProgressButton from '@/components/common/ProgressButton';
 import { useTranslation } from 'react-i18next';
+import useTelegramLink from '@/hooks/useTelegramLink';
 
 interface LinkedAccountsDialogProps {
   open: boolean;
@@ -15,13 +16,8 @@ interface LinkedAccountsDialogProps {
 const LinkedAccountsDialog: React.FC<LinkedAccountsDialogProps> = ({ open, close }) => {
   const { t } = useTranslation();
   const { data: telegramAccount, isLoading, isError, isFetching } = useTgGetAccountInfoQuery();
-  const [setTgAuth] = useTgSetAuthDataMutation();
+  const handleTelegramAuth = useTelegramLink();
   const [removeTgAuth] = useTgRemoveAuthDataMutation();
-
-  const handleTelegramAuth: TelegramAuthCallback = async telegramAuthDataDto => {
-    if (!telegramAuthDataDto) return;
-    await setTgAuth({ telegramAuthDataDto });
-  };
 
   const handleTelergamRemove = async () => {
     await removeTgAuth();

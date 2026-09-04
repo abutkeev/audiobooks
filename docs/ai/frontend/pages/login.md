@@ -16,7 +16,8 @@ Login
 ## API
 
 - `useAuthLoginMutation()` — логин по паролю
-- `useTgLoginMutation()` — вход через Telegram
+- `useTgLoginMutation()` — вход через Telegram. Отказ переводится по коду из тела ответа
+  (`utils/getTelegramAuthError`), а не показывается как есть: сообщения сервера английские
 - `useWebauthnGenerateChallengeMutation()`, `useWebauthnLoginMutation()` — WebAuthn
 
 ## Store

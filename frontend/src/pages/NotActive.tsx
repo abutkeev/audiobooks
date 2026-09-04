@@ -1,22 +1,18 @@
 import { Alert, Container, Stack } from '@mui/material';
 import useTitle from '@/hooks/useTitle';
-import { useTgGetAccountInfoQuery, useTgSetAuthDataMutation } from '@/api/api';
-import TelegramAuthButton, { TelegramAuthCallback } from '@/components/TelegramAuthButton';
+import { useTgGetAccountInfoQuery } from '@/api/api';
+import TelegramAuthButton from '@/components/TelegramAuthButton';
 import LoadingWrapper from '@/components/common/LoadingWrapper';
 import { Telegram } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import useTelegramLink from '@/hooks/useTelegramLink';
 
 const NotActive: React.FC = () => {
   const { t } = useTranslation();
   useTitle(t('Account is not active'));
 
   const { data: telegramAccount, isLoading, isError, isFetching } = useTgGetAccountInfoQuery();
-  const [setTgAuth] = useTgSetAuthDataMutation();
-
-  const handleTelegramAuth: TelegramAuthCallback = async telegramAuthDataDto => {
-    if (!telegramAuthDataDto) return;
-    await setTgAuth({ telegramAuthDataDto });
-  };
+  const handleTelegramAuth = useTelegramLink();
   return (
     <Container maxWidth='sm'>
       <Stack spacing={1}>

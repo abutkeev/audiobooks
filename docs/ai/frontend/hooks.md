@@ -10,6 +10,7 @@
 | `useAuthors` | Обёртка RTK Query для списка авторов |
 | `useReaders` | Обёртка RTK Query для списка чтецов |
 | `useSeries` | Обёртка RTK Query для списка серий |
+| `useTelegramLink` | Привязка Telegram-аккаунта; отказ показывает тостом, причину переводит по коду ответа |
 
 ## UI и медиа
 

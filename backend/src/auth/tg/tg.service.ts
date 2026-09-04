@@ -1,10 +1,10 @@
 import {
   BadRequestException,
-  ForbiddenException,
+  HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   Logger,
-  NotFoundException,
   ServiceUnavailableException,
   forwardRef,
 } from '@nestjs/common';
@@ -22,6 +22,11 @@ import { TelegramService } from 'src/telegram/telegram.service';
 
 // telegram signs the data but never expires it, so a leaked hash would log in forever
 const maxAuthAge = 24 * 60 * 60;
+
+// the client translates by the code, see docs/ai/backend/auth.md; the status lives in one place,
+// so a different exception class cannot leave a stale one in the body
+const refuse = (status: HttpStatus, code: string, message: string) =>
+  new HttpException({ code, message, statusCode: status }, status);
 
 @Injectable()
 export class TgService {
@@ -48,7 +53,7 @@ export class TgService {
 
     if (!hash) {
       this.logger.warn(`telegram auth data for id=${data.id} has no hash`);
-      throw new BadRequestException('hash  is not set');
+      throw new BadRequestException('hash is not set');
     }
 
     const secret = createHash('sha256').update(TELEGRAM_BOT_TOKEN).digest();
@@ -67,7 +72,7 @@ export class TgService {
     // otherwise refuse every login
     if (Math.floor(Date.now() / 1000) - data.auth_date >= maxAuthAge) {
       this.logger.warn(`telegram auth data for id=${data.id} expired, dated ${data.auth_date}`);
-      throw new ForbiddenException('telegram login data expired, authorize again');
+      throw refuse(HttpStatus.FORBIDDEN, 'tg_data_expired', 'telegram login data expired');
     }
 
     return true;
@@ -80,7 +85,7 @@ export class TgService {
 
   async set(userId: string, data: TelegramAuthDataDto): Promise<true> {
     if (!this.verifyAuthData(data)) {
-      throw new ForbiddenException('hash check failed');
+      throw refuse(HttpStatus.FORBIDDEN, 'tg_hash_invalid', 'hash check failed');
     }
     const { id, first_name, last_name, username, photo_url } = data;
     await this.telegramAccountModel.deleteOne({ userId });
@@ -101,16 +106,17 @@ export class TgService {
 
   async auth(data: TelegramAuthDataDto): Promise<LoginResponseDto> {
     if (!this.verifyAuthData(data)) {
-      throw new ForbiddenException('hash check failed');
+      throw refuse(HttpStatus.FORBIDDEN, 'tg_hash_invalid', 'hash check failed');
     }
     const info = await this.telegramAccountModel.findOne({ id: data.id });
     if (!info) {
       this.logger.warn(`telegram login failed: no linked account for telegram id=${data.id} username=${data.username}`);
-      throw new NotFoundException('telegram account info not found');
+      throw refuse(HttpStatus.NOT_FOUND, 'tg_account_unknown', 'telegram account info not found');
     }
-    const user = await this.usersService.find(info.userId).catch(error => {
+    const user = await this.usersService.find(info.userId).catch(() => {
       this.logger.warn(`telegram login failed: linked user ${info.userId} not found for telegram id=${data.id}`);
-      throw error;
+      // the same story for the visitor, and the internal id has no business on a public endpoint
+      throw refuse(HttpStatus.NOT_FOUND, 'tg_account_unknown', 'linked user not found');
     });
     this.logger.log(`telegram login success for telegram id=${data.id} userId=${info.userId}`);
     return this.authService.login(user);

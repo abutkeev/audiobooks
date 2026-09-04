@@ -12,6 +12,7 @@ import { useAppDispatch } from '@/store';
 import { useLogWriteMutation, useTgLoginMutation } from '@/api/api';
 import { setAuthToken } from '@/store/features/auth';
 import getErrorMessage from '@/utils/getErrorMessage';
+import getTelegramAuthError from '@/utils/getTelegramAuthError';
 import ErrorAlert from '@/components/common/ErrorAlert';
 import { useTranslation } from 'react-i18next';
 
@@ -46,7 +47,7 @@ const Login: React.FC = () => {
       navigate('/', { replace: true });
     } catch (e) {
       logTelegramDiagnostic('login', getErrorMessage(e, 'telegram login request failed'));
-      setError(getErrorMessage(e, 'Telegram login failed'));
+      setError(getTelegramAuthError(e) ?? t('Telegram login failed'));
     }
   };
 
