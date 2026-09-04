@@ -98,6 +98,9 @@ npm run test         # однократный прогон
 npm run test:watch   # watch-режим
 ```
 
+Сборочные глобалы (`VERSION`, `MEDIA_CACHE_NAME` и прочие из `define` в `vite.config.ts`) в тестах
+подменяются заглушками в `vitest.config.ts` — иначе модуль, который их читает, падает с `ReferenceError`.
+
 Покрыты чистые функции: `utils/isMatch` (поиск: регистр, е/ё, раскладка), `utils/formatSize`,
 `store/features/media-cache/parseContentLength`. Тестов на компоненты и хуки пока нет —
 для них потребуется jsdom и testing-library.
