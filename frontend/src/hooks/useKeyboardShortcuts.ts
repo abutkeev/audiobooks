@@ -3,11 +3,12 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import {
   changeSpeed,
   changeVolume,
-  chapterChange,
   forward,
   maxVolume,
+  nextChapter,
   pause,
   play,
+  previousChapter,
   rewind,
 } from '@/store/features/player';
 
@@ -29,7 +30,7 @@ const handledElsewhere = (target: EventTarget | null) =>
   target instanceof Element && !!target.closest('input:not([type="range"]), textarea, [role="menu"], [role="dialog"]');
 
 const useKeyboardShortcuts = () => {
-  const { playing, currentChapter, volume, speed } = useAppSelector(({ player: { state } }) => state);
+  const { playing, volume, speed } = useAppSelector(({ player: { state } }) => state);
   const dispatch = useAppDispatch();
 
   const handleKeyDown = useCallback(
@@ -66,12 +67,12 @@ const useKeyboardShortcuts = () => {
           break;
         case 'KeyN':
           if (metaKey || ctrlKey || altKey || !shiftKey) break;
-          dispatch(chapterChange(currentChapter + 1));
+          dispatch(nextChapter());
           disableDefaultActions();
           break;
         case 'KeyP':
           if (metaKey || ctrlKey || altKey || !shiftKey) break;
-          dispatch(chapterChange(currentChapter - 1));
+          dispatch(previousChapter());
           disableDefaultActions();
           break;
         case 'ArrowUp':
@@ -94,7 +95,7 @@ const useKeyboardShortcuts = () => {
           break;
       }
     },
-    [dispatch, playing, currentChapter, volume, speed]
+    [dispatch, playing, volume, speed]
   );
 
   useEffect(() => {
@@ -102,7 +103,7 @@ const useKeyboardShortcuts = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentChapter, volume, playing, handleKeyDown]);
+  }, [handleKeyDown]);
 };
 
 export default useKeyboardShortcuts;

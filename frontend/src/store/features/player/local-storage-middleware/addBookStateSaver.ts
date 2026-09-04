@@ -1,5 +1,6 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
-import { PlayerStateSlice, playerSetup } from '..';
+import type { PlayerStateSlice } from '..';
+import { playerSetup } from '../slice';
 import { setPreventLocalStorageSave } from '../internal';
 import { parseSavedState } from '.';
 

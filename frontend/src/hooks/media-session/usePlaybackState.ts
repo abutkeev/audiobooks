@@ -5,10 +5,16 @@ const usePlaybackState = (playing: boolean) => {
 
   useEffect(() => {
     mediaSession.playbackState = playing ? 'playing' : 'paused';
-    return () => {
-      mediaSession.playbackState = 'none';
-    };
   }, [playing, mediaSession]);
+
+  // a reset on every change flickers the lock screen controls,
+  // see docs/ai/frontend/player.md, "Media Session API"
+  useEffect(
+    () => () => {
+      mediaSession.playbackState = 'none';
+    },
+    [mediaSession]
+  );
 };
 
 export default usePlaybackState;

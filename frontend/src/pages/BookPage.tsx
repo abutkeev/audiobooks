@@ -13,7 +13,8 @@ import { useBooksGetBookInfoQuery } from '@/api/api';
 
 const BookPage: React.FC = () => {
   const { id = '' } = useParams();
-  const { data, isLoading, isError } = useBooksGetBookInfoQuery({ id });
+  // currentData, not data: otherwise the previous book stays on screen while the next loads
+  const { currentData: data, isFetching, isError } = useBooksGetBookInfoQuery({ id });
   const { authors, authorsLoading, authorsError } = useAuthors();
   const { readers, readersLoading, readersError } = useReaders();
   const { series, seriesLoading, seriesError } = useSeries();
@@ -33,7 +34,19 @@ const BookPage: React.FC = () => {
     return { position, currentChapter };
   }, [searchParams]);
 
-  const loading = isLoading || authorsLoading || readersLoading || seriesLoading;
+  const bookInfo = useMemo(
+    () =>
+      data && {
+        name: data.info.name,
+        author: data.info.authors.map(author_id => authors[author_id]).join(','),
+        series: data.info.series.length !== 0 ? data.info.series.map(({ id }) => series[id]).join(',') : undefined,
+        cover: data.info.cover,
+        draft: data.info.draft,
+      },
+    [data, authors, series]
+  );
+
+  const loading = (isFetching && !data) || authorsLoading || readersLoading || seriesLoading;
   const error = isError || authorsError || readersError || seriesError;
 
   const resetSearchParams = () => {
@@ -45,16 +58,9 @@ const BookPage: React.FC = () => {
       {data && (
         <>
           <BookCard id={id} info={data.info} authorsList={authors} readersList={readers} seriesList={series} />
-          {data.chapters.length !== 0 && (
+          {data.chapters.length !== 0 && bookInfo && (
             <Player
-              bookInfo={{
-                name: data.info.name,
-                author: data.info.authors.map(author_id => authors[author_id]).join(','),
-                series:
-                  data.info.series.length !== 0 ? data.info.series.map(({ id }) => series[id]).join(',') : undefined,
-                cover: data.info.cover,
-                draft: data.info.draft,
-              }}
+              bookInfo={bookInfo}
               bookId={id}
               chapters={data.chapters}
               externalState={externalState}

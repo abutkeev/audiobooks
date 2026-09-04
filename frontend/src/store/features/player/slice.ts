@@ -28,6 +28,7 @@ interface PlayerStore {
     pauseOnChapterEnd: boolean;
     resetSleepTimerOnActivity: boolean;
     preventScreenLock: boolean;
+    diagnostics: boolean;
     error: string;
   };
   bookId: string;
@@ -46,6 +47,7 @@ const initialState: PlayerStore = {
     pauseOnChapterEnd: false,
     resetSleepTimerOnActivity: true,
     preventScreenLock: true,
+    diagnostics: false,
     error: '',
   },
   bookId: '',
@@ -96,6 +98,9 @@ export const playerSlice = createSlice({
     setPreventScreenLock: (store, { payload }: PayloadAction<boolean>) => {
       store.state.preventScreenLock = payload;
     },
+    setDiagnostics: (store, { payload }: PayloadAction<boolean>) => {
+      store.state.diagnostics = payload;
+    },
     setError: (store, { payload }: PayloadAction<string>) => {
       store.state.error = payload;
     },
@@ -108,4 +113,5 @@ export const {
   setPauseOnChapterEnd,
   setResetSleepTimerOnActivity,
   setPreventScreenLock,
+  setDiagnostics,
 } = playerSlice.actions;

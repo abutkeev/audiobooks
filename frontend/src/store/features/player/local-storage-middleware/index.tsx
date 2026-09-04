@@ -1,5 +1,5 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
-import { PlayerStateSlice } from '..';
+import type { PlayerStateSlice } from '..';
 import addBooksStateSetup from './addBooksStateSetup';
 import addPlayerStateSetup from './addPlayerStateSetup';
 import addBookStateSaver from './addBookStateSaver';

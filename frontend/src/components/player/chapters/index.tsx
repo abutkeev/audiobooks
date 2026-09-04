@@ -40,7 +40,7 @@ const Chapters: React.FC = () => {
   if (chapters.length === 0) return;
 
   const handleChapterClick = (chapter: number) => () => dispatch(chapterChange(chapter));
-  const currentChapterTitle = chapters[currentChapter].title;
+  const currentChapterTitle = chapters[currentChapter]?.title ?? '';
   const chapterNumber = currentChapter + 1;
   const titleIsNumber = +currentChapterTitle === chapterNumber;
 

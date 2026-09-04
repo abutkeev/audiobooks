@@ -1,5 +1,5 @@
-import { AudioControllAddListrers } from '.';
-import { changePosition, rewind } from '..';
+import type { AudioControllAddListrers } from '.';
+import { changePosition, rewind } from '../actions';
 import { loadChapter } from '../internal';
 
 const addRewindAction: AudioControllAddListrers = mw => {

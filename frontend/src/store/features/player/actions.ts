@@ -1,4 +1,4 @@
-import { BookState, Message } from './createPlayerUtilsMiddleware';
+import type { BookState, Message } from './createPlayerUtilsMiddleware';
 import { createSliceAction } from './internal';
 
 export const changePosition = createSliceAction<number>('changePosition');
@@ -9,6 +9,8 @@ export const play = createSliceAction('play');
 export const forward = createSliceAction<number>('forward');
 export const rewind = createSliceAction<number>('rewind');
 export const chapterChange = createSliceAction<number>('chapterChange');
+export const nextChapter = createSliceAction('nextChapter');
+export const previousChapter = createSliceAction('previousChapter');
 export const updateBookState = createSliceAction<{ bookId: string; currentChapter: number; position: number }>(
   'updateBookState'
 );

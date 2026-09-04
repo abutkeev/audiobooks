@@ -2,7 +2,7 @@ import { SkipPrevious, Replay10, Pause, PlayArrow, Forward10, SkipNext } from '@
 import { Stack } from '@mui/material';
 import ControlButton from './ControlButton';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { chapterChange, forward, pause, play, rewind } from '@/store/features/player';
+import { forward, nextChapter, pause, play, previousChapter, rewind } from '@/store/features/player';
 
 const PlayerControlPanel: React.FC = () => {
   const {
@@ -15,8 +15,8 @@ const PlayerControlPanel: React.FC = () => {
     <Stack direction='row' sx={{ justifyContent: 'center' }}>
       <ControlButton
         Icon={SkipPrevious}
-        disabled={currentChapter === 0}
-        onClick={() => dispatch(chapterChange(currentChapter - 1))}
+        disabled={!position && currentChapter === 0}
+        onClick={() => dispatch(previousChapter())}
       />
       <ControlButton
         Icon={Replay10}
@@ -36,7 +36,7 @@ const PlayerControlPanel: React.FC = () => {
       <ControlButton
         Icon={SkipNext}
         disabled={currentChapter === chapters.length - 1}
-        onClick={() => dispatch(chapterChange(currentChapter + 1))}
+        onClick={() => dispatch(nextChapter())}
       />
     </Stack>
   );

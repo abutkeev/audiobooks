@@ -1,5 +1,6 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
-import { PlayerStateSlice, playerSetup } from '..';
+import type { PlayerStateSlice } from '..';
+import { playerSetup } from '../slice';
 import { setPreventLocalStorageSave } from '../internal';
 
 const addPlayerStateSaver = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, playerStateName: string) => {
@@ -28,7 +29,7 @@ const addPlayerStateSaver = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
     effect: (_, { getState }) => {
       const {
         bookId,
-        state: { currentChapter, position, volume, speed, resetSleepTimerOnActivity, preventScreenLock },
+        state: { currentChapter, position, volume, speed, resetSleepTimerOnActivity, preventScreenLock, diagnostics },
       } = getState().player;
       localStorage.setItem(
         playerStateName,
@@ -40,6 +41,7 @@ const addPlayerStateSaver = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
           speed,
           resetSleepTimerOnActivity,
           preventScreenLock,
+          diagnostics,
           updated: new Date().toISOString(),
         })
       );

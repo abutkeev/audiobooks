@@ -74,7 +74,8 @@ src/
 
 - Языки: en, ru
 - Детекция: localStorage (`lang`) → язык браузера → fallback `en`
-- Использование: `useTranslation()` из react-i18next
+- Использование: `useTranslation()` из react-i18next; вне компонентов (utils, middleware) — `t` из `i18next`,
+  ключи извлекаются и из `.ts`
 - Извлечение ключей: `npm run i18next:extract` (в `frontend/`)
 
 ## API-слой
@@ -101,9 +102,22 @@ npm run test:watch   # watch-режим
 Сборочные глобалы (`VERSION`, `MEDIA_CACHE_NAME` и прочие из `define` в `vite.config.ts`) в тестах
 подменяются заглушками в `vitest.config.ts` — иначе модуль, который их читает, падает с `ReferenceError`.
 
-Покрыты чистые функции: `utils/isMatch` (поиск: регистр, е/ё, раскладка), `utils/formatSize`,
-`store/features/media-cache/parseContentLength`. Тестов на компоненты и хуки пока нет —
+Покрыты функции, не требующие React и DOM: `utils/isMatch` (поиск: регистр, е/ё, раскладка), `utils/formatSize`,
+`store/features/media-cache/parseContentLength`, `store/features/api/redactSecrets`,
+`store/features/player/audio-control-middleware/waitForMetadata`, `startPlayback` и `diagnosticsLog`.
+Слушатели среднего слоя покрыты в `addLoadChapterAction.test.ts` и `addDiagnostics.test.ts`. Тестов на компоненты и хуки пока нет —
 для них потребуется jsdom и testing-library.
+
+Listener middleware тестируется без jsdom: слушатели принимают аудиоэлемент параметром, так что в тесте
+собирается свой `createListenerMiddleware`, стор с одним слайсом и подменный элемент
+(`addLoadChapterAction.test.ts`). Условие — не тянуть в модуль ничего, что при импорте создаёт аудиоэлемент
+или стор: баррель `features/player` реэкспортирует `audioControlMiddleware` с `new Audio()`, а `@/store`
+собирает стор целиком. Поэтому слушатели импортируют `../slice`, `../actions` и `../limits` напрямую, тип
+`AudioControllAddListrers` — через `import type`, граф Web Audio живёт в `gainGraph`, а
+`getSliceActionCreator` — в отдельном модуле, а не в `store/index.ts`. DOM-глобалы, которые слушатели читают
+в рантайме (`HTMLMediaElement` в проверках `readyState`), подменяются в тесте через `vi.stubGlobal`. Правило распространяется на все
+слушатели плеера, включая `local-storage-middleware`, а не только на те, что нужны текущему тесту: иначе
+следующий тест снова упрётся в баррель.
 
 ## Паттерны
 

@@ -8,17 +8,17 @@ const useMediaSession =
   'mediaSession' in navigator
     ? () => {
         const {
+          bookId,
           bookInfo,
           chapters,
           state: { currentChapter, playing, position, duration, speed },
         } = useAppSelector(({ player }) => player);
 
-        const chapterTitle =
-          chapters.length !== 0 && chapters.length < currentChapter ? chapters[currentChapter].title : '';
+        const chapterTitle = chapters[currentChapter]?.title ?? '';
 
         useMediaMetadata({ ...bookInfo, chapterTitle });
         usePlaybackState(playing);
-        usePositionState({ position, duration, playbackRate: speed });
+        usePositionState({ bookId, position, duration, playbackRate: speed });
         useMediaKeys();
       }
     : () => {};

@@ -1,5 +1,6 @@
-import { AudioControllAddListrers } from '.';
-import { changeSpeed, changeVolume, playerReset, playerSetup } from '..';
+import type { AudioControllAddListrers } from '.';
+import { changeSpeed, changeVolume } from '../actions';
+import { playerReset, playerSetup } from '../slice';
 import { loadChapter, stopUpdates } from '../internal';
 
 const addPlayerSetupActions: AudioControllAddListrers = (mw, audio) => {

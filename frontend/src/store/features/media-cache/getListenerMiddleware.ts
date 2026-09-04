@@ -2,7 +2,7 @@ import { ListenerMiddlewareInstance, createListenerMiddleware } from '@reduxjs/t
 import addUpdateCacheListeners from './listeners/updateCached';
 import addRemoveCachedMediaListner from './listeners/removeCached';
 import addMediaToCacheListner from './listeners/addToCache';
-import { MediaCacheStateSlice } from '.';
+import type { MediaCacheStateSlice } from '.';
 import mediaCacheSupported from './mediaCacheSupported';
 
 export type GetCache = () => Promise<Cache>;

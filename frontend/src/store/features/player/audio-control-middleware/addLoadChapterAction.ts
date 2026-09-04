@@ -1,66 +1,120 @@
-import { AudioControllAddListrers } from '.';
-import { changePosition, playerSlice } from '..';
-import { loadChapter, startUpdates, stopUpdates } from '../internal';
+import { t } from 'i18next';
+import type { AudioControllAddListrers } from '.';
+import { changePosition } from '../actions';
+import { playerReset, playerSlice } from '../slice';
+import { loadChapter, retryChapter, startUpdates, stopUpdates } from '../internal';
+import startPlayback from './startPlayback';
+import waitForMetadata from './waitForMetadata';
+
+const positionTolerance = 1;
 
 const addLoadChapterAction: AudioControllAddListrers = (mw, audio) => {
-  const { updateDuration, updatePlaying, setError, updateCurrentChapter } = playerSlice.actions;
+  const { updateDuration, updatePosition, updatePlaying, setError, updateCurrentChapter } = playerSlice.actions;
+
+  // the last request, for a retry to repeat: the store keeps a resolved position, and for a
+  // chapter loading from its end that position is not the one the user asked for
+  let pending: { request: { number: number; position?: number }; startPosition: number } | undefined;
+
+  // playback outlives the effect that asked for it, so its failure has to be told from the
+  // failure of a load that has already been replaced
+  let currentLoad = 0;
 
   mw.startListening({
     actionCreator: loadChapter,
-    effect: async ({ payload }, { getState, dispatch }) => {
+    effect: async ({ payload }, { getState, dispatch, cancelActiveListeners, signal }) => {
       const { chapters, state } = getState().player;
+      const chapter = chapters[payload.number];
 
-      if (state.playing) {
-        dispatch(stopUpdates());
-        audio.pause();
+      if (!chapter) {
+        console.error(`Chapter ${payload.number} is out of range`);
+        return;
       }
 
+      cancelActiveListeners();
+
+      const load = (currentLoad += 1);
+      const { playing } = state;
+      const position = payload.position ?? state.position;
+
+      // a negative position is counted from the end of the chapter: resolve it from the known
+      // duration right away, otherwise the store keeps the position of the chapter left behind
+      const startPosition = position >= 0 ? position : Math.max((chapter.duration ?? 0) + position, 0);
+
+      pending = { request: payload, startPosition };
+
+      dispatch(stopUpdates());
       dispatch(updateDuration(undefined));
       dispatch(updateCurrentChapter(payload.number));
+      // a message from a previous failure would outlive it and make a playing chapter look broken
+      dispatch(setError(''));
 
-      const loaded = new Promise<void>((resolve, reject) => {
-        const onError = (e: ErrorEvent) => reject(e);
-        audio.addEventListener('error', onError, { once: true });
-        audio.addEventListener(
-          'canplay',
-          () => {
-            audio.removeEventListener('error', onError);
-            resolve();
-          },
-          { once: true }
-        );
-      });
+      // the order below is dictated by iOS background playback,
+      // see docs/ai/frontend/player.md, "Переключение главы"
+      const metadata = waitForMetadata(audio, signal);
 
-      audio.src = chapters[payload.number].filename;
+      audio.src = chapter.filename;
       audio.load();
 
-      try {
-        await loaded;
-        if (payload.position !== undefined) {
-          const { position } = payload;
-          const { duration } = audio;
-          if (payload.position >= 0) {
-            dispatch(changePosition(position < duration ? position : duration));
-          } else {
-            // position is negative
-            const newPosition = duration + position;
-            dispatch(changePosition(newPosition > 0 ? newPosition : 0));
-          }
-        } else {
-          dispatch(changePosition(state.position));
-        }
+      dispatch(changePosition(startPosition));
 
-        dispatch(updateDuration(audio.duration));
-
-        if (state.playing) {
-          audio.play();
-          dispatch(startUpdates());
-        }
-      } catch (e) {
-        dispatch(updatePlaying(false));
-        setError("Can't load chapter");
-        console.error("Can't load chapter", e);
+      if (playing) {
+        startPlayback(audio, dispatch, () => currentLoad === load);
+        dispatch(startUpdates());
       }
+
+      try {
+        const duration = await metadata;
+
+        // the book may have been closed while the chapter was loading
+        if (!getState().player.bookId) return;
+
+        const stored = getState().player.state.position;
+        const wanted = stored !== startPosition ? stored : position >= 0 ? position : duration + position;
+        const target = Math.min(Math.max(wanted, 0), duration);
+
+        if (Math.abs(audio.currentTime - target) > positionTolerance) {
+          dispatch(changePosition(target));
+        } else {
+          dispatch(updatePosition(audio.currentTime));
+        }
+
+        // after the position: a known duration lets the websocket send the state,
+        // otherwise it would send the position of the previous chapter
+        dispatch(updateDuration(duration));
+      } catch (e) {
+        if (signal.aborted || !getState().player.bookId) return;
+
+        // playback was requested before the metadata, so the element may be sounding already
+        audio.pause();
+        dispatch(updatePlaying(false));
+        dispatch(stopUpdates());
+        dispatch(setError(t("Can't load chapter")));
+        console.error(`Can't load chapter ${payload.number}`, e);
+      }
+    },
+  });
+
+  mw.startListening({
+    actionCreator: retryChapter,
+    effect: (_, { getState, dispatch }) => {
+      const { currentChapter, position } = getState().player.state;
+
+      if (!pending) {
+        dispatch(loadChapter({ number: currentChapter }));
+        return;
+      }
+
+      const moved = position !== pending.startPosition;
+
+      dispatch(loadChapter(moved ? { number: pending.request.number, position } : pending.request));
+    },
+  });
+
+  mw.startListening({
+    actionCreator: playerReset,
+    effect: () => {
+      currentLoad += 1;
+      pending = undefined;
     },
   });
 };

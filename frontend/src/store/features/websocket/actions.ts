@@ -1,5 +1,5 @@
-import { websocketSlice } from '.';
-import { getSliceActionCreator } from '@/store';
+import websocketSlice from './slice';
+import { getSliceActionCreator } from '@/store/getSliceActionCreator';
 
 const createSliceAction = getSliceActionCreator(websocketSlice);
 export const connect = createSliceAction('connect');

@@ -10,14 +10,22 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import CustomDialog from '@/components/common/CustomDialog';
 import useChaptersCacheInfo from '../chapters/useChaptersCacheInfo';
 import { addMediaToCache, removeCachedMedia } from '@/store/features/media-cache';
-import { setPreventScreenLock, setResetSleepTimerOnActivity, showMessage } from '@/store/features/player';
+import {
+  setDiagnostics,
+  setPreventScreenLock,
+  setResetSleepTimerOnActivity,
+  showMessage,
+} from '@/store/features/player';
 import { useTranslation } from 'react-i18next';
+import { UnknownAction } from '@reduxjs/toolkit';
+
+const menuCloseDelay = 700;
 
 const Settings: React.FC = () => {
   const { t } = useTranslation();
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const {
-    state: { resetSleepTimerOnActivity, preventScreenLock, position, currentChapter },
+    state: { resetSleepTimerOnActivity, preventScreenLock, diagnostics, position, currentChapter },
     bookId,
   } = useAppSelector(({ player }) => player);
   const dispatch = useAppDispatch();
@@ -27,13 +35,9 @@ const Settings: React.FC = () => {
   const chaptersCacheInfo = useChaptersCacheInfo();
 
   const closeMenu = () => setMenuAnchor(undefined);
-  const handleResetSleepTimerOnActivityChange = (_: ChangeEvent, checked: boolean) => {
-    dispatch(setResetSleepTimerOnActivity(checked));
-    setTimeout(closeMenu, 700);
-  };
-  const handlePreventScreenLock = (_: ChangeEvent, checked: boolean) => {
-    dispatch(setPreventScreenLock(checked));
-    setTimeout(closeMenu, 700);
+  const handleSwitch = (action: (checked: boolean) => UnknownAction) => (_: ChangeEvent, checked: boolean) => {
+    dispatch(action(checked));
+    setTimeout(closeMenu, menuCloseDelay);
   };
   const handleStateCopy = () => {
     copy(JSON.stringify({ bookId, currentChapter, position }, null, 2));
@@ -63,7 +67,7 @@ const Settings: React.FC = () => {
               <Switch
                 checked={resetSleepTimerOnActivity}
                 color='primary'
-                onChange={handleResetSleepTimerOnActivityChange}
+                onChange={handleSwitch(setResetSleepTimerOnActivity)}
               />
             }
             label={t('reset sleep timer on activity')}
@@ -72,11 +76,19 @@ const Settings: React.FC = () => {
         {wakelockAvailable && (
           <MenuItem>
             <FormControlLabel
-              control={<Switch checked={preventScreenLock} color='primary' onChange={handlePreventScreenLock} />}
+              control={
+                <Switch checked={preventScreenLock} color='primary' onChange={handleSwitch(setPreventScreenLock)} />
+              }
               label={t('prevent screen lock when playing')}
             />
           </MenuItem>
         )}
+        <MenuItem>
+          <FormControlLabel
+            control={<Switch checked={diagnostics} color='primary' onChange={handleSwitch(setDiagnostics)} />}
+            label={t('send player diagnostics')}
+          />
+        </MenuItem>
         <MenuItem onClick={handleStateCopy}>
           <ContentCopy sx={theme => ({ color: theme.palette.primary.main, mr: 3 })} />
           {t('copy state')}

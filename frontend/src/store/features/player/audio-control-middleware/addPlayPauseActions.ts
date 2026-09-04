@@ -1,9 +1,12 @@
-import { AudioControllAddListrers, getAudioCtx } from '.';
-import { pause, play, playerSlice } from '..';
-import { loadChapter, startUpdates, stopUpdates } from '../internal';
+import type { AudioControllAddListrers } from '.';
+import { getAudioCtx } from './gainGraph';
+import { pause, play } from '../actions';
+import { playerSlice } from '../slice';
+import { retryChapter, startUpdates, stopUpdates } from '../internal';
+import startPlayback from './startPlayback';
 
 const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
-  const { updatePosition, updatePlaying, setError } = playerSlice.actions;
+  const { updatePosition, updatePlaying } = playerSlice.actions;
 
   mw.startListening({
     actionCreator: pause,
@@ -24,15 +27,20 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
   mw.startListening({
     actionCreator: play,
     effect: (_, { dispatch, getState }) => {
-      const { error, currentChapter } = getState().player.state;
-      if (error) {
-        dispatch(setError(''));
-        dispatch(loadChapter({ number: currentChapter }));
-      }
+      const { error, duration } = getState().player.state;
+
       dispatch(updatePlaying(true));
-      dispatch(startUpdates());
       getAudioCtx()?.resume();
-      audio.play();
+
+      // play over a chapter without metadata is an explicit retry: the element gives no way
+      // to tell a stalled load from a live one. Reloading starts the playback on its own
+      if (error || duration === undefined) {
+        dispatch(retryChapter());
+        return;
+      }
+
+      dispatch(startUpdates());
+      startPlayback(audio, dispatch);
     },
   });
 };

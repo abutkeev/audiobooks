@@ -1,5 +1,5 @@
-import { AudioControllAddListrers } from '.';
-import { changePosition, forward } from '..';
+import type { AudioControllAddListrers } from '.';
+import { changePosition, forward } from '../actions';
 import { loadChapter } from '../internal';
 
 const addForwardAction: AudioControllAddListrers = mw => {

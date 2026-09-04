@@ -1,6 +1,6 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
 import { Socket, io } from 'socket.io-client';
-import { StateSlice } from '.';
+import type { StateSlice } from '.';
 import { setConnected } from './slice';
 import { connect, disconnect } from './actions';
 import { playerSetup } from '../player';

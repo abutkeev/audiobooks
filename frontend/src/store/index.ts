@@ -1,4 +1,4 @@
-import { configureStore, createAction } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import searchSlice from './features/search';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
@@ -52,9 +52,3 @@ export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
-
-export function getSliceActionCreator(slice: { name: string }) {
-  return function <T = undefined>(name: string) {
-    return createAction<T>(`${slice.name}/${name}`);
-  };
-}

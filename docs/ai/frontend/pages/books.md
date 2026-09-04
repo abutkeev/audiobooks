@@ -70,3 +70,5 @@ BookPage
 - Устанавливает `currentBook` в localStorage
 - Если в URL есть `position`/`currentChapter` — передаёт как externalState в Player
 - Отображает п��зиции других слушателей (`OtherPlayersPosition`)
+- `bookInfo` для `Player` мемоизирован — требование `player.md`, раздел «Media Session API»
+- Данные книги берутся из `currentData`, не из `data`: `data` держит предыдущую книгу, пока грузится новая, и `Player` получил бы идентификатор новой книги со списком глав старой — позиция ушла бы в localStorage и на сервер под чужим id

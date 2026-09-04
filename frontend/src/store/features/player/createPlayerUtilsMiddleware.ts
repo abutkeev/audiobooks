@@ -1,5 +1,5 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
-import { copyUrl, showMessage } from '.';
+import { copyUrl, showMessage } from './actions';
 import { AlertProps } from '@mui/material';
 
 export type BookState = { currentChapter: number; position: number };

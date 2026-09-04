@@ -12,13 +12,13 @@ Redux Toolkit store с несколькими слайсами и кастомн
 
 ### player
 
-- Состояние: позиция, громкость, скорость, текущая глава, длительность, состояние воспроизведения
-- Действия: `changePosition`, `changeVolume`, `changeSpeed`, `pause`, `play`, `forward`, `rewind`, `chapterChange`, `updateBookState`, `copyUrl`, `showMessage`
+- Состояние: позиция, громкость, скорость, текущая глава, длительность, состояние воспроизведения, настройки (таймер сна, блокировка экрана, диагностика)
+- Действия: `changePosition`, `changeVolume`, `changeSpeed`, `pause`, `play`, `forward`, `rewind`, `chapterChange`, `nextChapter`, `previousChapter`, `updateBookState`, `copyUrl`, `showMessage`
 - Middleware:
   - `audio-control-middleware` — управление HTML5 Audio
   - `local-storage-middleware` — сохранение состояния
   - `createPlayerUtilsMiddleware` — вспомогательные операции
-- Константы: `maxVolume = 300` (усиление через Web Audio API GainNode), `minSpeed = 0.25`, `maxSpeed = 3`, `speedStep = 0.05`
+- Константы (`limits.ts`): `maxVolume = 300` (усиление через Web Audio API GainNode), `minSpeed = 0.25`, `maxSpeed = 3`, `speedStep = 0.05`
 - `changeSpeed` нормализует значение (`normalizeSpeed`: clamp в `[minSpeed, maxSpeed]` и округление до сотых) в `audio-control-middleware` — так что любой источник скорости приходит к допустимому значению
 
 ### media-cache
