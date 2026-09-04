@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
@@ -25,6 +26,8 @@ import { BookmarksModule } from './bookmarks/bookmarks.module';
 @Module({
   imports: [
     MongooseModule.forRoot(DB_URI, { lazyConnection: LAZY_DB_CONNECTION === 'true' }),
+    // a real client sends a batch every 30 seconds; the burst comes from the api error saver
+    ThrottlerModule.forRoot([{ limit: 30, ttl: 60000 }]),
     TelegrafModule.forRoot({
       token: TELEGRAM_BOT_TOKEN,
       launchOptions: false,

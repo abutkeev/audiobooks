@@ -1,5 +1,6 @@
 import { api } from '@/api/api';
 import { createListenerMiddleware, isRejectedWithValue } from '@reduxjs/toolkit';
+import redactSecrets from './redactSecrets';
 const apiErrorSaver = createListenerMiddleware();
 
 apiErrorSaver.startListening({
@@ -19,8 +20,16 @@ apiErrorSaver.startListening({
 
     dispatch(
       api.endpoints.logWrite.initiate({
-        object: {
-          apiError: { endpointName, type, originalArgs, url, status, statusText, userAgent: navigator.userAgent },
+        logDto: {
+          apiError: {
+            endpointName,
+            type,
+            originalArgs: redactSecrets(originalArgs),
+            url,
+            status,
+            statusText,
+            userAgent: navigator.userAgent,
+          },
         },
       })
     );

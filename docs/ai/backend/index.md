@@ -32,6 +32,9 @@
 - Файлы книг: `data/books/` → `/api/books/`
 - Глобальный префикс: `/api`
 - Глобальный `ValidationPipe`
+- Парсеры тела регистрируются вручную (`bodyParser: false`), в том числе свой на `/api/log` с лимитом
+  64 КБ — см. `modules/other.md`
+- `trust proxy: ['loopback', 'uniquelocal']` для верного адреса клиента у троттлера
 - Swagger: `/api-docs` (JWT security scheme)
 
 Обе статики монтируются **до** роутера Nest, поэтому обе объявлены с `redirect: false`: иначе каталог,

@@ -31,7 +31,7 @@ const Login: React.FC = () => {
   const [logWrite] = useLogWriteMutation();
 
   const logTelegramDiagnostic = (stage: string, message: string) => {
-    logWrite({ object: { telegramLogin: { stage, message, userAgent: navigator.userAgent } } });
+    logWrite({ logDto: { telegramLogin: { stage, message, userAgent: navigator.userAgent } } });
   };
 
   const handleTelegramAuth: TelegramAuthCallback = async telegramAuthDataDto => {
