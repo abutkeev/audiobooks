@@ -29,7 +29,7 @@
 
 ### Telegram (`tg/`)
 
-- `verifyAuthData(data)` — HMAC-SHA256 валидация хеша
+- `verifyAuthData(data)` — HMAC-SHA256 валидация хеша и возраст подписи: `auth_date` старше суток — `ForbiddenException` (подробности — `../auth.md`)
 - `set(userId, data)` — привязка аккаунта; автоактивация если пользователь в авторизованном чате
 - `auth(data)` — логин через Telegram, `NotFoundException` если аккаунт не привязан
 

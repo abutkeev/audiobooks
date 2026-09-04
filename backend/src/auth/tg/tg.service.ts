@@ -20,6 +20,9 @@ import { AuthService } from '../auth.service';
 import { LoginResponseDto } from '../dto/login-response.dto';
 import { TelegramService } from 'src/telegram/telegram.service';
 
+// telegram signs the data but never expires it, so a leaked hash would log in forever
+const maxAuthAge = 24 * 60 * 60;
+
 @Injectable()
 export class TgService {
   private readonly logger = new Logger(TgService.name);
@@ -55,12 +58,19 @@ export class TgService {
       .join('\n');
     const computedHash = createHmac('sha256', secret).update(dataCheckString).digest('hex');
 
-    const valid = hash === computedHash;
-    if (!valid) {
+    if (hash !== computedHash) {
       this.logger.warn(`telegram auth hash check failed for id=${data.id} username=${data.username}`);
+      return false;
     }
 
-    return valid;
+    // no lower bound: auth_date is signed too, and a server clock running behind telegram would
+    // otherwise refuse every login
+    if (Math.floor(Date.now() / 1000) - data.auth_date >= maxAuthAge) {
+      this.logger.warn(`telegram auth data for id=${data.id} expired, dated ${data.auth_date}`);
+      throw new ForbiddenException('telegram login data expired, authorize again');
+    }
+
+    return true;
   }
 
   async get(userId: string): Promise<TelegramAccountDto> {
