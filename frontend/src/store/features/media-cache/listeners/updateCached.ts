@@ -37,8 +37,13 @@ function addUpdateCacheListeners<State extends MediaCacheStateSlice>(
     const cache = await getCache();
     const getKeys = async () => (await cache.keys()).filter(({ method }) => method === 'GET');
 
+    // listing is instant while reading sizes is not, so the state is published twice:
+    // the ui shows what is cached right away and gets the sizes a moment later
+    const listed = await getKeys();
+    dispatch?.(updateCachedMedia(listed.map(({ url }) => ({ url, size: sizes.get(url) }))));
+
     // a chapter cached while sizes are read would be dropped by a snapshot taken before them
-    await Promise.all((await getKeys()).map(request => getSize(cache, request)));
+    await Promise.all(listed.map(request => getSize(cache, request)));
     const entries = await Promise.all(
       (await getKeys()).map(async request => ({ url: request.url, size: await getSize(cache, request) }))
     );
