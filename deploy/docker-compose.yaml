@@ -14,14 +14,16 @@ services:
       - "audiobooks-mongo"
     networks:
       - "audiobooks-mongo"
-    ports: 
-      - "4001:4000"
+    ports:
+      - "127.0.0.1:4001:4000"
     volumes:
       - "../:/mnt/"
     working_dir: "/mnt/backend"
     restart: "always"
     environment:
       TZ: "Europe/Moscow"
+      # the published port arrives on the container address, not on its loopback
+      LISTEN_ADDRESS: "0.0.0.0"
     command: >
       sh -c "ln -snf /usr/share/zoneinfo/$$TZ /etc/localtime && 
       echo $$TZ > /etc/timezone &&

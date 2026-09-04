@@ -7,6 +7,7 @@ export const FrontendDir = path.resolve(__dirname, '..', 'frontend');
 export const {
   DB_URI,
   PORT,
+  LISTEN_ADDRESS,
   JWT_SECRET,
   INIT_ID,
   INIT_PASSWD,
