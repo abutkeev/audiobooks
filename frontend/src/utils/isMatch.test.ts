@@ -22,6 +22,10 @@ describe('isMatch', () => {
     expect(isMatch({ searchString: '~;br', value: 'Ежик в тумане' })).toBe(true);
   });
 
+  it('matches the mac layout, where ё sits on another key', () => {
+    expect(isMatch({ searchString: '|;br', value: 'Ёжик в тумане' })).toBe(true);
+  });
+
   it('does not match an unrelated value', () => {
     expect(isMatch({ searchString: 'елка', value: 'Ёжик' })).toBe(false);
   });

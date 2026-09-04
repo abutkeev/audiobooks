@@ -2,7 +2,7 @@
 
 ## Стек
 
-- **React 18** + TypeScript
+- **React 19** + TypeScript
 - **Vite** — сборка и dev-сервер
 - **Material-UI (MUI)** — UI-компоненты
 - **Emotion** — CSS-in-JS (через MUI)

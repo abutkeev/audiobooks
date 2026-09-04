@@ -8,7 +8,8 @@ import path from 'path';
 
 export async function setup(options?: NestApplicationOptions) {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, options);
-  // a directory in the frontend build must not shadow an api route with a 301
+  // both static handlers are mounted before the nest router, so a directory whose path matches
+  // a route (data/books/<id> against GET /books/:id) would answer 301 instead of the controller
   app.useStaticAssets(FrontendDir, { redirect: false });
   app.useStaticAssets(path.resolve(DataDir, 'books'), { prefix: '/api/books/', index: false, redirect: false });
   app.useGlobalPipes(new ValidationPipe());

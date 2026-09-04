@@ -23,8 +23,9 @@ const CatalogSearchResults: FC<CatalogSearchResultsProps> = ({ shownBookIds }) =
   const found = useMemo(() => {
     if (!matchesSearch) return [];
 
+    const shown = new Set(shownBookIds);
     return books
-      .filter(({ id, info }) => !shownBookIds.includes(id) && matchesSearch(info))
+      .filter(({ id, info }) => !shown.has(id) && matchesSearch(info))
       .sort(({ info: a }, { info: b }) => a.name.localeCompare(b.name));
   }, [books, shownBookIds, matchesSearch]);
 

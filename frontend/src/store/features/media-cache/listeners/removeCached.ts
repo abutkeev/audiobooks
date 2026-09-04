@@ -1,6 +1,8 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
-import { removeCachedMedia } from '..';
-import { GetCache } from '../getListenerMiddleware';
+import mediaCacheSlice from '../slice';
+import type { GetCache } from '../getListenerMiddleware';
+
+const { removeCachedMedia } = mediaCacheSlice.actions;
 
 function addRemoveCachedMediaListner<State>(mw: ListenerMiddlewareInstance<State>, getCache: GetCache) {
   mw.startListening({

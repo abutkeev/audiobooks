@@ -33,6 +33,7 @@ data/books/{bookId}/
 | `getChaptersFromUrl(url)` | Получение HTML, делегирование ExternalPlaylistService |
 | `downloadExternalChapter(bookId, data)` | Загрузка MP3 с внеш��его URL с CORS-заголовками |
 | `clearChapters(bookId)` | Бэкап существующих глав в `data/backup/{bookId}/` (требует draft), очистка массива |
+| `remove(id)` | Удаление книги вместе с её бэкапами из `data/backup/{id}/` |
 
 ## BooksController
 

@@ -1,5 +1,7 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
-import mediaCacheSlice, { MediaCacheStateSlice, addMediaToCache } from '..';
+import mediaCacheSlice from '../slice';
+import { addMediaToCache } from '..';
+import type { MediaCacheStateSlice } from '..';
 import axios from 'axios';
 import parseContentLength from '../parseContentLength';
 import { GetCache } from '../getListenerMiddleware';
@@ -7,9 +9,12 @@ import { GetCache } from '../getListenerMiddleware';
 const maxAttempts = 3;
 const retryDelay = 1000;
 
+// 408 and 429 are the 4xx that explicitly ask to come back later
+const retryableStatuses = [408, 429];
+
 const isPermanentError = (e: unknown) => {
   const status = axios.isAxiosError(e) ? e.response?.status : undefined;
-  return !!status && status >= 400 && status < 500;
+  return !!status && status >= 400 && status < 500 && !retryableStatuses.includes(status);
 };
 
 function addMediaToCacheListner<State extends MediaCacheStateSlice>(
@@ -18,11 +23,18 @@ function addMediaToCacheListner<State extends MediaCacheStateSlice>(
 ) {
   const { setCachedMediaProgress, setCachedMediaError, clearCachedMediaProgress } = mediaCacheSlice.actions;
   const attempts = new Map<string, number>();
+  let retrying = false;
 
   mw.startListening({
     actionCreator: addMediaToCache,
     effect: async ({ payload }, api) => {
       api.cancelActiveListeners();
+      // a request made by the user starts counting attempts anew, a retry continues counting
+      if (!retrying) {
+        payload.forEach(url => attempts.delete(url));
+      }
+      retrying = false;
+
       const cache = await getCache();
       const failed: string[] = [];
 
@@ -76,7 +88,9 @@ function addMediaToCacheListner<State extends MediaCacheStateSlice>(
 
       // only urls of this request are retried: a stale error must not restart on its own
       if (failed.length !== 0) {
-        await api.delay(retryDelay * (attempts.get(failed[0]) || 1));
+        const attempt = Math.max(...failed.map(url => attempts.get(url) || 1));
+        await api.delay(retryDelay * attempt);
+        retrying = true;
         api.dispatch(addMediaToCache(failed));
       }
     },

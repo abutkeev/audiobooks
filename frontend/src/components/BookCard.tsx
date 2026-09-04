@@ -7,7 +7,8 @@ import useAuthData from '@/hooks/useAuthData';
 import { useTranslation } from 'react-i18next';
 import useFormattedDateTime from '@/hooks/useFormattedDateTime';
 
-const coverSize = { xs: 110, md: 200 };
+// the breakpoint matches useMobile, so the cover shrinks exactly where the layout does
+const coverSize = { xs: 110, sm: 200 };
 
 interface BookCardProps {
   id: string;
@@ -52,13 +53,13 @@ const BookCard: React.FC<BookCardProps> = ({
   return (
     <Card raised square>
       <Stack direction='row' sx={{ flexGrow: 1 }}>
-        <Box sx={{ flexShrink: 0, alignSelf: 'center', m: '5px' }}>
+        <Box sx={{ flexShrink: 0, alignSelf: 'center', m: 0.5 }}>
           {cover ? (
             <Box
               component='img'
               alt={t('Cover image')}
               src={cover.filename}
-              sx={{ display: 'block', width: coverSize, borderRadius: '5px' }}
+              sx={{ display: 'block', width: coverSize, borderRadius: 1 }}
             />
           ) : (
             <AutoStories sx={{ width: coverSize, height: coverSize }} color='primary' />

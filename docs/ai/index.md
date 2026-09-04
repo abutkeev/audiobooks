@@ -15,7 +15,7 @@
 
 | Документ | Назначение |
 |---|---|
-| [frontend/index.md](frontend/index.md) | Стек, структура директорий, маршрутизация, тема, i18n |
+| [frontend/index.md](frontend/index.md) | Стек, структура директорий, маршрутизация, тема, i18n, тесты |
 | [frontend/store.md](frontend/store.md) | Redux store: слайсы, middleware, RTK Query API |
 | [frontend/components.md](frontend/components.md) | Переиспользуемые компоненты и UI-паттерны |
 | [frontend/player.md](frontend/player.md) | Аудиоплеер: компоненты, управление, кеширование |

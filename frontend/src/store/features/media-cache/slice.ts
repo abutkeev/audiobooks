@@ -48,10 +48,14 @@ const mediaCacheSlice = createSlice({
         state.entries[url] = { state: 'cached', size };
         return;
       }
-      state.entries[url] = {
-        state: 'downloading',
-        progress: progress && progress > 0 && progress < 100 ? Math.round(progress) : undefined,
-      };
+
+      const rounded = progress && progress > 0 && progress < 100 ? Math.round(progress) : undefined;
+      const current = state.entries[url];
+      // xhr reports progress dozens of times a second: without this every report would
+      // rewrite the entry and rerender each subscriber of the cache state
+      if (current?.state === 'downloading' && current.progress === rounded) return;
+
+      state.entries[url] = { state: 'downloading', progress: rounded };
     },
     clearCachedMediaProgress: (state, { payload }: PayloadAction<string>) => {
       if (state.entries[payload]?.state === 'downloading') {

@@ -32,14 +32,17 @@ const MyBooks: React.FC = () => {
   const shownBookIds = useMemo(() => books.map(({ book: { id } }) => id), [books]);
 
   return (
-    <LoadingWrapper loading={loading} error={error}>
-      {filtredBooks.length !== 0 ? (
-        <BookPositionList books={filtredBooks} authorsList={authors} readersList={readers} seriesList={series} />
-      ) : (
-        <Alert severity='info'>{matchesSearch ? t('No matches among your books') : t('No books')}</Alert>
-      )}
+    <>
+      <LoadingWrapper loading={loading} error={error}>
+        {filtredBooks.length !== 0 ? (
+          <BookPositionList books={filtredBooks} authorsList={authors} readersList={readers} seriesList={series} />
+        ) : (
+          <Alert severity='info'>{matchesSearch ? t('No matches among my current books') : t('No books')}</Alert>
+        )}
+      </LoadingWrapper>
+      {/* outside LoadingWrapper: it unmounts children while loading, and useSearch clears the search on unmount */}
       <CatalogSearchResults shownBookIds={shownBookIds} />
-    </LoadingWrapper>
+    </>
   );
 };
 

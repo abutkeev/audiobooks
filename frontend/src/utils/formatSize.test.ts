@@ -23,6 +23,11 @@ describe('formatSize', () => {
     expect(formatSize(150 * 1024 * 1024)).toBe('150 MB');
   });
 
+  it('keeps the same precision around the rounding boundary', () => {
+    expect(formatSize(102399)).toBe('100 KB');
+    expect(formatSize(102400)).toBe('100 KB');
+  });
+
   it('moves to the next unit when rounding reaches it', () => {
     expect(formatSize(1024 * 1024 - 1)).toBe('1.0 MB');
     expect(formatSize(1024 * 1024 * 1024 - 1)).toBe('1.0 GB');

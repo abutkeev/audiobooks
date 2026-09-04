@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import CustomAccordion from '@/components/common/CustomAccordion';
 import UserOnlineIndicator from '@/components/UserOnlineIndicator';
 import getBooksWithPositions from '@/utils/getBooksWithPositions';
+import useBookSearchFilter from '@/hooks/useBookSearchFilter';
 import CatalogSearchResults from './CatalogSearchResults';
 
 const FriendsBooks: React.FC = () => {
@@ -22,10 +23,19 @@ const FriendsBooks: React.FC = () => {
   const loading = booksLoading || authorsLoading || readersLoading || seriesLoading || positionsLoading;
   const error = booksError || authorsError || readersError || seriesError || positionsError;
 
-  const friendsBooks = useMemo(
-    () => positions.map(({ friend, positions }) => ({ friend, books: getBooksWithPositions(positions, bookList) })),
-    [positions, bookList]
-  );
+  const matchesSearch = useBookSearchFilter();
+
+  const friendsBooks = useMemo(() => {
+    const result = positions.map(({ friend, positions }) => ({
+      friend,
+      books: getBooksWithPositions(positions, bookList),
+    }));
+    if (!matchesSearch) return result;
+
+    return result
+      .map(({ friend, books }) => ({ friend, books: books.filter(({ book: { info } }) => matchesSearch(info)) }))
+      .filter(({ books }) => books.length !== 0);
+  }, [positions, bookList, matchesSearch]);
 
   const shownBookIds = useMemo(
     () => friendsBooks.flatMap(({ books }) => books.map(({ book: { id } }) => id)),
@@ -33,24 +43,29 @@ const FriendsBooks: React.FC = () => {
   );
 
   return (
-    <LoadingWrapper loading={loading} error={error}>
-      {friendsBooks.length !== 0 ? (
-        friendsBooks.map(({ friend, books }) => (
-          <CustomAccordion
-            key={friend.uid}
-            summary={
-              <Typography>
-                <UserOnlineIndicator online={friend.online} /> {`${friend.name} (${friend.login})`}
-              </Typography>
-            }
-            details={<BookPositionList books={books} authorsList={authors} readersList={readers} seriesList={series} />}
-          />
-        ))
-      ) : (
-        <Alert severity='info'>{t('No books')}</Alert>
-      )}
+    <>
+      <LoadingWrapper loading={loading} error={error}>
+        {friendsBooks.length !== 0 ? (
+          friendsBooks.map(({ friend, books }) => (
+            <CustomAccordion
+              key={friend.uid}
+              summary={
+                <Typography>
+                  <UserOnlineIndicator online={friend.online} /> {`${friend.name} (${friend.login})`}
+                </Typography>
+              }
+              details={
+                <BookPositionList books={books} authorsList={authors} readersList={readers} seriesList={series} />
+              }
+            />
+          ))
+        ) : (
+          <Alert severity='info'>{matchesSearch ? t('No matches among friends books') : t('No books')}</Alert>
+        )}
+      </LoadingWrapper>
+      {/* outside LoadingWrapper: it unmounts children while loading, and useSearch clears the search on unmount */}
       <CatalogSearchResults shownBookIds={shownBookIds} />
-    </LoadingWrapper>
+    </>
   );
 };
 

@@ -13,8 +13,9 @@
 - Токен в заголовке: `Authorization: Bearer <token>`
 - Время жизни: 7 дней
 - Payload: `{ sub: userId, login, name, admin, enabled }`
-- `JwtAuthGuard` — глобальный guard, применяется ко всем эндпоинтам. Исключение — статика
-  `data/books/` под `/api/books/`: файлы книг публичны по URL (см. [index.md](index.md))
+- `JwtAuthGuard` — глобальный guard, применяется ко всем эндпоинтам. Исключения — эндпоинты с
+  `@Public()` (см. ниже) и статика `data/books/` под `/api/books/`: файлы книг публичны по URL
+  (см. [index.md](index.md))
 
 ### WebAuthn (FIDO2)
 

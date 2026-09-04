@@ -28,17 +28,20 @@
 **Логика:**
 - Фильтрует позиции: исключает незначащие (position=0 && currentChapter=0)
 - Дедупликация по книгам (последнее обновление)
-- Поиск через `useSearchMatcher()` по имени книги, автору, чтецу, серии
+- Поиск через `useBookSearchFilter()` по имени книги, автору, чтецу, серии
 - Сортировка по дате обновления (новые первые)
+- При активном поиске под списком — `CatalogSearchResults`: найденное во всех книгах, кроме уже показанного
 
 ### FriendsBooks (`pages/main/FriendsBooks.tsx`)
 
 **API:** `useBooksGetQuery()`, `usePositionGetFriendsQuery()`
 
 **Логика:**
-- Группирует по��иции по другу
+- Группирует позиции по другу
 - Каждый друг — `CustomAccordion` с `BookCard[]`
 - `UserOnlineIndicator` для статуса онлайн
+- Поиск фильтрует книги друзей, друзья без совпадений скрываются
+- При активном поиске под списком — `CatalogSearchResults`: найденное во всех книгах, кроме уже показанного
 
 ### BookList (`pages/main/BookList.tsx`)
 
@@ -46,7 +49,7 @@
 
 **Логика:**
 - Фильтрация по URL-параметрам: `author_id`, `reader_id`, `series_id`
-- Поиск через `useSearchMatcher()`
+- Поиск через `useBookSearchFilter()`
 - Сортировка: автор → серия → н��мер в серии
 
 ## BookPage (`pages/BookPage.tsx`)

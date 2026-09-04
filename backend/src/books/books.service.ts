@@ -26,6 +26,8 @@ import { EventsService } from 'src/events/events.service';
 const logger = new Logger('BooksService');
 const getBookInfoConfig = (id: string) => `books/${id}/info.json`;
 const booksDir = path.resolve(DataDir, 'books');
+// outside booksDir: that directory is served as static files without authorization
+const backupsDir = path.resolve(DataDir, 'backup');
 
 @Injectable()
 export class BooksService {
@@ -142,6 +144,8 @@ export class BooksService {
     if (!existsSync(bookDir) || !lstatSync(bookDir)?.isDirectory()) throw new NotFoundException(`book ${id} not found`);
     try {
       rmSync(bookDir, { recursive: true });
+      // backups live outside the book directory, nothing else would ever remove them
+      rmSync(path.resolve(backupsDir, id), { recursive: true, force: true });
       return true;
     } catch (e) {
       logger.error(e);
@@ -339,8 +343,7 @@ export class BooksService {
         throw new BadRequestException(`book must be draft to clear chapters`);
       }
 
-      // outside data/books: that directory is served as static files without authorization
-      const backupDir = resolve(DataDir, 'backup', bookId, new Date().toISOString());
+      const backupDir = resolve(backupsDir, bookId, new Date().toISOString());
       mkdirSync(backupDir, { recursive: true });
 
       const chaptersBackup = resolve(backupDir, 'chapters.json');

@@ -7,7 +7,8 @@
 - **Passport** — аутентификация (JWT, Local, WebAuthn, Telegram)
 - **Socket.io** — WebSocket-соединения
 - **Telegraf** — Telegram-бот
-- **Swagger** — документация API (`/api/docs`)
+- **Swagger** — документация API (`/api-docs`)
+- **Node** — 24 (образ в `deploy/docker-compose.yaml`, `engines.node` в `backend/package.json`)
 
 ## Конфигурация
 
@@ -18,17 +19,26 @@
 | `DB_URI` | URI подключения к MongoDB |
 | `PORT` | Порт сервера (по умолчанию 4000) |
 | `JWT_SECRET` | Секрет для подписи JWT |
+| `TELEGRAM_PROXY` | SOCKS5-прокси для Telegram-бота |
+| `RECAPTCHA_VERIFY_URL` | URL проверки reCAPTCHA |
+| `LAZY_DB_CONNECTION` | Не ждать подключения к MongoDB при старте (`true`) |
 | `INIT_ID` / `INIT_PASSWD` | Начальный пользователь |
 | `RECAPTCHA_SITE_KEY` | Ключ reCAPTCHA v3 |
 | `TELEGRAM_BOT_TOKEN` | Токен Telegram-бота |
 
 ### Запуск (`app.ts`, `main.ts`)
 
-- Статика фронтенда: `data/frontend`
+- Статика фронтенда: `backend/frontend` (симлинк на сборку фронтенда)
 - Файлы книг: `data/books/` → `/api/books/`
 - Глобальный префикс: `/api`
 - Глобальный `ValidationPipe`
-- Swagger: `/api/docs` (JWT security scheme)
+- Swagger: `/api-docs` (JWT security scheme)
+
+Обе статики монтируются **до** роутера Nest, поэтому обе объявлены с `redirect: false`: иначе каталог,
+чей путь совпадает с маршрутом (`data/books/<id>` против `GET /books/:id`), отвечает 301 на адрес со
+слэшем вместо контроллера. Постоянный редирект без `cache-control` браузер запоминает надолго, а
+Service Worker кеширует ответы `/api/` по адресу запроса — из-за расхождения адресов книга переставала
+открываться офлайн.
 
 ## Модули
 
@@ -80,6 +90,9 @@ data/
 ├── readers.json        # [{id, name}]
 └── series.json         # [{id, name, authors[]}]
 ```
+
+**Разовое при обновлении:** бэкапы, сделанные до переноса, остаются в `data/books/<id>/backup/` —
+то есть публично раздаются. Их нужно перенести в `data/backup/<id>/` вручную.
 
 **Файлы книг публичны по URL.** `data/books/` раздаётся статикой и не проходит через
 `JwtAuthGuard`: аудиофайлы, обложки и `info.json` доступны без токена. На этом держится
