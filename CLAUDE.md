@@ -56,7 +56,7 @@ npm run test    # frontend: если тесты есть в затронутой
 ## Code conventions
 
 - **Prettier**: 120 символов, single quotes, trailing commas ES5, 2 пробела, LF
-- **ESLint**: настройки per-module (backend — `@typescript-eslint`, frontend — + `react-hooks`)
+- **ESLint**: flat config (`eslint.config.mjs` в backend, `eslint.config.js` во frontend), настройки per-module (backend — `@typescript-eslint` + `prettier`, frontend — + `react-hooks`)
 - Код и комментарии — на английском
 - Документация (`.md`) — на русском
 - Комментарии только если объясняют **зачем**, а не **что**. Не пересказывать код

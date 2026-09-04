@@ -30,8 +30,9 @@ export class ExternalPlaylistService {
         })
       );
       return data;
-    } catch (e) {
-      // ignore error
+    } catch {
+      // a site that does not answer is simply skipped by the caller
+      return undefined;
     }
   }
 
@@ -64,7 +65,10 @@ export class ExternalPlaylistService {
         const url = file.split(' or ')[0];
         return { title, url, bookUrl };
       });
-    } catch {}
+    } catch {
+      // a playlist in another format is skipped, the caller tries the next parser
+      return undefined;
+    }
   }
 
   // https://audioknigivse.ru
