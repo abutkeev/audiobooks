@@ -15,12 +15,15 @@ interface CachedMediaEntry {
 
 interface MediaCacheState {
   available: boolean;
+  // reading the cache takes noticeable time, and the ui must not call it unavailable meanwhile
+  reading: boolean;
   entries: Record<string, MediaCacheEntryState>;
   subscribers: string[];
 }
 
 const initialState: MediaCacheState = {
   available: false,
+  reading: false,
   entries: {},
   subscribers: [],
 };
@@ -66,6 +69,9 @@ const mediaCacheSlice = createSlice({
       state.entries[payload] = { state: 'error' };
     },
     // listener effects run later than this reducer, so they read the list from the state
+    setMediaCacheReading: (state, { payload }: PayloadAction<boolean>) => {
+      state.reading = payload;
+    },
     startMediaCacheUpdates: (state, { payload }: PayloadAction<string>) => {
       if (!state.subscribers.includes(payload)) {
         state.subscribers.push(payload);

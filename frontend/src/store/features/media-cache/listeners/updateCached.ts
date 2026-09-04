@@ -8,9 +8,10 @@ import parseContentLength from '../parseContentLength';
 
 const updateInterval = 1 * 60 * 1000;
 
-const { updateCachedMedia, startMediaCacheUpdates, stopMediaCacheUpdates } = mediaCacheSlice.actions;
+const { updateCachedMedia, setMediaCacheReading, startMediaCacheUpdates, stopMediaCacheUpdates } =
+  mediaCacheSlice.actions;
 
-type Dispatch = (action: ReturnType<typeof updateCachedMedia>) => void;
+type Dispatch = (action: ReturnType<typeof updateCachedMedia | typeof setMediaCacheReading>) => void;
 
 function addUpdateCacheListeners<State extends MediaCacheStateSlice>(
   mw: ListenerMiddlewareInstance<State>,
@@ -52,10 +53,12 @@ function addUpdateCacheListeners<State extends MediaCacheStateSlice>(
   };
 
   const runUpdate = () => {
+    dispatch?.(setMediaCacheReading(true));
     pendingUpdate = update()
       .catch(e => console.error("can't update media cache state", e))
       .finally(() => {
         pendingUpdate = undefined;
+        dispatch?.(setMediaCacheReading(false));
         if (updateRequested) {
           updateRequested = false;
           runUpdate();

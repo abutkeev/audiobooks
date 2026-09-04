@@ -22,7 +22,7 @@ const getBookId = (url: string) => {
 };
 
 const useCachedBooks = () => {
-  const { entries, available } = useMediaCache();
+  const { entries, available, reading } = useMediaCache();
   const { data: books = [], isLoading: booksLoading, isError: booksError } = useBooksGetQuery();
   const { authors, authorsLoading, authorsError } = useAuthors();
 
@@ -53,7 +53,8 @@ const useCachedBooks = () => {
   return {
     cachedBooks,
     available,
-    loading: booksLoading || authorsLoading,
+    // the cache is read asynchronously: until the first snapshot arrives the dialog waits
+    loading: (reading && !available) || booksLoading || authorsLoading,
     // the list itself comes from the cache, so a failed catalog only costs book names
     catalogError: booksError || authorsError,
   };
