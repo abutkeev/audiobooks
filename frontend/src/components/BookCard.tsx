@@ -65,9 +65,11 @@ const BookCard: React.FC<BookCardProps> = ({
             <AutoStories sx={{ width: coverSize, height: coverSize }} color='primary' />
           )}
         </Box>
-        <CardContent sx={{ flexGrow: 1 }}>
+        {/* minWidth lets the flex items shrink below their content, so a long title is
+            truncated instead of pushing the edit button out of the screen */}
+        <CardContent sx={{ flexGrow: 1, minWidth: 0 }}>
           <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
-            <Typography variant='h6' sx={{ cursor: 'default' }} noWrap>
+            <Typography variant='h6' sx={{ cursor: 'default', minWidth: 0 }} noWrap>
               {list ? <Link to={to ?? `/book/${id}`}>{name}</Link> : name}
             </Typography>
             {draft && <EditNote />}
