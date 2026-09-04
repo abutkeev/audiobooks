@@ -10,7 +10,6 @@
   },
   "include": [
     "vite.config.ts",
-    "vitest.config.ts",
-    "src/store/features/media-cache/cacheName.ts"
+    "vitest.config.ts"
   ]
 }

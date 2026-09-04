@@ -4,7 +4,7 @@ import searchSlice from './features/search';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import titleSlice from './features/title';
 import snackbarsSlice from './features/snackbars';
-import mediaCacheSlice, { createMediaCacheListenerMiddleware, mediaCacheName } from './features/media-cache';
+import mediaCacheSlice, { createMediaCacheListenerMiddleware } from './features/media-cache';
 import {
   audioControlMiddleware,
   createPlayerUtilsMiddleware,
@@ -34,7 +34,7 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
       .prepend([
-        createMediaCacheListenerMiddleware(mediaCacheName),
+        createMediaCacheListenerMiddleware(MEDIA_CACHE_NAME),
         audioControlMiddleware,
         createLocalStorageMiddleware({ playerStateName: 'playerState', booksStateName: 'booksState' }),
         createPlayerUtilsMiddleware({ copyBookStateUrl, showMessage }),

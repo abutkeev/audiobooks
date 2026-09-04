@@ -3,7 +3,6 @@ import { getSliceActionCreator } from '@/store';
 
 export { default as createMediaCacheListenerMiddleware } from './getListenerMiddleware';
 export { default as mediaCacheSupported } from './mediaCacheSupported';
-export { default as mediaCacheName } from './cacheName';
 export type { MediaCacheEntryState } from './slice';
 export type MediaCacheStateSlice = { [mediaCacheSlice.name]: ReturnType<typeof mediaCacheSlice.getInitialState> };
 

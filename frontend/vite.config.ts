@@ -4,7 +4,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePWA } from 'vite-plugin-pwa';
 import { promisify } from 'util';
 import { exec } from 'child_process';
-import mediaCacheName from './src/store/features/media-cache/cacheName';
+
+// the page reads this name through MEDIA_CACHE_NAME: a single source for both sides
+const mediaCacheName = 'mp3';
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
@@ -39,6 +41,7 @@ export default defineConfig(async ({ mode }) => {
       TELEGRAM_BOT_ID: JSON.stringify(TELEGRAM_BOT_ID),
       VERSION: JSON.stringify(`${BRANCH}.${REVISION}`),
       BUILD_DATE: JSON.stringify(new Date().toISOString()),
+      MEDIA_CACHE_NAME: JSON.stringify(mediaCacheName),
     },
     plugins: [
       react(),
