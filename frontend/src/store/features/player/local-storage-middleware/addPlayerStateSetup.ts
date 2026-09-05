@@ -1,14 +1,7 @@
 import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
 import type { PlayerStateSlice } from '..';
 import { maxVolume, normalizeSpeed } from '../limits';
-import {
-  playerSetup,
-  playerSlice,
-  setDiagnostics,
-  setPreventScreenLock,
-  setResetSleepTimerOnActivity,
-  setRewindOnPause,
-} from '../slice';
+import { playerSetup, playerSlice, setDiagnostics, setPreventScreenLock, setResetSleepTimerOnActivity } from '../slice';
 import { parseSavedState } from '.';
 import { setPreventLocalStorageSave } from '../internal';
 
@@ -28,7 +21,6 @@ const addPlayerStateSetup = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
         speed,
         resetSleepTimerOnActivity,
         preventScreenLock,
-        rewindOnPause,
         diagnostics,
         bookId,
       } = parseSavedState(playerStateName);
@@ -47,10 +39,6 @@ const addPlayerStateSetup = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
 
       if (typeof resetSleepTimerOnActivity === 'boolean') {
         dispatch(setResetSleepTimerOnActivity(resetSleepTimerOnActivity));
-      }
-
-      if (typeof rewindOnPause === 'boolean') {
-        dispatch(setRewindOnPause(rewindOnPause));
       }
 
       if (typeof diagnostics === 'boolean') {

@@ -9,15 +9,19 @@ const useWakeLock = () => {
       let timerId: ReturnType<typeof setTimeout>;
       let wakelock: WakeLockSentinel;
       const preventLock = () =>
-        navigator.wakeLock.request('screen').then(lock => {
-          wakelock = lock;
-          wakelock.onrelease = () => {
-            timerId = setTimeout(() => {
-              clearTimeout(timerId);
-              preventLock();
-            }, 1000);
-          };
-        });
+        navigator.wakeLock
+          .request('screen')
+          .then(lock => {
+            wakelock = lock;
+            wakelock.onrelease = () => {
+              timerId = setTimeout(() => {
+                clearTimeout(timerId);
+                preventLock();
+              }, 1000);
+            };
+          })
+          // a hidden document refuses the lock, and playing now drops on a standstill too
+          .catch(e => console.error("Can't prevent screen lock", e));
       preventLock();
       return () => {
         clearTimeout(timerId);

@@ -13,17 +13,13 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
   mw.startListening({
     actionCreator: pause,
     effect: (_, { getState, dispatch }) => {
-      const { position, rewindOnPause } = getState().player.state;
-      const newPosition = rewindOnPause ? Math.max(position - rewindTime, 0) : position;
+      const { position } = getState().player.state;
+      const newPosition = Math.max(position - rewindTime, 0);
 
-      // the seek goes before the pause, and on a hidden page it may be what costs the element the
-      // right to sound again, see docs/ai/frontend/player.md, "Заморозка"
-      if (newPosition !== position) {
-        audio.currentTime = newPosition;
-        dispatch(updatePosition(newPosition));
-      }
-
+      audio.currentTime = newPosition;
       audio.pause();
+
+      dispatch(updatePosition(newPosition));
       dispatch(updatePlaying(false));
       dispatch(stopUpdates());
     },
@@ -45,6 +41,10 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
         dispatch(retryChapter());
         return;
       }
+
+      // an element that stood still still calls itself playing, and play() over it does nothing,
+      // see docs/ai/frontend/player.md, "Молчащее воспроизведение"
+      if (!audio.paused) audio.pause();
 
       dispatch(startUpdates());
       startPlayback(audio, dispatch);

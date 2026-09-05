@@ -26,11 +26,12 @@ const addPlayerUpdates: AudioControllAddListrers = (mw, audio) => {
     if (healthy) {
       sameTime = 0;
       reported = false;
-      return;
+      return false;
     }
 
     sameTime += 1;
-    if (sameTime < stalledTicks || reported) return;
+    if (sameTime < stalledTicks) return false;
+    if (reported) return true;
 
     reported = true;
     dispatch(playbackStalled());
@@ -39,6 +40,8 @@ const addPlayerUpdates: AudioControllAddListrers = (mw, audio) => {
     getAudioCtx()?.resume();
     audio.muted = true;
     audio.muted = false;
+
+    return true;
   };
 
   mw.startListening({
@@ -61,8 +64,11 @@ const addPlayerUpdates: AudioControllAddListrers = (mw, audio) => {
             if (isFinite(audio.duration)) dispatch(updateDuration(audio.duration));
           }
         }
-        dispatch(updatePlaying(!audio.paused));
-        stalled(dispatch);
+        // on its own line: the detector resets its own state and has to run every tick,
+        // see docs/ai/frontend/player.md, "Молчащее воспроизведение"
+        const standstill = stalled(dispatch);
+
+        dispatch(updatePlaying(!audio.paused && !standstill));
       }, 1000);
     },
   });

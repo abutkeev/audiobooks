@@ -10,7 +10,7 @@ import addAudioEventListeners from './addAudioEventListeners';
 import addOtherPlayerActions from './addOtherPlayerActions';
 import addForwardAction from './addForwardAction';
 import addRewindAction from './addRewindAction';
-import { playerReset, playerSlice, setPauseOnChapterEnd, setRewindOnPause } from '../slice';
+import { playerReset, playerSlice, setPauseOnChapterEnd } from '../slice';
 import { chapterEnded, loadChapter, playbackStalled, retryChapter, startUpdates, stopUpdates } from '../internal';
 import { changePosition, chapterChange, forward, nextChapter, pause, play, previousChapter, rewind } from '../actions';
 import type { PlayerStateSlice } from '..';
@@ -594,20 +594,6 @@ describe('player listeners', () => {
     expect(audio.currentTime).toBe(95);
   });
 
-  it('touches nothing on a pause when the step back is switched off', async () => {
-    store.dispatch(setRewindOnPause(false));
-    store.dispatch(loadChapter({ number: 1, position: 100 }));
-    audio.metadataArrived(300);
-    await flush();
-
-    const seeks = audio.seeks;
-    store.dispatch(pause());
-
-    expect(playerState().position).toBe(100);
-    // not just the same value: a seek of a hidden element may be what costs it the sound
-    expect(audio.seeks).toBe(seeks);
-  });
-
   it('reports playback that says it goes and stays where it is', async () => {
     vi.useFakeTimers();
     try {
@@ -627,6 +613,8 @@ describe('player listeners', () => {
       expect(dispatched.filter(type => type === playbackStalled.type)).toHaveLength(1);
       // the only path in webkit that asks for the audio session again
       expect(audio.mutedToggles).toBe(1);
+      // the interface has to show the play button, however loudly the element claims otherwise
+      expect(playerState().playing).toBe(false);
     } finally {
       vi.useRealTimers();
     }
@@ -671,6 +659,36 @@ describe('player listeners', () => {
 
       // two standstills of two seconds are not one of four
       expect(dispatched).not.toContain(playbackStalled.type);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('restarts an element that stands still when play is pressed', async () => {
+    vi.useFakeTimers();
+    try {
+      store.dispatch(playerSlice.actions.updatePlaying(true));
+      store.dispatch(loadChapter({ number: 1, position: 30 }));
+      audio.metadataArrived(300);
+      await vi.advanceTimersByTimeAsync(0);
+      audio.stall();
+      await vi.advanceTimersByTimeAsync(5000);
+      expect(playerState().playing).toBe(false);
+
+      audio.pause.mockClear();
+      audio.play.mockClear();
+      store.dispatch(play());
+
+      // play() over an element that calls itself playing does nothing, so it is stopped first
+      expect(audio.pause).toHaveBeenCalledTimes(1);
+      expect(audio.play).toHaveBeenCalledTimes(1);
+
+      // and the store ends up playing again, with the publication alive
+      expect(playerState().playing).toBe(true);
+      audio.holdPosition(40);
+      dispatched = [];
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(dispatched).toContain('player/updatePosition');
     } finally {
       vi.useRealTimers();
     }
