@@ -2,7 +2,7 @@ import ControlButton from './ControlButton';
 import { ChangeEvent, useState } from 'react';
 import { FormControlLabel, Menu, MenuItem, Switch } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
-import useWakeLock from '@/hooks/useWakeLock';
+import { wakeLockSupported } from '@/hooks/useWakeLock';
 import copy from 'copy-to-clipboard';
 import { Clear, ContentCopy, FileDownload, Update } from '@mui/icons-material';
 import UpdateStateDialog from './UpdateStateDialog';
@@ -29,7 +29,6 @@ const Settings: React.FC = () => {
     bookId,
   } = useAppSelector(({ player }) => player);
   const dispatch = useAppDispatch();
-  const wakelockAvailable = useWakeLock();
   const [showUpdateStateDialog, setShowUpdateStateDialog] = useState(false);
   const [showClearCacheConfirmation, setShowClearCacheConfirmation] = useState(false);
   const chaptersCacheInfo = useChaptersCacheInfo();
@@ -73,7 +72,7 @@ const Settings: React.FC = () => {
             label={t('reset sleep timer on activity')}
           />
         </MenuItem>
-        {wakelockAvailable && (
+        {wakeLockSupported && (
           <MenuItem>
             <FormControlLabel
               control={

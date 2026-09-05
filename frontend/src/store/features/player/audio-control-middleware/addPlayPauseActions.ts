@@ -13,6 +13,9 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
   mw.startListening({
     actionCreator: pause,
     effect: (_, { getState, dispatch }) => {
+      // the media keys outlive the book: a closed player has nothing to pause
+      if (!getState().player.bookId) return;
+
       const { position } = getState().player.state;
       const newPosition = Math.max(position - rewindTime, 0);
 
@@ -28,6 +31,9 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
   mw.startListening({
     actionCreator: play,
     effect: (_, { dispatch, getState }) => {
+      // without a book play would take the retry branch and load a chapter out of an empty list
+      if (!getState().player.bookId) return;
+
       const { error, duration } = getState().player.state;
 
       dispatch(updatePlaying(true));

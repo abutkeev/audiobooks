@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-const usePlaybackState = (playing: boolean) => {
+const usePlaybackState = ({ active, playing }: { active: boolean; playing: boolean }) => {
   const { mediaSession } = navigator;
 
   useEffect(() => {
-    mediaSession.playbackState = playing ? 'playing' : 'paused';
-  }, [playing, mediaSession]);
+    mediaSession.playbackState = !active ? 'none' : playing ? 'playing' : 'paused';
+  }, [active, playing, mediaSession]);
 
   // a reset on every change flickers the lock screen controls,
   // see docs/ai/frontend/player.md, "Media Session API"

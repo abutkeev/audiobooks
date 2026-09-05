@@ -3,12 +3,14 @@ import { Box, IconButton, Toolbar, Typography } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Search from './Search';
-import { currentBookVarName } from '@/pages/Home';
 import { useAppSelector } from '@/store';
+import { currentBookVarName } from '@/pages/Home';
 import MobileAppBar from './MobileAppBar';
 import AccountMenu from '../account-menu';
 import AdminMenu from '../admin-menu';
 import useMobile from '@/hooks/useMobile';
+import MiniPlayer from './mini-player';
+import MiniPlayerSpacer from './mini-player/Spacer';
 
 const AppBar: React.FC = () => {
   const navigate = useNavigate();
@@ -46,8 +48,10 @@ const AppBar: React.FC = () => {
           <AdminMenu />
           <AccountMenu />
         </Toolbar>
+        <MiniPlayer />
       </MuiAppBar>
       <Toolbar />
+      <MiniPlayerSpacer />
     </>
   );
 };

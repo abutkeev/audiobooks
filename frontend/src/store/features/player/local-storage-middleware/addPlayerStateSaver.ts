@@ -2,8 +2,9 @@ import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
 import type { PlayerStateSlice } from '..';
 import { playerSetup } from '../slice';
 import { setPreventLocalStorageSave } from '../internal';
+import { playerStateName } from '.';
 
-const addPlayerStateSaver = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, playerStateName: string) => {
+const addPlayerStateSaver = (mw: ListenerMiddlewareInstance<PlayerStateSlice>) => {
   let preventSave = false;
 
   mw.startListening({

@@ -1,6 +1,8 @@
 import { PayloadAction, createListenerMiddleware, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { api } from '@/api/api';
 import { parseToken } from '@/hooks/useAuthData';
+// from the actions module, not the barrel: the barrel builds an audio element on import
+import { closePlayer } from './player/actions';
 
 const localStorageTokenName = 'authToken';
 
@@ -35,6 +37,9 @@ mw.startListening({
     if (!oldAuth || !newAuth || oldAuth.admin !== newAuth.admin || oldAuth.enabled !== newAuth.enabled) {
       dispatch(api.util.resetApiState());
     }
+
+    // the audio outlives the page: a logged out user must not keep hearing the book
+    if (!payload) dispatch(closePlayer());
   },
 });
 

@@ -8,12 +8,14 @@ Redux Toolkit store с несколькими слайсами и кастомн
 
 - Состояние: `{ token: string | null }`
 - Действия: `setAuthToken`
-- Middleware: сброс кеша RTK Query при смене токена, обработка 403
+- Middleware: сброс кеша RTK Query при смене токена, обработка 403, остановка плеера при выходе
+  (`closePlayer` — импортируется из `player/actions`, не из бареля: тот создаёт аудиоэлемент на импорте)
 
 ### player
 
-- Состояние: позиция, громкость, скорость, текущая глава, длительность, состояние воспроизведения, настройки (таймер сна, блокировка экрана, диагностика)
-- Действия: `changePosition`, `changeVolume`, `changeSpeed`, `pause`, `play`, `forward`, `rewind`, `chapterChange`, `nextChapter`, `previousChapter`, `updateBookState`, `copyUrl`, `showMessage`
+- Состояние: позиция, громкость, скорость, текущая глава, длительность, состояние воспроизведения, настройки (таймер сна, блокировка экрана, диагностика); рядом со `state` — `bookId`, `bookInfo` и `chapters`
+- Действия: `changePosition`, `changeVolume`, `changeSpeed`, `pause`, `play`, `forward`, `rewind`, `chapterChange`, `nextChapter`, `previousChapter`, `updateBookState`, `copyUrl`, `showMessage`, `closePlayer`, `updateChapters`
+- `bookId !== ''` означает «плеер занят»: сессия переживает уход со страницы книги и закрывается только `closePlayer` (мини-плеер в аппбаре, логаут), см. [player.md](player.md)
 - Middleware:
   - `audio-control-middleware` — управление HTML5 Audio
   - `local-storage-middleware` — сохранение состояния

@@ -36,7 +36,7 @@ export const store = configureStore({
       .prepend([
         createMediaCacheListenerMiddleware(MEDIA_CACHE_NAME),
         audioControlMiddleware,
-        createLocalStorageMiddleware({ playerStateName: 'playerState', booksStateName: 'booksState' }),
+        createLocalStorageMiddleware(),
         createPlayerUtilsMiddleware({ copyBookStateUrl, showMessage }),
         websocketMiddleware,
         authMiddleware,

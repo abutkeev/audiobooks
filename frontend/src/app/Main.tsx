@@ -7,6 +7,7 @@ import { useAppSelector } from '@/store';
 import ReloadPrompt from './ReloadPrompt';
 import { Outlet } from 'react-router-dom';
 import Footer from './footer';
+import PlayerHost from './PlayerHost';
 
 const Main: React.FC = () => {
   const title = useAppSelector(({ title }) => title);
@@ -20,6 +21,7 @@ const Main: React.FC = () => {
         </Helmet>
       </HelmetProvider>
       <AppBar />
+      <PlayerHost />
       <Snackbar />
       <Container ref={mainRef} sx={{ my: 1, maxWidth: 'md' }}>
         <ReloadPrompt />

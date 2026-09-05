@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 interface BookMetadata {
+  active: boolean;
   name: string;
   author: string;
   series?: string;
@@ -11,10 +12,15 @@ interface BookMetadata {
   chapterTitle: string;
 }
 
-const useMediaMetadata = ({ name, author, series, cover, chapterTitle }: BookMetadata) => {
+const useMediaMetadata = ({ active, name, author, series, cover, chapterTitle }: BookMetadata) => {
   const { mediaSession } = navigator;
 
   useEffect(() => {
+    if (!active) {
+      mediaSession.metadata = null;
+      return;
+    }
+
     const title = `${name}` + (chapterTitle && ` (${chapterTitle})`);
     mediaSession.metadata = new MediaMetadata({
       title,
@@ -32,7 +38,7 @@ const useMediaMetadata = ({ name, author, series, cover, chapterTitle }: BookMet
     return () => {
       mediaSession.metadata = null;
     };
-  }, [name, author, series, chapterTitle, cover, mediaSession]);
+  }, [active, name, author, series, chapterTitle, cover, mediaSession]);
 };
 
 export default useMediaMetadata;

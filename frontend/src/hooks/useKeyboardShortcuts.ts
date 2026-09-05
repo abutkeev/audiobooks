@@ -29,8 +29,13 @@ const stepSpeed = (speed: number, direction: 1 | -1) =>
 const handledElsewhere = (target: EventTarget | null) =>
   target instanceof Element && !!target.closest('input:not([type="range"]), textarea, [role="menu"], [role="dialog"]');
 
-const useKeyboardShortcuts = () => {
-  const { playing, volume, speed } = useAppSelector(({ player: { state } }) => state);
+// bound to the book page, not to the player: arrows would take scrolling away from every list
+// and tab switching from the book list, see docs/ai/frontend/player.md
+const useKeyboardShortcuts = (enabled: boolean) => {
+  // primitive selectors: the state object changes every second with the position tick
+  const playing = useAppSelector(({ player: { state } }) => state.playing);
+  const volume = useAppSelector(({ player: { state } }) => state.volume);
+  const speed = useAppSelector(({ player: { state } }) => state.speed);
   const dispatch = useAppDispatch();
 
   const handleKeyDown = useCallback(
@@ -99,11 +104,13 @@ const useKeyboardShortcuts = () => {
   );
 
   useEffect(() => {
+    if (!enabled) return;
+
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [handleKeyDown]);
+  }, [enabled, handleKeyDown]);
 };
 
 export default useKeyboardShortcuts;

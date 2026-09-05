@@ -5,12 +5,11 @@ import { ExpandMore } from '@mui/icons-material';
 import useMediaCache from '@/hooks/useMediaCache';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { chapterChange } from '@/store/features/player';
-import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import formatTime from '@/utils/formatTime';
+import ChaptersSummary from './ChaptersSummary';
 
 const Chapters: React.FC = () => {
-  const { t } = useTranslation();
   const {
     state: { currentChapter, position },
     chapters,
@@ -40,17 +39,11 @@ const Chapters: React.FC = () => {
   if (chapters.length === 0) return;
 
   const handleChapterClick = (chapter: number) => () => dispatch(chapterChange(chapter));
-  const currentChapterTitle = chapters[currentChapter]?.title ?? '';
-  const chapterNumber = currentChapter + 1;
-  const titleIsNumber = +currentChapterTitle === chapterNumber;
 
   return (
     <Accordion square>
       <AccordionSummary expandIcon={<ExpandMore />} onClick={({ currentTarget }) => currentTarget.blur()}>
-        <Typography sx={{ flexGrow: 1 }}>
-          {t('Current chapter')} {chapterNumber} {t('of')} {chapters.length}{' '}
-          {!titleIsNumber && `(${currentChapterTitle})`}
-        </Typography>
+        <ChaptersSummary chapters={chapters} currentChapter={currentChapter} />
         {durations && (
           <Typography>
             {formatTime(durations.current)}/{formatTime(durations.total)}

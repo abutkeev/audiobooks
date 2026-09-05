@@ -2,15 +2,15 @@ import { ListenerMiddlewareInstance } from '@reduxjs/toolkit';
 import type { PlayerStateSlice } from '..';
 import { maxVolume, normalizeSpeed } from '../limits';
 import { playerSetup, playerSlice, setDiagnostics, setPreventScreenLock, setResetSleepTimerOnActivity } from '../slice';
-import { parseSavedState } from '.';
+import { isValidChapter, isValidPosition, parseSavedState, playerStateName } from '.';
 import { setPreventLocalStorageSave } from '../internal';
 
-const addPlayerStateSetup = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, playerStateName: string) => {
+const addPlayerStateSetup = (mw: ListenerMiddlewareInstance<PlayerStateSlice>) => {
   const { updatePosition, updateCurrentChapter, updateVolume, updateSpeed } = playerSlice.actions;
 
   mw.startListening({
     actionCreator: playerSetup,
-    effect: (_, { getState, dispatch }) => {
+    effect: ({ payload }, { getState, dispatch }) => {
       dispatch(setPreventLocalStorageSave(true));
       const { bookId: currentBookId, chapters } = getState().player;
 
@@ -45,16 +45,14 @@ const addPlayerStateSetup = (mw: ListenerMiddlewareInstance<PlayerStateSlice>, p
         dispatch(setDiagnostics(diagnostics));
       }
 
-      if (
-        currentBookId === bookId &&
-        Number.isInteger(currentChapter) &&
-        currentChapter > 0 &&
-        currentChapter < chapters.length
-      ) {
+      // a chapter chosen by the user beats the saved one
+      const restorePlace = payload.currentChapter === undefined && currentBookId === bookId;
+
+      if (restorePlace && isValidChapter(currentChapter, chapters.length)) {
         dispatch(updateCurrentChapter(currentChapter));
       }
 
-      if (currentBookId === bookId && isFinite(position) && position > 0) {
+      if (restorePlace && isValidPosition(position)) {
         dispatch(updatePosition(position));
       }
       dispatch(setPreventLocalStorageSave(false));

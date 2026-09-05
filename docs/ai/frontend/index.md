@@ -106,7 +106,8 @@ npm run test:watch   # watch-режим
 `store/features/media-cache/parseContentLength`, `store/features/api/redactSecrets`,
 `store/features/player/audio-control-middleware/waitForMetadata`, `startPlayback` и `diagnosticsLog`,
 `utils/getTelegramAuthError`.
-Слушатели среднего слоя покрыты в `addLoadChapterAction.test.ts` и `addDiagnostics.test.ts`. Тестов на компоненты и хуки пока нет —
+Слушатели среднего слоя покрыты в `addLoadChapterAction.test.ts`, `addDiagnostics.test.ts`,
+`addPlayerSetupActions.test.ts` (закрытие плеера) и `addSleepTimer.test.ts`. Тестов на компоненты и хуки пока нет —
 для них потребуется jsdom и testing-library.
 
 Listener middleware тестируется без jsdom: слушатели принимают аудиоэлемент параметром, так что в тесте

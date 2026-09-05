@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Stack, Typography, Slider, Skeleton } from '@mui/material';
+import { Stack, Typography, Slider } from '@mui/material';
 import formatTime from '@/utils/formatTime';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { changePosition } from '@/store/features/player';
 import PlaybackRate from './PlaybackRate';
+import PositionPlaceholder from './PositionPlaceholder';
 
 const PositionControl: React.FC = () => {
   const { position, duration } = useAppSelector(({ player: { state } }) => state);
@@ -30,20 +31,7 @@ const PositionControl: React.FC = () => {
           </Typography>
         </>
       ) : (
-        <>
-          <Skeleton variant='text'>
-            <Typography>00:00</Typography>
-          </Skeleton>
-          <Slider
-            sx={{ flexGrow: 1 }}
-            value={0}
-            disabled
-            slotProps={{ thumb: { style: { display: 'none' } }, track: { style: { display: 'none' } } }}
-          />
-          <Skeleton>
-            <Typography>00:00</Typography>
-          </Skeleton>
-        </>
+        <PositionPlaceholder />
       )}
       <PlaybackRate />
     </Stack>

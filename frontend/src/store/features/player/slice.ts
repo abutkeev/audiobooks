@@ -17,6 +17,14 @@ export interface BookChapter {
   duration?: number;
 }
 
+export interface PlayerSetupPayload {
+  bookId: string;
+  chapters: BookChapter[];
+  playing?: boolean;
+  /** A chapter chosen by the user: the saved one is not restored over it. */
+  currentChapter?: number;
+}
+
 interface PlayerStore {
   state: {
     currentChapter: number;
@@ -62,12 +70,20 @@ export const playerSlice = createSlice({
   name: 'player',
   initialState,
   reducers: {
-    playerSetup: (_, { payload: { bookId, chapters } }: PayloadAction<Pick<PlayerStore, 'bookId' | 'chapters'>>) => ({
+    playerSetup: (
+      _,
+      { payload: { bookId, chapters, playing = false, currentChapter = 0 } }: PayloadAction<PlayerSetupPayload>
+    ) => ({
       ...initialState,
+      state: { ...initialState.state, playing, currentChapter },
       bookId,
       chapters,
     }),
     playerReset: () => initialState,
+    // only chapters: a write to state would wake every position saver, see docs/ai/frontend/player.md
+    updateChapters: (state, { payload }: PayloadAction<PlayerStore['chapters']>) => {
+      state.chapters = payload;
+    },
     setBookInfo: (state, { payload }: PayloadAction<PlayerStore['bookInfo']>) => {
       state.bookInfo = payload;
     },
@@ -109,6 +125,7 @@ export const playerSlice = createSlice({
 export const {
   playerSetup,
   playerReset,
+  updateChapters,
   setBookInfo,
   setPauseOnChapterEnd,
   setResetSleepTimerOnActivity,

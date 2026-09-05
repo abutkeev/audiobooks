@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useAppSelector } from '@/store';
 
+export const wakeLockSupported = 'wakeLock' in navigator;
+
+// mounted once in PlayerHost: a second instance would release the lock from under the first one
 const useWakeLock = () => {
   const { preventScreenLock, playing } = useAppSelector(({ player: { state } }) => state);
-  const wakelockAvailable = 'wakeLock' in navigator;
   useEffect(() => {
-    if (preventScreenLock && playing && wakelockAvailable) {
+    if (preventScreenLock && playing && wakeLockSupported) {
       let timerId: ReturnType<typeof setTimeout>;
       let wakelock: WakeLockSentinel;
       const preventLock = () =>
@@ -31,8 +33,7 @@ const useWakeLock = () => {
         }
       };
     }
-  }, [preventScreenLock, playing, wakelockAvailable]);
-  return wakelockAvailable;
+  }, [preventScreenLock, playing]);
 };
 
 export default useWakeLock;

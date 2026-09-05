@@ -15,11 +15,14 @@ const useMediaSession =
         } = useAppSelector(({ player }) => player);
 
         const chapterTitle = chapters[currentChapter]?.title ?? '';
+        // a closed player is a state of the hooks, not their absence,
+        // see docs/ai/frontend/player.md, "Media Session API"
+        const active = !!bookId;
 
-        useMediaMetadata({ ...bookInfo, chapterTitle });
-        usePlaybackState(playing);
+        useMediaMetadata({ active, ...bookInfo, chapterTitle });
+        usePlaybackState({ active, playing });
         usePositionState({ bookId, position, duration, playbackRate: speed });
-        useMediaKeys();
+        useMediaKeys(active);
       }
     : () => {};
 

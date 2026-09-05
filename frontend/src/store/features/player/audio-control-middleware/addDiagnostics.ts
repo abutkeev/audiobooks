@@ -3,6 +3,7 @@ import type { PlayerStateSlice } from '..';
 import {
   changePosition,
   chapterChange,
+  closePlayer,
   forward,
   nextChapter,
   pause,
@@ -54,6 +55,7 @@ const recorded = new Set(
     updateBookState,
     showMessage,
     playerReset,
+    closePlayer,
     setDiagnostics,
     playerSlice.actions.setError,
     playerSetup,

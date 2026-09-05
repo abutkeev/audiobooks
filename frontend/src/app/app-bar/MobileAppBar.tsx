@@ -5,6 +5,8 @@ import { useAppSelector } from '@/store';
 import { useState } from 'react';
 import AccountMenu from '../account-menu';
 import AdminMenu from '../admin-menu';
+import MiniPlayer from './mini-player';
+import MiniPlayerSpacer from './mini-player/Spacer';
 
 interface MobileAppBarProps {
   handleHomeButtonClick(): void;
@@ -43,8 +45,10 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({ handleHomeButtonClick, show
             </>
           )}
         </Toolbar>
+        <MiniPlayer />
       </AppBar>
       <Toolbar />
+      <MiniPlayerSpacer />
     </>
   );
 };

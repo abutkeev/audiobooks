@@ -16,3 +16,4 @@ export const updateBookState = createSliceAction<{ bookId: string; currentChapte
 );
 export const copyUrl = createSliceAction<BookState>('copyUrl');
 export const showMessage = createSliceAction<Message>('showMessage');
+export const closePlayer = createSliceAction('closePlayer');

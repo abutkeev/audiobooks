@@ -6,12 +6,14 @@ const mediaKeysRewindTime = 10;
 
 const useMediaKeys =
   'mediaSession' in navigator
-    ? () => {
+    ? (active: boolean) => {
         const dispatch = useAppDispatch();
 
         const { mediaSession } = navigator;
 
         useEffect(() => {
+          if (!active) return;
+
           mediaSession.setActionHandler('previoustrack', () => dispatch(rewind(mediaKeysRewindTime)));
           mediaSession.setActionHandler('nexttrack', () => dispatch(forward(mediaKeysRewindTime)));
           mediaSession.setActionHandler('seekbackward', ({ seekOffset }) =>
@@ -33,7 +35,7 @@ const useMediaKeys =
             mediaSession.setActionHandler('pause', null);
             mediaSession.setActionHandler('seekto', null);
           };
-        }, [dispatch, mediaSession]);
+        }, [active, dispatch, mediaSession]);
       }
     : () => {};
 

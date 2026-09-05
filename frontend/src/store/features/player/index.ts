@@ -4,7 +4,7 @@ export * from './slice';
 export * from './limits';
 export * from './actions';
 export { audioControlMiddleware } from './audio-control-middleware';
-export { createLocalStorageMiddleware } from './local-storage-middleware';
+export { createLocalStorageMiddleware, readSavedBookState } from './local-storage-middleware';
 export { createPlayerUtilsMiddleware } from './createPlayerUtilsMiddleware';
 export type { BookState } from './createPlayerUtilsMiddleware';
 
