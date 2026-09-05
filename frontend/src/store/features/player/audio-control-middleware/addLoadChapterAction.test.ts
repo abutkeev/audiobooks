@@ -10,9 +10,9 @@ import addAudioEventListeners from './addAudioEventListeners';
 import addOtherPlayerActions from './addOtherPlayerActions';
 import addForwardAction from './addForwardAction';
 import addRewindAction from './addRewindAction';
-import { playerReset, playerSlice, setPauseOnChapterEnd } from '../slice';
+import { playerReset, playerSlice, setPauseOnChapterEnd, setRewindOnPause } from '../slice';
 import { chapterEnded, loadChapter, retryChapter, startUpdates, stopUpdates } from '../internal';
-import { changePosition, chapterChange, forward, nextChapter, play, previousChapter, rewind } from '../actions';
+import { changePosition, chapterChange, forward, nextChapter, pause, play, previousChapter, rewind } from '../actions';
 import type { PlayerStateSlice } from '..';
 
 const chapters = [
@@ -93,7 +93,10 @@ class FakeAudio {
     return this.time;
   }
 
+  seeks = 0;
+
   set currentTime(value: number) {
+    this.seeks += 1;
     if (this.loaded) this.time = value;
   }
 
@@ -561,6 +564,31 @@ describe('player listeners', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it('steps back five seconds on a pause', async () => {
+    store.dispatch(loadChapter({ number: 1, position: 100 }));
+    audio.metadataArrived(300);
+    await flush();
+
+    store.dispatch(pause());
+
+    expect(playerState().position).toBe(95);
+    expect(audio.currentTime).toBe(95);
+  });
+
+  it('touches nothing on a pause when the step back is switched off', async () => {
+    store.dispatch(setRewindOnPause(false));
+    store.dispatch(loadChapter({ number: 1, position: 100 }));
+    audio.metadataArrived(300);
+    await flush();
+
+    const seeks = audio.seeks;
+    store.dispatch(pause());
+
+    expect(playerState().position).toBe(100);
+    // not just the same value: a seek of a hidden element may be what costs it the sound
+    expect(audio.seeks).toBe(seeks);
   });
 
   it('ignores the playing event of a closed book', async () => {

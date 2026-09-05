@@ -28,6 +28,7 @@ interface PlayerStore {
     pauseOnChapterEnd: boolean;
     resetSleepTimerOnActivity: boolean;
     preventScreenLock: boolean;
+    rewindOnPause: boolean;
     diagnostics: boolean;
     error: string;
   };
@@ -47,6 +48,7 @@ const initialState: PlayerStore = {
     pauseOnChapterEnd: false,
     resetSleepTimerOnActivity: true,
     preventScreenLock: true,
+    rewindOnPause: true,
     diagnostics: false,
     error: '',
   },
@@ -98,6 +100,9 @@ export const playerSlice = createSlice({
     setPreventScreenLock: (store, { payload }: PayloadAction<boolean>) => {
       store.state.preventScreenLock = payload;
     },
+    setRewindOnPause: (store, { payload }: PayloadAction<boolean>) => {
+      store.state.rewindOnPause = payload;
+    },
     setDiagnostics: (store, { payload }: PayloadAction<boolean>) => {
       store.state.diagnostics = payload;
     },
@@ -113,5 +118,6 @@ export const {
   setPauseOnChapterEnd,
   setResetSleepTimerOnActivity,
   setPreventScreenLock,
+  setRewindOnPause,
   setDiagnostics,
 } = playerSlice.actions;

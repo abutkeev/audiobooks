@@ -13,6 +13,7 @@ import { addMediaToCache, removeCachedMedia } from '@/store/features/media-cache
 import {
   setDiagnostics,
   setPreventScreenLock,
+  setRewindOnPause,
   setResetSleepTimerOnActivity,
   showMessage,
 } from '@/store/features/player';
@@ -25,7 +26,7 @@ const Settings: React.FC = () => {
   const { t } = useTranslation();
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
   const {
-    state: { resetSleepTimerOnActivity, preventScreenLock, diagnostics, position, currentChapter },
+    state: { resetSleepTimerOnActivity, preventScreenLock, rewindOnPause, diagnostics, position, currentChapter },
     bookId,
   } = useAppSelector(({ player }) => player);
   const dispatch = useAppDispatch();
@@ -83,6 +84,12 @@ const Settings: React.FC = () => {
             />
           </MenuItem>
         )}
+        <MenuItem>
+          <FormControlLabel
+            control={<Switch checked={rewindOnPause} color='primary' onChange={handleSwitch(setRewindOnPause)} />}
+            label={t('step back five seconds on pause')}
+          />
+        </MenuItem>
         <MenuItem>
           <FormControlLabel
             control={<Switch checked={diagnostics} color='primary' onChange={handleSwitch(setDiagnostics)} />}

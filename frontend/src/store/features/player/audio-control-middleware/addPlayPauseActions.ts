@@ -5,20 +5,25 @@ import { playerSlice } from '../slice';
 import { retryChapter, startUpdates, stopUpdates } from '../internal';
 import startPlayback from './startPlayback';
 
+const rewindTime = 5;
+
 const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
   const { updatePosition, updatePlaying } = playerSlice.actions;
 
   mw.startListening({
     actionCreator: pause,
     effect: (_, { getState, dispatch }) => {
-      const { position } = getState().player.state;
-      const rewind = 5;
-      const newPosition = position > rewind ? position - rewind : 0;
+      const { position, rewindOnPause } = getState().player.state;
+      const newPosition = rewindOnPause ? Math.max(position - rewindTime, 0) : position;
 
-      audio.currentTime = newPosition;
+      // the seek goes before the pause, and on a hidden page it may be what costs the element the
+      // right to sound again, see docs/ai/frontend/player.md, "Заморозка"
+      if (newPosition !== position) {
+        audio.currentTime = newPosition;
+        dispatch(updatePosition(newPosition));
+      }
+
       audio.pause();
-
-      dispatch(updatePosition(newPosition));
       dispatch(updatePlaying(false));
       dispatch(stopUpdates());
     },
