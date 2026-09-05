@@ -11,7 +11,7 @@ import addOtherPlayerActions from './addOtherPlayerActions';
 import addForwardAction from './addForwardAction';
 import addRewindAction from './addRewindAction';
 import { playerReset, playerSlice, setPauseOnChapterEnd, setRewindOnPause } from '../slice';
-import { chapterEnded, loadChapter, retryChapter, startUpdates, stopUpdates } from '../internal';
+import { chapterEnded, loadChapter, playbackStalled, retryChapter, startUpdates, stopUpdates } from '../internal';
 import { changePosition, chapterChange, forward, nextChapter, pause, play, previousChapter, rewind } from '../actions';
 import type { PlayerStateSlice } from '..';
 
@@ -94,6 +94,17 @@ class FakeAudio {
   }
 
   seeks = 0;
+  mutedToggles = 0;
+  private mutedValue = false;
+
+  set muted(value: boolean) {
+    if (value !== this.mutedValue) this.mutedToggles += value ? 1 : 0;
+    this.mutedValue = value;
+  }
+
+  get muted() {
+    return this.mutedValue;
+  }
 
   set currentTime(value: number) {
     this.seeks += 1;
@@ -146,6 +157,12 @@ class FakeAudio {
 
   holdPosition(value: number) {
     this.time = value;
+  }
+
+  /** Playing without moving: an element that answered a play but got no audio session. */
+  stall() {
+    this.paused = false;
+    this.readyState = 4;
   }
 
   failed(code: number, message: string) {
@@ -589,6 +606,74 @@ describe('player listeners', () => {
     expect(playerState().position).toBe(100);
     // not just the same value: a seek of a hidden element may be what costs it the sound
     expect(audio.seeks).toBe(seeks);
+  });
+
+  it('reports playback that says it goes and stays where it is', async () => {
+    vi.useFakeTimers();
+    try {
+      store.dispatch(playerSlice.actions.updatePlaying(true));
+      store.dispatch(loadChapter({ number: 1, position: 30 }));
+      audio.metadataArrived(300);
+      await vi.advanceTimersByTimeAsync(0);
+      audio.stall();
+
+      dispatched = [];
+      // the first tick only takes the reading the next ones are compared against
+      await vi.advanceTimersByTimeAsync(3000);
+      expect(dispatched).not.toContain(playbackStalled.type);
+
+      await vi.advanceTimersByTimeAsync(2000);
+
+      expect(dispatched.filter(type => type === playbackStalled.type)).toHaveLength(1);
+      // the only path in webkit that asks for the audio session again
+      expect(audio.mutedToggles).toBe(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('says nothing about playback that moves', async () => {
+    vi.useFakeTimers();
+    try {
+      store.dispatch(playerSlice.actions.updatePlaying(true));
+      store.dispatch(loadChapter({ number: 1, position: 30 }));
+      audio.metadataArrived(300);
+      await vi.advanceTimersByTimeAsync(0);
+      audio.stall();
+
+      dispatched = [];
+      for (let second = 1; second <= 4; second += 1) {
+        audio.holdPosition(30 + second);
+        await vi.advanceTimersByTimeAsync(1000);
+      }
+
+      expect(dispatched).not.toContain(playbackStalled.type);
+      expect(audio.mutedToggles).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('starts counting the standstill over when the position moves', async () => {
+    vi.useFakeTimers();
+    try {
+      store.dispatch(playerSlice.actions.updatePlaying(true));
+      store.dispatch(loadChapter({ number: 1, position: 30 }));
+      audio.metadataArrived(300);
+      await vi.advanceTimersByTimeAsync(0);
+      audio.stall();
+
+      dispatched = [];
+      await vi.advanceTimersByTimeAsync(3000);
+      audio.holdPosition(31);
+      await vi.advanceTimersByTimeAsync(1000);
+      await vi.advanceTimersByTimeAsync(2000);
+
+      // two standstills of two seconds are not one of four
+      expect(dispatched).not.toContain(playbackStalled.type);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('ignores the playing event of a closed book', async () => {

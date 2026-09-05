@@ -50,6 +50,8 @@ export default defineConfig(async ({ mode }) => {
         manifest: {
           name: 'Audio books',
           short_name: 'Audio books',
+          // not standalone on purpose, see docs/ai/frontend/player.md, "Заморозка"
+          display: 'browser',
           theme_color: '#212121',
           background_color: '#212121',
           icons: [

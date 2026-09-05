@@ -1,10 +1,45 @@
 import type { AudioControllAddListrers } from '.';
 import { playerSlice } from '../slice';
-import { startUpdates, stopUpdates } from '../internal';
+import { playbackStalled, startUpdates, stopUpdates } from '../internal';
+import { getAudioCtx } from './gainGraph';
+
+// a spare tick over the one that would do: a single reading equal to the previous one costs
+// nothing to wait out, and a false alarm here would mute a sounding element
+const stalledTicks = 3;
+
+type StalledDispatch = (action: ReturnType<typeof playbackStalled>) => void;
 
 const addPlayerUpdates: AudioControllAddListrers = (mw, audio) => {
   let intervalId: ReturnType<typeof setInterval> | undefined;
+  let lastTime = 0;
+  let sameTime = 0;
+  let reported = false;
   const { updatePosition, updateDuration, updatePlaying } = playerSlice.actions;
+
+  // an element that answered a play but got no audio session reports playing and stays put,
+  // see docs/ai/frontend/player.md, "Молчащее воспроизведение"
+  const stalled = (dispatch: StalledDispatch) => {
+    const healthy =
+      audio.paused || audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA || audio.currentTime !== lastTime;
+    lastTime = audio.currentTime;
+
+    if (healthy) {
+      sameTime = 0;
+      reported = false;
+      return;
+    }
+
+    sameTime += 1;
+    if (sameTime < stalledTicks || reported) return;
+
+    reported = true;
+    dispatch(playbackStalled());
+    // two cures for the two ways to stand still, both idempotent: a suspended context above 100%
+    // of volume looks exactly the same, see the section above
+    getAudioCtx()?.resume();
+    audio.muted = true;
+    audio.muted = false;
+  };
 
   mw.startListening({
     actionCreator: startUpdates,
@@ -27,6 +62,7 @@ const addPlayerUpdates: AudioControllAddListrers = (mw, audio) => {
           }
         }
         dispatch(updatePlaying(!audio.paused));
+        stalled(dispatch);
       }, 1000);
     },
   });
@@ -36,6 +72,9 @@ const addPlayerUpdates: AudioControllAddListrers = (mw, audio) => {
     effect: () => {
       clearInterval(intervalId);
       intervalId = undefined;
+      lastTime = 0;
+      sameTime = 0;
+      reported = false;
     },
   });
 };

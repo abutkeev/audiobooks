@@ -13,7 +13,7 @@ import {
   updateBookState,
 } from '../actions';
 import { playerReset, playerSetup, playerSlice, setDiagnostics } from '../slice';
-import { chapterEnded, loadChapter, retryChapter } from '../internal';
+import { chapterEnded, loadChapter, playbackStalled, retryChapter } from '../internal';
 import createDiagnosticsLog, { DiagnosticsEntry, DiagnosticsLogOptions } from './diagnosticsLog';
 import sendDiagnostics from './diagnosticsTransport';
 
@@ -57,6 +57,7 @@ const recorded = new Set(
     setDiagnostics,
     playerSlice.actions.setError,
     playerSetup,
+    playbackStalled,
   ].map(({ type }) => type)
 );
 
