@@ -13,11 +13,11 @@ Redux Toolkit store с несколькими слайсами и кастомн
 
 ### player
 
-- Состояние: позиция, громкость, скорость, текущая глава, длительность, состояние воспроизведения, настройки (таймер сна, блокировка экрана, диагностика); рядом со `state` — `bookId`, `bookInfo` и `chapters`
-- Действия: `changePosition`, `changeVolume`, `changeSpeed`, `pause`, `play`, `forward`, `rewind`, `chapterChange`, `nextChapter`, `previousChapter`, `updateBookState`, `copyUrl`, `showMessage`, `closePlayer`, `updateChapters`
+- Состояние: позиция, громкость, скорость, текущая глава, длительность, состояние воспроизведения, настройки (таймер сна, блокировка экрана, диагностика); рядом со `state` — `bookId`, `bookInfo`, `chapters` и `sleepTimer`
+- Действия: `changePosition`, `changeVolume`, `changeSpeed`, `pause`, `play`, `forward`, `rewind`, `chapterChange`, `nextChapter`, `previousChapter`, `updateBookState`, `copyUrl`, `showMessage`, `closePlayer`, `updateChapters`, `setSleepTimer`/`extendSleepTimer`/`clearSleepTimer`
 - `bookId !== ''` означает «плеер занят»: сессия переживает уход со страницы книги и закрывается только `closePlayer` (мини-плеер в аппбаре, логаут), см. [player.md](player.md)
 - Middleware:
-  - `audio-control-middleware` — управление HTML5 Audio
+  - `audio-control-middleware` — управление HTML5 Audio; там же слушатель `addSleepTimer` — отсчёт таймера сна, продление по активности, пауза по истечении
   - `local-storage-middleware` — сохранение состояния
   - `createPlayerUtilsMiddleware` — вспомогательные операции
 - Константы (`limits.ts`): `maxVolume = 300` (усиление через Web Audio API GainNode), `minSpeed = 0.25`, `maxSpeed = 3`, `speedStep = 0.05`

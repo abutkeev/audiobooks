@@ -12,6 +12,7 @@ import addForwardAction from './addForwardAction';
 import addChapterEndAction from './addChapterEndAction';
 import addUpdateBookStateAction from './addUpdateBookStateAction';
 import addDiagnostics from './addDiagnostics';
+import addSleepTimer from './addSleepTimer';
 
 export type AudioControllAddListrers = (
   mw: ListenerMiddlewareInstance<PlayerStateSlice>,
@@ -33,5 +34,6 @@ addRewindAction(mw, audio);
 addPositionAction(mw, audio);
 addOtherPlayerActions(mw, audio);
 addUpdateBookStateAction(mw, audio);
+addSleepTimer(mw, audio);
 
 export const audioControlMiddleware = mw.middleware;

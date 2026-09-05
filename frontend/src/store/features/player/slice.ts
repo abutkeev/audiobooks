@@ -17,12 +17,19 @@ export interface BookChapter {
   duration?: number;
 }
 
+const minute = 60 * 1000;
+
 export interface PlayerSetupPayload {
   bookId: string;
   chapters: BookChapter[];
   playing?: boolean;
   /** A chapter chosen by the user: the saved one is not restored over it. */
   currentChapter?: number;
+}
+
+interface SleepTimer {
+  endsAt: number;
+  minutes: number;
 }
 
 interface PlayerStore {
@@ -42,6 +49,8 @@ interface PlayerStore {
   bookId: string;
   bookInfo: BookInfo;
   chapters: BookChapter[];
+  // next to state, not inside it, see docs/ai/frontend/player.md, "Таймер сна"
+  sleepTimer?: SleepTimer;
 }
 
 const initialState: PlayerStore = {
@@ -64,20 +73,23 @@ const initialState: PlayerStore = {
     author: '',
   },
   chapters: [],
+  sleepTimer: undefined,
 };
 
 export const playerSlice = createSlice({
   name: 'player',
   initialState,
   reducers: {
+    // the sleep timer survives a book change, see docs/ai/frontend/player.md, "Таймер сна"
     playerSetup: (
-      _,
+      { sleepTimer },
       { payload: { bookId, chapters, playing = false, currentChapter = 0 } }: PayloadAction<PlayerSetupPayload>
     ) => ({
       ...initialState,
       state: { ...initialState.state, playing, currentChapter },
       bookId,
       chapters,
+      sleepTimer,
     }),
     playerReset: () => initialState,
     // only chapters: a write to state would wake every position saver, see docs/ai/frontend/player.md
@@ -120,6 +132,26 @@ export const playerSlice = createSlice({
     setError: (store, { payload }: PayloadAction<string>) => {
       store.state.error = payload;
     },
+    // the clock is read in prepare, so that the reducer itself stays pure
+    setSleepTimer: {
+      reducer: (store, { payload: { minutes, now } }: PayloadAction<{ minutes: number; now: number }>) => {
+        store.sleepTimer = { minutes, endsAt: now + minutes * minute };
+      },
+      prepare: (minutes: number) => ({ payload: { minutes, now: Date.now() } }),
+    },
+    // separate from setSleepTimer: the listener restarts on that one, and restarting it on every
+    // extension would reset the throttle that limits them
+    extendSleepTimer: {
+      reducer: (store, { payload: now }: PayloadAction<number>) => {
+        if (!store.sleepTimer) return;
+
+        store.sleepTimer.endsAt = now + store.sleepTimer.minutes * minute;
+      },
+      prepare: () => ({ payload: Date.now() }),
+    },
+    clearSleepTimer: store => {
+      store.sleepTimer = undefined;
+    },
   },
 });
 export const {
@@ -131,4 +163,7 @@ export const {
   setResetSleepTimerOnActivity,
   setPreventScreenLock,
   setDiagnostics,
+  setSleepTimer,
+  extendSleepTimer,
+  clearSleepTimer,
 } = playerSlice.actions;

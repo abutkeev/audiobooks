@@ -4,105 +4,79 @@ import { useCallback, useEffect, useState } from 'react';
 import { Menu, MenuItem, Stack, Typography } from '@mui/material';
 import formatTime from '@/utils/formatTime';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { pause, setPauseOnChapterEnd } from '@/store/features/player';
+import { clearSleepTimer, setPauseOnChapterEnd, setSleepTimer } from '@/store/features/player';
 import { useTranslation } from 'react-i18next';
+
+const leftUpdateInterval = 500;
 
 const SleepControl: React.FC = () => {
   const { t } = useTranslation();
   const [menuAhchor, setMenuAnchor] = useState<HTMLElement>();
-  const [sleepTimerDuration, setSleepTimerDuration] = useState<number>();
-  const [sleepTimerStart, setSleepTimerStart] = useState<Date>();
-  const [sleepTimerLeft, setSleepTimerLeft] = useState<number>();
-  const { pauseOnChapterEnd, resetSleepTimerOnActivity } = useAppSelector(({ player: { state } }) => state);
+  const pauseOnChapterEnd = useAppSelector(({ player: { state } }) => state.pauseOnChapterEnd);
+  const endsAt = useAppSelector(({ player }) => player.sleepTimer?.endsAt);
   const dispatch = useAppDispatch();
+
+  // kept out of the store: writing the remaining time there twice a second would wake every
+  // position saver, see docs/ai/frontend/player.md
+  const [left, setLeft] = useState<number>();
+
+  useEffect(() => {
+    if (!endsAt) {
+      setLeft(undefined);
+      return;
+    }
+
+    const update = () => setLeft(Math.max(endsAt - Date.now(), 0) / 1000);
+
+    update();
+    const intervalId = setInterval(update, leftUpdateInterval);
+    return () => clearInterval(intervalId);
+  }, [endsAt]);
 
   const closeMenu = useCallback(() => setMenuAnchor(undefined), [setMenuAnchor]);
 
-  const setSleepTimer = useCallback(
+  const setTimer = useCallback(
     (duration: number) => () => {
       closeMenu();
       dispatch(setPauseOnChapterEnd(false));
-      if (duration <= 0) {
-        setSleepTimerDuration(undefined);
-        setSleepTimerLeft(undefined);
-        setSleepTimerStart(undefined);
-        return;
-      }
-      setSleepTimerDuration(duration);
-      setSleepTimerStart(new Date());
-      setSleepTimerLeft(duration * 60);
+      dispatch(duration > 0 ? setSleepTimer(duration) : clearSleepTimer());
     },
-    [closeMenu, setSleepTimerDuration, setSleepTimerLeft, setSleepTimerStart, dispatch]
+    [closeMenu, dispatch]
   );
 
-  useEffect(() => {
-    if (sleepTimerDuration && sleepTimerStart) {
-      const updateSleepTimerLeft = () => {
-        const endTimestamp = sleepTimerStart.getTime() + sleepTimerDuration * 60 * 1000;
-        const left = endTimestamp - new Date().getTime();
-        if (left < 0) {
-          setSleepTimer(0)();
-          dispatch(pause());
-          clearInterval(intervalId);
-          return;
-        }
-        setSleepTimerLeft(left / 1000);
-      };
-      const intervalId = setInterval(updateSleepTimerLeft, 500);
-      return () => clearInterval(intervalId);
-    }
-  }, [sleepTimerDuration, sleepTimerStart, dispatch, setSleepTimer]);
-
-  useEffect(() => {
-    const resetSleepTimerStart = () => {
-      if (sleepTimerDuration) setSleepTimerLeft(sleepTimerDuration * 60);
-      setSleepTimerStart(new Date());
-    };
-    const removeEventListeners = () => {
-      window.removeEventListener('mousemove', resetSleepTimerStart);
-      window.removeEventListener('keydown', resetSleepTimerStart);
-    };
-    if (sleepTimerStart && resetSleepTimerOnActivity) {
-      window.addEventListener('mousemove', resetSleepTimerStart);
-      window.addEventListener('keydown', resetSleepTimerStart);
-      return removeEventListeners;
-    }
-    removeEventListeners();
-  }, [sleepTimerStart, sleepTimerDuration, resetSleepTimerOnActivity]);
-
   const handlePauseOnChaperEnd = () => {
-    setSleepTimer(0)();
+    setTimer(0)();
     dispatch(setPauseOnChapterEnd(true));
   };
 
   return (
     <Stack direction='row' sx={{ alignItems: 'center' }}>
       <ControlButton
-        Icon={sleepTimerDuration || pauseOnChapterEnd ? Bedtime : BedtimeOff}
+        Icon={endsAt || pauseOnChapterEnd ? Bedtime : BedtimeOff}
         small
         onClick={e => setMenuAnchor(e.currentTarget)}
       />
-      {!!sleepTimerLeft && <Typography>{formatTime(sleepTimerLeft)}</Typography>}
+      {!!left && <Typography>{formatTime(left)}</Typography>}
       {pauseOnChapterEnd && <Typography>{t('on chapter end')}</Typography>}
       <Menu anchorEl={menuAhchor} open={!!menuAhchor} onClose={closeMenu}>
-        {(!!sleepTimerLeft || pauseOnChapterEnd) && (
-          <MenuItem onClick={setSleepTimer(0)}>
+        {(!!left || pauseOnChapterEnd) && (
+          <MenuItem onClick={setTimer(0)}>
             <Typography>{t('Switch off')}</Typography>
           </MenuItem>
         )}
-        <MenuItem onClick={setSleepTimer(15)}>
+        <MenuItem onClick={setTimer(15)}>
           <Typography>15 {t('min')}</Typography>
         </MenuItem>
-        <MenuItem onClick={setSleepTimer(30)}>
+        <MenuItem onClick={setTimer(30)}>
           <Typography>30 {t('min')}</Typography>
         </MenuItem>
-        <MenuItem onClick={setSleepTimer(45)}>
+        <MenuItem onClick={setTimer(45)}>
           <Typography>45 {t('min')}</Typography>
         </MenuItem>
-        <MenuItem onClick={setSleepTimer(60)}>
+        <MenuItem onClick={setTimer(60)}>
           <Typography>1 {t('hour')}</Typography>
         </MenuItem>
-        <MenuItem onClick={setSleepTimer(120)}>
+        <MenuItem onClick={setTimer(120)}>
           <Typography>2 {t('hours')}</Typography>
         </MenuItem>
         {!pauseOnChapterEnd && (
