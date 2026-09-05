@@ -1,7 +1,6 @@
 import { RouteObject, RouterProvider, createHashRouter } from 'react-router-dom';
 import MainPage from '@/pages/main';
 import BookPage from '@/pages/BookPage';
-import Home from '@/pages/Home';
 import NotFound from '@/pages/NotFound';
 import Main from './Main';
 import { useMemo } from 'react';
@@ -21,7 +20,7 @@ import Readers from '@/pages/readers';
 const userRoutes: RouteObject[] = [
   {
     path: '/',
-    element: <Home />,
+    element: <MainPage />,
   },
   {
     path: '/books',

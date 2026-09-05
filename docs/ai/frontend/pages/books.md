@@ -1,15 +1,8 @@
 # Страницы книг
 
-## Home (`pages/Home.tsx`)
-
-Маршрут: `/`. Редирект-обёртка.
-
-- Если `currentBook` в localStorage есть в списке книг → редирект на `/book/{id}`
-- Иначе → рендерит MainPage
-
 ## MainPage (`pages/main/index.tsx`)
 
-Маршрут: `/books`. Три вкладки.
+Маршруты: `/` и `/books`. Три вкладки.
 
 ### Вкладки
 
@@ -67,7 +60,6 @@ BookPage
 **API:** `useBooksGetBookInfoQuery({ id })`, `useAuthors()`, `useReaders()`, `useSeries()`
 
 **Логика:**
-- Устанавливает `currentBook` в localStorage
 - Если в URL есть `position`/`currentChapter` — передаёт как externalState в Player
 - Отображает п��зиции других слушателей (`OtherPlayersPosition`)
 - `bookInfo` для `Player` мемоизирован — требование `player.md`, раздел «Media Session API»

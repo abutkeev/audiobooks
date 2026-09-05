@@ -4,7 +4,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Search from './Search';
 import { useAppSelector } from '@/store';
-import { currentBookVarName } from '@/pages/Home';
 import MobileAppBar from './MobileAppBar';
 import AccountMenu from '../account-menu';
 import AdminMenu from '../admin-menu';
@@ -21,7 +20,6 @@ const AppBar: React.FC = () => {
   const mobile = useMobile();
 
   const handleHomeButtonClick = () => {
-    localStorage.removeItem(currentBookVarName);
     navigate('/');
   };
 

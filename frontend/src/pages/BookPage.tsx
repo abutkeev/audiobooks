@@ -5,8 +5,7 @@ import useAuthors from '@/hooks/useAuthors';
 import useReaders from '@/hooks/useReaders';
 import useSeries from '@/hooks/useSeries';
 import Player from '@/components/player';
-import { useEffect, useMemo } from 'react';
-import { currentBookVarName } from './Home';
+import { useMemo } from 'react';
 import useTitle from '@/hooks/useTitle';
 import OtherPlayersPosition from '@/components/other-player-positions';
 import { useBooksGetBookInfoQuery } from '@/api/api';
@@ -20,10 +19,6 @@ const BookPage: React.FC = () => {
   const { series, seriesLoading, seriesError } = useSeries();
 
   useTitle(data?.info.name || '');
-
-  useEffect(() => {
-    localStorage.setItem(currentBookVarName, id);
-  }, [id]);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const externalState = useMemo(() => {
