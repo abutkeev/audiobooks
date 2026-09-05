@@ -9,7 +9,10 @@ const addPlayerUpdates: AudioControllAddListrers = (mw, audio) => {
   mw.startListening({
     actionCreator: startUpdates,
     effect: (_, { dispatch, getState }) => {
-      clearInterval(intervalId);
+      // idempotent on purpose: playback resumed after buffering asks again, and restarting the
+      // timer would put off the next publication by a whole second every time
+      if (intervalId) return;
+
       intervalId = setInterval(() => {
         // a loading element would overwrite the position the chapter starts from; the store
         // duration is set by loadChapter after that position, see docs/ai/frontend/player.md

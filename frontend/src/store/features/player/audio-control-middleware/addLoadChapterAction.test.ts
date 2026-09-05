@@ -11,7 +11,7 @@ import addOtherPlayerActions from './addOtherPlayerActions';
 import addForwardAction from './addForwardAction';
 import addRewindAction from './addRewindAction';
 import { playerReset, playerSlice, setPauseOnChapterEnd } from '../slice';
-import { chapterEnded, loadChapter, stopUpdates } from '../internal';
+import { chapterEnded, loadChapter, retryChapter, startUpdates, stopUpdates } from '../internal';
 import { changePosition, chapterChange, forward, nextChapter, play, previousChapter, rewind } from '../actions';
 import type { PlayerStateSlice } from '..';
 
@@ -29,14 +29,23 @@ class FakeAudio {
   src = '';
   readyState = 0;
   onpause: (() => void) | null = null;
+  onplay: (() => void) | null = null;
   onerror: (() => void) | null = null;
   duration = NaN;
   error: MediaError | null = null;
   paused = true;
   play = vi.fn(() => {
+    // an unusable source is refused before anything is reported, every other state goes on
+    if (this.error?.code === 4)
+      return Promise.reject(Object.assign(new Error('refused'), { name: 'NotSupportedError' }));
+
+    // an element that is already going reports nothing: it only settles the promises it owes
+    if (!this.paused) return Promise.resolve();
+
     this.paused = false;
-    // a real element only reports playing once it has data to play
-    if (this.loaded) this.emit('playing');
+    this.emit('play');
+    if (this.readyState >= 3) this.emit('playing');
+
     return Promise.resolve();
   });
 
@@ -107,6 +116,14 @@ class FakeAudio {
     this.loaded = true;
     this.readyState = 1;
     this.duration = duration;
+  }
+
+  /** Metadata alone gives no sound: a real element reports playing once it has data ahead. */
+  dataArrived() {
+    this.readyState = 4;
+    this.emit('canplay');
+
+    if (!this.paused) this.emit('playing');
   }
 
   metadataArrived(duration: number) {
@@ -450,9 +467,113 @@ describe('player listeners', () => {
     await flush();
     store.dispatch(playerSlice.actions.updatePlaying(false));
 
+    dispatched = [];
     audio.play();
+    audio.dataArrived();
 
     expect(playerState().playing).toBe(true);
+    expect(dispatched).toContain(startUpdates.type);
+  });
+
+  it('follows the element into a pause', async () => {
+    store.dispatch(loadChapter({ number: 1, position: 0 }));
+    audio.metadataArrived(300);
+    await flush();
+    audio.play();
+    audio.dataArrived();
+
+    dispatched = [];
+    audio.pause();
+
+    expect(playerState().playing).toBe(false);
+    expect(dispatched).toContain(stopUpdates.type);
+  });
+
+  it('retries a failed chapter when the element is asked to play', async () => {
+    store.dispatch(loadChapter({ number: 1, position: 0 }));
+    audio.failed(2, 'network');
+    await flush();
+    expect(playerState().error).toBe("Can't load chapter");
+
+    const loads = audio.loads;
+    audio.play.mockClear();
+    audio.play();
+    await flush();
+
+    expect(audio.loads).toBe(loads + 1);
+    expect(playerState().error).toBe('');
+    // the reload has to sound, otherwise the press is as lost as it was before
+    expect(playerState().playing).toBe(true);
+    expect(audio.play).toHaveBeenCalledTimes(2);
+  });
+
+  it('retries a chapter that broke mid playback', async () => {
+    const logged = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      store.dispatch(playerSlice.actions.updatePlaying(true));
+      store.dispatch(loadChapter({ number: 1, position: 0 }));
+      audio.metadataArrived(300);
+      await flush();
+      audio.dataArrived();
+      audio.failed(2, 'network');
+
+      const loads = audio.loads;
+      audio.play();
+      await flush();
+
+      expect(audio.loads).toBe(loads + 1);
+      expect(playerState().error).toBe('');
+    } finally {
+      logged.mockRestore();
+    }
+  });
+
+  it('does not answer its own playback with another load', async () => {
+    store.dispatch(playerSlice.actions.updatePlaying(true));
+
+    dispatched = [];
+    store.dispatch(loadChapter({ number: 1, position: 0 }));
+    await flush();
+
+    // the load asks the element to play while the duration is unknown: a wider condition in the
+    // play handler would answer that with a reload, and so on without end
+    expect(audio.play).toHaveBeenCalledTimes(1);
+    expect(dispatched).not.toContain(retryChapter.type);
+    expect(audio.loads).toBe(1);
+  });
+
+  it('keeps publishing at its own pace when playback is asked for again', async () => {
+    vi.useFakeTimers();
+    try {
+      store.dispatch(playerSlice.actions.updatePlaying(true));
+      store.dispatch(loadChapter({ number: 1, position: 0 }));
+      audio.metadataArrived(300);
+      await vi.advanceTimersByTimeAsync(0);
+
+      await vi.advanceTimersByTimeAsync(900);
+      audio.holdPosition(42);
+      store.dispatch(startUpdates());
+      dispatched = [];
+      await vi.advanceTimersByTimeAsync(100);
+
+      // a restarted interval would put the publication off by another second
+      expect(dispatched).toContain('player/updatePosition');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('ignores the playing event of a closed book', async () => {
+    store.dispatch(loadChapter({ number: 1, position: 0 }));
+    audio.metadataArrived(300);
+    await flush();
+    store.dispatch(playerReset());
+
+    dispatched = [];
+    audio.play();
+    audio.dataArrived();
+
+    expect(dispatched).not.toContain(startUpdates.type);
   });
 
   it('moves inside the chapter while it has room', async () => {
@@ -683,9 +804,12 @@ describe('player listeners', () => {
     store.dispatch(playerSlice.actions.updatePlaying(true));
     store.dispatch(loadChapter({ number: 1, position: 0 }));
 
+    dispatched = [];
     audio.pauseEvent();
 
     expect(playerState().playing).toBe(true);
+    // the load has just started the updates, and this pause is its own
+    expect(dispatched).not.toContain(stopUpdates.type);
   });
 
   it('leaves a failed load to report itself', async () => {

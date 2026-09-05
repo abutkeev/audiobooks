@@ -30,6 +30,8 @@ const addPlayPauseActions: AudioControllAddListrers = (mw, audio) => {
       const { error, duration } = getState().player.state;
 
       dispatch(updatePlaying(true));
+      // kept on the action and not only on the playing event: chrome resumes a context
+      // only inside a gesture, see docs/ai/frontend/player.md, "Web Audio API"
       getAudioCtx()?.resume();
 
       // play over a chapter without metadata is an explicit retry: the element gives no way
